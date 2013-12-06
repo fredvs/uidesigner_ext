@@ -1,3 +1,7 @@
+This is a extended version of fpGUI Designer. 
+
+Fred van Stappen. fiens@hotmail.com  
+
 
    fpGUI's Visual User Interface Designer
    ======================================
