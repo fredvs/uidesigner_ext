@@ -25,15 +25,36 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
+  RunOnce_PostIt,
    fpg_cmdlineparams
   ,fpg_stylemanager, mystyle_systemcolors  ,
   Classes, SysUtils, fpg_base, fpg_main, vfdmain, vfdresizer, vfdforms,
   vfdfile, newformdesigner, vfdwidgets, vfdformparser, vfdeditors,   fpg_iniutils,
   vfdwidgetclass, vfdutils, vfdprops, vfddesigner, vfdpropeditgrid;
 
-
 procedure MainProc;
+var
+filedir : string;
 begin
+  ifonlyone := true ;
+  filedir := '';
+
+  if (isrunningIDE('typhon') = false) and (isrunningIDE('lazarus') = false)
+  then
+    begin
+     filedir := 'clear';
+     RunOnce(filedir);
+    end else
+   begin
+       { If file passed in as clasical first param, load it! }
+   if (FileExists(ParamStr(1))) or (ParamStr(1)='closeall') or (ParamStr(1)='quit')  then filedir := ParamStr(1) ;
+
+     if gCommandLineParams.IsParam('onlyone') then begin
+    if strtoint(copy(gCommandLineParams.GetParam('onlyone'),1,1)) > 0 then
+     RunOnce(filedir) else ifonlyone := false ;  ;
+     end else RunOnce(filedir);
+    end;
+
   fpgApplication.Initialize;
   try
              RegisterWidgets;
@@ -51,12 +72,7 @@ begin
     // Note:  This needs improving!!
     fpgApplication.MainForm := frmMain;
 
-    { If file passed in as param, load it! }
-    maindsgn.EditedFileName := ParamStr(1);
-    if FileExists(maindsgn.EditedFileName) then
-      maindsgn.OnLoadFile(maindsgn);
-
-      fpgApplication.Run;
+   fpgApplication.Run;
     
     PropList.Free;
     

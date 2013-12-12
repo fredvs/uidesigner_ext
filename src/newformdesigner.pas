@@ -22,16 +22,19 @@ unit newformdesigner;
 interface
 
 uses
+  RunOnce_PostIt,
   ideconst,
   SysUtils,
   Classes,
   fpg_base,
+  fpg_main,
   fpg_widget,
   fpg_form,
   fpg_label,
   fpg_button,
   fpg_edit,
   fpg_listbox,
+  fpg_panel,
   fpg_memo,
   fpg_combobox,
   fpg_menu,
@@ -74,11 +77,16 @@ type
     chlPalette: TfpgComboBox;
     filemenu: TfpgPopupMenu;
     formmenu: TfpgPopupMenu;
-    setmenu: TfpgPopupMenu;
+   //  setmenu: TfpgPopupMenu;
     miOpenRecentMenu: TfpgPopupMenu;
     helpmenu: TfpgPopupMenu;
     windowmenu: TfpgPopupMenu;
     previewmenu: TfpgPopupMenu;
+    Panel1: TfpgPanel;
+    Label1: TfpgLabel;
+    Label2: TfpgLabel;
+    Label3: TfpgLabel;
+    Label4: TfpgLabel;
     {@VFD_HEAD_END: frmMain}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
@@ -95,9 +103,12 @@ type
     procedure   OnObjInspect(Sender: TObject);
     procedure   ToFrontClick(Sender: TObject);
     procedure   OnFormDesignShow(Sender: TObject);
-    procedure    LoadIDEparameters(ide :integer) ;
-  end;
-
+    procedure   LoadIDEparameters(ide :integer) ;
+    procedure   onMessagePost;
+    procedure   onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
+    procedure   onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
+    procedure   onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
+   end;
 
   TPropertyList = class(TObject)
   private
@@ -166,7 +177,7 @@ type
     lblName3: TfpgLabel;
     lblName4: TfpgHyperlink;
     lblCompiled: TfpgLabel;
-    lblfpcversion  : TfpgLabel;
+    lblfpcversion: TfpgLabel;
     {@VFD_HEAD_END: frmAbout}
   public
     procedure AfterCreate; override;
@@ -178,13 +189,14 @@ type
 var
   frmProperties: TfrmProperties;
   frmMain: TfrmMain;
-
+  ifonlyone : boolean;
   PropList: TPropertyList;
+  oriMousePos: TPoint;
+  idetemp : integer;
 
 implementation
 
 uses
-  fpg_main,
   vfdmain,
   fpg_iniutils,
   fpg_dialogs;
@@ -281,17 +293,16 @@ begin
     Text := 'Compiled on:  %s';
   end;
 
-
-    lblfpcversion := TfpgLabel.Create(self);
+  lblfpcversion := TfpgLabel.Create(self);
   with lblfpcversion do
   begin
     Name := 'lblfpcversion';
     SetPosition(12, 152, 161, 13);
     FontDesc := 'Arial-8';
     Hint := '';
+    Text := 'Label';
     Text := 'Compiled with FPC: ' + fpcversion;
   end;
-
 
   {@VFD_BODY_END: frmAbout}
   {%endregion}
@@ -320,6 +331,23 @@ fmbegin, fmend : integer ;
 begin
    fpgapplication.ProcessMessages;
 ////////
+{$IFDEF unix}
+ WindowAttributes := [waBorderless] ;
+{$ENDIF}
+
+  btnOpen.Visible:=false;
+  btnSave.Left:= btnOpen.Left ;
+  btnSave.UpdateWindowPosition;
+
+   btnToFront.Left := 83;
+   btnToFront.UpdateWindowPosition;
+
+ filemenu.MenuItem(0).Visible:=false;
+ filemenu.MenuItem(1).Visible:=false;
+ filemenu.MenuItem(2).Visible:=false;
+ //filemenu.MenuItem(9).Visible:=false;
+ //filemenu.MenuItem(8).Visible:=false;
+
  if ide = 2 then
   begin
 {$if defined(cpu64)}
@@ -439,7 +467,6 @@ if fileexists(pchar(dataf)) then
          left := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) ;
                 end else left :=0 ;
 
-
                if   Pos('Top="',dataf2) > 0 then
                    begin
                   dataf := copy(dataf2,Pos('Top="',dataf2)+5,6) ;
@@ -451,9 +478,7 @@ if fileexists(pchar(dataf)) then
                   dataf := copy(dataf2,Pos('Width="',dataf2)+7,6) ;
             width := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) ;
           end else width := fpgApplication.ScreenWidth ; ;
-
-
-            ////
+             ////
    {$IFDEF Windows}
 
      if  gINI.ReadBool('Options', 'AlwaystoFront', false) = true then
@@ -466,9 +491,7 @@ if fileexists(pchar(dataf)) then
                 left := left + 1 ;
 {$ENDIF}
  end;
-
-         end;
-
+   end;
       CloseFile(f);
       UpdateWindowPosition;
          end;
@@ -476,9 +499,20 @@ if fileexists(pchar(dataf)) then
 
 end;
 
+procedure TfrmMain.onMessagePost;
+begin
+if theMessage = 'quit' then
+ close else
+if (FileExists(theMessage)) or (theMessage = 'closeall') then
+  begin
+  maindsgn.EditedFileName := theMessage;
+  maindsgn.OnLoadFile(maindsgn);
+   end;
+BringToFront;
+end;
+
 procedure TfrmMain.AfterCreate;
 var
-
   n, x, y , wscreen: integer;
   wgc: TVFDWidgetClass;
   btn: TwgPaletteButton;
@@ -488,14 +522,13 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
   wscreen := fpgApplication.ScreenWidth;
   {@VFD_BODY_BEGIN: frmMain}
   Name := 'frmMain';
+  SetPosition(96, 118, 800, 92);
   WindowTitle := 'frmMain';
   Hint := '';
   ShowHint := True;
-  SetPosition(0, 77, 800 , 92);
   WindowPosition := wpUser;
   MinHeight := 82;
   MinWidth := 315;
@@ -512,7 +545,7 @@ begin
   with btnNewForm do
   begin
     Name := 'btnNewForm';
-    SetPosition(4, 28, 25, 24);
+    SetPosition(16, 33, 25, 24);
     Text := '';
     FontDesc := '#Label1';
     Hint := 'Add New Form to Unit';
@@ -528,7 +561,7 @@ begin
   with btnOpen do
   begin
     Name := 'btnOpen';
-    SetPosition(30, 28, 25, 24);
+    SetPosition(42, 33, 25, 24);
     Text := '';
     FontDesc := '#Label1';
     Hint := 'Open a file';
@@ -544,7 +577,7 @@ begin
   with btnSave do
   begin
     Name := 'btnSave';
-    SetPosition(56, 28, 25, 24);
+    SetPosition(68, 33, 25, 24);
     Text := '';
     FontDesc := '#Label1';
     Hint := 'Save the current form design';
@@ -561,7 +594,7 @@ begin
   with btnToFront do
   begin
     Name := 'btnToFront';
-    SetPosition(89, 28, 55, 24);
+    SetPosition(97, 33, 51, 24);
     Text := 'to Front';
     FontDesc := '#Label1';
     Hint := 'Switch Designer Always-To-Front <> Normal';
@@ -573,14 +606,16 @@ begin
     Focusable := False;
     Tag := 0;
     OnClick   := @ToFrontClick;
+    hide;
   end;
 
   wgpalette := TwgPalette.Create(self);
   with wgpalette do
   begin
     Name := 'wgpalette';
-    SetPosition(152, 28, wscreen- 149, 62);
+    SetPosition(152, 28, 2, 32);
     Anchors := [anLeft,anRight,anTop,anBottom];
+    SetPosition(152, 28, wscreen- 149, 62);
     //    Width := self.Width - Left - 3;
     Focusable := False;
     OnResize := @PaletteBarResized;
@@ -590,8 +625,9 @@ begin
   with chlPalette do
   begin
     Name := 'chlPalette';
-    SetPosition(4, 67, 144, 22);
+    SetPosition(16, 64, 132, 22);
     Anchors := [anLeft,anBottom];
+    ExtraHint := '';
     FontDesc := '#List';
     Hint := '';
     Items.Add('-');
@@ -626,14 +662,6 @@ begin
     AddMenuItem('Tab Order...', '', @(maindsgn.OnEditTabOrder));
     AddMenuItem('-', '', nil);
     AddMenuItem('Edit special...', '', nil).Enabled := False; // TODO
-  end;
-
-  setmenu := TfpgPopupMenu.Create(self);
-  with setmenu do
-  begin
-    Name := 'setmenu';
-    SetPosition(464, 29, 120, 20);
-    AddMenuItem('General options...', '', @(maindsgn.OnOptionsClick));
   end;
 
   miOpenRecentMenu := TfpgPopupMenu.Create(self);
@@ -680,7 +708,6 @@ begin
     MenuItem(10).Visible:=false;
     AddMenuItem('', '',@frmmain.OnFormDesignShow);
     MenuItem(11).Visible:=false;
-
     MenuItem(2).Tag:=0;
     MenuItem(3).Tag:=1;
     MenuItem(4).Tag:=2;
@@ -704,6 +731,80 @@ begin
     AddMenuItem('with Motif', '', nil).Enabled := False;
     AddMenuItem('with OpenLook', '', nil).Enabled := False;
   end;
+
+   Panel1 := TfpgPanel.Create(self);
+  with Panel1 do
+  begin
+    Name := 'Panel1';
+    SetPosition(0, 0, 13, 92);
+    Align := alLeft;
+    FontDesc := '#Label1';
+    Hint := '';
+    Style := bsFlat;
+    Text := '';
+    tag := 0 ;
+    BackgroundColor:= clmoneygreen;
+    OnMouseMove:= @onMovemovepanel ;
+    OnMouseDown := @onClickDownPanel ;
+    OnMouseUp := @onClickUpPanel ;
+  end;
+
+  Label1 := TfpgLabel.Create(Panel1);
+  with Label1 do
+  begin
+    Name := 'Label1';
+    SetPosition(1, 3, 12, 15);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'M';
+    BackgroundColor:= clmoneygreen;
+    OnMouseMove:= @onMovemovepanel ;
+    OnMouseDown := @onClickDownPanel ;
+    OnMouseUp := @onClickUpPanel ;
+  end;
+
+  Label2 := TfpgLabel.Create(Panel1);
+  with Label2 do
+  begin
+    Name := 'Label2';
+    SetPosition(3, 15, 10, 15);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'o';
+    BackgroundColor:= clmoneygreen;
+    OnMouseMove:= @onMovemovepanel ;
+    OnMouseDown := @onClickDownPanel ;
+    OnMouseUp := @onClickUpPanel ;
+  end;
+
+  Label3 := TfpgLabel.Create(Panel1);
+  with Label3 do
+  begin
+    Name := 'Label3';
+    SetPosition(3, 29, 10, 15);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'v';
+    OnMouseMove:= @onMovemovepanel ;
+    OnMouseDown := @onClickDownPanel ;
+    OnMouseUp := @onClickUpPanel ;
+    BackgroundColor:= clmoneygreen;
+  end;
+
+  Label4 := TfpgLabel.Create(Panel1);
+  with Label4 do
+  begin
+    Name := 'Label4';
+    SetPosition(3,43, 10, 15);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'e';
+    BackgroundColor:= clmoneygreen;
+    OnMouseMove:= @onMovemovepanel ;
+    OnMouseDown := @onClickDownPanel ;
+    OnMouseUp := @onClickUpPanel ;
+  end;
+
 
   {@VFD_BODY_END: frmMain}
   {%endregion}
@@ -739,14 +840,17 @@ begin
 
   MainMenu.AddMenuItem('&File', nil).SubMenu     := filemenu;
   MainMenu.AddMenuItem('Selected Fo&rm', nil).SubMenu     := formmenu;
-  MainMenu.AddMenuItem('&Settings', nil).SubMenu := setmenu;
+ // MainMenu.AddMenuItem('&Settings', nil).SubMenu := setmenu;
+
+ MainMenu.AddMenuItem('&Settings', nil) ;
+
    MainMenu.AddMenuItem('&Preview', nil).SubMenu  := previewmenu;
    MainMenu.AddMenuItem('&Window', nil).SubMenu  := windowmenu;
   MainMenu.AddMenuItem('&Help', nil).SubMenu     := helpmenu;
   MainMenu.AddMenuItem('', nil) ;
 
       MainMenu.MenuItem(3).Visible:=false;
-
+       MainMenu.MenuItem(2).OnClick := @(maindsgn.OnOptionsClick);
 
   FFileOpenRecent.SubMenu := miOpenRecentMenu;
   mru := TfpgMRU.Create(self);
@@ -773,14 +877,31 @@ begin
        end;
 
     x := gINI.ReadInteger('Options', 'IDE', 0);
-
+   idetemp := x ;
 if x = 0 then
 begin
+
+  btnOpen.Visible:=true;
+  btnSave.Left:= 56 ;
+  btnSave.UpdateWindowPosition;
+  btnToFront.Left := 86;
+  btnToFront.UpdateWindowPosition;
+
+ filemenu.MenuItem(0).Visible:=true;
+ filemenu.MenuItem(1).Visible:=true;
+ filemenu.MenuItem(8).Visible:=true;
+
   if  gINI.ReadBool('frmMainState', 'FirstLoad', true) = false  then
           gINI.ReadFormState(self)
          else
          gINI.WriteBool('frmMainState', 'FirstLoad', false);
   end else  LoadIDEparameters(x) ;
+
+ if ifonlyone = true then
+ begin
+  InitMessage ;
+  StartMessage(@onMessagePost, 1000);
+ end;
 
 end;
 
@@ -788,6 +909,7 @@ end;
 procedure TfrmMain.BeforeDestruction;
 begin
   gINI.WriteFormState(self);
+  gINI.WriteInteger('Options', 'IDE', idetemp);
 
   inherited BeforeDestruction;
 end;
@@ -808,6 +930,27 @@ begin
   chlPalette.FocusItem := i;
 end;
 
+procedure TfrmMain.onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
+ begin
+ oriMousePos := AMousePos;
+ panel1.Tag:=1;
+  end;
+
+procedure TfrmMain.onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
+ begin
+  panel1.Tag:=0;
+  end;
+
+procedure TfrmMain.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint) ;
+ begin
+  if panel1.Tag = 1 then
+  begin
+  fpgapplication.ProcessMessages;
+  top := top + ( AMousePos.Y- oriMousePos.y);
+  left := left + (AMousePos.x-oriMousePos.X );
+  UpdateWindowPosition;
+  end;
+ end;
 
 procedure  TfrmMain.ToFrontClick(Sender: TObject);
  begin
@@ -825,7 +968,14 @@ begin
    MainMenu.MenuItem(6).Text:=  'Current file : ' + p + s + '     fpGUI Designer v' + program_version;    ;
     btnToFront.Text:='Normal';
    btnToFront.tag:=1;
-   show;
+   {$IFDEF windows}
+   left := left + 8 ;
+   UpdateWindowPosition;
+   {$ENDIF}
+       show;
+    frmProperties.hide;
+   fpgapplication.ProcessMessages;
+   frmProperties.Show;
   end;
 
 procedure TfrmMain.OnNeverToFront(Sender: TObject);
@@ -837,9 +987,15 @@ begin
         btnToFront.Text:='to Front';
    btnToFront.tag:=0;
   WindowType := wtwindow ;  // with borders, not on front.
-    WindowAttributes := [];
+  //  WindowAttributes := [];
+     {$IFDEF windows}
+   left := left - 8 ;
+   UpdateWindowPosition;
+    {$ENDIF}
    show;
-
+   frmProperties.hide;
+   fpgapplication.ProcessMessages;
+   frmProperties.Show;
 end;
 
 procedure TfrmMain.OnHideClick(Sender: TObject);
@@ -866,7 +1022,7 @@ end;
 
 procedure TfrmMain.OnObjInspect(Sender: TObject);
 begin
-  frmProperties.hide;
+   frmProperties.hide;
    fpgapplication.ProcessMessages;
    frmProperties.Show;
  // fpgapplication.ProcessMessages;

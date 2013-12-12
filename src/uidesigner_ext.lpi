@@ -120,8 +120,12 @@
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
+    <Target>
+      <Filename Value="uidesigner_ext"/>
+    </Target>
     <SearchPaths>
-      <UnitOutputDirectory Value="output"/>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <UnitOutputDirectory Value="units"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>

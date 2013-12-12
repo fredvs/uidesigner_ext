@@ -33,6 +33,7 @@ uses
   fpg_Editbtn,
   fpg_combobox,
   fpg_RadioButton,
+  fpg_dialogs,
   fpg_trackbar,
   fpg_checkbox,
   fpg_panel,
@@ -92,13 +93,14 @@ type
     procedure   SetTitle(const AValue: string);
   public
     {@VFD_HEAD_BEGIN: WidgetOrderForm}
+
     lblTitle: TfpgLabel;
     btnOK: TfpgButton;
     btnCancel: TfpgButton;
     btnUp: TfpgButton;
     btnDown: TfpgButton;
     TreeView1: TfpgTreeView;
-    {@VFD_HEAD_END: WidgetOrderForm}
+        {@VFD_HEAD_END: WidgetOrderForm}
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -120,6 +122,7 @@ type
 
   public
     {@VFD_HEAD_BEGIN: frmVFDSetup}
+    changeide : integer;
     lb1: TfpgLabel;
     chlGrid: TfpgComboBox;
     btnOK: TfpgButton;
@@ -290,6 +293,7 @@ procedure TWidgetOrderForm.AfterCreate;
 begin
   inherited AfterCreate;
   {@VFD_BODY_BEGIN: WidgetOrderForm}
+
   Name := 'WidgetOrderForm';
   SetPosition(692, 160, 426, 398);
   WindowTitle := 'Widget order';
@@ -373,7 +377,7 @@ begin
     TabOrder := 7;
   end;
 
-  {@VFD_BODY_END: WidgetOrderForm}
+    {@VFD_BODY_END: WidgetOrderForm}
 end;
 
 procedure TWidgetOrderForm.OnButtonClick(Sender: TObject);
@@ -428,6 +432,22 @@ end;
 
 procedure   TfrmVFDSetup.IdeIntegration(Sender: TObject);
 begin
+  if sender = rbnone then
+  begin
+     rbnone.Checked:=true;
+  frmMain.btnOpen.Visible:=true;
+   frmMain.btnSave.Left:= 56 ;
+   frmMain.btnSave.UpdateWindowPosition;
+    frmMain.btnToFront.Left := 86;
+   frmMain.btnToFront.UpdateWindowPosition;
+ WindowAttributes := [] ;
+ frmMain.filemenu.MenuItem(0).Visible:=true;
+ frmMain.filemenu.MenuItem(1).Visible:=true;
+// frmMain.filemenu.MenuItem(8).Visible:=true;
+ frmMain.filemenu.MenuItem(2).Visible:=true;
+// frmMain.filemenu.MenuItem(9).Visible:=true;
+end;
+
   if sender = rbtyphon then
   begin
    rbtyphon.Checked:=true;
@@ -445,10 +465,13 @@ procedure TfrmVFDSetup.LoadSettings;
 var
  x : integer ;
 begin
+ fpgapplication.ProcessMessages;
 
- x := gINI.ReadInteger('Options', 'IDE', 0);
+ //x := gINI.ReadInteger('Options', 'IDE', 0);
 
- case x of
+ changeIde :=  idetemp ;
+
+ case idetemp of
   0 : rbnone.Checked:=true;
   1 : rblaz.Checked:=true;
   2 : rbtyphon.Checked:=true;
@@ -480,6 +503,12 @@ begin
 
 procedure TfrmVFDSetup.SaveSettings;
 begin
+ fpgapplication.ProcessMessages;
+    if  rbnone.Checked =true then
+  gINI.WriteString('Path', 'Application', '' )
+    else
+  gINI.WriteString('Path', 'Application', ParamStr(0));
+
   gINI.WriteInteger('Designer', 'Version', cDesignerINIVersion);
   gINI.WriteInteger('Options', 'GridResolution', chlGrid.FocusItem);
   gINI.WriteInteger('Options', 'MRUFileCount', tbMRUFileCount.Position);
@@ -492,21 +521,8 @@ begin
   gINI.WriteInteger('Options', 'IndentationType', cbIndentationType.FocusItem);
   gINI.WriteString('Options', 'CustomEditor', FilenameEdit1.FileName);
 
-  if  rbnone.Checked =true then
-   gINI.WriteInteger('Options', 'IDE', 0);
-
-   if  rblaz.Checked =true then
-   gINI.WriteInteger('Options', 'IDE', 1);
-
-    if  rbtyphon.Checked =true then
-   gINI.WriteInteger('Options', 'IDE', 2);
-
-
-      if  rbedit0.Checked =true then
+    if  rbedit0.Checked =true then
    gINI.WriteInteger('Options', 'Editor', 0);
-
-    if  rbedit1.Checked =true then
-   gINI.WriteInteger('Options', 'Editor', 1);
 
      if  rbedit2.Checked =true then
    gINI.WriteInteger('Options', 'Editor', 2);
@@ -518,7 +534,18 @@ begin
    gINI.WriteInteger('Options', 'Editor', 4);
 
 
- end;
+        if  rbnone.Checked =true then idetemp := 0 ;
+        if  rblaz.Checked =true then idetemp := 1 ;
+        if  rbtyphon.Checked =true then idetemp := 2 ;
+
+   if  idetemp <> changeide then
+    case idetemp of
+  0 : ShowMessage('IDE des-integration will append after closing application');
+  1 : ShowMessage('IDE integration will append next run of ' + rblaz.Text);
+  2 : ShowMessage('IDE integration will append next run of ' + rbtyphon.Text);
+  end;
+
+  end;
 
 procedure TfrmVFDSetup.btnOKClick(Sender: TObject);
 begin
@@ -558,7 +585,7 @@ var
 begin
   {@VFD_BODY_BEGIN: frmVFDSetup}
   Name := 'frmVFDSetup';
-  SetPosition(315, 207, 429, 350);
+  SetPosition(318, 279, 429, 350);
   WindowTitle := 'General settings';
   Hint := '';
   ShowHint := True;
@@ -771,7 +798,8 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Label';
-    Text := 'Location of ini file : ' + GetAppConfigDir(false) ;
+    Text := 'Location of ini file : ' + GetAppConfigDir(false) +  applicationname + '.ini' ;
+
   end;
 
   Label2 := TfpgLabel.Create(self);
@@ -820,6 +848,7 @@ begin
     Hint := '';
     TabOrder := 23;
     Text := 'None';
+    OnClick   := @IdeIntegration;
   end;
 
   WidgetOrderForm := TfpgLabel.Create(self);
@@ -845,23 +874,11 @@ begin
     Text := 'None';
   end;
 
-  rbedit1 := TfpgRadioButton.Create(self);
-  with rbedit1 do
-  begin
-    Name := 'rbedit1';
-    SetPosition(276, 136, 80, 19);
-    FontDesc := '#Label1';
-    GroupIndex := 1;
-    Hint := '';
-    TabOrder := 25;
-    Text := 'IDE';
-  end;
-
   rbedit2 := TfpgRadioButton.Create(self);
   with rbedit2 do
   begin
     Name := 'rbedit2';
-    SetPosition(276, 156, 108, 19);
+    SetPosition(276, 136, 108, 19);
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := '';
@@ -873,7 +890,7 @@ begin
   with rbedit3 do
   begin
     Name := 'rbedit3';
-    SetPosition(276, 176, 100, 19);
+    SetPosition(276, 156, 100, 19);
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := '';
@@ -885,7 +902,7 @@ begin
   with FilenameEdit1 do
   begin
     Name := 'FilenameEdit1';
-    SetPosition(296, 200, 116, 24);
+    SetPosition(296, 180, 116, 24);
     ExtraHint := '';
     FileName := '';
     Filter := '';
@@ -897,7 +914,7 @@ begin
   with rbedit4 do
   begin
     Name := 'rbedit4';
-    SetPosition(276, 200, 16, 19);
+    SetPosition(276, 180, 16, 19);
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := '';
@@ -964,7 +981,7 @@ procedure TfrmVFDSetup.BeforeDestruction;
 begin
   // We don't put this in SaveSettings because it needs to be called even if
   // user cancels the dialog with btnCancel or ESC key press.
-  gINI.WriteFormState(self);
+   gINI.WriteFormState(self);
   inherited BeforeDestruction;
 end;
 

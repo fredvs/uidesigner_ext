@@ -29,14 +29,15 @@ uses
   fpg_base,
   fpg_main,
   fpg_widget,
-  fpg_dialogs,
   fpg_constants,
   vfdprops,
   vfdforms,
   vfddesigner,
   vfdfile,
+  fpg_dialogs,
   fpg_menu,
-    newformdesigner;
+  RunOnce_PostIt,
+  newformdesigner;
 
 const
   program_version = FPGUI_VERSION;
@@ -158,7 +159,15 @@ var
   end;
 
   if fname = '' then
-    Exit;
+  begin
+ if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+begin
+   frmmain.Hide ;
+   frmProperties.Hide;
+end;
+   Exit ;
+  end ;
+
 
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -169,13 +178,39 @@ var
   
   if not fpgFileExists(fname) then
   begin
-    ShowMessage('File does not exists.', 'Error loading form');
+   //  ShowMessage('File does not exists.', 'Error loading form');
+      if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+begin
+   frmmain.Hide ;
+   frmProperties.Hide;
+end;
     Exit;
   end;
 
-  FFile.LoadFile(fname);
-  FFile.GetBlocks;
-   fnametemp := '' ;
+  if FFile.LoadFile(fname) = false then
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+begin
+   frmmain.Hide ;
+   frmProperties.Hide;
+ end;
+
+ if  FFile.GetBlocks = 0  then
+ begin
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+begin
+   frmmain.Hide ;
+   frmProperties.Hide;
+end;
+ end else
+ begin
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+begin
+   frmmain.show ;
+   frmProperties.show;
+end;
+ end ;
+
+  // fname := '' ;
   SetLength(ArrayFormDesign,0);
     x := 0 ;
 
@@ -206,6 +241,7 @@ var
              end;
     end;
      frmMain.mru.AddItem(fname);
+
 end;
 
 procedure TMainDesigner.OnSaveFile(Sender: TObject);
@@ -482,22 +518,45 @@ begin
 end;
 
 procedure TMainDesigner.OnExit(Sender: TObject);
+var
+x : integer;
 begin
+  if (IsRunningIDE('typhon') = false) and (IsRunningIDE('lazarus') = false)
+ then
+ begin
+ frmProperties.Close;
+ frmMain.Close;
+ end else
+ begin
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0
+   then begin
+ x := 0 ;
+ while x < length(ArrayFormDesign)  do
+  begin
+  ArrayFormDesign[x].Form.close;
+   inc(x);
+   end;
+
+  frmProperties.hide;
+   frmMain.hide;
+  end else
+  begin
   frmProperties.Close;
-  frmMain.Close;
-end;
+ frmMain.Close;
+  end;
+  end;
+  end;
 
 procedure TMainDesigner.OnOptionsClick(Sender: TObject);
 var
   frm: TfrmVFDSetup;
 begin
-  gINI.WriteFormState(frmMain);
+ // gINI.WriteFormState(frmMain);
   frm := TfrmVFDSetup.Create(nil);
   try
      if frm.ShowModal = mrOK then
     begin
-      frmMain.WindowType:=wtpopup;
-
+    //  frmMain.WindowType:=wtpopup;
                   LoadDefaults;
       frmMain.mru.MaxItems      := gINI.ReadInteger('Options', 'MRUFileCount', 4);
       frmMain.mru.ShowFullPath  := gINI.ReadBool('Options', 'ShowFullPath', True);
