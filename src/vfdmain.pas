@@ -518,34 +518,10 @@ begin
 end;
 
 procedure TMainDesigner.OnExit(Sender: TObject);
-var
-x : integer;
 begin
-  if (IsRunningIDE('typhon') = false) and (IsRunningIDE('lazarus') = false)
- then
- begin
  frmProperties.Close;
  frmMain.Close;
- end else
- begin
-  if gINI.ReadInteger('Options', 'IDE', 0) > 0
-   then begin
- x := 0 ;
- while x < length(ArrayFormDesign)  do
-  begin
-  ArrayFormDesign[x].Form.close;
-   inc(x);
-   end;
-
-  frmProperties.hide;
-   frmMain.hide;
-  end else
-  begin
-  frmProperties.Close;
- frmMain.Close;
-  end;
-  end;
-  end;
+    end;
 
 procedure TMainDesigner.OnOptionsClick(Sender: TObject);
 var

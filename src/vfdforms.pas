@@ -540,9 +540,9 @@ begin
 
    if  idetemp <> changeide then
     case idetemp of
-  0 : ShowMessage('IDE des-integration will append after closing application');
-  1 : ShowMessage('IDE integration will append next run of ' + rblaz.Text);
-  2 : ShowMessage('IDE integration will append next run of ' + rbtyphon.Text);
+  0 : ShowMessage('IDE des-integration will append after closing application' );
+  1 : ShowMessage('IDE integration will append next run of Lazarus');
+  2 : ShowMessage('IDE integration will append next run of Typhon');
   end;
 
   end;
@@ -596,7 +596,7 @@ begin
 
   lb1 := TfpgLabel.Create(self);
   with lb1 do
-  begin
+    begin
     Name := 'lb1';
     SetPosition(32, 24, 100, 16);
     FontDesc := '#Label1';
@@ -816,7 +816,7 @@ begin
   with rbTyphon do
   begin
     Name := 'rbTyphon';
-    SetPosition(288, 44, 104, 19);
+    SetPosition(288, 64, 120, 19);
     FontDesc := '#Label1';
     GroupIndex := 0;
     Hint := '';
@@ -829,7 +829,7 @@ begin
   with rbLaz do
   begin
     Name := 'rbLaz';
-    SetPosition(288, 64, 120, 19);
+    SetPosition(288, 44, 104, 19);
     FontDesc := '#Label1';
     GroupIndex := 0;
     Hint := '';
@@ -964,10 +964,7 @@ begin
 dataf := GetUserDir +'.lazarus/environmentoptions.xml' ;
 {$ENDIF}
 
- dataf := copy(GetAppConfigDir(false),1,pos('uidesigner',GetAppConfigDir(false))-1)
-             +  'lazarus\environmentoptions.xml';
-
-if fileexists(pchar(dataf)) then  rblaz.enabled:= true else rblaz.enabled:= false;
+ if fileexists(pchar(dataf)) then  rblaz.enabled:= true else rblaz.enabled:= false;
 
 
    if  gINI.ReadBool('frmVFDSetupState', 'FirstLoad', true) = false  then

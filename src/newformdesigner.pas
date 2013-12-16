@@ -87,9 +87,11 @@ type
     Label2: TfpgLabel;
     Label3: TfpgLabel;
     Label4: TfpgLabel;
+
     {@VFD_HEAD_END: frmMain}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
+    procedure   MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
     function    GetSelectedWidget: TVFDWidgetClass;
     procedure   SetSelectedWidget(wgc: TVFDWidgetClass);
     procedure   AfterCreate; override;
@@ -323,6 +325,34 @@ begin
   end;
 end;
 
+procedure   TfrmMain.MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
+  var
+  x : integer;
+  begin
+    if (IsRunningIDE('typhon') = false) and (IsRunningIDE('lazarus') = false)
+   then
+   begin
+     CanClose := true;
+     end else
+   begin
+      CanClose := false;
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0
+     then begin
+   x := 0 ;
+   while x < length(ArrayFormDesign)  do
+    begin
+    ArrayFormDesign[x].Form.close;
+     inc(x);
+     end;
+    frmProperties.close;
+     frmMain.hide;
+    end else
+    begin
+    CanClose := true;
+    end;
+    end;
+    end;
+
 procedure TfrmMain.LoadIDEparameters(ide :integer) ;
 var
 f : textfile ;
@@ -352,7 +382,7 @@ begin
   begin
 {$if defined(cpu64)}
 {$IFDEF Windows}
- dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner',GetAppConfigDir(false))-1)
+ dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner_ext',GetAppConfigDir(false))-1)
            +  'Roaming\typhon64\environmentoptions.xml';
   {$ENDIF}
 {$IFDEF Linux}
@@ -361,7 +391,7 @@ dataf := GetUserDir +'.typhon64/environmentoptions.xml' ;
 
 {$else}
 {$IFDEF Windows}
-dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner',GetAppConfigDir(false))-1)
+dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner_ext',GetAppConfigDir(false))-1)
            +  'Roaming\typhon32\environmentoptions.xml';
   {$ENDIF}
 {$IFDEF Linux}
@@ -374,7 +404,7 @@ dataf := GetUserDir +'.typhon32/environmentoptions.xml' ;
  if ide = 1 then
     begin
 {$IFDEF Windows}
-dataf := copy(GetAppConfigDir(false),1,pos('uidesigner',GetAppConfigDir(false))-1)
+dataf := copy(GetAppConfigDir(false),1,pos('uidesigner_ext',GetAppConfigDir(false))-1)
           +  'lazarus\environmentoptions.xml';
  {$ENDIF}
 {$IFDEF Linux}
@@ -386,9 +416,9 @@ end;
 
 if fileexists(pchar(dataf)) then
                 begin
-                    AssignFile(f,pchar( dataf));
+   AssignFile(f,pchar(dataf));
    Reset(F);
-    dataf := '' ;
+   dataf := '' ;
    dataf2 := '' ;
    fmbegin := 0 ;
    fmend := 0;
@@ -411,7 +441,8 @@ if fileexists(pchar(dataf)) then
           left := 190 ;
              top := 43 ;
          {$IFDEF Windows}
-            left := 182 ;
+            top := 41 ;
+            width := fpgApplication.ScreenWidth  - 198 ;
             {$ENDIF}
       end else  if   Pos('WindowState Value="Normal"',dataf2) > 0 then
                begin
@@ -419,27 +450,51 @@ if fileexists(pchar(dataf)) then
                     begin
                        dataf := copy(dataf2,Pos('Left="',dataf2)+6,6) ;
             left := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) + 190 ;
-                end else left :=0 ;
+                        end else left := 190 ;
+            {$IFDEF Windows}
+            left := left + 8 ;
+            {$ENDIF}
 
-
-               if   Pos('Top="',dataf2) > 0 then
+           if   Pos('Top="',dataf2) > 0 then
                    begin
                   dataf := copy(dataf2,Pos('Top="',dataf2)+5,6) ;
             top := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) ;
-            end  else top :=77 ;
-                   top := top + 50;
+            end
+            {$IFDEF unix}
+             else top :=  0 ;
+             top := top + 52;
+            {$ENDIF}
+             {$IFDEF windows}
+             else top :=  0 ;
+              top := top + 50;
+            {$ENDIF}
+
             if   Pos('Width="',dataf2) > 0 then
               begin
                   dataf := copy(dataf2,Pos('Width="',dataf2)+7,6) ;
             width := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) - 190 ;
-          end else width := fpgApplication.ScreenWidth - 190 ; ;
+             {$IFDEF Windows}
+            width := width - 8 ;
+            {$ENDIF}
+          end else
+          begin
+          width := fpgApplication.ScreenWidth - 190 ;
+            {$IFDEF Windows}
+            width := width - 8 ;
+            {$ENDIF}
+          end;
+
+
                end;
 
          ////
 
 {$IFDEF Windows}
        if  gINI.ReadBool('Options', 'AlwaystoFront', false) = true then
-                left := left + 8 ;
+         begin
+      left := left - 5 ;
+      width := width + 5 ;
+        end;
 {$ENDIF}
 
 {$IFDEF Linux}
@@ -532,6 +587,7 @@ begin
   WindowPosition := wpUser;
   MinHeight := 82;
   MinWidth := 315;
+  OnCloseQuery:= @MainCloseQueryEvent;
 
   MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do
@@ -968,15 +1024,29 @@ begin
    MainMenu.MenuItem(6).Text:=  'Current file : ' + p + s + '     fpGUI Designer v' + program_version;    ;
     btnToFront.Text:='Normal';
    btnToFront.tag:=1;
-   {$IFDEF windows}
+ if idetemp = 1 then
+  begin
+    {$IFDEF Windows}
+      // left := left - 5 ;
+     width := width + 8 ;
+       {$ENDIF}
+    {$IFDEF Linux}
+      left := left + 1 ;
+    {$ENDIF}
+   end;
+
+  if  idetemp = 2 then
+  begin
+    {$IFDEF windows}
    left := left + 8 ;
-   UpdateWindowPosition;
-   {$ENDIF}
+     {$ENDIF}
+     end;
+UpdateWindowPosition;
        show;
     frmProperties.hide;
    fpgapplication.ProcessMessages;
    frmProperties.Show;
-  end;
+   end;
 
 procedure TfrmMain.OnNeverToFront(Sender: TObject);
 begin
@@ -988,15 +1058,31 @@ begin
    btnToFront.tag:=0;
   WindowType := wtwindow ;  // with borders, not on front.
   //  WindowAttributes := [];
-     {$IFDEF windows}
+
+     if idetemp = 1 then
+  begin
+   {$IFDEF Windows}
+     //  left := left + 5 ;
+     width := width - 8 ;
+      {$ENDIF}
+ {$IFDEF Linux}
+      left := left - 1 ;
+  {$ENDIF}
+   end;
+
+  if  idetemp = 2 then
+  begin
+   {$IFDEF windows}
    left := left - 8 ;
+     {$ENDIF}
+     end;
    UpdateWindowPosition;
-    {$ENDIF}
+
    show;
    frmProperties.hide;
    fpgapplication.ProcessMessages;
    frmProperties.Show;
-end;
+  end;
 
 procedure TfrmMain.OnHideClick(Sender: TObject);
 
