@@ -1068,6 +1068,9 @@ begin
       AnUnitInfo.SessionModified:=true;
       AEditor.Modified:=false;
     end;
+///// fred was here for fpGUI
+    LoadfpgDesigner(AnUnitInfo.Filename, '');
+   //////
     exit(mrOk);
   end;
 
@@ -1192,6 +1195,10 @@ begin
   debugln(['TLazSourceFileManager.SaveEditorFile END ',NewFilename,' AnUnitInfo.Modified=',AnUnitInfo.Modified,' AEditor.Modified=',AEditor.Modified]);
   {$ENDIF}
   Result:=mrOk;
+
+///// fred was here
+    LoadfpgDesigner(AnUnitInfo.Filename, '');
+   //////
 end;
 
 function TLazSourceFileManager.SaveEditorFile(const Filename: string;

@@ -3067,6 +3067,7 @@ procedure TMainIDE.mnuSaveClicked(Sender: TObject);
 begin
   if SourceEditorManager.ActiveEditor = nil then exit;
   DoSaveEditorFile(SourceEditorManager.ActiveEditor, [sfCheckAmbiguousFiles]);
+
 end;
 
 procedure TMainIDE.mnuSaveAsClicked(Sender: TObject);
@@ -9373,6 +9374,10 @@ begin
       AnUnitInfo.SessionModified:=true;
       AEditor.Modified:=false;
     end;
+
+   ///// fred was here for fpgui
+    LoadfpgDesigner(AnUnitInfo.Filename, '');
+  //////
     exit(mrOk);
   end;
 
@@ -9497,6 +9502,11 @@ begin
   debugln(['TMainIDE.DoSaveEditorFile END ',NewFilename,' AnUnitInfo.Modified=',AnUnitInfo.Modified,' AEditor.Modified=',AEditor.Modified]);
   {$ENDIF}
   Result:=mrOk;
+
+///// fred was here for fpgui
+    LoadfpgDesigner(AnUnitInfo.Filename, '');
+  //////
+
 end;
 
 function TMainIDE.DoCloseEditorFile(PageIndex:integer;
