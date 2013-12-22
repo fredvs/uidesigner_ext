@@ -1,3 +1,8 @@
+{ This is a patched version of main.pp. It allows to use fpGUI Designer.
+Fred van Stappen     
+fiens@hotmail.com
+}
+
 {
  ***************************************************************************
  *                                                                         *
@@ -211,10 +216,7 @@ implementation
 
 var
   SourceFileMgrSingleton: TLazSourceFileManager = nil;
-  /// fred was here
-  AProcess : TProcess ;
-  ///
-
+  
  function SourceFileMgr: TLazSourceFileManager;
 // Return always the same instance of SourceFileManager. Create at the first time.
 begin
@@ -5243,6 +5245,7 @@ begin
   if (AComponentClassName='') or (not IsValidIdent(AComponentClassName)) then
   begin
     DebugLn(['TLazSourceFileManager.LoadComponentDependencyHidden invalid component class name "',AComponentClassName,'"']);
+
     exit(mrCancel);
   end;
 

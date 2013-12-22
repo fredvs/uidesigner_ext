@@ -1,3 +1,7 @@
+{ This is a patched version of main.pp. It allows to use fpGUI Designer.
+Fred van Stappen     
+fiens@hotmail.com
+}
 {
  /***************************************************************************
                     main.pp  -  the "integrated" in IDE
@@ -1127,11 +1131,7 @@ var
   SkipAutoLoadingLastProject: boolean = false;
   StartedByStartLazarus: boolean = false;
   ShowSetupDialog: boolean = false;
-
-  /// fred was here for fpgui
-  AProcess : TProcess ;
-  ///
-
+ 
 function FindDesignComponent(const aName: string): TComponent;
 var
   AnUnitInfo: TUnitInfo;
@@ -3857,6 +3857,7 @@ begin
   if AComponent is TControl then
     TControl(AComponent).ControlStyle:=
       TControl(AComponent).ControlStyle-[csNoDesignVisible];
+
   // create designer
   DesignerForm.Designer := TDesigner.Create(DesignerForm, TheControlSelection);
   {$IFDEF IDE_DEBUG}
