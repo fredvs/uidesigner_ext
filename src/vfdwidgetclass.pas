@@ -91,8 +91,6 @@ type
 
 implementation
 
-uses
-  TypInfo;
   
 
 type
@@ -162,7 +160,7 @@ end;
 
 function TVFDWidgetProperty.GetPropertySource(wg: TfpgWidget; const ident: string): string;
 begin
-
+  Result := '';
 end;
 
 function TVFDWidgetProperty.ParseSourceLine(wg: TfpgWidget; const line: string): boolean;

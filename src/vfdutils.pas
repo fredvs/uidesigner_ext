@@ -22,8 +22,6 @@ unit vfdutils;
 interface
 
 uses
-  Classes,
-  SysUtils,
   fpg_widget,
   fpg_form,
   fpg_label,

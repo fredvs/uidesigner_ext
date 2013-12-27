@@ -25,7 +25,6 @@ interface
 uses
   SysUtils,
   Classes,
-  fpg_base,
   fpg_utils;
 
 type

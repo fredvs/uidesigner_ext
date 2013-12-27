@@ -1,7 +1,12 @@
+{ TThis is a extended version of fpGUI uidesigner
+Fred van Stappen
+fiens@hotmail.com
+}
+
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
-    Copyright (C) 2006 - 2010 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
@@ -12,7 +17,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
     Description:
-      The main uiDesigner forms.
+      This unit defines various forms/dialogs used in the UI Designer.
 }
 
 unit vfdforms;
@@ -25,7 +30,6 @@ uses
   Classes,
   SysUtils,
   fpg_base,
-  fpg_widget,
   fpg_form,
   fpg_label,
   fpg_edit,
@@ -36,7 +40,6 @@ uses
   fpg_dialogs,
   fpg_trackbar,
   fpg_checkbox,
-  fpg_panel,
   newformdesigner,
   fpg_tree;
 
@@ -44,14 +47,14 @@ type
 
   TVFDDialog = class(TfpgForm)
   protected
-    procedure HandleKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean); override;
+    procedure HandleKeyPress(var keycode: word; var shiftstate: TShiftState;
+      var consumed: boolean); override;
   end;
 
 
   TInsertCustomForm = class(TVFDDialog)
   public
-    l1,
-    l2: TfpgLabel;
+    l1, l2: TfpgLabel;
     edClass: TfpgEdit;
     edName: TfpgEdit;
     btnOK: TfpgButton;
@@ -63,7 +66,8 @@ type
 
   TNewFormForm = class(TVFDDialog)
   private
-    procedure OnedNameKeyPressed(Sender: TObject; var KeyCode: word; var ShiftState: TShiftState; var Consumed: boolean);
+    procedure OnedNameKeyPressed(Sender: TObject; var KeyCode: word;
+      var ShiftState: TShiftState; var Consumed: boolean);
   public
     l1: TfpgLabel;
     edName: TfpgEdit;
@@ -76,7 +80,8 @@ type
 
   TEditPositionForm = class(TVFDDialog)
   private
-    procedure edPosKeyPressed(Sender: TObject; var KeyCode: word; var ShiftState: TShiftState; var Consumed: boolean);
+    procedure edPosKeyPressed(Sender: TObject; var KeyCode: word;
+      var ShiftState: TShiftState; var Consumed: boolean);
   public
     lbPos: TfpgLabel;
     edPos: TfpgEdit;
@@ -89,10 +94,11 @@ type
 
   TWidgetOrderForm = class(TVFDDialog)
   private
-    function    GetTitle: string;
-    procedure   SetTitle(const AValue: string);
+    function GetTitle: string;
+    procedure SetTitle(const AValue: string);
   public
     {@VFD_HEAD_BEGIN: WidgetOrderForm}
+
 
     lblTitle: TfpgLabel;
     btnOK: TfpgButton;
@@ -100,29 +106,28 @@ type
     btnUp: TfpgButton;
     btnDown: TfpgButton;
     TreeView1: TfpgTreeView;
-        {@VFD_HEAD_END: WidgetOrderForm}
+    {@VFD_HEAD_END: WidgetOrderForm}
   public
     constructor Create(AOwner: TComponent); override;
-    destructor  Destroy; override;
-    procedure   AfterCreate; override;
-    procedure   OnButtonClick(Sender: TObject);
-    property    Title: string read GetTitle write SetTitle;
+    destructor Destroy; override;
+    procedure AfterCreate; override;
+    procedure OnButtonClick(Sender: TObject);
+    property Title: string read GetTitle write SetTitle;
   end;
 
 
   TfrmVFDSetup = class(TfpgForm)
   private
     FINIVersion: integer;
-    procedure   FormShow(Sender: TObject);
-    procedure   LoadSettings;
-    procedure   SaveSettings;
-    procedure   btnOKClick(Sender: TObject);
-    procedure   setAlwaysToFront(Sender: TObject) ;
-    procedure   IdeIntegration(Sender: TObject);
+    procedure LoadSettings;
+    procedure SaveSettings;
+    procedure btnOKClick(Sender: TObject);
+    procedure setAlwaysToFront(Sender: TObject);
+    procedure IdeIntegration(Sender: TObject);
+    procedure UndoLook(Sender: TObject);
 
   public
     {@VFD_HEAD_BEGIN: frmVFDSetup}
-    changeide : integer;
     lb1: TfpgLabel;
     chlGrid: TfpgComboBox;
     btnOK: TfpgButton;
@@ -147,15 +152,17 @@ type
     rbNone: TfpgRadioButton;
     WidgetOrderForm: TfpgLabel;
     rbedit0: TfpgRadioButton;
-    rbedit1: TfpgRadioButton;
     rbedit2: TfpgRadioButton;
     rbedit3: TfpgRadioButton;
     FilenameEdit1: TfpgFileNameEdit;
     rbedit4: TfpgRadioButton;
+    Label3: TfpgLabel;
+    CheckBox1: TfpgCheckBox;
+    Label4: TfpgLabel;
+    TrackBarUndo: TfpgTrackBar;
     {@VFD_HEAD_END: frmVFDSetup}
-    constructor Create(AOwner: TComponent); override;
-    procedure   AfterCreate; override;
-    procedure   BeforeDestruction; override;
+    procedure AfterCreate; override;
+    procedure BeforeDestruction; override;
   end;
 
 
@@ -170,6 +177,9 @@ uses
 const
   cDesignerINIVersion = 1;
 
+var
+  changeide: integer;
+
 
 { TInsertCustomForm }
 
@@ -181,12 +191,12 @@ begin
   WindowTitle := 'Insert Custom Widget';
   SetPosition(0, 0, 300, 100);
 
-  l1        := CreateLabel(self, 8, 4, 'Class name:');
-  edClass   := CreateEdit(self, 8, 24, 150, 0);
+  l1 := CreateLabel(self, 8, 4, 'Class name:');
+  edClass := CreateEdit(self, 8, 24, 150, 0);
   edClass.Text := 'Tfpg';
-  l2        := CreateLabel(self, 8, 48, 'Name:');
-  edName    := CreateEdit(self, 8, 68, 150, 0);
-  btnOK     := CreateButton(self, 180, 20, 100, 'OK', @OnButtonClick);
+  l2 := CreateLabel(self, 8, 48, 'Name:');
+  edName := CreateEdit(self, 8, 68, 150, 0);
+  btnOK := CreateButton(self, 180, 20, 100, 'OK', @OnButtonClick);
   btnCancel := CreateButton(self, 180, 52, 100, 'Cancel', @OnButtonClick);
   {%endregion}
 end;
@@ -194,7 +204,7 @@ end;
 procedure TInsertCustomForm.OnButtonClick(Sender: TObject);
 begin
   if Sender = btnOK then
-    ModalResult := mrOK
+    ModalResult := mrOk
   else
     ModalResult := mrCancel;
 end;
@@ -215,26 +225,26 @@ begin
   SetPosition(0, 0, 286, 66);
   WindowTitle := 'New Form';
 
-  l1           := CreateLabel(self, 8, 8, 'Form name:');
-  edName       := CreateEdit(self, 8, 28, 180, 0);
-  edName.Text  := '';
+  l1 := CreateLabel(self, 8, 8, 'Form name:');
+  edName := CreateEdit(self, 8, 28, 180, 0);
+  edName.Text := '';
   edName.OnKeyPress := @OnedNameKeyPressed;
-  btnOK        := CreateButton(self, 196, 8, 80, rsOK, @OnButtonClick);
-  btnCancel    := CreateButton(self, 196, 36, 80, rsCancel, @OnButtonClick);
+  btnOK := CreateButton(self, 196, 8, 80, rsOK, @OnButtonClick);
+  btnCancel := CreateButton(self, 196, 36, 80, rsCancel, @OnButtonClick);
 end;
 
 procedure TNewFormForm.OnButtonClick(Sender: TObject);
 begin
   if Sender = btnOK then
-    ModalResult := mrOK
+    ModalResult := mrOk
   else
     ModalResult := mrCancel;
 end;
 
 { TEditPositionForm }
 
-procedure TEditPositionForm.edPosKeyPressed(Sender: TObject; var KeyCode: word;
-  var ShiftState: TShiftState; var Consumed: boolean);
+procedure TEditPositionForm.edPosKeyPressed(Sender: TObject;
+  var KeyCode: word; var ShiftState: TShiftState; var Consumed: boolean);
 begin
   if (KeyCode = keyEnter) or (KeyCode = keyPEnter) then
     btnOK.Click;
@@ -249,17 +259,17 @@ begin
   WindowTitle := 'Position';
   Sizeable := False;
 
-  lbPos           := CreateLabel(self, 8, 8, 'Pos:      ');
-  edPos           := CreateEdit(self, 8, 28, 80, 0);
+  lbPos := CreateLabel(self, 8, 8, 'Pos:      ');
+  edPos := CreateEdit(self, 8, 28, 80, 0);
   edPos.OnKeyPress := @edPosKeyPressed;
-  btnOK           := CreateButton(self, 98, 8, 80, rsOK, @OnButtonClick);
-  btnCancel       := CreateButton(self, 98, 36, 80, rsCancel, @OnButtonClick);
+  btnOK := CreateButton(self, 98, 8, 80, rsOK, @OnButtonClick);
+  btnCancel := CreateButton(self, 98, 36, 80, rsCancel, @OnButtonClick);
 end;
 
 procedure TEditPositionForm.OnButtonClick(Sender: TObject);
 begin
   if Sender = btnOK then
-    ModalResult := mrOK
+    ModalResult := mrOk
   else
     ModalResult := mrCancel;
 end;
@@ -294,6 +304,7 @@ begin
   inherited AfterCreate;
   {@VFD_BODY_BEGIN: WidgetOrderForm}
 
+
   Name := 'WidgetOrderForm';
   SetPosition(692, 160, 426, 398);
   WindowTitle := 'Widget order';
@@ -315,12 +326,12 @@ begin
   begin
     Name := 'btnOK';
     SetPosition(346, 24, 75, 24);
-    Anchors := [anRight,anTop];
+    Anchors := [anRight, anTop];
     Text := 'OK';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.ok';
-    ModalResult := mrOK;
+    ModalResult := mrOk;
     TabOrder := 2;
   end;
 
@@ -329,7 +340,7 @@ begin
   begin
     Name := 'btnCancel';
     SetPosition(346, 52, 75, 24);
-    Anchors := [anRight,anTop];
+    Anchors := [anRight, anTop];
     Text := 'Cancel';
     FontDesc := '#Label1';
     Hint := '';
@@ -343,7 +354,7 @@ begin
   begin
     Name := 'btnUp';
     SetPosition(346, 108, 75, 24);
-    Anchors := [anRight,anTop];
+    Anchors := [anRight, anTop];
     Text := 'Up';
     FontDesc := '#Label1';
     Hint := '';
@@ -357,7 +368,7 @@ begin
   begin
     Name := 'btnDown';
     SetPosition(346, 136, 75, 24);
-    Anchors := [anRight,anTop];
+    Anchors := [anRight, anTop];
     Text := 'Down';
     FontDesc := '#Label1';
     Hint := '';
@@ -371,13 +382,13 @@ begin
   begin
     Name := 'TreeView1';
     SetPosition(4, 24, 336, 368);
-    Anchors := [anLeft,anRight,anTop,anBottom];
+    Anchors := [anLeft, anRight, anTop, anBottom];
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 7;
   end;
 
-    {@VFD_BODY_END: WidgetOrderForm}
+  {@VFD_BODY_END: WidgetOrderForm}
 end;
 
 procedure TWidgetOrderForm.OnButtonClick(Sender: TObject);
@@ -387,7 +398,7 @@ begin
   lNode := Treeview1.Selection;
   if lNode = nil then
     exit;
-  
+
   if Sender = btnUp then
   begin
     if lNode.Prev = nil then
@@ -401,117 +412,125 @@ begin
     if (lNode.Next.Next = nil) then // the last node doesn't have a next
       lNode.MoveTo(lNode.Next, naAdd)
     else
-      lNode.MoveTo(lNode.Next.Next, naInsert);  
+      lNode.MoveTo(lNode.Next.Next, naInsert);
   end;
-  
+
   Treeview1.Invalidate;
 end;
 
 { TVFDDialogBase }
 
-procedure TVFDDialog.HandleKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean);
+procedure TVFDDialog.HandleKeyPress(var keycode: word; var shiftstate: TShiftState;
+  var consumed: boolean);
 begin
   if keycode = keyEscape then
   begin
-    consumed    := True;
+    consumed := True;
     ModalResult := mrCancel;
   end;
   inherited HandleKeyPress(keycode, shiftstate, consumed);
 end;
 
-procedure TfrmVFDSetup.FormShow(Sender: TObject);
+procedure TfrmVFDSetup.UndoLook(Sender: TObject);
 begin
-  { Bring to afterform.create }
-
- // if FINIVersion >= cDesignerINIVersion then
-  //  gINI.ReadFormState(self)
-//  else
- //   gINI.ReadFormState(self, -1, -1, True);
+  frmMain.Hide;
+  if checkbox1.Checked = False then
+    frmMain.MainMenu.MenuItem(1).Visible := True
+  else
+    frmMain.MainMenu.MenuItem(1).Visible := False;
+  frmMain.Show;
 end;
 
-
-procedure   TfrmVFDSetup.IdeIntegration(Sender: TObject);
+procedure TfrmVFDSetup.IdeIntegration(Sender: TObject);
 begin
-  if sender = rbnone then
+  if Sender = rbnone then
   begin
-     rbnone.Checked:=true;
-  frmMain.btnOpen.Visible:=true;
-   frmMain.btnSave.Left:= 56 ;
-   frmMain.btnSave.UpdateWindowPosition;
+    rbnone.Checked := True;
+    frmMain.btnOpen.Visible := True;
+    frmMain.btnSave.Left := 56;
+    frmMain.btnSave.UpdateWindowPosition;
     frmMain.btnToFront.Left := 86;
-   frmMain.btnToFront.UpdateWindowPosition;
- WindowAttributes := [] ;
- frmMain.filemenu.MenuItem(0).Visible:=true;
- frmMain.filemenu.MenuItem(1).Visible:=true;
-// frmMain.filemenu.MenuItem(8).Visible:=true;
- frmMain.filemenu.MenuItem(2).Visible:=true;
-// frmMain.filemenu.MenuItem(9).Visible:=true;
+    frmMain.btnToFront.UpdateWindowPosition;
+    WindowAttributes := [];
+    frmMain.filemenu.MenuItem(0).Visible := True;
+    frmMain.filemenu.MenuItem(1).Visible := True;
+    // frmMain.filemenu.MenuItem(8).Visible:=true;
+    frmMain.filemenu.MenuItem(2).Visible := True;
+    // frmMain.filemenu.MenuItem(9).Visible:=true;
+  end;
+
+  if Sender = rbtyphon then
+  begin
+    rbtyphon.Checked := True;
+    frmmain.LoadIDEparameters(2);
+  end;
+
+  if Sender = rblaz then
+  begin
+    rblaz.Checked := True;
+    frmmain.LoadIDEparameters(1);
+  end;
 end;
-
-  if sender = rbtyphon then
-  begin
-   rbtyphon.Checked:=true;
-  frmmain.LoadIDEparameters(2) ;
-     end;
-
-    if sender = rblaz then
-  begin
-  rblaz.Checked:=true;
-  frmmain.LoadIDEparameters(1) ;
-   end;
- end;
 
 procedure TfrmVFDSetup.LoadSettings;
 var
- x : integer ;
+  x: integer;
 begin
- fpgapplication.ProcessMessages;
+  fpgapplication.ProcessMessages;
 
- //x := gINI.ReadInteger('Options', 'IDE', 0);
+  //x := gINI.ReadInteger('Options', 'IDE', 0);
 
- changeIde :=  idetemp ;
+  changeIde := idetemp;
 
- case idetemp of
-  0 : rbnone.Checked:=true;
-  1 : rblaz.Checked:=true;
-  2 : rbtyphon.Checked:=true;
+  case idetemp of
+    0: rbnone.Checked := True;
+    1: rblaz.Checked := True;
+    2: rbtyphon.Checked := True;
   end;
 
   x := gINI.ReadInteger('Options', 'Editor', 0);
 
- case x of
-  0 : rbedit0.Checked:=true;
-  1 : rbedit1.Checked:=true;
-  2 : rbedit2.Checked:=true;
-  3 : rbedit3.Checked:=true;
-  4 : rbedit4.Checked:=true;
+  case x of
+    0: rbedit0.Checked := True;
+    2: rbedit2.Checked := True;
+    3: rbedit3.Checked := True;
+    4: rbedit4.Checked := True;
   end;
 
-  FINIVersion             := gINI.ReadInteger('Designer', 'Version', 0);
-  chlGrid.FocusItem       := gINI.ReadInteger('Options', 'GridResolution', 2);
+  TrackBarUndo.Position := gINI.ReadInteger('Options', 'MaxUndo', 10);
+  CheckBox1.Checked := gINI.ReadBool('Options', 'EnableUndo', True);
+  maxundo := TrackBarUndo.Position;
+  FINIVersion := gINI.ReadInteger('Designer', 'Version', 0);
+  chlGrid.FocusItem := gINI.ReadInteger('Options', 'GridResolution', 2);
   tbMRUFileCount.Position := gINI.ReadInteger('Options', 'MRUFileCount', 4);
-  chkFullPath.Checked     := gINI.ReadBool('Options', 'ShowFullPath', True);
-  edtDefaultExt.Text      := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
-  chkUndoOnExit.Checked   := gINI.ReadBool('Options', 'UndoOnExit', UndoOnPropExit);
-  chkOneClick.Checked     := gINI.ReadBool('Options', 'OneClickMove', True);
-  chkCodeRegions.Checked  := gINI.ReadBool('Options', 'UseCodeRegions', True);
-  chkAlwaystoFront.Checked    :=  gINI.ReadBool('Options', 'AlwaystoFront', false);
+  chkFullPath.Checked := gINI.ReadBool('Options', 'ShowFullPath', True);
+  edtDefaultExt.Text := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
+  chkUndoOnExit.Checked := gINI.ReadBool('Options', 'UndoOnExit', UndoOnPropExit);
+  chkOneClick.Checked := gINI.ReadBool('Options', 'OneClickMove', True);
+  chkCodeRegions.Checked := gINI.ReadBool('Options', 'UseCodeRegions', True);
+  chkAlwaystoFront.Checked := gINI.ReadBool('Options', 'AlwaystoFront', False);
   cbIndentationType.FocusItem := gINI.ReadInteger('Options', 'IndentationType', 0);
   cbIndentationType.FocusItem := gINI.ReadInteger('Options', 'IndentationType', 0);
-  FilenameEdit1.FileName  := gINI.ReadString('Options', 'CustomEditor', '');  ;
-  end;
+  FilenameEdit1.FileName := gINI.ReadString('Options', 'CustomEditor', '');
+  ;
+end;
 
 procedure TfrmVFDSetup.SaveSettings;
 begin
- fpgapplication.ProcessMessages;
-    if  rbnone.Checked =true then
-  gINI.WriteString('Path', 'Application', '' )
-    else
-  gINI.WriteString('Path', 'Application', ParamStr(0));
+  fpgapplication.ProcessMessages;
+  if rbnone.Checked = True then
+    gINI.WriteString('Path', 'Application', '')
+  else
+    gINI.WriteString('Path', 'Application', ParamStr(0));
 
   gINI.WriteInteger('Designer', 'Version', cDesignerINIVersion);
   gINI.WriteInteger('Options', 'GridResolution', chlGrid.FocusItem);
   gINI.WriteInteger('Options', 'MRUFileCount', tbMRUFileCount.Position);
+  gINI.WriteInteger('Options', 'MaxUndo', TrackBarUndo.Position);
+  gINI.WriteBool('Options', 'EnableUndo', CheckBox1.Checked);
+  maxundo := TrackBarUndo.Position;
+  enableundo := checkBox1.Checked;
+
   gINI.WriteBool('Options', 'ShowFullPath', chkFullPath.Checked);
   gINI.WriteString('Options', 'DefaultFileExt', edtDefaultExt.Text);
   gINI.WriteBool('Options', 'UndoOnExit', chkUndoOnExit.Checked);
@@ -521,82 +540,82 @@ begin
   gINI.WriteInteger('Options', 'IndentationType', cbIndentationType.FocusItem);
   gINI.WriteString('Options', 'CustomEditor', FilenameEdit1.FileName);
 
-    if  rbedit0.Checked =true then
-   gINI.WriteInteger('Options', 'Editor', 0);
+  if rbedit0.Checked = True then
+    gINI.WriteInteger('Options', 'Editor', 0);
 
-     if  rbedit2.Checked =true then
-   gINI.WriteInteger('Options', 'Editor', 2);
+  if rbedit2.Checked = True then
+    gINI.WriteInteger('Options', 'Editor', 2);
 
-     if  rbedit3.Checked =true then
-   gINI.WriteInteger('Options', 'Editor', 3);
+  if rbedit3.Checked = True then
+    gINI.WriteInteger('Options', 'Editor', 3);
 
-       if  rbedit4.Checked =true then
-   gINI.WriteInteger('Options', 'Editor', 4);
+  if rbedit4.Checked = True then
+    gINI.WriteInteger('Options', 'Editor', 4);
 
 
-        if  rbnone.Checked =true then idetemp := 0 ;
-        if  rblaz.Checked =true then idetemp := 1 ;
-        if  rbtyphon.Checked =true then idetemp := 2 ;
+  if rbnone.Checked = True then
+    idetemp := 0;
+  if rblaz.Checked = True then
+    idetemp := 1;
+  if rbtyphon.Checked = True then
+    idetemp := 2;
 
-   if  idetemp <> changeide then
+  if idetemp <> changeide then
     case idetemp of
-  0 : ShowMessage('IDE des-integration will append after closing application' );
-  1 : ShowMessage('IDE integration will append next run of Lazarus');
-  2 : ShowMessage('IDE integration will append next run of Typhon');
-  end;
+      0: ShowMessage('IDE des-integration will append after closing application');
+      1: ShowMessage('IDE integration will append next run of Lazarus');
+      2: ShowMessage('IDE integration will append next run of Typhon');
+    end;
 
-  end;
+end;
 
 procedure TfrmVFDSetup.btnOKClick(Sender: TObject);
 begin
   SaveSettings;
-  ModalResult := mrOK;
+  ModalResult := mrOk;
 end;
 
 
 
 procedure TfrmVFDSetup.SetAlwaysToFront(Sender: TObject);
 begin
-    if tag = 1 then begin
-  hide;
-  fpgapplication.ProcessMessages;
-  gINI.WriteBool('Options', 'AlwaystoFront', chkAlwaystoFront.Checked);
-  if chkAlwaystoFront.checked = false then
-     frmMain.onnevertofront(Sender)
-  else
-    frmMain.onalwaystofront(sender);
- if rblaz.Checked = true then IdeIntegration(rblaz);
-  if rbtyphon.Checked = true then IdeIntegration(rbtyphon);
+  if tag = 1 then
+  begin
+    hide;
     fpgapplication.ProcessMessages;
-  show;
-     end;
-
+    gINI.WriteBool('Options', 'AlwaystoFront', chkAlwaystoFront.Checked);
+    if chkAlwaystoFront.Checked = False then
+      frmMain.onnevertofront(Sender)
+    else
+      frmMain.onalwaystofront(Sender);
+    if rblaz.Checked = True then
+      IdeIntegration(rblaz);
+    if rbtyphon.Checked = True then
+      IdeIntegration(rbtyphon);
+    fpgapplication.ProcessMessages;
+    Show;
   end;
 
-constructor TfrmVFDSetup.Create(AOwner: TComponent);
-begin
-  inherited Create(AOwner);
-  OnShow := @FormShow;
 end;
 
 procedure TfrmVFDSetup.AfterCreate;
 var
-  dataf : string ;
+  dataf: string;
 begin
   {@VFD_BODY_BEGIN: frmVFDSetup}
   Name := 'frmVFDSetup';
-  SetPosition(318, 279, 429, 350);
+  SetPosition(257, 140, 549, 350);
   WindowTitle := 'General settings';
   Hint := '';
   ShowHint := True;
   WindowPosition := wpUser;
   MinHeight := 305;
   MinWidth := 335;
-  Tag := 0 ;
+  Tag := 0;
 
   lb1 := TfpgLabel.Create(self);
   with lb1 do
-    begin
+  begin
     Name := 'lb1';
     SetPosition(32, 24, 100, 16);
     FontDesc := '#Label1';
@@ -623,8 +642,8 @@ begin
   with btnOK do
   begin
     Name := 'btnOK';
-    SetPosition(177, 315, 75, 24);
-    Anchors := [anRight,anBottom];
+    SetPosition(233, 319, 75, 24);
+    Anchors := [anRight, anBottom];
     Text := 'OK';
     FontDesc := '#Label1';
     Hint := '';
@@ -661,7 +680,7 @@ begin
   with chkFullPath do
   begin
     Name := 'chkFullPath';
-    SetPosition(32, 172, 172, 20);
+    SetPosition(32, 168, 172, 20);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 4;
@@ -692,7 +711,7 @@ begin
   with edtDefaultExt do
   begin
     Name := 'edtDefaultExt';
-    SetPosition(196, 212, 52, 24);
+    SetPosition(240, 212, 52, 24);
     ExtraHint := '';
     FontDesc := '#Edit1';
     Hint := '';
@@ -704,7 +723,7 @@ begin
   with lblName3 do
   begin
     Name := 'lblName3';
-    SetPosition(12, 200, 68, 16);
+    SetPosition(48, 200, 68, 16);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Various';
@@ -737,7 +756,7 @@ begin
   with Label1 do
   begin
     Name := 'Label1';
-    SetPosition(48, 216, 144, 16);
+    SetPosition(88, 216, 144, 16);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Default file extension:';
@@ -747,7 +766,7 @@ begin
   with chkCodeRegions do
   begin
     Name := 'chkCodeRegions';
-    SetPosition(32, 236, 328, 20);
+    SetPosition(88, 236, 328, 20);
     FontDesc := '#Label1';
     Hint := 'Applies to new form/dialogs only';
     TabOrder := 18;
@@ -758,7 +777,7 @@ begin
   with cbIndentationType do
   begin
     Name := 'cbIndentationType';
-    SetPosition(212, 260, 152, 24);
+    SetPosition(288, 256, 152, 24);
     ExtraHint := '';
     FontDesc := '#List';
     Hint := '';
@@ -772,7 +791,7 @@ begin
   with lblIndentType do
   begin
     Name := 'lblIndentType';
-    SetPosition(20, 264, 192, 16);
+    SetPosition(92, 260, 192, 16);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Indent Type for generated code:';
@@ -787,26 +806,27 @@ begin
     Hint := '';
     TabOrder := 19;
     Text := 'Designer always to front';
-    onChange :=   @setAlwaysToFront ;
+    onChange := @setAlwaysToFront;
   end;
 
   pathini := TfpgLabel.Create(self);
   with pathini do
   begin
     Name := 'pathini';
-    SetPosition(18, 290, 388, 20);
-    FontDesc := '#Label1';
+    SetPosition(14, 290, 524, 20);
+    Alignment := taCenter;
+    FontDesc := '#Label2';
     Hint := '';
     Text := 'Label';
-    Text := 'Location of ini file : ' + GetAppConfigDir(false) +  applicationname + '.ini' ;
-
+    Text := 'Location of ini file : ' + GetAppConfigDir(False) +
+      applicationname + '.ini';
   end;
 
   Label2 := TfpgLabel.Create(self);
   with Label2 do
   begin
     Name := 'Label2';
-    SetPosition(280, 4, 104, 15);
+    SetPosition(244, 4, 104, 15);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'IDE Integration';
@@ -816,46 +836,46 @@ begin
   with rbTyphon do
   begin
     Name := 'rbTyphon';
-    SetPosition(288, 64, 120, 19);
+    SetPosition(252, 64, 120, 19);
     FontDesc := '#Label1';
     GroupIndex := 0;
     Hint := '';
     TabOrder := 21;
     Text := 'with Typhon';
-    OnClick   := @IdeIntegration;
+    OnClick := @IdeIntegration;
   end;
 
   rbLaz := TfpgRadioButton.Create(self);
   with rbLaz do
   begin
     Name := 'rbLaz';
-    SetPosition(288, 44, 104, 19);
+    SetPosition(252, 44, 104, 19);
     FontDesc := '#Label1';
     GroupIndex := 0;
     Hint := '';
     TabOrder := 22;
     Text := 'with Lazarus';
-    OnClick   := @IdeIntegration;
+    OnClick := @IdeIntegration;
   end;
 
   rbNone := TfpgRadioButton.Create(self);
   with rbNone do
   begin
     Name := 'rbNone';
-    SetPosition(288, 24, 88, 19);
+    SetPosition(252, 24, 88, 19);
     FontDesc := '#Label1';
     GroupIndex := 0;
     Hint := '';
     TabOrder := 23;
     Text := 'None';
-    OnClick   := @IdeIntegration;
+    OnClick := @IdeIntegration;
   end;
 
   WidgetOrderForm := TfpgLabel.Create(self);
   with WidgetOrderForm do
   begin
     Name := 'WidgetOrderForm';
-    SetPosition(264, 96, 80, 15);
+    SetPosition(392, 4, 80, 15);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Code Editor';
@@ -865,7 +885,7 @@ begin
   with rbedit0 do
   begin
     Name := 'rbedit0';
-    SetPosition(276, 116, 104, 19);
+    SetPosition(396, 24, 104, 19);
     Checked := True;
     FontDesc := '#Label1';
     GroupIndex := 1;
@@ -878,7 +898,7 @@ begin
   with rbedit2 do
   begin
     Name := 'rbedit2';
-    SetPosition(276, 136, 108, 19);
+    SetPosition(396, 44, 108, 19);
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := '';
@@ -890,7 +910,7 @@ begin
   with rbedit3 do
   begin
     Name := 'rbedit3';
-    SetPosition(276, 156, 100, 19);
+    SetPosition(396, 64, 100, 19);
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := '';
@@ -902,7 +922,7 @@ begin
   with FilenameEdit1 do
   begin
     Name := 'FilenameEdit1';
-    SetPosition(296, 180, 116, 24);
+    SetPosition(420, 84, 116, 24);
     ExtraHint := '';
     FileName := '';
     Filter := '';
@@ -914,7 +934,7 @@ begin
   with rbedit4 do
   begin
     Name := 'rbedit4';
-    SetPosition(276, 180, 16, 19);
+    SetPosition(396, 84, 16, 19);
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := '';
@@ -922,11 +942,57 @@ begin
     Text := ' ';
   end;
 
+  Label3 := TfpgLabel.Create(self);
+  with Label3 do
+  begin
+    Name := 'Label3';
+    SetPosition(288, 120, 116, 19);
+    FontDesc := '#Label2';
+    Hint := '';
+    Text := 'Undo Feature';
+  end;
+
+  CheckBox1 := TfpgCheckBox.Create(self);
+  with CheckBox1 do
+  begin
+    Name := 'CheckBox1';
+    SetPosition(300, 140, 120, 19);
+    Checked := True;
+    FontDesc := '#Label1';
+    Hint := '';
+    TabOrder := 30;
+    Text := 'Enable Undo';
+    OnClick := @UndoLook;
+  end;
+
+  Label4 := TfpgLabel.Create(self);
+  with Label4 do
+  begin
+    Name := 'Label4';
+    SetPosition(304, 164, 104, 19);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Maximum Undo:';
+  end;
+
+  TrackBarUndo := TfpgTrackBar.Create(self);
+  with TrackBarUndo do
+  begin
+    Name := 'TrackBarUndo';
+    SetPosition(408, 156, 100, 30);
+    Hint := '';
+    Min := 10;
+    Position := 20;
+    Position := 20;
+    ShowPosition := True;
+    TabOrder := 32;
+  end;
+
   {@VFD_BODY_END: frmVFDSetup}
 
     {$IFDEF windows}
-    rbedit2.Text:= 'NotePad';
-    rbedit3.Text:= 'WordPad';
+  rbedit2.Text := 'NotePad';
+  rbedit3.Text := 'WordPad';
       {$ENDIF}
 
 
@@ -935,53 +1001,59 @@ begin
    {$if defined(cpu64)}
  {$IFDEF Windows}
 
-  dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner',GetAppConfigDir(false))-1)
-           +  'Roaming\typhon64\environmentoptions.xml';
+  dataf := copy(GetAppConfigDir(False), 1, pos('Local\uidesigner', GetAppConfigDir(False)) -
+    1) + 'Roaming\typhon64\environmentoptions.xml';
 
      {$ENDIF}
   {$IFDEF Linux}
- dataf := GetUserDir +'.typhon64/environmentoptions.xml' ;
+  dataf := GetUserDir + '.typhon64/environmentoptions.xml';
 {$ENDIF}
 
 {$else}
 {$IFDEF Windows}
-  dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner',GetAppConfigDir(false))-1)
-           +  'Roaming\typhon32\environmentoptions.xml';
+  dataf := copy(GetAppConfigDir(False), 1, pos('Local\uidesigner', GetAppConfigDir(False)) -
+    1) + 'Roaming\typhon32\environmentoptions.xml';
     {$ENDIF}
   {$IFDEF Linux}
- dataf := GetUserDir +'.typhon32/environmentoptions.xml' ;
+  dataf := GetUserDir + '.typhon32/environmentoptions.xml';
 {$ENDIF}
 {$endif}
 
- if fileexists(pchar(dataf)) then  rbtyphon.enabled:= true else rbtyphon.enabled:= false;
+  if fileexists(PChar(dataf)) then
+    rbtyphon.Enabled := True
+  else
+    rbtyphon.Enabled := False;
 
 
 {$IFDEF Windows}
-  dataf := copy(GetAppConfigDir(false),1,pos('uidesigner',GetAppConfigDir(false))-1)
-            +  'lazarus\environmentoptions.xml';
+  dataf := copy(GetAppConfigDir(False), 1, pos('uidesigner', GetAppConfigDir(False)) -
+    1) + 'lazarus\environmentoptions.xml';
    {$ENDIF}
  {$IFDEF Linux}
-dataf := GetUserDir +'.lazarus/environmentoptions.xml' ;
+  dataf := GetUserDir + '.lazarus/environmentoptions.xml';
 {$ENDIF}
 
- if fileexists(pchar(dataf)) then  rblaz.enabled:= true else rblaz.enabled:= false;
+  if fileexists(PChar(dataf)) then
+    rblaz.Enabled := True
+  else
+    rblaz.Enabled := False;
 
 
-   if  gINI.ReadBool('frmVFDSetupState', 'FirstLoad', true) = false  then
-                   gINI.ReadFormState(self) else
-   gINI.WriteBool('frmVFDSetupState', 'FirstLoad', false);
+  if gINI.ReadBool('frmVFDSetupState', 'FirstLoad', True) = False then
+    gINI.ReadFormState(self)
+  else
+    gINI.WriteBool('frmVFDSetupState', 'FirstLoad', False);
 
-   tag := 1 ;
- end;
+  tag := 1;
+end;
 
 procedure TfrmVFDSetup.BeforeDestruction;
 begin
   // We don't put this in SaveSettings because it needs to be called even if
   // user cancels the dialog with btnCancel or ESC key press.
-   gINI.WriteFormState(self);
+  gINI.WriteFormState(self);
   inherited BeforeDestruction;
 end;
 
 
 end.
-

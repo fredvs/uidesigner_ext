@@ -1,7 +1,12 @@
+{ This is the extended version of fpGUI
+with widow list, undo feature, integration into IDE, editor launcher,...
+Fred van Stappen
+fiens@hotmail.com
+}
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
-    Copyright (C) 2006 - 2010 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
@@ -23,88 +28,88 @@ interface
 
 uses
   Classes,
-   Process,
+  Process,
   SysUtils,
   fpg_form,
   fpg_base,
   fpg_main,
-  fpg_widget,
   fpg_constants,
   vfdprops,
   vfdforms,
   vfddesigner,
   vfdfile,
   fpg_dialogs,
-  fpg_menu,
-  RunOnce_PostIt,
   newformdesigner;
 
 const
   program_version = FPGUI_VERSION;
 
 
- var
+var
   s, p: string;
 
- //   windlist : pointer ;
+type
+  TProc = procedure(Sender: TObject) of object;
 
- type
- TProc = procedure(Sender: Tobject) of object;
-
- type
+type
 
   TMainDesigner = class(TObject)
   private
-    procedure   SetEditedFileName(const Value: string);
-    procedure   LoadDefaults;
+    procedure SetEditedFileName(const Value: string);
+    procedure LoadDefaults;
   protected
     FDesigners: TList;
     FFile: TVFDFile;
     FEditedFileName: string;
   public
+    ifundo: boolean;
     GridResolution: integer;
     SaveComponentNames: boolean;
     selectedform: TFormDesigner;
     constructor Create;
-    destructor  Destroy; override;
-    procedure   CreateWindows;
-    procedure   SelectForm(aform: TFormDesigner);
-    function    Designer(index: integer): TFormDesigner;
-    function    DesignerCount: integer;
-    function    NewFormName: string;
-    function    CreateParseForm(const FormName, FormHead, FormBody: string) :TFormDesigner ;
-    procedure   OnNewForm(Sender: TObject);
-    procedure   OnNewFile(Sender: TObject);
-    procedure   OnSaveFile(Sender: TObject);
-    procedure   OnLoadFile(Sender: TObject);
-    procedure   OnPropTextChange(Sender: TObject);
-    procedure   OnPropNameChange(Sender: TObject);
-    procedure   OnPropPosEdit(Sender: TObject);
-    procedure   OnOtherChange(Sender: TObject);
-    procedure   OnAnchorChange(Sender: TObject);
-    procedure   OnEditWidget(Sender: TObject);
-    procedure   OnEditWidgetOrder(Sender: TObject);
-    procedure   OnEditTabOrder(Sender: TObject);
-    procedure   OnExit(Sender: TObject);
-    procedure   OnOptionsClick(Sender: TObject);
-    property    EditedFileName: string read FEditedFileName write SetEditedFileName;
+    destructor Destroy; override;
+    procedure CreateWindows;
+    procedure SelectForm(aform: TFormDesigner);
+    function Designer(index: integer): TFormDesigner;
+    function DesignerCount: integer;
+    function NewFormName: string;
+    function CreateParseForm(const FormName, FormHead, FormBody: string):
+      TFormDesigner;
+    procedure SaveUndo(typeundo: integer);
+    procedure LoadUndo(undofile: string);
+    procedure OnNewForm(Sender: TObject);
+    procedure OnNewFile(Sender: TObject);
+    procedure OnSaveFile(Sender: TObject);
+    procedure OnLoadFile(Sender: TObject);
+    procedure OnPropTextChange(Sender: TObject);
+    procedure OnPropNameChange(Sender: TObject);
+    procedure OnPropPosEdit(Sender: TObject);
+    procedure OnOtherChange(Sender: TObject);
+    procedure OnAnchorChange(Sender: TObject);
+    procedure OnEditWidget(Sender: TObject);
+    procedure OnEditWidgetOrder(Sender: TObject);
+    procedure OnEditTabOrder(Sender: TObject);
+    procedure OnExit(Sender: TObject);
+    procedure OnOptionsClick(Sender: TObject);
+    property EditedFileName: string read FEditedFileName write SetEditedFileName;
   end;
 
 
 var
   maindsgn: TMainDesigner;
-  ArrayFormDesign : array of TFormDesigner ;
+  ArrayFormDesign: array of TFormDesigner;
+  ArrayUndo: array of string;
 
 implementation
 
 uses
   vfdformparser,
-   fpg_iniutils,
+  fpg_iniutils,
   fpg_utils;
 
 var
-  DefaultPasExt : String = '.pas';
-  OneClickMove: Boolean;
+  DefaultPasExt: string = '.pas';
+  OneClickMove: boolean;
 
 { TMainDesigner }
 
@@ -112,6 +117,7 @@ procedure TMainDesigner.OnNewFile(Sender: TObject);
 var
   n: integer;
 begin
+  ifundo := False;
   EditedFileName := '';
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -119,55 +125,79 @@ begin
     TFormDesigner(FDesigners[n]).Free;
   end;
   FDesigners.Clear;
-      n := 0;
-      frmmain.windowmenu.MenuItem(1).Visible:=false;
+  n := 0;
+  frmmain.windowmenu.MenuItem(1).Visible := False;
 
-      for n := 0 to 9 do
+  for n := 0 to 9 do
   begin
-  frmmain.windowmenu.MenuItem(n+2).Visible:=false;
-  frmmain.windowmenu.MenuItem(n+2).Text:='';
+    frmmain.windowmenu.MenuItem(n + 2).Visible := False;
+    frmmain.windowmenu.MenuItem(n + 2).Text := '';
   end;
-   SetLength(ArrayFormDesign,0);
-   OnNewForm(Sender);
+
+  for n := 0 to 9 do
+  begin
+    frmmain.listundomenu.MenuItem(n).Visible := False;
+    frmmain.listundomenu.MenuItem(n).Text := '';
+  end;
+  SetLength(ArrayFormDesign, 0);
+
+  if Length(ArrayUndo) > 0 then
+  begin
+
+    for n := 0 to length(ArrayUndo) - 1 do
+      deletefile(ArrayUndo[n]);
+  end;
+  indexundo := 0;
+  frmmain.undomenu.MenuItem(0).Enabled := False;
+  frmmain.undomenu.MenuItem(1).Enabled := False;
+  frmmain.undomenu.MenuItem(3).Enabled := False;
+  SetLength(ArrayUndo, 0);
+  OnNewForm(Sender);
 end;
 
 
 procedure TMainDesigner.OnLoadFile(Sender: TObject);
 var
-  n, m, x : integer;
+  n, m, x: integer;
   bl, bl2: TVFDFileBlock;
-  fname, fnametemp: string;
+  fname: string;
   afiledialog: TfpgFileDialog;
-  FormTemp : TfpgForm;
- begin
-  fname := EditedFileName;
 
+begin
+  fname := EditedFileName;
+  ifundo := False;
   if Sender <> maindsgn then
   begin
-    afiledialog          := TfpgFileDialog.Create(nil);
+    afiledialog := TfpgFileDialog.Create(nil);
     afiledialog.Filename := EditedFilename;
     afiledialog.WindowTitle := 'Open form file';
-    afiledialog.Filter   := 'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
+    afiledialog.Filter :=
+      'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
     if afiledialog.RunOpenFile then
     begin
       EditedFileName := aFileDialog.Filename;
-      fname          := EditedFilename;
+      fname := EditedFilename;
     end
     else
-      fname          := '';
+      fname := '';
     FreeAndNil(aFileDialog);
   end;
 
   if fname = '' then
   begin
- if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-begin
-   frmmain.Hide ;
-   frmProperties.Hide;
-end;
-   Exit ;
-  end ;
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+    begin
+      frmmain.Hide;
+      frmProperties.Hide;
+    end;
+    Exit;
+  end;
 
+  for n := 0 to 9 do
+  begin
+    frmmain.listundomenu.MenuItem(n).Visible := False;
+    frmmain.listundomenu.MenuItem(n).Text := '';
+  end;
 
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -175,50 +205,58 @@ end;
     TFormDesigner(FDesigners[n]).Free;
   end;
   FDesigners.Clear;
-  
+
   if not fpgFileExists(fname) then
   begin
-   //  ShowMessage('File does not exists.', 'Error loading form');
-      if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-begin
-   frmmain.Hide ;
-   frmProperties.Hide;
-end;
+    //  ShowMessage('File does not exists.', 'Error loading form');
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+    begin
+      frmmain.Hide;
+      frmProperties.Hide;
+    end;
     Exit;
   end;
 
-  if FFile.LoadFile(fname) = false then
-  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-begin
-   frmmain.Hide ;
-   frmProperties.Hide;
- end;
+  if FFile.LoadFile(fname) = False then
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+    begin
+      frmmain.Hide;
+      frmProperties.Hide;
+    end;
 
- if  FFile.GetBlocks = 0  then
- begin
-  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-begin
-   frmmain.Hide ;
-   frmProperties.Hide;
-end;
- end else
- begin
-  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-begin
-   frmmain.show ;
-   frmProperties.show;
-end;
- end ;
+  if FFile.GetBlocks = 0 then
+  begin
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+    begin
+      frmmain.Hide;
+      frmProperties.Hide;
+    end;
+  end
+  else
+  begin
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+    begin
+      frmmain.Show;
+      frmProperties.Show;
+    end;
+  end;
 
-  // fname := '' ;
-  SetLength(ArrayFormDesign,0);
-    x := 0 ;
+  if Length(ArrayUndo) > 0 then
+  begin
+    for n := 0 to length(ArrayUndo) - 1 do
+      deletefile(ArrayUndo[n]);
+  end;
 
-  for n := 0 to FFile.BlockCount-1 do
+  indexundo := 0;
+  SetLength(ArrayFormDesign, 0);
+  SetLength(ArrayUndo, 0);
+  x := 0;
+
+  for n := 0 to FFile.BlockCount - 1 do
   begin
     bl := FFile.Block(n);
     if bl.BlockID = 'VFD_HEAD_BEGIN' then
-      for m := n + 1 to FFile.BlockCount-1 do
+      for m := n + 1 to FFile.BlockCount - 1 do
       begin
         bl2 := FFile.Block(m);
         if (bl2.BlockID = 'VFD_BODY_BEGIN') and (bl2.FormName = bl.FormName) then
@@ -226,21 +264,29 @@ end;
           if x < 10 then
 
           begin
-          SetLength(ArrayFormDesign,x+1);
-          ArrayFormDesign[x] := CreateParseForm(bl.FormName, bl.Data, bl2.Data)  // pair was found
-          end else CreateParseForm(bl.FormName, bl.Data, bl2.Data) ;
+            SetLength(ArrayFormDesign, x + 1);
+            ArrayFormDesign[x] := CreateParseForm(bl.FormName, bl.Data, bl2.Data);
+            // pair was found
+          end
+          else
+            CreateParseForm(bl.FormName, bl.Data, bl2.Data);
 
-           frmmain.windowmenu.MenuItem(1).Visible:=true;
-           if x < 10 then begin
-           frmmain.windowmenu.MenuItem(x+2).Visible:=true;
-           frmmain.windowmenu.MenuItem(x+2).Text:=bl.FormName;
-           end;
-            fnametemp := bl.FormName ;
-            inc(x);
-            end;
-             end;
-    end;
-     frmMain.mru.AddItem(fname);
+          frmmain.windowmenu.MenuItem(1).Visible := True;
+          if x < 10 then
+          begin
+            frmmain.windowmenu.MenuItem(x + 2).Visible := True;
+            frmmain.windowmenu.MenuItem(x + 2).Text := bl.FormName;
+          end;
+          // fnametemp := bl.FormName ;
+          Inc(x);
+        end;
+      end;
+  end;
+  frmMain.mru.AddItem(fname);
+    if (enableundo = True) then SaveUndo(0);
+  frmmain.undomenu.MenuItem(0).Enabled := False;
+  frmmain.undomenu.MenuItem(1).Enabled := False;
+  frmmain.undomenu.MenuItem(3).Enabled := False;
 
 end;
 
@@ -259,15 +305,16 @@ begin
     fname := EditedFileName
   else
   begin
-    afiledialog          := TfpgFileDialog.Create(nil);
+    afiledialog := TfpgFileDialog.Create(nil);
     afiledialog.Filename := EditedFilename;
     afiledialog.WindowTitle := 'Save form source';
-    afiledialog.Filter   := 'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
+    afiledialog.Filter :=
+      'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
     if afiledialog.RunSaveFile then
     begin
-      fname:=aFileDialog.Filename;
-      if (ExtractFileExt(fname)='') then
-        fname:=fname+DefaultPasExt;
+      fname := aFileDialog.Filename;
+      if (ExtractFileExt(fname) = '') then
+        fname := fname + DefaultPasExt;
       EditedFileName := fname;
     end
     else
@@ -288,13 +335,13 @@ begin
   else
   begin
     uname := fpgExtractFileName(fname);
-    i     := pos('.pas', LowerCase(uname));
+    i := pos('.pas', LowerCase(uname));
     if i > 0 then
       uname := copy(uname, 1, i - 1);
     FFile.NewFileSkeleton(uname);
   end;
 
-  for n := 0 to DesignerCount-1 do
+  for n := 0 to DesignerCount - 1 do
   begin
     fd := nil;
     fd := Designer(n);
@@ -316,52 +363,243 @@ begin
     frmMain.mru.AddItem(fname);
   except
     on E: Exception do
-      raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' + #13 +
-          E.Message);
+      raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' +
+        #13 + E.Message);
+  end;
+   if (enableundo = True) then SaveUndo(0);
+end;
+
+procedure TMainDesigner.LoadUndo(undofile: string);
+var
+  n, m, x: integer;
+  bl, bl2: TVFDFileBlock;
+  FFileUndo: TVFDFile;
+begin
+  ifundo := True;
+  FFileUndo := TVFDFile.Create;
+
+  if FFileUndo.LoadFile(undofile) = False then
+  begin
+    FFileUndo.Free;
+    ifundo := False;
+    exit;
+  end;
+
+  if FFileUndo.GetBlocks = 0 then
+  begin
+    FFileUndo.Free;
+    ifundo := False;
+    exit;
+  end;
+
+
+  for n := 0 to FDesigners.Count - 1 do
+  begin
+    selectedform := nil;
+    TFormDesigner(FDesigners[n]).Free;
+  end;
+  FDesigners.Clear;
+
+
+  // fname := '' ;
+  SetLength(ArrayFormDesign, 0);
+  x := 0;
+
+  for n := 0 to FFileUndo.BlockCount - 1 do
+  begin
+    bl := FFileUndo.Block(n);
+    if bl.BlockID = 'VFD_HEAD_BEGIN' then
+      for m := n + 1 to FFileUndo.BlockCount - 1 do
+      begin
+        bl2 := FFileUndo.Block(m);
+        if (bl2.BlockID = 'VFD_BODY_BEGIN') and (bl2.FormName = bl.FormName) then
+        begin
+          if x < 10 then
+
+          begin
+            SetLength(ArrayFormDesign, x + 1);
+            ArrayFormDesign[x] := CreateParseForm(bl.FormName, bl.Data, bl2.Data);
+            // pair was found
+          end
+          else
+            CreateParseForm(bl.FormName, bl.Data, bl2.Data);
+
+          frmmain.windowmenu.MenuItem(1).Visible := True;
+          if x < 10 then
+          begin
+            frmmain.windowmenu.MenuItem(x + 2).Visible := True;
+            frmmain.windowmenu.MenuItem(x + 2).Text := bl.FormName;
+          end;
+          Inc(x);
+        end;
+      end;
+  end;
+  ifundo := False;
+  frmmain.undomenu.MenuItem(1).Enabled := True;
+end;
+
+procedure TMainDesigner.SaveUndo(typeundo: integer);
+var
+  n: integer;
+  fd: TFormDesigner;
+  fdataundo, undodir, undofile, undotime, undofile2: string;
+  ffundo: file;
+  FFileUndo: TVFDFile;
+begin
+
+  fpgapplication.ProcessMessages;
+  ifundo := True;
+  undodir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) +
+    directoryseparator + 'temp';
+  if DirectoryExists(PChar(undodir)) then
+  else
+    ForceDirectories(PChar(undodir));
+  undodir := undodir + directoryseparator;
+
+  FFileUndo := TVFDFile.Create;
+
+  FFileUndo.LoadFile(EditedFileName);
+  FFileUndo.GetBlocks;
+
+  for n := 0 to DesignerCount - 1 do
+  begin
+    fd := nil;
+    fd := Designer(n);
+    if fd = nil then
+      raise Exception.Create('Failed to find Designer Form');
+    FFileundo.SetFormData(fd.Form.Name, fd.GetFormSourceDecl, fd.GetFormSourceImpl);
+  end;
+
+  fdataundo := FFileUndo.MergeBlocks;
+  undotime := FormatDateTime('tt', now);
+
+  undofile := IntToStr(typeundo) + '_' + FormatDateTime('yy', now)
+  + FormatDateTime('mm', now) +  FormatDateTime('dd', now) +
+  FormatDateTime('hh', now)  +  FormatDateTime('nn', now)  +  FormatDateTime('ss', now)  ;
+
+  AssignFile(ffundo, fpgToOSEncoding(undodir + undofile + '.tmp'));
+  try
+    Rewrite(ffundo, 1);
+    try
+      BlockWrite(ffundo, fdataundo[1], length(fdataundo));
+    finally
+      CloseFile(ffundo);
+    end;
+  except
+    on E: Exception do
+      raise Exception.Create('Form save I/O failure in TMainDesigner.SaveUndo.' +
+        #13 + E.Message);
+  end;
+
+  FFileUndo.Free;
+
+  if length(ArrayUndo) < maxundo then
+    SetLength(ArrayUndo, length(ArrayUndo) + 1)
+  else
+    deletefile(ArrayUndo[length(ArrayUndo) - 1]);
+  undofile2 := ArrayUndo[0];
+  ArrayUndo[0] := undodir + undofile + '.tmp';
+  n := length(ArrayUndo) - 1;
+  while (n > 0) do
+  begin
+    ArrayUndo[n] := ArrayUndo[n - 1];
+    n := n - 1;
+  end;
+
+  if length(ArrayUndo) > 1 then
+    ArrayUndo[1] := undofile2;
+
+  n := 0;
+  while n < length(ArrayUndo) do
+  begin
+    frmmain.listundomenu.MenuItem(n).Visible := True;
+    Inc(n);
+  end;
+
+  undofile2 := frmmain.listundomenu.MenuItem(0).Text;
+  frmmain.listundomenu.MenuItem(0).Visible := True;
+  frmmain.listundomenu.MenuItem(0).Text := undotime;
+
+  n := length(ArrayUndo) - 1;
+  while (n > 0) do
+  begin
+    frmmain.listundomenu.MenuItem(n).Text := frmmain.listundomenu.MenuItem(n - 1).Text;
+    n := n - 1;
+  end;
+  if length(ArrayUndo) > 1 then
+    frmmain.listundomenu.MenuItem(1).Text := undofile2;
+
+  frmmain.undomenu.MenuItem(0).Enabled := True;
+  frmmain.undomenu.MenuItem(3).Enabled := True;
+
+  ifundo := False;
+end;
+
+procedure TMainDesigner.OnPropNameChange(Sender: TObject);
+begin
+
+  if SelectedForm <> nil then
+  begin
+    SelectedForm.OnPropNameChange(Sender);
+    fpgapplication.ProcessMessages;
+    if (ifundo = False) and (enableundo = True) then
+      SaveUndo(0);
+  end;
+end;
+
+procedure TMainDesigner.OnPropPosEdit(Sender: TObject);
+begin
+  if SelectedForm <> nil then
+  begin
+    SelectedForm.OnPropPosEdit(Sender);
+    fpgapplication.ProcessMessages;
+    if (ifundo = False) and (enableundo = True) then
+      SaveUndo(1);
+  end;
+end;
+
+procedure TMainDesigner.OnPropTextChange(Sender: TObject);
+begin
+  if SelectedForm <> nil then
+  begin
+    SelectedForm.OnPropTextChange(Sender);
   end;
 end;
 
 procedure TMainDesigner.OnAnchorChange(Sender: TObject);
 begin
   if SelectedForm <> nil then
+  begin
     SelectedForm.OnAnchorChange(Sender);
+    fpgapplication.ProcessMessages;
+    if (ifundo = False) and (enableundo = True) then
+      SaveUndo(3);
+  end;
 end;
 
 procedure TMainDesigner.OnOtherChange(Sender: TObject);
 begin
   if SelectedForm <> nil then
+  begin
     SelectedForm.OnOtherChange(Sender);
-end;
-
-procedure TMainDesigner.OnPropNameChange(Sender: TObject);
-begin
-  if SelectedForm <> nil then
-    SelectedForm.OnPropNameChange(Sender);
-end;
-
-procedure TMainDesigner.OnPropPosEdit(Sender: TObject);
-begin
-  if SelectedForm <> nil then
-    SelectedForm.OnPropPosEdit(Sender);
-end;
-
-procedure TMainDesigner.OnPropTextChange(Sender: TObject);
-begin
-  if SelectedForm <> nil then
-    SelectedForm.OnPropTextChange(Sender);
+    fpgapplication.ProcessMessages;
+    if (ifundo = False) and (enableundo = True) then
+      SaveUndo(4);
+  end;
 end;
 
 procedure TMainDesigner.OnNewForm(Sender: TObject);
 var
   fd: TFormDesigner;
   nfrm: TNewFormForm;
-    x : integer;
+  x: integer;
+
   function DoesNameAlreadyExist(const AName: string): boolean;
   var
     i: integer;
   begin
     Result := False;
-    for i := 0 to FDesigners.Count-1 do
+    for i := 0 to FDesigners.Count - 1 do
     begin
       if TFormDesigner(FDesigners[i]).Form.Name = AName then
       begin
@@ -370,14 +608,16 @@ var
       end;
     end;
   end;
+
 begin
   nfrm := TNewFormForm.Create(nil);
   try
-    if nfrm.ShowModal = mrOK then
+    if nfrm.ShowModal = mrOk then
     begin
       if DoesNameAlreadyExist(nfrm.edName.Text) then
       begin
-        TfpgMessageDialog.Critical('Name Conflict','The form name already exists in the current unit, please try again');
+        TfpgMessageDialog.Critical('Name Conflict',
+          'The form name already exists in the current unit, please try again');
         exit;
       end;
       fd := TFormDesigner.Create;
@@ -389,17 +629,18 @@ begin
       SelectedForm := fd;
       fd.Show;
 
-        x := length(ArrayFormDesign) ;
+      x := length(ArrayFormDesign);
 
-       if x < 10 then begin
-            SetLength(ArrayFormDesign,length(ArrayFormDesign)+1);
-            x := length(ArrayFormDesign) ;
-            ArrayFormDesign[x-1] := fd ;
-            frmmain.windowmenu.MenuItem(1).Visible:=true;
-              frmmain.windowmenu.MenuItem(x+1).Visible:=true;
-           frmmain.windowmenu.MenuItem(x+1).Text:=fd.Form.Name;
-                      end;
-
+      if x < 10 then
+      begin
+        SetLength(ArrayFormDesign, length(ArrayFormDesign) + 1);
+        x := length(ArrayFormDesign);
+        ArrayFormDesign[x - 1] := fd;
+        frmmain.windowmenu.MenuItem(1).Visible := True;
+        frmmain.windowmenu.MenuItem(x + 1).Visible := True;
+        frmmain.windowmenu.MenuItem(x + 1).Text := fd.Form.Name;
+      end;
+      SaveUndo(0);
     end;
 
   finally
@@ -419,14 +660,14 @@ end;
 
 constructor TMainDesigner.Create;
 begin
-  FDesigners   := TList.Create;
+  FDesigners := TList.Create;
   SelectedForm := nil;
-  FFile        := TVFDFile.Create;
+  FFile := TVFDFile.Create;
 
   // options
   SaveComponentNames := True;
   LoadDefaults;
-  
+
   FEditedFileName := '';
 end;
 
@@ -434,11 +675,17 @@ destructor TMainDesigner.Destroy;
 var
   n: integer;
 begin
+  if Length(ArrayUndo) > 0 then
+  begin
+    for n := 0 to length(ArrayUndo) - 1 do
+      deletefile(ArrayUndo[n]);
+  end;
+
   for n := 0 to FDesigners.Count - 1 do
     TFormDesigner(FDesigners[n]).Free;
   FDesigners.Free;
   FFile.Free;
-  
+
   frmProperties.Free;
   frmMain.Free;
   inherited;
@@ -454,7 +701,7 @@ end;
 function TMainDesigner.Designer(index: integer): TFormDesigner;
 begin
   Result := nil;
-  if (index < 0) or (index > FDesigners.Count-1) then
+  if (index < 0) or (index > FDesigners.Count - 1) then
     Exit;
   Result := TFormDesigner(FDesigners[index]);
 end;
@@ -480,11 +727,12 @@ begin
         Break;
       Inc(n);
     end;
-  until n > DesignerCount-1;
+  until n > DesignerCount - 1;
   Result := s;
 end;
 
-function TMainDesigner.CreateParseForm(const FormName, FormHead, FormBody: string) : TFormDesigner ;
+function TMainDesigner.CreateParseForm(const FormName, FormHead, FormBody: string):
+TFormDesigner;
 var
   fd: TFormDesigner;
   fp: TVFDFormParser;
@@ -495,7 +743,7 @@ begin
   fp.Free;
 
   FDesigners.Add(fd);
-  result := fd;
+  Result := fd;
   fd.Show;
 end;
 
@@ -519,24 +767,24 @@ end;
 
 procedure TMainDesigner.OnExit(Sender: TObject);
 begin
- frmProperties.Close;
- frmMain.Close;
-    end;
+  frmProperties.Close;
+  frmMain.Close;
+end;
 
 procedure TMainDesigner.OnOptionsClick(Sender: TObject);
 var
   frm: TfrmVFDSetup;
 begin
- // gINI.WriteFormState(frmMain);
+  // gINI.WriteFormState(frmMain);
   frm := TfrmVFDSetup.Create(nil);
   try
-     if frm.ShowModal = mrOK then
+    if frm.ShowModal = mrOk then
     begin
-    //  frmMain.WindowType:=wtpopup;
-                  LoadDefaults;
-      frmMain.mru.MaxItems      := gINI.ReadInteger('Options', 'MRUFileCount', 4);
-      frmMain.mru.ShowFullPath  := gINI.ReadBool('Options', 'ShowFullPath', True);
-          end;
+      //  frmMain.WindowType:=wtpopup;
+      LoadDefaults;
+      frmMain.mru.MaxItems := gINI.ReadInteger('Options', 'MRUFileCount', 4);
+      frmMain.mru.ShowFullPath := gINI.ReadBool('Options', 'ShowFullPath', True);
+    end;
   finally
     frm.Free;
 
@@ -544,10 +792,10 @@ begin
 end;
 
 procedure TMainDesigner.SetEditedFileName(const Value: string);
-  var
-  aprocess : tprocess;
- begin
-   AProcess := TProcess.Create(nil);
+var
+  aprocess: tprocess;
+begin
+  AProcess := TProcess.Create(nil);
 
   FEditedFileName := Value;
   s := ExtractFileName(FEditedFileName);
@@ -556,41 +804,43 @@ procedure TMainDesigner.SetEditedFileName(const Value: string);
     s := '[new]';
   frmMain.WindowTitle := 'fpGUI Designer v' + program_version + ' - ' + p + s;
 
-       if frmMain.btnToFront.Tag = 1 then
-       frmMain.MainMenu.MenuItem(6).Text:= 'Current file : ' + p + s + '     fpGUI Designer v' + program_version;
+  if frmMain.btnToFront.Tag = 1 then
+    frmMain.MainMenu.MenuItem(6).Text :=
+      'Current file : ' + p + s + '     fpGUI Designer v' + program_version;
 
    {$IFDEF Linux}
-  if  (fileexists(pchar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0)  > 1) then
+  if (fileexists(PChar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0) > 1) then
   begin
     case gINI.ReadInteger('Options', 'Editor', 0) of
-     2 :  AProcess.CommandLine := 'gedit ' + p + s ;
-     3 :  AProcess.CommandLine := 'geany ' + p + s ;
-     4 :  AProcess.CommandLine :=  gINI.ReadString('Options', 'CustomEditor', '') +' ' + p + s ;
+      2: AProcess.CommandLine := 'gedit ' + p + s;
+      3: AProcess.CommandLine := 'geany ' + p + s;
+      4: AProcess.CommandLine :=
+          gINI.ReadString('Options', 'CustomEditor', '') + ' ' + p + s;
     end;
-       AProcess.Options := AProcess.Options + [poNoConsole];
-    AProcess.Priority := ppNormal ;
-    AProcess.showwindow :=  swoShowNoActivate ;
+    AProcess.Options := AProcess.Options + [poNoConsole];
+    AProcess.Priority := ppNormal;
+    AProcess.showwindow := swoShowNoActivate;
     AProcess.Execute;
     AProcess.Free;
-   end;
+  end;
    {$ENDIF}
 
      {$IFDEF windows}
-  if  (fileexists(pchar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0)  > 1) then
+  if (fileexists(PChar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0) > 1) then
   begin
     case gINI.ReadInteger('Options', 'Editor', 0) of
-     2 :  AProcess.CommandLine := 'notepad ' + p + s ;
-    // 3 :  AProcess.CommandLine := 'wordpad ' + p + s ;
-     4 :  AProcess.CommandLine :=  gINI.ReadString('Options', 'CustomEditor', '') +' ' + p + s ;
+      2: AProcess.CommandLine := 'notepad ' + p + s;
+      // 3 :  AProcess.CommandLine := 'wordpad ' + p + s ;
+      4: AProcess.CommandLine :=
+          gINI.ReadString('Options', 'CustomEditor', '') + ' ' + p + s;
     end;
-       AProcess.Options := AProcess.Options + [poNoConsole];
-    AProcess.Priority := ppHigh ;
- // AProcess.showwindow :=  swonone ;
+    AProcess.Options := AProcess.Options + [poNoConsole];
+    AProcess.Priority := ppHigh;
+    // AProcess.showwindow :=  swonone ;
     AProcess.Execute;
     AProcess.Free;
-   end;
+  end;
    {$ENDIF}
-
 
 end;
 
@@ -601,11 +851,10 @@ begin
     1: GridResolution := 4;
     2: GridResolution := 8;
   end;
-  DefaultPasExt   := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
-  UndoOnPropExit  := gINI.ReadBool('Options', 'UndoOnExit', DefUndoOnPropExit);
-  OneClickMove    := gINI.ReadBool('Options', 'OneClickMove', True);
+  DefaultPasExt := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
+  UndoOnPropExit := gINI.ReadBool('Options', 'UndoOnExit', DefUndoOnPropExit);
+  OneClickMove := gINI.ReadBool('Options', 'OneClickMove', True);
   fpgApplication.HintPause := 1000;
 end;
 
 end.
-

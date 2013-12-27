@@ -23,11 +23,9 @@ interface
 
 uses
   SysUtils,
-  Classes,
   contnrs,
   vfdwidgetclass,
-  vfdprops,
-  typinfo;
+  vfdprops;
 
 procedure RegisterWidgets;
 procedure RegisterVFDWidget(awc: TVFDWidgetClass);
@@ -67,8 +65,7 @@ uses
   fpg_ColorWheel,
   fpg_splitter,
   fpg_hyperlink,
-  vfdpropeditgrid,
-  vfdmain;
+  vfdpropeditgrid;
 
 type
   TVFDPageControlWidgetClass = class(TVFDWidgetClass)

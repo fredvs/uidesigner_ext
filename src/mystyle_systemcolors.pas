@@ -42,7 +42,7 @@ interface
 
 uses
  // Classes, fpg_main, fpg_base;
-Classes, SysUtils, fpg_main, fpg_base;
+Classes, fpg_main, fpg_base;
 
 type
 

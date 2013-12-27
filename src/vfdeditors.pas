@@ -22,14 +22,10 @@ unit vfdeditors;
 interface
 
 uses
-  Classes,
-  SysUtils,
-  fpg_widget,
   fpg_label,
   fpg_button,
   fpg_memo,
-  vfdforms,
-  fpg_stylemanager;
+  vfdforms;
 
 type
 
@@ -80,7 +76,6 @@ begin
   btnCancel     := CreateButton(self, Width-84, 200, 80, 'Cancel', @OnButtonClick);
   btnCancel.Anchors := [anRight, anBottom];
   {%endregion}
-
 end;
 
 procedure TItemEditorForm.btnClearClicked(Sender: TObject);

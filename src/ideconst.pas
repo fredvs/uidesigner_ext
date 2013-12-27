@@ -21,7 +21,7 @@ unit ideconst;
 interface
 
 uses
-  Classes, SysUtils;
+  SysUtils;
 
 const
   cProjectExt     = '.project';

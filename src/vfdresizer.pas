@@ -23,7 +23,6 @@ interface
 
 uses
   Classes,
-  SysUtils,
   fpg_base,
   fpg_widget;
 
