@@ -21,70 +21,76 @@ program uidesigner_ext;
 
 {$mode objfpc}{$H+}
 
-uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads,
-  {$ENDIF}{$ENDIF}
+uses {$IFDEF UNIX} {$IFDEF UseCThreads}
+  cthreads, {$ENDIF} {$ENDIF}
   RunOnce_PostIt,
-   fpg_cmdlineparams
-  ,fpg_stylemanager, mystyle_systemcolors  ,
-  Classes, SysUtils, fpg_base, fpg_main, vfdmain, vfdresizer, vfdforms,
-  vfdfile, newformdesigner, vfdwidgets, vfdformparser, vfdeditors,   fpg_iniutils,
-  vfdwidgetclass, vfdutils, vfdprops, vfddesigner, vfdpropeditgrid;
+  fpg_cmdlineparams,
+  fpg_stylemanager,
+  SysUtils,
+  fpg_main,
+  vfdmain,
+  newformdesigner,
+  vfdwidgets;
 
-procedure MainProc;
-var
-filedir : string;
-begin
-  ifonlyone := true ;
-  filedir := '';
+  procedure MainProc;
+  var
+    filedir: string;
+  begin
+    ifonlyone := True;
+    filedir := '';
 
-  if (isrunningIDE('typhon') = false) and (isrunningIDE('lazarus') = false)
-  then
+    if (isrunningIDE('typhon') = False) and (isrunningIDE('lazarus') = False) then
     begin
-     filedir := 'clear';
-     RunOnce(filedir);
-    end else
-   begin
-       { If file passed in as clasical first param, load it! }
-   if (FileExists(ParamStr(1))) or (ParamStr(1)='closeall') or (ParamStr(1)='quit')  then filedir := ParamStr(1) ;
+      filedir := 'clear';
+      RunOnce(filedir);
+    end
+    else
+    begin
+      { If file passed in as clasical first param, load it! }
+      if (FileExists(ParamStr(1))) or (ParamStr(1) = 'closeall') or
+        (ParamStr(1) = 'quit') then
+        filedir := ParamStr(1);
 
-     if gCommandLineParams.IsParam('onlyone') then begin
-    if strtoint(copy(gCommandLineParams.GetParam('onlyone'),1,1)) > 0 then
-     RunOnce(filedir) else ifonlyone := false ;  ;
-     end else RunOnce(filedir);
+      if gCommandLineParams.IsParam('onlyone') then
+      begin
+        if StrToInt(copy(gCommandLineParams.GetParam('onlyone'), 1, 1)) > 0 then
+          RunOnce(filedir)
+        else
+          ifonlyone := False;
+        ;
+      end
+      else
+        RunOnce(filedir);
     end;
 
-  fpgApplication.Initialize;
-  try
-             RegisterWidgets;
-       if not gCommandLineParams.IsParam('style') then
-    if fpgStyleManager.SetStyle('my style system colors') then
-      fpgStyle := fpgStyleManager.Style;
+    fpgApplication.Initialize;
+    try
+      RegisterWidgets;
+      if not gCommandLineParams.IsParam('style') then
+        if fpgStyleManager.SetStyle('my style system colors') then
+          fpgStyle := fpgStyleManager.Style;
 
 
 
-    PropList := TPropertyList.Create;
-     maindsgn := TMainDesigner.Create;
+      PropList := TPropertyList.Create;
+      maindsgn := TMainDesigner.Create;
 
-     maindsgn.CreateWindows;
+      maindsgn.CreateWindows;
 
-    // Note:  This needs improving!!
-    fpgApplication.MainForm := frmMain;
+      // Note:  This needs improving!!
+      fpgApplication.MainForm := frmMain;
 
-   fpgApplication.Run;
-    
-    PropList.Free;
-    
-  finally
-    maindsgn.Free;
+      fpgApplication.Run;
+
+      PropList.Free;
+
+    finally
+      maindsgn.Free;
+    end;
   end;
-end;
 
 {$R *.res}
 
 begin
   MainProc;
 end.
-
-

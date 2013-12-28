@@ -1001,8 +1001,8 @@ begin
    {$if defined(cpu64)}
  {$IFDEF Windows}
 
-  dataf := copy(GetAppConfigDir(False), 1, pos('Local\uidesigner', GetAppConfigDir(False)) -
-    1) + 'Roaming\typhon64\environmentoptions.xml';
+  dataf := copy(GetAppConfigDir(False), 1, pos('Local\uidesigner',
+    GetAppConfigDir(False)) - 1) + 'Roaming\typhon64\environmentoptions.xml';
 
      {$ENDIF}
   {$IFDEF Linux}
@@ -1011,8 +1011,8 @@ begin
 
 {$else}
 {$IFDEF Windows}
-  dataf := copy(GetAppConfigDir(False), 1, pos('Local\uidesigner', GetAppConfigDir(False)) -
-    1) + 'Roaming\typhon32\environmentoptions.xml';
+  dataf := copy(GetAppConfigDir(False), 1, pos('Local\uidesigner',
+    GetAppConfigDir(False)) - 1) + 'Roaming\typhon32\environmentoptions.xml';
     {$ENDIF}
   {$IFDEF Linux}
   dataf := GetUserDir + '.typhon32/environmentoptions.xml';

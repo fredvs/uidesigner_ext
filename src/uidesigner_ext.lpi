@@ -140,6 +140,7 @@
       <Debugging>
         <GenerateDebugInfo Value="False"/>
         <StripSymbols Value="True"/>
+        <UseExternalDbgSyms Value="True"/>
       </Debugging>
       <LinkSmart Value="True"/>
       <Options>
@@ -149,6 +150,10 @@
       </Options>
     </Linking>
     <Other>
+      <Verbosity>
+        <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
+      </Verbosity>
+      <WriteFPCLogo Value="False"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

@@ -1,4 +1,4 @@
-{ This is the extended version of fpGUI
+{ This is the extended version of fpGUI uidesigner
 with widow list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
@@ -28,7 +28,6 @@ interface
 
 uses
   RunOnce_PostIt,
-  ideconst,
   SysUtils,
   Classes,
   fpg_base,
@@ -489,9 +488,7 @@ if fileexists(pchar(dataf)) then
             width := width - 8 ;
             {$ENDIF}
           end;
-
-
-               end;
+              end;
 
          ////
 
@@ -508,7 +505,6 @@ if fileexists(pchar(dataf)) then
                 left := left + 1 ;
 {$ENDIF}
      end;
-
 
     if ide = 2 then begin
 
@@ -556,9 +552,7 @@ if fileexists(pchar(dataf)) then
       CloseFile(f);
       UpdateWindowPosition;
          end;
-
-
-end;
+ end;
 
 procedure TfrmMain.onMessagePost;
 begin
@@ -575,7 +569,7 @@ end;
 procedure TfrmMain.OnLoadUndo(Sender: TObject);
  begin
     if Sender is TfpgMenuItem then begin
- maindsgn.loadundo(ArrayUndo[TfpgMenuItem(Sender).Tag]) ;
+ maindsgn.loadundo(TfpgMenuItem(Sender).Tag) ;
       end;
   end;
 
@@ -585,7 +579,8 @@ procedure TfrmMain.OnIndexUndo(Sender: TObject);
 if indexundo < length(ArrayUndo) -1  then
 begin
 inc(indexundo);
-maindsgn.loadundo(ArrayUndo[indexundo]) ;
+maindsgn.loadundo(indexundo) ;
+
 end else  frmmain.undomenu.MenuItem(0).Enabled := false;
 
  end;
@@ -596,7 +591,7 @@ procedure TfrmMain.OnIndexRedo(Sender: TObject);
 if indexundo > 0 then
 begin
 dec(indexundo);
-maindsgn.loadundo(ArrayUndo[indexundo]) ;
+maindsgn.loadundo(indexundo) ;
 end else  frmmain.undomenu.MenuItem(1).Enabled := false;
  end;
 

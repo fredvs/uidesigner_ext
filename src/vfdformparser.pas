@@ -42,25 +42,26 @@ type
     eob: boolean;
     line: string;
     lineindex: integer;
-    procedure   ParseFormProperties;
-    procedure   ParseFormWidgets;
-    procedure   NextLine;
-    function    ReadWGProperty(propline: string; wg: TfpgWidget; wgc: TVFDWidgetClass): boolean;
+    procedure ParseFormProperties;
+    procedure ParseFormWidgets;
+    procedure NextLine;
+    function ReadWGProperty(propline: string; wg: TfpgWidget;
+      wgc: TVFDWidgetClass): boolean;
   public
     constructor Create(const FormName, FormHead, FormBody: string);
-    destructor  Destroy; override;
-    function    ParseForm: TFormDesigner;
+    destructor Destroy; override;
+    function ParseForm: TFormDesigner;
   end;
 
 
-function  GetIdentifier(var s: string): string;
-function  GetStringValue(var s: string): string;
+function GetIdentifier(var s: string): string;
+function GetStringValue(var s: string): string;
 procedure SkipSpaces(var s: string);
-function  CheckSymbol(var s: string; const sym: string): boolean;
-function  GetIntValue(var s: string): integer;
-function  GetBoolValue(var s: string): boolean;
-function  GetFloatValue(var s: string): extended;
-function  GetColorValue(var s: string): integer;
+function CheckSymbol(var s: string; const sym: string): boolean;
+function GetIntValue(var s: string): integer;
+function GetBoolValue(var s: string): boolean;
+function GetFloatValue(var s: string): extended;
+function GetColorValue(var s: string): integer;
 
 
 implementation
@@ -71,7 +72,7 @@ implementation
 constructor TVFDFormParser.Create(const FormName, FormHead, FormBody: string);
 begin
   fformname := FormName;
-  ffd       := nil;
+  ffd := nil;
   BodyLines := TStringList.Create;
   BodyLines.Text := FormBody;
   lineindex := -1;
@@ -87,7 +88,7 @@ procedure TVFDFormParser.NextLine;
 begin
   repeat
     Inc(lineindex);
-    eob := (lineindex > BodyLines.Count-1);
+    eob := (lineindex > BodyLines.Count - 1);
     if not eob then
       line := trim(bodylines.Strings[lineindex])
     else
@@ -97,7 +98,7 @@ end;
 
 function TVFDFormParser.ParseForm: TFormDesigner;
 begin
-  ffd           := TFormDesigner.Create;
+  ffd := TFormDesigner.Create;
   ffd.Form.Name := fformname;
   // parsing line by line
   // the unknown lines will be "other properties"
@@ -129,7 +130,7 @@ var
 begin
   SkipSpaces(s);
   ns := '';
-  n  := 1;
+  n := 1;
   while (n <= length(s)) and (s[n] in ['0'..'9', '-']) do
   begin
     ns := ns + s[n];
@@ -152,8 +153,8 @@ begin
   else if UpperCase(fs) = 'FALSE' then
     Result := False
   else
-    raise exception.Create('Failed to parse Boolean value <' + s + '>');
-    
+    raise Exception.Create('Failed to parse Boolean value <' + s + '>');
+
   if Result then
     Delete(s, 1, 4)
   else
@@ -167,7 +168,7 @@ var
 begin
   SkipSpaces(s);
   ns := '';
-  n  := 1;
+  n := 1;
   while (n <= length(s)) and (s[n] in ['0'..'9', '-', '.']) do
   begin
     ns := ns + s[n];
@@ -183,11 +184,11 @@ var
   quot: boolean;
   c, prevc: char;
   ccode: string;
-//  ids: string;
+  //  ids: string;
 begin
   Result := '';
-//  ids    := GetIdentifier(s);
-//  if ids <> '' then
+  //  ids    := GetIdentifier(s);
+  //  if ids <> '' then
 {    if ids = 'u8' then
     begin
       if not CheckSymbol(s, '(') then
@@ -198,8 +199,8 @@ begin
 }
   SkipSpaces(s);
   prevc := #0;
-  n     := 1;
-  quot  := False;
+  n := 1;
+  quot := False;
   while n <= length(s) do
   begin
     c := s[n];
@@ -221,7 +222,7 @@ begin
             ccode := ccode + s[n];
             Inc(n);
           end;
-          c      := chr(StrToIntDef(ccode, Ord('?')) and $FF);
+          c := chr(StrToIntDef(ccode, Ord('?')) and $FF);
           Result := Result + c;
         end
         else
@@ -236,10 +237,10 @@ begin
     Delete(s, 1, n - 1);
 
   SkipSpaces(s);
-//  if ids <> '' then
-//    CheckSymbol(s, ')');
-//  if ids = 'u8' then
-//    Result := u8(Result);
+  //  if ids <> '' then
+  //    CheckSymbol(s, ')');
+  //  if ids = 'u8' then
+  //    Result := u8(Result);
 end;
 
 function GetColorValue(var s: string): integer;
@@ -252,8 +253,8 @@ begin
   CheckSymbol(s, '(');
   SkipSpaces(s);
   ns := '';
-  n  := 1;
-  while (n <= length(s)) and (s[n] in ['$','0'..'9','a'..'f','A'..'F']) do
+  n := 1;
+  while (n <= length(s)) and (s[n] in ['$', '0'..'9', 'a'..'f', 'A'..'F']) do
   begin
     ns := ns + s[n];
     Inc(n);
@@ -270,7 +271,7 @@ var
 begin
   SkipSpaces(s);
   Result := '';
-  n      := 1;
+  n := 1;
   while n <= length(s) do
   begin
     if s[n] in ['_', 'a'..'z', 'A'..'Z', '0'..'9'] then
@@ -315,7 +316,7 @@ begin
 
     wgname := GetIdentifier(s);
     //writeln('wg: ',wgname);
-    lok    := CheckSymbol(s, ':=');
+    lok := CheckSymbol(s, ':=');
     if lok then
       wgclass := GetIdentifier(s);
     lok := lok and CheckSymbol(s, '.');
@@ -328,7 +329,7 @@ begin
 
     if lok then
     begin
-//      writeln('wg create: ',wgname,' (',wgclass,') - ',wgparent);
+      //      writeln('wg create: ',wgname,' (',wgclass,') - ',wgparent);
 
       // searching for the parent ...
       pwg := nil;
@@ -336,16 +337,17 @@ begin
       begin
         pwg := ffd.FindWidgetByName(wgparent);
         if pwg = nil then
-          DebugLn('Warning! Parent object "' + wgparent + '" not found for "' + wgname + '"');
+          DebugLn('Warning! Parent object "' + wgparent + '" not found for "' +
+            wgname + '"');
       end;
       if pwg = nil then
         pwg := ffd.Form;
 
       wgclassuc := UpperCase(wgclass);
 
-      wg  := nil;
+      wg := nil;
       wgc := nil;
-      for n := 0 to VFDWidgetCount-1 do
+      for n := 0 to VFDWidgetCount - 1 do
       begin
         wgc := VFDWidget(n);
         if wgclassuc = UpperCase(wgc.WidgetClass.ClassName) then
@@ -358,22 +360,22 @@ begin
       if wg = nil then
       begin
         wgc := VFDOtherWidget;
-        wg  := TOtherWidget.Create(pwg);
+        wg := TOtherWidget.Create(pwg);
         TOtherWidget(wg).wgClassName := wgclass;
       end;
 
       wg.Name := wgname;
       wg.FormDesigner := ffd;
-      
+
       NextLine;
-      s     := UpperCase(line);
+      s := UpperCase(line);
       ident := GetIdentifier(s);
       if ident = 'WITH' then
       begin
         // skip with line...
         NextLine;
 
-        s     := UpperCase(line);
+        s := UpperCase(line);
         ident := GetIdentifier(s);
         if ident = 'BEGIN' then
           NextLine;
@@ -394,7 +396,7 @@ begin
 
       end;
 
-      wd           := ffd.AddWidget(wg, nil);
+      wd := ffd.AddWidget(wg, nil);
       wd.FVFDClass := wgc;
       wd.other.Text := wgother;
 
@@ -408,7 +410,8 @@ begin
   end;
 end;
 
-function TVFDFormParser.ReadWGProperty(propline: string; wg: TfpgWidget; wgc: TVFDWidgetClass): boolean;
+function TVFDFormParser.ReadWGProperty(propline: string; wg: TfpgWidget;
+  wgc: TVFDWidgetClass): boolean;
 var
   s: string;
   n: integer;
@@ -421,7 +424,7 @@ begin
 
   ident := UpperCase(GetIdentifier(s));
   //writeln('ident: ',ident);
-  sval  := '';
+  sval := '';
 
   lok := False;
 
@@ -431,7 +434,7 @@ begin
     if lok then
     begin
       sval := GetStringValue(s);
-      lok  := CheckSymbol(s, ';');
+      lok := CheckSymbol(s, ';');
     end;
     if lok then
       wg.Name := sval;
@@ -470,7 +473,7 @@ begin
       if lok then
       begin
         sval := GetStringValue(s);
-        lok  := CheckSymbol(s, ';');
+        lok := CheckSymbol(s, ';');
       end;
       if lok then
         TfpgForm(wg).WindowTitle := sval;
@@ -499,7 +502,7 @@ begin
 
   if not lok then
     if wgc <> nil then
-      for n := 0 to wgc.PropertyCount-1 do
+      for n := 0 to wgc.PropertyCount - 1 do
       begin
         lok := wgc.GetProperty(n).ParseSourceLine(wg, line);
         if lok then
@@ -513,4 +516,3 @@ begin
 end;
 
 end.
-

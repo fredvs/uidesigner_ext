@@ -35,7 +35,7 @@ type
     Position: integer;
     Data: string;
   end;
-  
+
 
   TVFDFile = class
   private
@@ -44,23 +44,23 @@ type
     FFileData: string;
     NewFormsDecl: string;
     NewFormsImpl: string;
-    procedure   FreeBlocks;
-    procedure   AddBlock(aposition: integer; ablockid, aformname, ablockdata: string);
+    procedure FreeBlocks;
+    procedure AddBlock(aposition: integer; ablockid, aformname, ablockdata: string);
   public
     constructor Create;
-    destructor  Destroy; override;
-    function    LoadFile(fname: string): boolean;
-    function    BlockCount: integer;
-    function    Block(index: integer): TVFDFileBlock;
-    function    GetBlocks: integer;   // parse file
-    function    MergeBlocks: string;  // store file
-    procedure   AddNewFormDecl(formname, formheadblock: string);
-    procedure   AddNewFormImpl(formname, formbody: string);
-    function    FindFormBlock(blockid, formname: string): TVFDFileBlock;
-    procedure   SetFormData(formname, headblock, bodyblock: string);
-    procedure   NewFileSkeleton(AUnitname: string);
+    destructor Destroy; override;
+    function LoadFile(fname: string): boolean;
+    function BlockCount: integer;
+    function Block(index: integer): TVFDFileBlock;
+    function GetBlocks: integer;   // parse file
+    function MergeBlocks: string;  // store file
+    procedure AddNewFormDecl(formname, formheadblock: string);
+    procedure AddNewFormImpl(formname, formbody: string);
+    function FindFormBlock(blockid, formname: string): TVFDFileBlock;
+    procedure SetFormData(formname, headblock, bodyblock: string);
+    procedure NewFileSkeleton(AUnitname: string);
   end;
-  
+
 
 implementation
 
@@ -77,11 +77,11 @@ procedure TVFDFile.AddBlock(aposition: integer; ablockid, aformname, ablockdata:
 var
   fb: TVFDFileBlock;
 begin
-  fb          := TVFDFileBlock.Create;
+  fb := TVFDFileBlock.Create;
   fb.Position := aposition;
-  fb.BlockID  := ablockid;
+  fb.BlockID := ablockid;
   fb.FormName := aformname;
-  fb.Data     := ablockdata;
+  fb.Data := ablockdata;
   FBlocks.Add(fb);
 end;
 
@@ -90,14 +90,12 @@ var
   s: string;
 begin
   s :=
-      Ind(1) + 'T' + formname + ' = class(TfpgForm)' + LineEnding +
-      Ind(1) + 'private' + LineEnding +
-      Ind(2) + '{@VFD_HEAD_BEGIN: ' + formname + '}' + LineEnding
-    + formheadblock +
-      Ind(2) + '{@VFD_HEAD_END: ' + formname + '}' + LineEnding +
-      Ind(1) + 'public' + LineEnding +
-      Ind(2) + 'procedure AfterCreate; override;' + LineEnding
-    + Ind(1) + 'end;' + LineEnding + LineEnding;
+    Ind(1) + 'T' + formname + ' = class(TfpgForm)' + LineEnding +
+    Ind(1) + 'private' + LineEnding + Ind(2) + '{@VFD_HEAD_BEGIN: ' +
+    formname + '}' + LineEnding + formheadblock + Ind(2) + '{@VFD_HEAD_END: ' +
+    formname + '}' + LineEnding + Ind(1) + 'public' + LineEnding +
+    Ind(2) + 'procedure AfterCreate; override;' + LineEnding + Ind(1) +
+    'end;' + LineEnding + LineEnding;
   NewFormsDecl := NewFormsDecl + s;
 end;
 
@@ -111,31 +109,27 @@ begin
   lUseRegions := gINI.ReadBool('Options', 'UseCodeRegions', True);
   if lUseRegions then
   begin
-    lRegionTop    := Ind(1) + '{%region ''Auto-generated GUI code'' -fold}' + LineEnding;
+    lRegionTop := Ind(1) + '{%region ''Auto-generated GUI code'' -fold}' + LineEnding;
     lRegionBottom := Ind(1) + '{%endregion}' + LineEnding;
   end
   else
   begin
-    lRegionTop    := '';
+    lRegionTop := '';
     lRegionBottom := '';
   end;
 
-  s := LineEnding + LineEnding +
-    'procedure T' + formname + '.AfterCreate;' + LineEnding +
-    'begin' + LineEnding +
-    lRegionTop +
-    Ind(1) + '{@VFD_BODY_BEGIN: ' + formname + '}' + LineEnding +
-    formbody +
+  s := LineEnding + LineEnding + 'procedure T' + formname + '.AfterCreate;' +
+    LineEnding + 'begin' + LineEnding + lRegionTop + Ind(1) +
+    '{@VFD_BODY_BEGIN: ' + formname + '}' + LineEnding + formbody +
     Ind(1) + '{@VFD_BODY_END: ' + formname + '}' + LineEnding +
-    lRegionBottom +
-    'end;' + LineEnding;
+    lRegionBottom + 'end;' + LineEnding;
   NewFormsImpl := NewFormsImpl + s;
 end;
 
 function TVFDFile.Block(index: integer): TVFDFileBlock;
 begin
   Result := nil;
-  if (index < 0) or (index > FBlocks.Count-1) then
+  if (index < 0) or (index > FBlocks.Count - 1) then
     Exit;
   Result := TVFDFileBlock(FBlocks[index]);
 end;
@@ -147,11 +141,11 @@ end;
 
 constructor TVFDFile.Create;
 begin
-  FFileData    := '';
-  FParsedData  := '';
+  FFileData := '';
+  FParsedData := '';
   NewFormsDecl := '';
   NewFormsImpl := '';
-  FBlocks      := TList.Create;
+  FBlocks := TList.Create;
 end;
 
 destructor TVFDFile.Destroy;
@@ -167,7 +161,7 @@ var
   fb: TVFDFileBlock;
 begin
   Result := nil;
-  for n := 0 to BlockCount-1 do
+  for n := 0 to BlockCount - 1 do
   begin
     fb := Block(n);
     if (fb.BlockID = blockid) and (UpperCase(fb.FormName) = UpperCase(formname)) then
@@ -182,7 +176,7 @@ procedure TVFDFile.FreeBlocks;
 var
   n: integer;
 begin
-  for n := FBlocks.Count-1 downto 0 do
+  for n := FBlocks.Count - 1 downto 0 do
     TVFDFileBlock(FBlocks[n]).Free;
   FBlocks.Clear;
   NewFormsDecl := '';
@@ -205,10 +199,10 @@ begin
 
   // searching blocks:
   repeat
-    bname     := '';
-    formname  := '';
+    bname := '';
+    formname := '';
     datablock := '';
-    s      := cBlockPrefix;
+    s := cBlockPrefix;
     startp := pos(s, FParsedData);
     if startp > 0 then
     begin
@@ -230,10 +224,10 @@ begin
       end;
 
       startmarker := copy(FParsedData, startp, n - startp + 1);
-      deletelen   := length(startmarker);
-      dropmarker  := False;
+      deletelen := length(startmarker);
+      dropmarker := False;
 
-//      Writeln('marker: ', startmarker);
+      //      Writeln('marker: ', startmarker);
 
       // block marker ?
       endmarker := '';
@@ -250,11 +244,12 @@ begin
         if endp > 0 then
         begin
           //Writeln('end marker found.');
-          datablock  := copy(FParsedData, startp + length(startmarker), endp - startp - length(startmarker));
+          datablock := copy(FParsedData, startp + length(startmarker),
+            endp - startp - length(startmarker));
           //Writeln('data block:');
           //writeln(datablock);
           //writeln('.');
-          deletelen  := endp - startp + length(endmarker);
+          deletelen := endp - startp + length(endmarker);
         end
         else
         begin
@@ -303,11 +298,11 @@ var
 begin
   //  Writeln('merging blocks: ');
   newsaved := False;
-  rs       := FParsedData;
-  iofs     := 0;
+  rs := FParsedData;
+  iofs := 0;
   for n := 0 to FBlocks.Count - 1 do
   begin
-    fb          := TVFDFileBlock(FBlocks[n]);
+    fb := TVFDFileBlock(FBlocks[n]);
     startmarker := '{@' + fb.BlockID;
     if fb.formname <> '' then
       startmarker := startmarker + ': ' + fb.FormName;
@@ -327,7 +322,7 @@ begin
       iblock := NewFormsDecl + iblock
     else if fb.BlockID = 'VFD_NEWFORM_IMPL' then
     begin
-      iblock   := iblock + NewFormsImpl;
+      iblock := iblock + NewFormsImpl;
       newsaved := True;
     end;
 
@@ -345,15 +340,13 @@ end;
 procedure TVFDFile.NewFileSkeleton(AUnitname: string);
 begin
   FFileData :=
-    'unit ' + AUnitname + ';'+ LineEnding + LineEnding +
-    '{$mode objfpc}{$H+}' + LineEnding + LineEnding +
-    'interface' + LineEnding + LineEnding +
-    'uses' + LineEnding +
-    Ind(1) + 'SysUtils, Classes, fpg_base, fpg_main, fpg_form;' + LineEnding + LineEnding +
-    'type' + LineEnding + LineEnding +
-    '{@VFD_NEWFORM_DECL}' + LineEnding + LineEnding +
-    'implementation' + LineEnding + LineEnding +
-    '{@VFD_NEWFORM_IMPL}' + LineEnding + LineEnding +
+    'unit ' + AUnitname + ';' + LineEnding + LineEnding + '{$mode objfpc}{$H+}' +
+    LineEnding + LineEnding + 'interface' + LineEnding + LineEnding +
+    'uses' + LineEnding + Ind(1) +
+    'SysUtils, Classes, fpg_base, fpg_main, fpg_form;' + LineEnding +
+    LineEnding + 'type' + LineEnding + LineEnding + '{@VFD_NEWFORM_DECL}' +
+    LineEnding + LineEnding + 'implementation' + LineEnding +
+    LineEnding + '{@VFD_NEWFORM_IMPL}' + LineEnding + LineEnding +
     'end.' + LineEnding;
 
   GetBlocks;
@@ -378,4 +371,3 @@ end;
 
 
 end.
-

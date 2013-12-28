@@ -1,4 +1,4 @@
-{ This is the extended version of fpGUI
+{ This is the extended version of fpGUI uidesigner
 with widow list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
@@ -30,7 +30,6 @@ uses
   Classes,
   Process,
   SysUtils,
-  fpg_form,
   fpg_base,
   fpg_main,
   fpg_constants,
@@ -44,12 +43,18 @@ uses
 const
   program_version = FPGUI_VERSION;
 
-
 var
   s, p: string;
 
 type
   TProc = procedure(Sender: TObject) of object;
+
+type
+  TUndo = record
+    FileName: string;
+    ActiveForm: string;
+    Comment: string;
+  end;
 
 type
 
@@ -75,8 +80,8 @@ type
     function NewFormName: string;
     function CreateParseForm(const FormName, FormHead, FormBody: string):
       TFormDesigner;
-    procedure SaveUndo(typeundo: integer);
-    procedure LoadUndo(undofile: string);
+    procedure SaveUndo(Sender: TObject; typeundo: integer);
+    procedure LoadUndo(undoindex: integer);
     procedure OnNewForm(Sender: TObject);
     procedure OnNewFile(Sender: TObject);
     procedure OnSaveFile(Sender: TObject);
@@ -98,7 +103,8 @@ type
 var
   maindsgn: TMainDesigner;
   ArrayFormDesign: array of TFormDesigner;
-  ArrayUndo: array of string;
+  ArrayUndo: array of TUndo;
+  dob: string;
 
 implementation
 
@@ -134,7 +140,7 @@ begin
     frmmain.windowmenu.MenuItem(n + 2).Text := '';
   end;
 
-  for n := 0 to 9 do
+  for n := 0 to 99 do
   begin
     frmmain.listundomenu.MenuItem(n).Visible := False;
     frmmain.listundomenu.MenuItem(n).Text := '';
@@ -145,7 +151,7 @@ begin
   begin
 
     for n := 0 to length(ArrayUndo) - 1 do
-      deletefile(ArrayUndo[n]);
+      deletefile(ArrayUndo[n].FileName);
   end;
   indexundo := 0;
   frmmain.undomenu.MenuItem(0).Enabled := False;
@@ -194,6 +200,12 @@ begin
   end;
 
   for n := 0 to 9 do
+  begin
+    frmmain.windowmenu.MenuItem(n + 2).Visible := False;
+    frmmain.windowmenu.MenuItem(n + 2).Text := '';
+  end;
+
+  for n := 0 to 99 do
   begin
     frmmain.listundomenu.MenuItem(n).Visible := False;
     frmmain.listundomenu.MenuItem(n).Text := '';
@@ -244,7 +256,7 @@ begin
   if Length(ArrayUndo) > 0 then
   begin
     for n := 0 to length(ArrayUndo) - 1 do
-      deletefile(ArrayUndo[n]);
+      deletefile(ArrayUndo[n].FileName);
   end;
 
   indexundo := 0;
@@ -283,7 +295,9 @@ begin
       end;
   end;
   frmMain.mru.AddItem(fname);
-    if (enableundo = True) then SaveUndo(0);
+
+  if (enableundo = True) then
+    SaveUndo(Sender, 5);
   frmmain.undomenu.MenuItem(0).Enabled := False;
   frmmain.undomenu.MenuItem(1).Enabled := False;
   frmmain.undomenu.MenuItem(3).Enabled := False;
@@ -366,10 +380,11 @@ begin
       raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' +
         #13 + E.Message);
   end;
-   if (enableundo = True) then SaveUndo(0);
+  if (enableundo = True) then
+    SaveUndo(Sender, 6);
 end;
 
-procedure TMainDesigner.LoadUndo(undofile: string);
+procedure TMainDesigner.LoadUndo(undoindex: integer);
 var
   n, m, x: integer;
   bl, bl2: TVFDFileBlock;
@@ -378,7 +393,7 @@ begin
   ifundo := True;
   FFileUndo := TVFDFile.Create;
 
-  if FFileUndo.LoadFile(undofile) = False then
+  if FFileUndo.LoadFile(ArrayUndo[undoindex].FileName) = False then
   begin
     FFileUndo.Free;
     ifundo := False;
@@ -392,6 +407,11 @@ begin
     exit;
   end;
 
+  for n := 0 to 9 do
+  begin
+    frmmain.windowmenu.MenuItem(n + 2).Visible := False;
+    frmmain.windowmenu.MenuItem(n + 2).Text := '';
+  end;
 
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -400,8 +420,6 @@ begin
   end;
   FDesigners.Clear;
 
-
-  // fname := '' ;
   SetLength(ArrayFormDesign, 0);
   x := 0;
 
@@ -436,16 +454,36 @@ begin
   end;
   ifundo := False;
   frmmain.undomenu.MenuItem(1).Enabled := True;
+
+  x := 0;
+  while x < length(ArrayFormDesign) do
+  begin
+    if ArrayUndo[undoindex].ActiveForm = ArrayFormDesign[x].Form.Name then
+    begin
+      frmProperties.hide;
+      frmProperties.Show;
+      ArrayFormDesign[x].Form.Hide;
+      ArrayFormDesign[x].Form.Show;
+
+      exit;
+    end;
+    Inc(x);
+  end;
 end;
 
-procedure TMainDesigner.SaveUndo(typeundo: integer);
+procedure TMainDesigner.SaveUndo(Sender: TObject; typeundo: integer);
 var
-  n: integer;
+  n, dd: integer;
   fd: TFormDesigner;
-  fdataundo, undodir, undofile, undotime, undofile2: string;
+  fdataundo, undodir, tempcomment, undofile, undotime, undofile2: string;
   ffundo: file;
   FFileUndo: TVFDFile;
+  TempForm: string;
 begin
+  if dob = FormatDateTime('tt', now) then
+    dd := 1
+  else
+    dd := 0;
 
   fpgapplication.ProcessMessages;
   ifundo := True;
@@ -472,10 +510,10 @@ begin
 
   fdataundo := FFileUndo.MergeBlocks;
   undotime := FormatDateTime('tt', now);
-
-  undofile := IntToStr(typeundo) + '_' + FormatDateTime('yy', now)
-  + FormatDateTime('mm', now) +  FormatDateTime('dd', now) +
-  FormatDateTime('hh', now)  +  FormatDateTime('nn', now)  +  FormatDateTime('ss', now)  ;
+  dob := undotime;
+  undofile := IntToStr(typeundo) + '_' + FormatDateTime('yy', now) +
+    FormatDateTime('mm', now) + FormatDateTime('dd', now) +
+    FormatDateTime('hh', now) + FormatDateTime('nn', now) + FormatDateTime('ss', now);
 
   AssignFile(ffundo, fpgToOSEncoding(undodir + undofile + '.tmp'));
   try
@@ -493,44 +531,83 @@ begin
 
   FFileUndo.Free;
 
-  if length(ArrayUndo) < maxundo then
-    SetLength(ArrayUndo, length(ArrayUndo) + 1)
+  if dd = 0 then
+  begin
+
+    if length(ArrayUndo) < maxundo then
+      SetLength(ArrayUndo, length(ArrayUndo) + 1)
+    else
+      deletefile(ArrayUndo[length(ArrayUndo) - 1].FileName);
+
+    undofile2 := ArrayUndo[0].FileName;
+    TempForm := ArrayUndo[0].ActiveForm;
+    Tempcomment := ArrayUndo[0].Comment;
+
+    n := length(ArrayUndo) - 1;
+    while (n > 0) do
+    begin
+      ArrayUndo[n].FileName := ArrayUndo[n - 1].FileName;
+      ArrayUndo[n].ActiveForm := ArrayUndo[n - 1].ActiveForm;
+      ArrayUndo[n].Comment := ArrayUndo[n - 1].Comment;
+      dec(n);
+    end;
+
+    if length(ArrayUndo) > 1 then
+    begin
+      ArrayUndo[1].FileName := undofile2;
+      ArrayUndo[1].ActiveForm := TempForm;
+      ArrayUndo[1].Comment := Tempcomment;
+    end;
+  end;
+
+  if dd = 1 then
+    deletefile(ArrayUndo[0].FileName);
+
+  ArrayUndo[0].FileName := undodir + undofile + '.tmp';
+
+  if typeundo <> 5 then
+    ArrayUndo[0].ActiveForm := selectedform.Form.Name
   else
-    deletefile(ArrayUndo[length(ArrayUndo) - 1]);
-  undofile2 := ArrayUndo[0];
-  ArrayUndo[0] := undodir + undofile + '.tmp';
-  n := length(ArrayUndo) - 1;
-  while (n > 0) do
+    ArrayUndo[0].ActiveForm := '';
+
+  ArrayUndo[0].comment := frmProperties.edName.Text;
+  /// to do better with more details
+
+  if typeundo < 5 then
   begin
-    ArrayUndo[n] := ArrayUndo[n - 1];
-    n := n - 1;
+    if frmProperties.edName.Text = selectedform.Form.Name then
+      tempform := selectedform.Form.Name + ' => has moved.'
+    else
+      tempform := selectedform.Form.Name + ' => ' + frmProperties.edName.Text +
+        ' => has changed.';
+  end
+  else
+    case typeundo of
+      5: tempform := 'Init Root.';
+      6: tempform := selectedform.Form.Name + ' => was saved.';
+      7: tempform := selectedform.Form.Name + ' => new form.'
+    end;
+
+  if dd = 0 then
+  begin
+    undofile2 := frmmain.listundomenu.MenuItem(0).Text;
+    n := length(ArrayUndo) - 1;
+    while (n > 0) do
+    begin
+      frmmain.listundomenu.MenuItem(n).Text := frmmain.listundomenu.MenuItem(n - 1).Text;
+      Dec(n);
+    end;
+    if length(ArrayUndo) > 1 then
+      frmmain.listundomenu.MenuItem(1).Text := undofile2;
   end;
 
-  if length(ArrayUndo) > 1 then
-    ArrayUndo[1] := undofile2;
-
-  n := 0;
-  while n < length(ArrayUndo) do
-  begin
-    frmmain.listundomenu.MenuItem(n).Visible := True;
-    Inc(n);
-  end;
-
-  undofile2 := frmmain.listundomenu.MenuItem(0).Text;
-  frmmain.listundomenu.MenuItem(0).Visible := True;
-  frmmain.listundomenu.MenuItem(0).Text := undotime;
-
-  n := length(ArrayUndo) - 1;
-  while (n > 0) do
-  begin
-    frmmain.listundomenu.MenuItem(n).Text := frmmain.listundomenu.MenuItem(n - 1).Text;
-    n := n - 1;
-  end;
-  if length(ArrayUndo) > 1 then
-    frmmain.listundomenu.MenuItem(1).Text := undofile2;
+  frmmain.listundomenu.MenuItem(0).Text := undotime + ' => ' + TempForm;
 
   frmmain.undomenu.MenuItem(0).Enabled := True;
   frmmain.undomenu.MenuItem(3).Enabled := True;
+
+  for n := 0 to length(ArrayUndo) - 1 do
+  frmmain.listundomenu.MenuItem(n).Visible := True;
 
   ifundo := False;
 end;
@@ -543,7 +620,7 @@ begin
     SelectedForm.OnPropNameChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
-      SaveUndo(0);
+      SaveUndo(Sender, 0);
   end;
 end;
 
@@ -554,7 +631,7 @@ begin
     SelectedForm.OnPropPosEdit(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
-      SaveUndo(1);
+      SaveUndo(Sender, 1);
   end;
 end;
 
@@ -573,7 +650,7 @@ begin
     SelectedForm.OnAnchorChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
-      SaveUndo(3);
+      SaveUndo(Sender, 3);
   end;
 end;
 
@@ -584,7 +661,7 @@ begin
     SelectedForm.OnOtherChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
-      SaveUndo(4);
+      SaveUndo(Sender, 4);
   end;
 end;
 
@@ -640,7 +717,8 @@ begin
         frmmain.windowmenu.MenuItem(x + 1).Visible := True;
         frmmain.windowmenu.MenuItem(x + 1).Text := fd.Form.Name;
       end;
-      SaveUndo(0);
+      if (enableundo = True) then
+        SaveUndo(Sender, 7);
     end;
 
   finally
@@ -678,7 +756,7 @@ begin
   if Length(ArrayUndo) > 0 then
   begin
     for n := 0 to length(ArrayUndo) - 1 do
-      deletefile(ArrayUndo[n]);
+      deletefile(ArrayUndo[n].FileName);
   end;
 
   for n := 0 to FDesigners.Count - 1 do

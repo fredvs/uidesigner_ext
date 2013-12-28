@@ -41,13 +41,13 @@ type
     FProp: TVFDWidgetProperty;
   public
     OnUpdate: TNotifyEvent;
-    procedure   UpdateProperty(Sender: TObject);
-    property    Prop: TVFDWidgetProperty read FProp;
+    procedure UpdateProperty(Sender: TObject);
+    property Prop: TVFDWidgetProperty read FProp;
     constructor Create(AOwner: TComponent; aprop: TVFDWidgetProperty); reintroduce;
-    procedure   CreateLayout; virtual;
-    procedure   LoadValue(wg: TfpgWidget); virtual;
-    procedure   StoreValue(wg: TfpgWidget); virtual;
-    procedure   SetFocus; virtual;
+    procedure CreateLayout; virtual;
+    procedure LoadValue(wg: TfpgWidget); virtual;
+    procedure StoreValue(wg: TfpgWidget); virtual;
+    procedure SetFocus; virtual;
   end;
 
 
@@ -57,12 +57,13 @@ type
     Description: string;
   public
     constructor Create(aName: string); virtual;
-    function    ParseSourceLine(wg: TfpgWidget; const line: string): boolean; virtual;
-    function    GetPropertySource(wg: TfpgWidget; const ident: string): string; virtual;
-    function    GetValueText(wg: TfpgWidget): string; virtual;
-    procedure   DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas; rect: TfpgRect; flags: integer); virtual;
-    function    CreateEditor(AOwner: TComponent): TVFDPropertyEditor; virtual;
-    procedure   OnExternalEdit(wg: TfpgWidget); virtual;
+    function ParseSourceLine(wg: TfpgWidget; const line: string): boolean; virtual;
+    function GetPropertySource(wg: TfpgWidget; const ident: string): string; virtual;
+    function GetValueText(wg: TfpgWidget): string; virtual;
+    procedure DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas; rect: TfpgRect;
+      flags: integer); virtual;
+    function CreateEditor(AOwner: TComponent): TVFDPropertyEditor; virtual;
+    procedure OnExternalEdit(wg: TfpgWidget); virtual;
   end;
 
 
@@ -80,18 +81,19 @@ type
     Container: boolean;
     BlockMouseMsg: boolean;
     constructor Create(aClass: TWidgetClass);
-    destructor  Destroy; override;
-    function    AddProperty(apropname: string; apropclass: TVFDPropertyClass; desc: string): TVFDWidgetProperty;
-    function    PropertyCount: integer;
-    function    GetProperty(ind: integer): TVFDWidgetProperty;
-    function    CreateWidget(AOwner: TComponent): TfpgWidget;
-    function    CreatePopupMenu(AWidget: TfpgWidget): TfpgPopupMenu; virtual;
+    destructor Destroy; override;
+    function AddProperty(apropname: string; apropclass: TVFDPropertyClass;
+      desc: string): TVFDWidgetProperty;
+    function PropertyCount: integer;
+    function GetProperty(ind: integer): TVFDWidgetProperty;
+    function CreateWidget(AOwner: TComponent): TfpgWidget;
+    function CreatePopupMenu(AWidget: TfpgWidget): TfpgPopupMenu; virtual;
   end;
 
 
 implementation
 
-  
+
 
 type
   // used to get to SetDesigning() in Form Designer
@@ -100,8 +102,8 @@ type
 
 { TVFDWidgetClass }
 
-function TVFDWidgetClass.AddProperty(apropname: string; apropclass: TVFDPropertyClass;
-  desc: string): TVFDWidgetProperty;
+function TVFDWidgetClass.AddProperty(apropname: string;
+  apropclass: TVFDPropertyClass; desc: string): TVFDWidgetProperty;
 begin
   Result := apropclass.Create(apropname);
   Result.Description := desc;
@@ -111,10 +113,10 @@ end;
 constructor TVFDWidgetClass.Create(aClass: TWidgetClass);
 begin
   WidgetClass := aClass;
-  FProps      := TList.Create;
+  FProps := TList.Create;
   Description := '';
-  NameBase    := 'Widget';
-  Container   := False;
+  NameBase := 'Widget';
+  Container := False;
   BlockMouseMsg := True;
 end;
 
@@ -154,11 +156,12 @@ end;
 
 constructor TVFDWidgetProperty.Create(aName: string);
 begin
-  Name        := aName;
+  Name := aName;
   Description := '';
 end;
 
-function TVFDWidgetProperty.GetPropertySource(wg: TfpgWidget; const ident: string): string;
+function TVFDWidgetProperty.GetPropertySource(wg: TfpgWidget;
+  const ident: string): string;
 begin
   Result := '';
 end;
@@ -173,13 +176,14 @@ begin
   Result := nil;
 end;
 
-procedure TVFDWidgetProperty.DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas; rect: TfpgRect; flags: integer);
+procedure TVFDWidgetProperty.DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas;
+  rect: TfpgRect; flags: integer);
 var
   x, y, fy: integer;
   s: string;
 begin
-  x  := rect.left;
-  y  := rect.top;
+  x := rect.left;
+  y := rect.top;
   fy := y + rect.Height div 2 - Canvas.Font.Height div 2;
 
   try
@@ -188,7 +192,7 @@ begin
     on E: Exception do
       debugln('Detected an error: ', E.Message);
   end;
-  
+
   Canvas.BeginDraw;
   Canvas.DrawString(x + 1, fy, s);
   Canvas.EndDraw;
@@ -210,7 +214,7 @@ constructor TVFDPropertyEditor.Create(AOwner: TComponent; aprop: TVFDWidgetPrope
 begin
   inherited Create(AOwner);
   OnUpdate := nil;
-  FProp    := aprop;
+  FProp := aprop;
 end;
 
 procedure TVFDPropertyEditor.CreateLayout;
@@ -244,4 +248,3 @@ begin
 end;
 
 end.
-

@@ -17,7 +17,7 @@ interface
 
 uses
   {$IFDEF MSWINDOWS}
-  Windows, JwaTlHelp32,
+  JwaTlHelp32,
 {$ENDIF}
    {$IF DEFINED(LCL)}
   ExtCtrls,       /// for lcl timer
