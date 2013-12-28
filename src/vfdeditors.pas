@@ -22,6 +22,9 @@ unit vfdeditors;
 interface
 
 uses
+  Classes,
+  SysUtils,
+  fpg_widget,
   fpg_label,
   fpg_button,
   fpg_memo,
@@ -70,10 +73,10 @@ begin
   btnClear := CreateButton(self, 8, 200, 80, 'Clear', @btnClearClicked);
   btnClear.Anchors := [anLeft, anBottom];
 
-  btnOK := CreateButton(self, Width - 168, 200, 80, 'OK', @OnButtonClick);
+  btnOK         := CreateButton(self, Width-168, 200, 80, 'OK', @OnButtonClick);
   btnOK.Anchors := [anRight, anBottom];
 
-  btnCancel := CreateButton(self, Width - 84, 200, 80, 'Cancel', @OnButtonClick);
+  btnCancel     := CreateButton(self, Width-84, 200, 80, 'Cancel', @OnButtonClick);
   btnCancel.Anchors := [anRight, anBottom];
   {%endregion}
 end;
@@ -86,10 +89,11 @@ end;
 procedure TItemEditorForm.OnButtonClick(Sender: TObject);
 begin
   if Sender = btnOK then
-    ModalResult := mrOk
+    ModalResult := mrOK
   else
     ModalResult := mrCancel;
 end;
 
 
 end.
+

@@ -1,5 +1,6 @@
-{ This is the extended version of fpGUI uidesigner
-with widow list, undo feature, integration into IDE, editor launcher,...
+{ 
+This is the extended version of fpGUI uidesigner.
+With window list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
 }

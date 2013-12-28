@@ -1,8 +1,9 @@
-{ TThis is a extended version of fpGUI uidesigner
+{ 
+This is the extended version of fpGUI uidesigner.
+With window list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
 }
-
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
@@ -162,7 +163,7 @@ type
     TrackBarUndo: TfpgTrackBar;
     {@VFD_HEAD_END: frmVFDSetup}
     procedure AfterCreate; override;
-    procedure BeforeDestruction; override;
+    // procedure BeforeDestruction; override;
   end;
 
 
@@ -447,9 +448,9 @@ begin
   begin
     rbnone.Checked := True;
     frmMain.btnOpen.Visible := True;
-    frmMain.btnSave.Left := 56;
+    frmMain.btnSave.Left := 69;
     frmMain.btnSave.UpdateWindowPosition;
-    frmMain.btnToFront.Left := 86;
+    frmMain.btnToFront.Left := 97;
     frmMain.btnToFront.UpdateWindowPosition;
     WindowAttributes := [];
     frmMain.filemenu.MenuItem(0).Visible := True;
@@ -608,9 +609,9 @@ begin
   WindowTitle := 'General settings';
   Hint := '';
   ShowHint := True;
-  WindowPosition := wpUser;
-  MinHeight := 305;
-  MinWidth := 335;
+  WindowPosition := wpScreenCenter;
+  MinHeight := 350;
+  MinWidth := 549;
   Tag := 0;
 
   lb1 := TfpgLabel.Create(self);
@@ -1038,15 +1039,16 @@ begin
   else
     rblaz.Enabled := False;
 
-
+{
   if gINI.ReadBool('frmVFDSetupState', 'FirstLoad', True) = False then
     gINI.ReadFormState(self)
   else
     gINI.WriteBool('frmVFDSetupState', 'FirstLoad', False);
-
+  }
   tag := 1;
 end;
 
+{
 procedure TfrmVFDSetup.BeforeDestruction;
 begin
   // We don't put this in SaveSettings because it needs to be called even if
@@ -1054,6 +1056,6 @@ begin
   gINI.WriteFormState(self);
   inherited BeforeDestruction;
 end;
-
+}
 
 end.

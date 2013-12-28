@@ -1,5 +1,6 @@
-{ This is the extended version of fpGUI uidesigner
-with widow list, undo feature, integration into IDE, editor launcher,...
+{ 
+This is the extended version of fpGUI uidesigner.
+With window list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
 }
@@ -953,9 +954,9 @@ if x = 0 then
 begin
 
   btnOpen.Visible:=true;
-  btnSave.Left:= 56 ;
+  btnSave.Left:= 69 ;
   btnSave.UpdateWindowPosition;
-  btnToFront.Left := 86;
+  btnToFront.Left := 97;
   btnToFront.UpdateWindowPosition;
 
  filemenu.MenuItem(0).Visible:=true;

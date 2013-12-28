@@ -42,20 +42,19 @@ type
 
   TPropertyDBColumns = class(TVFDWidgetProperty)
   public
-    function ParseSourceLine(wg: TfpgWidget; const line: string): boolean; override;
-    function GetPropertySource(wg: TfpgWidget; const ident: string): string; override;
-    function GetValueText(wg: TfpgWidget): string; override;
-    function CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
-    procedure OnExternalEdit(wg: TfpgWidget); override;
+    function    ParseSourceLine(wg: TfpgWidget; const line: string): boolean; override;
+    function    GetPropertySource(wg: TfpgWidget; const ident: string): string; override;
+    function    GetValueText(wg: TfpgWidget): string; override;
+    function    CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
+    procedure   OnExternalEdit(wg: TfpgWidget); override;
   end;
 
 
   // A normal grid's column information now become rows of data.
   TColumnsGrid = class(TfpgCustomGrid)
   protected
-    function GetRowCount: integer; override;
-    procedure DrawCell(ARow, ACol: integer; ARect: TfpgRect;
-      AFlags: TfpgGridDrawState); override;
+    function    GetRowCount: Integer; override;
+    procedure   DrawCell(ARow, ACol: Integer; ARect: TfpgRect; AFlags: TfpgGridDrawState);  override;
   public
     dbgrid: TfpgStringGrid;
     constructor Create(AOwner: TComponent); override;
@@ -64,7 +63,7 @@ type
 
   TColumnEditForm = class(TfpgForm)
   private
-    procedure GridRowChange(Sender: TObject; row: integer);
+    procedure GridRowChange(Sender: TObject; row: Integer);
     procedure EditChange(Sender: TObject);
     procedure NewButtonClick(Sender: TObject);
     procedure DeleteButtonClick(Sender: TObject);
@@ -102,7 +101,7 @@ procedure EditStringGridColumns(agrid: TfpgStringGrid);
 var
   frm: TColumnEditForm;
 begin
-  frm := TColumnEditForm.Create(nil);
+  frm        := TColumnEditForm.Create(nil);
   frm.dbgrid := agrid;
   frm.grid.dbgrid := agrid;
   frm.ShowModal;
@@ -279,7 +278,7 @@ begin
   {%endregion}
 end;
 
-procedure TColumnEditForm.GridRowChange(Sender: TObject; row: integer);
+procedure TColumnEditForm.GridRowChange(Sender: TObject; row: Integer);
 var
   i: integer;
   c: TfpgStringColumn;
@@ -294,23 +293,23 @@ begin
     edCOLWIDTH.OnChange := nil;
     chlALIGN.OnChange := nil;
 
-    lbCOLNO.Text := IntToStr(row);
-    edTITLE.Text := c.Title;
-    edCOLWIDTH.Text := IntToStr(c.Width);
+    lbCOLNO.Text     := IntToStr(row);
+    edTITLE.Text     := c.Title;
+    edCOLWIDTH.Text  := IntToStr(c.Width);
     case c.Alignment of
       taRightJustify:
-        i := 1;
+          i := 1;
       taCenter:
-        i := 2
+          i := 2
       else
-        i := 0;
+          i := 0;
     end;
     chlALIGN.FocusItem := i;
   finally
     // enable event handlers again.
-    edTITLE.OnChange := @EditChange;
+    edTITLE.OnChange    := @EditChange;
     edCOLWIDTH.OnChange := @EditChange;
-    chlALIGN.OnChange := @EditChange;
+    chlALIGN.OnChange   := @EditChange;
   end;
 end;
 
@@ -322,13 +321,13 @@ begin
   if c = nil then
     Exit;
 
-  c.Title := edTITLE.Text;
-  c.Width := StrToIntDef(edCOLWIDTH.Text, 30);
+  c.Title      := edTITLE.Text;
+  c.Width      := StrToIntDef(edCOLWIDTH.Text, 30);
   case chlALIGN.FocusItem of
     1: c.Alignment := taRightJustify;
     2: c.Alignment := taCenter;
     else
-      c.Alignment := taLeftJustify;
+      c.Alignment  := taLeftJustify;
   end;
 
   grid.RePaint;
@@ -339,7 +338,7 @@ procedure TColumnEditForm.EditChange(Sender: TObject);
 begin
   if grid.FocusRow < 0 then
     Exit;
-  SaveColumn(grid.FocusRow);
+  SaveColumn(grid.FocusRow)
 end;
 
 procedure TColumnEditForm.NewButtonClick(Sender: TObject);
@@ -372,9 +371,9 @@ begin
       grid.Update;
     end;
   end
-  else if grid.FocusRow < grid.RowCount - 1 then
+  else if grid.FocusRow < grid.RowCount-1 then
   begin
-    dbgrid.MoveColumn(grid.FocusRow, grid.FocusRow + 1);
+    dbgrid.MoveColumn(grid.FocusRow, grid.FocusRow+1);
     grid.FocusRow := grid.FocusRow + 1;
     grid.Update;
   end;
@@ -383,7 +382,7 @@ end;
 
 { TColumnsGrid }
 
-function TColumnsGrid.GetRowCount: integer;
+function TColumnsGrid.GetRowCount: Integer;
 begin
   try
     // Yes, it must be ColumnCount and *not* RowCount!
@@ -393,35 +392,34 @@ begin
   end;
 end;
 
-procedure TColumnsGrid.DrawCell(ARow, ACol: integer; ARect: TfpgRect;
-  AFlags: TfpgGridDrawState);
+procedure TColumnsGrid.DrawCell(ARow, ACol: Integer; ARect: TfpgRect; AFlags: TfpgGridDrawState);
 var
   s: string;
   x: integer;
   c: TfpgStringColumn;
 begin
-  //  writeln('ARow=', ARow, '  ACol=', ACol);
+//  writeln('ARow=', ARow, '  ACol=', ACol);
   c := dbgrid.Columns[ARow{ - 1}];
   if c = nil then
   begin
-    //    writeln(' TColumnsGrid.DrawCell -> exit early because c = nil');
+//    writeln(' TColumnsGrid.DrawCell -> exit early because c = nil');
     Exit;
   end;
-  //  writeln(' ... we passed the nil test');
+//  writeln(' ... we passed the nil test');
   x := ARect.Left + 1;
 
   case ACol of
-    0: s := IntToStr(ARow);
-    1: s := c.Title;
-    2: s := IntToStr(c.Width);
-    3: case c.Alignment of
-        taRightJustify:
-          s := 'Right';
-        taCenter:
-          s := 'Center';
-        else
-          s := 'Left';
-      end;
+    0:  s := IntToStr(ARow);
+    1:  s := c.Title;
+    2:  s := IntToStr(c.Width);
+    3:  case c.Alignment of
+          taRightJustify:
+              s := 'Right';
+          taCenter:
+              s := 'Center';
+          else
+              s := 'Left';
+        end;
     else
       s := '?';
   end;
@@ -457,11 +455,9 @@ end;
 procedure TPropertyDBColumns.OnExternalEdit(wg: TfpgWidget);
 begin
   if not Assigned(wg) then
-    raise Exception.Create(
-      'TPropertyDBColumns.OnExternalEdit(wg) - wg widget may not be nil.');
+    raise Exception.Create('TPropertyDBColumns.OnExternalEdit(wg) - wg widget may not be nil.');
   if not (wg is TfpgStringGrid) then
-    raise Exception.Create(
-      'TPropertyDBColumns.OnExternalEdit(wg) - wg widget is not a TfpgStringGrid.');
+    raise Exception.Create('TPropertyDBColumns.OnExternalEdit(wg) - wg widget is not a TfpgStringGrid.');
   EditStringGridColumns(TfpgStringGrid(wg));
 end;
 
@@ -471,7 +467,7 @@ var
   s: string;
   sval: string;
 begin
-  s := line;
+  s      := line;
   Result := False;
   if UpperCase(GetIdentifier(s)) <> UpperCase('ADDCOLUMN') then
     Exit;
@@ -506,8 +502,7 @@ begin
   c.Free;
 end;
 
-function TPropertyDBColumns.GetPropertySource(wg: TfpgWidget;
-  const ident: string): string;
+function TPropertyDBColumns.GetPropertySource(wg: TfpgWidget; const ident: string): string;
 var
   f: integer;
   c: TfpgStringColumn;
@@ -516,21 +511,24 @@ begin
   Result := '';
   with TfpgStringGrid(wg) do
   begin
-    for f := 0 to ColumnCount - 1 do
+    for f := 0 to ColumnCount-1 do
     begin
       c := Columns[f];
       case c.Alignment of
         taRightJustify:
-          alstr := 'taRightJustify';
+            alstr := 'taRightJustify';
         taCenter:
-          alstr := 'taCenter';
+            alstr := 'taCenter';
         else
-          alstr := 'taLeftJustify';
+            alstr := 'taLeftJustify';
       end;
-      Result := Result + ident + 'AddColumn(' + QuotedStr(c.Title) +
-        ', ' + IntToStr(c.Width) + ', ' + alstr + ');' + LineEnding;
+      Result := Result + ident
+          + 'AddColumn(' + QuotedStr(c.Title) + ', '
+          + IntToStr(c.Width) + ', '
+          + alstr + ');' + LineEnding;
     end;  { for }
   end;  { with }
 end;
 
 end.
+

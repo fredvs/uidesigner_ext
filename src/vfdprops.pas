@@ -1,7 +1,7 @@
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
-    Copyright (C) 2006 - 2010 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
@@ -72,10 +72,10 @@ type
 
   TPropertyStringList = class(TVFDWidgetProperty)
   public
-    function ParseSourceLine(wg: TfpgWidget; const line: string): boolean; override;
-    function GetPropertySource(wg: TfpgWidget; const ident: string): string; override;
-    function GetValueText(wg: TfpgWidget): string; override;
-    function CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
+    function  ParseSourceLine(wg: TfpgWidget; const line: string): boolean; override;
+    function  GetPropertySource(wg: TfpgWidget; const ident: string): string; override;
+    function  GetValueText(wg: TfpgWidget): string; override;
+    function  CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
     procedure OnExternalEdit(wg: TfpgWidget); override;
   end;
 
@@ -87,22 +87,21 @@ type
     function GetValueText(wg: TfpgWidget): string; override;
     function CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
   end;
-
-
+  
+  
   TPropertyFontDesc = class(TPropertyString)
-    function CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
+    function  CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
     procedure OnExternalEdit(wg: TfpgWidget); override;
   end;
-
-
+  
+  
   TPropertyColor = class(TVFDWidgetProperty)
   public
-    procedure DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas; rect: TfpgRect;
-      flags: integer); override;
-    function ParseSourceLine(wg: TfpgWidget; const line: string): boolean; override;
-    function GetPropertySource(wg: TfpgWidget; const ident: string): string; override;
-    function GetValueText(wg: TfpgWidget): string; override;
-    function CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
+    procedure DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas; rect: TfpgRect; flags: integer); override;
+    function  ParseSourceLine(wg: TfpgWidget; const line: string): boolean; override;
+    function  GetPropertySource(wg: TfpgWidget; const ident: string): string; override;
+    function  GetValueText(wg: TfpgWidget): string; override;
+    function  CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
     procedure OnExternalEdit(wg: TfpgWidget); override;
   end;
 
@@ -140,8 +139,8 @@ type
     procedure StoreValue(wg: TfpgWidget); override;
     procedure SetFocus; override;
   end;
-
-
+  
+  
   TBooleanPropertyEditor = class(TChoicePropertyEditor)
   public
     procedure LoadValue(wg: TfpgWidget); override;
@@ -169,7 +168,7 @@ const
   DefUndoOnPropExit = False;
 
 var
-  UndoOnPropExit: boolean = DefUndoOnPropExit;
+  UndoOnPropExit: Boolean = DefUndoOnPropExit;
 
 implementation
 
@@ -177,7 +176,9 @@ uses
   TypInfo,
   vfdformparser,
   vfdeditors,
+  vfd_constants,
   fpg_dialogs;
+
 
 procedure EditStringList(sl: TStringList);
 var
@@ -186,7 +187,7 @@ begin
   frm := TItemEditorForm.Create(nil);
   try
     frm.edItems.Lines.Assign(sl);
-    if frm.ShowModal = mrOk then
+    if frm.ShowModal = mrOK then
       sl.Assign(frm.edItems.Lines);
   finally
     frm.Free;
@@ -239,7 +240,7 @@ function TPropertyString.ParseSourceLine(wg: TfpgWidget; const line: string): bo
 var
   s, sval: string;
 begin
-  s := line;
+  s      := line;
   Result := False;
   if UpperCase(GetIdentifier(s)) <> UpperCase(Name) then
     Exit;
@@ -247,7 +248,7 @@ begin
   Result := CheckSymbol(s, ':=');
   if Result then
   begin
-    sval := GetStringValue(s);
+    sval   := GetStringValue(s);
     Result := CheckSymbol(s, ';');
   end;
 
@@ -286,7 +287,7 @@ var
   s: string;
   ival: integer;
 begin
-  s := line;
+  s      := line;
   Result := False;
   if UpperCase(GetIdentifier(s)) <> UpperCase(Name) then
     Exit;
@@ -294,11 +295,11 @@ begin
   Result := CheckSymbol(s, ':=');
   if Result then
   begin
-    ival := GetIntValue(s);
+    ival   := GetIntValue(s);
     Result := CheckSymbol(s, ';');
   end
   else
-    ival := 0;
+    ival   := 0;
 
   if Result then
     SetOrdProp(wg, Name, ival);
@@ -326,7 +327,7 @@ begin
     UpdateProperty(nil);
     FOrigValue := edit.Text;
   end
-  else if (keycode = keyEscape) then
+  else if (keycode=keyEscape) then
   begin
     edit.Text := FOrigValue;
   end
@@ -336,11 +337,11 @@ end;
 
 procedure TGeneralPropertyEditor.CreateLayout;
 begin
-  Anchors := [anTop, anLeft, anRight];
-  Edit := TfpgEdit.Create(self);
+  Anchors       := [anTop, anLeft, anRight];
+  Edit          := TfpgEdit.Create(self);
   Edit.SetPosition(0, 0, Width, Height);
-  Edit.Anchors := Anchors;
-  //  Edit.OnChange := @UpdateProperty;
+  Edit.Anchors  := Anchors;
+//  Edit.OnChange := @UpdateProperty;
   Edit.OnKeyPress := @EditKeyPressed;
   Edit.OnExit := @EditExit;
   Edit.Visible := True;
@@ -364,11 +365,11 @@ procedure TGeneralPropertyEditor.LoadValue(wg: TfpgWidget);
 begin
   case etype of
     gptInteger:
-      LoadIntValue(wg);
+        LoadIntValue(wg);
     gptFloat:
-      LoadFloatValue(wg);
+        LoadFloatValue(wg);
     else
-      LoadStrValue(wg);
+        LoadStrValue(wg);
   end;
   FOrigValue := edit.Text;
 end;
@@ -420,11 +421,11 @@ procedure TGeneralPropertyEditor.StoreValue(wg: TfpgWidget);
 begin
   case etype of
     gptInteger:
-      StoreIntValue(wg);
+        StoreIntValue(wg);
     gptFloat:
-      StoreFloatValue(wg);
+        StoreFloatValue(wg);
     else
-      StoreStrValue(wg);
+        StoreStrValue(wg);
   end;
 end;
 
@@ -435,25 +436,23 @@ begin
   Result := TExternalPropertyEditor.Create(AOwner, self);
 end;
 
-function TPropertyStringList.GetPropertySource(wg: TfpgWidget;
-  const ident: string): string;
+function TPropertyStringList.GetPropertySource(wg: TfpgWidget; const ident: string): string;
 var
   sl: TStringList;
   f: integer;
 begin
   sl := TStringList(GetObjectProp(wg, Name, TStrings));
   if not Assigned(sl) then
-    raise Exception.Create('Failed to find TStrings type property.');
+    raise Exception.Create(rsErrNoStringsProperty);
 
   Result := '';
 
   //if sl.Text <> '' then
   //begin
-  //writeln('Text = <', sl.Text, '>');
-  //writeln('StringList.Count = ', sl.Count);
-  for f := 0 to sl.Count - 1 do
-    Result := Result + ident + Name + '.Add(' + QuotedStr(sl.Strings[f]) +
-      ');' + LineEnding;
+    //writeln('Text = <', sl.Text, '>');
+    //writeln('StringList.Count = ', sl.Count);
+    for f := 0 to sl.Count - 1 do
+      Result := Result + ident + Name + '.Add(' + QuotedStr(sl.Strings[f]) + ');' + LineEnding;
   //end;
 end;
 
@@ -461,9 +460,9 @@ function TPropertyStringList.GetValueText(wg: TfpgWidget): string;
 var
   sl: TStringList;
 begin
-  sl := TStringList(GetObjectProp(wg, Name, TStrings));
+  sl     := TStringList(GetObjectProp(wg, Name, TStrings));
   if not Assigned(sl) then
-    raise Exception.Create('Failed to find TStrings type property.');
+    raise Exception.Create(rsErrNoStringsProperty);
   Result := '[' + IntToStr(sl.Count) + ' lines]';
 end;
 
@@ -473,18 +472,17 @@ var
 begin
   sl := TStringList(GetObjectProp(wg, Name, TStrings));
   if not Assigned(sl) then
-    raise Exception.Create('Failed to find TStrings type property.');
+    raise Exception.Create(rsErrNoStringsProperty);
   EditStringList(sl);
 end;
 
-function TPropertyStringList.ParseSourceLine(wg: TfpgWidget;
-  const line: string): boolean;
+function TPropertyStringList.ParseSourceLine(wg: TfpgWidget; const line: string): boolean;
 var
   s: string;
   sval: string;
   sl: TStringList;
 begin
-  s := line;
+  s      := line;
   Result := False;
   if UpperCase(GetIdentifier(s)) <> UpperCase(Name) then
     Exit;
@@ -494,7 +492,7 @@ begin
   Result := Result and CheckSymbol(s, '(');
   if Result then
   begin
-    sval := GetStringValue(s);
+    sval   := GetStringValue(s);
     Result := Result and CheckSymbol(s, ')');
     Result := Result and CheckSymbol(s, ';');
   end;
@@ -503,7 +501,7 @@ begin
   begin
     sl := TStringList(GetObjectProp(wg, Name, TStrings));
     if not Assigned(sl) then
-      raise Exception.Create('Failed to find TStrings type property.');
+      raise Exception.Create(rsErrNoStringsProperty);
     sl.Add(sval);
   end;
 end;
@@ -516,7 +514,7 @@ var
   s: string;
   bval: boolean;
 begin
-  s := line;
+  s      := line;
   Result := False;
   if UpperCase(GetIdentifier(s)) <> UpperCase(Name) then
     Exit;
@@ -524,11 +522,11 @@ begin
   Result := CheckSymbol(s, ':=');
   if Result then
   begin
-    bval := GetBoolValue(s);
+    bval   := GetBoolValue(s);
     Result := CheckSymbol(s, ';');
   end
   else
-    bval := False;
+    bval   := False;
 
   if Result then
     SetOrdProp(wg, Name, Ord(bval));
@@ -576,9 +574,9 @@ procedure TExternalPropertyEditor.HandlePaint;
 var
   r: TfpgRect;
 begin
-  //  inherited HandlePaint;
-  //  if not Windowed then
-  //    Exit;
+//  inherited HandlePaint;
+//  if not Windowed then
+//    Exit;
   if widget = nil then
     Exit;
   Canvas.Clear(clBoxColor);
@@ -590,17 +588,17 @@ end;
 procedure TExternalPropertyEditor.CreateLayout;
 begin
   inherited;
-  Widget := nil;
-  Anchors := [anTop, anLeft, anRight];
+  Widget      := nil;
+  Anchors     := [anTop, anLeft, anRight];
 
   btnEdit := TfpgButton.Create(self);
   with btnEdit do
   begin
-    Height := self.Height;
-    Width := 24;
-    Top := 0;
-    Left := self.Width - btnEdit.Width;
-    Text := '...';
+    Height  := self.Height;
+    Width   := 24;
+    Top     := 0;
+    Left    := self.Width - btnEdit.Width;
+    Text    := '...';
     UpdateWindowPosition;
     Anchors := [anTop, anRight];
     OnClick := @OnEditClick;
@@ -655,7 +653,7 @@ function TPropertyEnum.ParseSourceLine(wg: TfpgWidget; const line: string): bool
 var
   s, sval: string;
 begin
-  s := line;
+  s      := line;
   Result := False;
   if UpperCase(GetIdentifier(s)) <> UpperCase(Name) then
     Exit;
@@ -663,7 +661,7 @@ begin
   Result := CheckSymbol(s, ':=');
   if Result then
   begin
-    sval := GetIdentifier(s);
+    sval   := GetIdentifier(s);
     Result := CheckSymbol(s, ';');
   end;
 
@@ -671,7 +669,7 @@ begin
     try
       SetEnumProp(wg, Name, sval);
     except
-      //      Writeln('invalid enum value: "' + sval + '" for ' + Name);
+//      Writeln('invalid enum value: "' + sval + '" for ' + Name);
       Result := False;
     end;
 end;
@@ -680,10 +678,10 @@ end;
 
 procedure TChoicePropertyEditor.CreateLayout;
 begin
-  Anchors := [anTop, anLeft, anRight];
-  chl := TfpgComboBox.Create(self);
+  Anchors      := [anTop, anLeft, anRight];
+  chl          := TfpgComboBox.Create(self);
   chl.SetPosition(0, 0, Width, Height);
-  chl.Anchors := Anchors;
+  chl.Anchors  := Anchors;
   chl.OnChange := @UpdateProperty;
   chl.Visible := True;
 end;
@@ -761,7 +759,7 @@ var
   s: string;
   ival: extended;
 begin
-  s := line;
+  s      := line;
   Result := False;
   if UpperCase(GetIdentifier(s)) <> UpperCase(Name) then
     Exit;
@@ -769,11 +767,11 @@ begin
   Result := CheckSymbol(s, ':=');
   if Result then
   begin
-    ival := GetFloatValue(s);
+    ival   := GetFloatValue(s);
     Result := CheckSymbol(s, ';');
   end
   else
-    ival := 0.0;
+    ival   := 0.0;
 
   if Result then
     SetFloatProp(wg, Name, ival);
@@ -781,8 +779,7 @@ end;
 
 function TPropertyFloat.GetPropertySource(wg: TfpgWidget; const ident: string): string;
 begin
-  Result := ident + Name + ' := ' + FloatToStr(GetFloatProp(wg, Name)) +
-    ';' + LineEnding;
+  Result := ident + Name + ' := ' + FloatToStr(GetFloatProp(wg, Name)) + ';' + LineEnding;
 end;
 
 function TPropertyFloat.GetValueText(wg: TfpgWidget): string;
@@ -821,12 +818,10 @@ begin
   c := fpgColorToRGB(TfpgColor(i));
   { paint the color square }
   Canvas.Color := c;
-  Canvas.FillRectangle(rect.Left + dx, rect.Top + ((rect.Height - BLOCK_SIZE) div 2),
-    BLOCK_SIZE, BLOCK_SIZE);
+  Canvas.FillRectangle(rect.Left+dx, rect.Top+((rect.Height-BLOCK_SIZE) div 2), BLOCK_SIZE, BLOCK_SIZE);
   { paint a block border around the square }
   Canvas.Color := clBlack;
-  Canvas.DrawRectangle(rect.Left + dx, rect.Top + ((rect.Height - BLOCK_SIZE) div 2),
-    BLOCK_SIZE, BLOCK_SIZE);
+  Canvas.DrawRectangle(rect.Left+dx, rect.Top+((rect.Height-BLOCK_SIZE) div 2), BLOCK_SIZE, BLOCK_SIZE);
 end;
 
 function TPropertyColor.ParseSourceLine(wg: TfpgWidget; const line: string): boolean;
@@ -834,7 +829,7 @@ var
   s: string;
   ival: integer;
 begin
-  s := line;
+  s      := line;
   Result := False;
   if UpperCase(GetIdentifier(s)) <> UpperCase(Name) then
     Exit;
@@ -850,7 +845,7 @@ begin
     try
       SetOrdProp(wg, Name, ival);
     except
-      //      Writeln('invalid ordinal value: "', ival, '" for ', Name);
+//      Writeln('invalid ordinal value: "', ival, '" for ', Name);
       Result := False;
     end;
 end;
@@ -908,3 +903,4 @@ begin
 end;
 
 end.
+

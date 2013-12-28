@@ -23,6 +23,7 @@ interface
 
 uses
   Classes,
+  SysUtils,
   fpg_base,
   fpg_widget;
 
@@ -30,19 +31,19 @@ type
   TwgResizer = class(TfpgWidget)
   protected
     wgdesigner: TObject;
-    procedure HandlePaint; override;
-    procedure HandleLMouseDown(x, y: integer; shiftstate: TShiftState); override;
-    procedure HandleLMouseUp(x, y: integer; shiftstate: TShiftState); override;
-    procedure HandleMouseMove(x, y: integer; btnstate: word;
-      shiftstate: TShiftState); override;
+    procedure   HandlePaint; override;
+    procedure   HandleLMouseDown(x, y: integer; shiftstate: TShiftState); override;
+    procedure   HandleLMouseUp(x, y: integer; shiftstate: TShiftState); override;
+    procedure   HandleMouseMove(x, y: integer; btnstate: word; shiftstate: TShiftState); override;
   public
     direction: integer;
     FDragging: boolean;
-    FDragPosX, FDragPosY: TfpgCoord;
+    FDragPosX,
+    FDragPosY: TfpgCoord;
     constructor Create(ACompDesigner: TObject; adirection: integer); reintroduce;
-    procedure Show;
+    procedure   Show;
   end;
-
+  
 
 implementation
 
@@ -81,19 +82,20 @@ end;
 procedure TwgResizer.HandleMouseMove(x, y: integer; btnstate: word;
   shiftstate: TShiftState);
 var
-  dx, dy: integer;
+  dx,
+  dy: integer;
   gridc: integer;
   wgd: TWidgetDesigner;
 begin
-  //  inherited HandleMouseMove(x, y, btnstate, shiftstate);
+//  inherited HandleMouseMove(x, y, btnstate, shiftstate);
 
   if (not FDragging) or ((btnstate and MOUSE_LEFT) = 0) then
     Exit;
-
+    
   dx := x - FDragPosX;
   dy := y - FDragPosY;
 
-  wgd := TWidgetDesigner(wgdesigner);
+  wgd   := TWidgetDesigner(wgdesigner);
   gridc := maindsgn.GridResolution;
 
   dx := dx - (dx mod gridc);
@@ -119,8 +121,8 @@ begin
   FBackgroundColor := $404040;
   wgdesigner := aCompDesigner;
   FDragging := False;
-  Width := 5;
-  Height := 5;
+  Width     := 5;
+  Height    := 5;
   direction := adirection;
   case direction of
     1: MouseCursor := mcSizeSENW;   // top left
@@ -140,3 +142,4 @@ begin
 end;
 
 end.
+

@@ -22,6 +22,8 @@ unit vfdutils;
 interface
 
 uses
+  Classes,
+  SysUtils,
   fpg_widget,
   fpg_form,
   fpg_label,
@@ -29,6 +31,7 @@ uses
   fpg_button,
   fpg_memo,
   fpg_checkbox;
+
 
 procedure SetWidgetText(wg: TfpgWidget; txt: string);
 function GetWidgetText(wg: TfpgWidget; out txt: string): boolean;
@@ -50,17 +53,17 @@ var
 procedure SetWidgetText(wg: TfpgWidget; txt: string);
 begin
   if wg is TfpgForm then
-    TfpgForm(wg).WindowTitle := txt
+    TfpgForm(wg).WindowTitle  := txt
   else if wg is TfpgLabel then
-    TfpgLabel(wg).Text := txt
+    TfpgLabel(wg).Text        := txt
   else if wg is TfpgEdit then
-    TfpgEdit(wg).Text := txt
+    TfpgEdit(wg).Text         := txt
   else if wg is TfpgMemo then
-    TfpgMemo(wg).Text := txt
+    TfpgMemo(wg).Text         := txt
   else if wg is TfpgButton then
-    TfpgButton(wg).Text := txt
+    TfpgButton(wg).Text       := txt
   else if wg is TfpgCheckBox then
-    TfpgCheckBox(wg).Text := txt;
+    TfpgCheckBox(wg).Text     := txt;
 end;
 
 function GetWidgetText(wg: TfpgWidget; out txt: string): boolean;
@@ -69,26 +72,26 @@ begin
   if wg is TfpgForm then
     txt := TfpgForm(wg).WindowTitle
   else if wg is TfpgLabel then
-    txt := TfpgLabel(wg).Text
+    txt    := TfpgLabel(wg).Text
   else if wg is TfpgEdit then
-    txt := TfpgEdit(wg).Text
+    txt    := TfpgEdit(wg).Text
   else if wg is TfpgMemo then
-    txt := TfpgMemo(wg).Text
+    txt    := TfpgMemo(wg).Text
   else if wg is TfpgButton then
-    txt := TfpgButton(wg).Text
+    txt    := TfpgButton(wg).Text
   else if wg is TfpgCheckBox then
-    txt := TfpgCheckBox(wg).Text
+    txt    := TfpgCheckBox(wg).Text
   else
   begin
     Result := False;
-    txt := '';
+    txt    := '';
   end;
 end;
 
 function Ind(const ACount: integer): string;
 begin
-  Result := DupeString(IndentCharacters[gINI.ReadInteger('Options',
-    'IndentationType', 0)], ACount);
+  Result := DupeString(IndentCharacters[gINI.ReadInteger('Options', 'IndentationType', 0)], ACount);
 end;
 
 end.
+
