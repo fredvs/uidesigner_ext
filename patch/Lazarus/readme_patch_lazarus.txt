@@ -1,6 +1,6 @@
 This patch enable complete integration of fpGUI into Lazarus.
 
-1)- Compile uidesinger_ext.pas
+1)- Compile uidesigner_ext.pas
   - Close uidesigner_ext
 
 2)- Depending of your Lazarus version, unzip main.pp_laz_xxx in ~/uidesigner_ext/patch/Lazarus/
