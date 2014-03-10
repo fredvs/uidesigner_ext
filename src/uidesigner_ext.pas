@@ -29,7 +29,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   cthreads, {$ENDIF} {$ENDIF}
   RunOnce_PostIt,
   fpg_cmdlineparams,
-  mystyle_systemcolors,
+  mystyle,
   fpg_stylemanager,
   SysUtils,
   fpg_main,
@@ -72,7 +72,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
     try
       RegisterWidgets;
       if not gCommandLineParams.IsParam('style') then
-        if fpgStyleManager.SetStyle('my style system colors') then
+        if fpgStyleManager.SetStyle('Demo Style') then
           fpgStyle := fpgStyleManager.Style;
 
       PropList := TPropertyList.Create;
