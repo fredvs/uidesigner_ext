@@ -606,6 +606,7 @@ var
 
 begin
   {%region 'Auto-generated GUI code' -fold}
+
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
