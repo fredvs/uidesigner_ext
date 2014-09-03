@@ -41,32 +41,26 @@
       <Unit0>
         <Filename Value="uidesigner_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="uidesigner_ext"/>
       </Unit0>
       <Unit1>
         <Filename Value="vfdmain.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdmain"/>
       </Unit1>
       <Unit2>
         <Filename Value="vfdresizer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdresizer"/>
       </Unit2>
       <Unit3>
         <Filename Value="vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdforms"/>
       </Unit3>
       <Unit4>
         <Filename Value="vfddesigner.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfddesigner"/>
       </Unit4>
       <Unit5>
         <Filename Value="vfdfile.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdfile"/>
       </Unit5>
       <Unit6>
         <Filename Value="newformdesigner.pas"/>
@@ -81,32 +75,26 @@
       <Unit8>
         <Filename Value="vfdwidgetclass.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdwidgetclass"/>
       </Unit8>
       <Unit9>
         <Filename Value="vfdeditors.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdeditors"/>
       </Unit9>
       <Unit10>
         <Filename Value="vfdformparser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdformparser"/>
       </Unit10>
       <Unit11>
         <Filename Value="vfdprops.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdprops"/>
       </Unit11>
       <Unit12>
         <Filename Value="vfdutils.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdutils"/>
       </Unit12>
       <Unit13>
         <Filename Value="vfdpropeditgrid.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdpropeditgrid"/>
       </Unit13>
       <Unit14>
         <Filename Value="anchors.inc"/>
@@ -154,7 +142,6 @@
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
       </Verbosity>
       <WriteFPCLogo Value="False"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
 </CONFIG>

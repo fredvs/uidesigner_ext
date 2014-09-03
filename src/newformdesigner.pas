@@ -7,7 +7,7 @@ fiens@hotmail.com
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
-    Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2014 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
@@ -20,6 +20,7 @@ fiens@hotmail.com
     Description:
       Essential classes used by the fpGUI Designer
 }
+
 
 unit newformdesigner;
 
@@ -70,6 +71,7 @@ type
     procedure   miHelpAboutClick(Sender: TObject);
     procedure   miHelpAboutGUI(Sender: TObject);
     procedure   miMRUClick(Sender: TObject; const FileName: string);
+    procedure   BuildThemePreviewMenu;
 
   public
     {@VFD_HEAD_BEGIN: frmMain}
@@ -204,12 +206,12 @@ var
 implementation
 
 uses
-  vfdmain,
   fpg_iniutils,
-  vfd_constants,
+  fpg_dialogs,
   fpg_constants,
-  fpg_dialogs;
-
+  fpg_stylemanager,
+  vfdmain,
+  vfd_constants;
 
 // Anchor images
 {$I anchors.inc}
@@ -499,10 +501,9 @@ if fileexists(pchar(dataf)) then
       left := left - 5 ;
       width := width + 5 ;
         end;
-{$ENDIF}
+{$else}
 
-{$IFDEF Linux}
-        if  gINI.ReadBool('Options', 'AlwaystoFront', false) = true then
+       if  gINI.ReadBool('Options', 'AlwaystoFront', false) = true then
                 left := left + 1 ;
 {$ENDIF}
      end;
@@ -613,7 +614,8 @@ begin
   wscreen := fpgApplication.ScreenWidth;
   {@VFD_BODY_BEGIN: frmMain}
   Name := 'frmMain';
-  SetPosition(96, 118, 800, 92);
+ // SetPosition(96, 118, 800, 92);
+  SetPosition(338, 140, 754, 92);
   WindowTitle := 'frmMain';
   Hint := '';
   ShowHint := True;
@@ -702,9 +704,8 @@ begin
   with wgpalette do
   begin
     Name := 'wgpalette';
-    SetPosition(152, 28, 2, 32);
+    SetPosition(152, 28, 600, 62);
     Anchors := [anLeft,anRight,anTop,anBottom];
-    SetPosition(152, 28, wscreen- 149, 62);
     //    Width := self.Width - Left - 3;
     Focusable := False;
     OnResize := @PaletteBarResized;
@@ -715,6 +716,7 @@ begin
   begin
     Name := 'chlPalette';
     SetPosition(16, 64, 132, 22);
+   //     SetPosition(4, 67, 144, 22);
     Anchors := [anLeft,anBottom];
     ExtraHint := '';
     FontDesc := '#List';
@@ -850,6 +852,7 @@ begin
     MenuItem(11).Tag:=9;
   end;
 
+{
   previewmenu := TfpgPopupMenu.Create(self);
   with previewmenu do
   begin
@@ -860,6 +863,14 @@ begin
     AddMenuItem('with OpenSoft', '', nil).Enabled := False;
     AddMenuItem('with Motif', '', nil).Enabled := False;
     AddMenuItem('with OpenLook', '', nil).Enabled := False;
+  end;
+}
+
+previewmenu := TfpgPopupMenu.Create(self);
+  with previewmenu do
+  begin
+    Name := 'previewmenu';
+    SetPosition(324, 36, 120, 20);
   end;
 
   PanelMove := TfpgPanel.Create(self);
@@ -883,8 +894,10 @@ begin
   {%endregion}
 
   { Build component palette }
+
   x := 0;
   y := 0;
+ 
   for n := 0 to VFDWidgetCount-1 do
   begin
     wgc           := VFDWidget(n);
@@ -909,8 +922,11 @@ begin
     end;
   end;
 
-  chlPalette.Items.Sort;
 
+ BuildThemePreviewMenu;
+
+  chlPalette.Items.Sort;
+ 
   MainMenu.AddMenuItem('&File', nil).SubMenu     := filemenu;
     MainMenu.AddMenuItem('&Undo', nil).SubMenu     := undomenu;
   MainMenu.AddMenuItem('Selected Fo&rm', nil).SubMenu     := formmenu;
@@ -920,8 +936,7 @@ begin
   MainMenu.AddMenuItem('&Help', nil).SubMenu     := helpmenu;
   MainMenu.AddMenuItem('', nil) ;
 
-      MainMenu.MenuItem(4).Visible:=false;
-     if enableundo = true then MainMenu.MenuItem(1).Visible:= true else MainMenu.MenuItem(1).Visible:= false ;
+    if enableundo = true then MainMenu.MenuItem(1).Visible:= true else MainMenu.MenuItem(1).Visible:= false ;
 
   FFileOpenRecent.SubMenu := miOpenRecentMenu;
   FlistUndo.SubMenu := listundomenu;
@@ -1548,6 +1563,24 @@ begin
       Inc(y, 30);
     end;
   end;
+end;
+
+
+procedure TfrmMain.BuildThemePreviewMenu;
+var
+  sl: TStringList;
+  i: integer;
+begin
+  sl := TStringList.Create;
+  fpgStyleManager.AssignStyleTypes(sl);
+  sl.Sort;
+  for i := 0 to sl.Count-1 do
+  begin
+    if sl[i] = 'auto' then
+      continue;
+    previewmenu.AddMenuItem(sl[i], '', nil).Enabled := False;
+  end;
+  sl.Free;
 end;
 
 procedure TfrmMain.miHelpAboutClick(Sender: TObject);
