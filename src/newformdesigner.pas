@@ -183,6 +183,7 @@ type
      lblVersion: TfpgLabel;
      btnClose: TfpgButton;
      lblWrittenBy: TfpgLabel;
+     lblExtBy: TfpgLabel;
      lblURL: TfpgHyperlink;
      lblCompiled: TfpgLabel;
      {@VFD_HEAD_END: frmAbout}
@@ -247,7 +248,7 @@ begin
   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(378, 267, 276, 180);
-  WindowTitle := 'Product Information...';
+  WindowTitle := 'About UIdesigner_ext';
   Hint := '';
   WindowPosition := wpScreenCenter;
   Sizeable := False;
@@ -260,7 +261,7 @@ begin
     SetPosition(12, 16, 255, 31);
     FontDesc := 'Arial-20';
     Hint := '';
-    Text := 'fpGUI UI Designer';
+    Text := 'UIDesigner_ext';
   end;
 
   lblVersion := TfpgLabel.Create(self);
@@ -320,6 +321,16 @@ begin
     FontDesc := 'Arial-8';
     Hint := '';
     Text := 'Compiled on:  %s';
+  end;
+
+  lblExtBy := TfpgLabel.Create(self);
+  with lblExtBy do
+  begin
+    Name := 'lblExtBy';
+    SetPosition(12, 152, 150, 14);
+    FontDesc := 'Arial-9';
+    Hint := '';
+    Text := '_ext by Fred van Stappen';
   end;
 
   {@VFD_BODY_END: frmAbout}
@@ -795,8 +806,8 @@ begin
     Name := 'helpmenu';
     SetPosition(328, 52, 120, 20);
     AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
-    AddMenuItem('Product Information...', '', @miHelpAboutClick);
-  end;
+    AddMenuItem('About UIdesigner_ext...', '', @miHelpAboutClick);
+   end;
 
   listundomenu := TfpgPopupMenu.Create(self);
   x := 0;
@@ -1044,7 +1055,7 @@ begin
     fpgapplication.ProcessMessages;
     WindowType := wtpopup ;  // borderless, always on front but doesn't steal focus
     MainMenu.MenuItem(7).Visible:=true;
-   MainMenu.MenuItem(7).Text:=  'Current file : ' + p + s + '     fpGUI Designer v' + program_version;    ;
+   MainMenu.MenuItem(7).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' + program_version;    ;
     btnToFront.Text:='Normal';
    btnToFront.tag:=1;
  if idetemp = 1 then
@@ -1114,7 +1125,7 @@ begin
    hide;
 
  WindowAttributes := [waBorderless];
- MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     fpGUI Designer'  ;
+ MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     UIdesigner_ext'  ;
 
  show;
 
