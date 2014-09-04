@@ -70,7 +70,6 @@
       <Unit7>
         <Filename Value="vfdwidgets.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdwidgets"/>
       </Unit7>
       <Unit8>
         <Filename Value="vfdwidgetclass.pas"/>

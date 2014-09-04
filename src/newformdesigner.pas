@@ -113,6 +113,7 @@ type
     procedure   OnFormDesignShow(Sender: TObject);
     procedure   LoadIDEparameters(ide :integer) ;
     procedure   onMessagePost;
+    procedure   OnStyleChange(Sender: TObject);
     procedure   onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure   onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure   onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
@@ -202,6 +203,7 @@ var
   oriMousePos: TPoint;
   idetemp, maxundo, indexundo : integer;
   enableundo : boolean;
+  numstyle : integer;
 
 implementation
 
@@ -608,6 +610,7 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
@@ -852,21 +855,7 @@ begin
     MenuItem(11).Tag:=9;
   end;
 
-{
   previewmenu := TfpgPopupMenu.Create(self);
-  with previewmenu do
-  begin
-    Name := 'previewmenu';
-    SetPosition(324, 36, 120, 20);
-    AddMenuItem('with Windows 9x', '', nil).Enabled := False;
-    AddMenuItem('with Windows XP', '', nil).Enabled := False;
-    AddMenuItem('with OpenSoft', '', nil).Enabled := False;
-    AddMenuItem('with Motif', '', nil).Enabled := False;
-    AddMenuItem('with OpenLook', '', nil).Enabled := False;
-  end;
-}
-
-previewmenu := TfpgPopupMenu.Create(self);
   with previewmenu do
   begin
     Name := 'previewmenu';
@@ -915,7 +904,7 @@ previewmenu := TfpgPopupMenu.Create(self);
     chlPalette.Items.AddObject(wgc.WidgetClass.ClassName, wgc);
 
     Inc(x, 32);
-    if (x+30) >= wgpalette.Width then
+    if (x+30) >= wgpalette.Width  then
     begin
       x := 0;
       Inc(y, 30);
@@ -1146,8 +1135,7 @@ begin
    frmProperties.hide;
    fpgapplication.ProcessMessages;
    frmProperties.Show;
- // fpgapplication.ProcessMessages;
-end;
+ end;
 
 procedure TfrmMain.OnFormDesignShow(Sender: TObject);
 begin
@@ -1550,6 +1538,7 @@ var
 begin
   x := 0;
   y := 0;
+  wgpalette.Width := width - 170;
   for n := 0 to wgPalette.ComponentCount-1 do
   begin
     btn := wgPalette.Components[n] as TwgPaletteButton;
@@ -1563,8 +1552,39 @@ begin
       Inc(y, 30);
     end;
   end;
-end;
+ end;
 
+procedure TfrmMain.OnStyleChange(Sender: TObject);
+var
+  x : integer;
+begin
+  if Sender is TfpgMenuItem then begin
+   if fpgstyleManager.setstyle(TfpgMenuItem(Sender).Text) then
+   begin
+
+ for x := 0 to numstyle-1 do
+ previewmenu.MenuItem(x).Checked:=false;
+
+TfpgMenuItem(Sender).Checked:= true;
+     fpgstyle := fpgstyleManager.Style;
+
+     hide;
+     show;
+
+     for x := 2 to 11 do
+     if windowmenu.MenuItem(x).Visible = true then
+  begin
+  ArrayFormDesign[x-2].Form.hide ;
+  ArrayFormDesign[x-2].Form.Show ;
+  end;
+
+   frmProperties.hide;
+   fpgapplication.ProcessMessages;
+   frmProperties.Show;
+     end;
+ end;
+
+end;
 
 procedure TfrmMain.BuildThemePreviewMenu;
 var
@@ -1574,11 +1594,12 @@ begin
   sl := TStringList.Create;
   fpgStyleManager.AssignStyleTypes(sl);
   sl.Sort;
+  numstyle := sl.Count-1 ;
   for i := 0 to sl.Count-1 do
   begin
     if sl[i] = 'auto' then
       continue;
-    previewmenu.AddMenuItem(sl[i], '', nil).Enabled := False;
+    previewmenu.AddMenuItem(sl[i], '', @OnStyleChange).Enabled := true;
   end;
   sl.Free;
 end;
