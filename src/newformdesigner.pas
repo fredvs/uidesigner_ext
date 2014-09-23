@@ -406,7 +406,7 @@ begin
  dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner_ext',GetAppConfigDir(false))-1)
            +  'Roaming\typhon64\environmentoptions.xml';
   {$ENDIF}
-{$IFDEF Linux}
+{$IFDEF unix}
 dataf := GetUserDir +'.typhon64/environmentoptions.xml' ;
 {$ENDIF}
 
@@ -415,7 +415,7 @@ dataf := GetUserDir +'.typhon64/environmentoptions.xml' ;
 dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner_ext',GetAppConfigDir(false))-1)
            +  'Roaming\typhon32\environmentoptions.xml';
   {$ENDIF}
-{$IFDEF Linux}
+{$IFDEF unix}
 dataf := GetUserDir +'.typhon32/environmentoptions.xml' ;
 {$ENDIF}
 {$endif}
@@ -428,7 +428,7 @@ dataf := GetUserDir +'.typhon32/environmentoptions.xml' ;
 dataf := copy(GetAppConfigDir(false),1,pos('uidesigner_ext',GetAppConfigDir(false))-1)
           +  'lazarus\environmentoptions.xml';
  {$ENDIF}
-{$IFDEF Linux}
+{$IFDEF unix}
 dataf := GetUserDir +'.lazarus/environmentoptions.xml' ;
 {$ENDIF}
 
@@ -481,13 +481,13 @@ if fileexists(pchar(dataf)) then
                   dataf := copy(dataf2,Pos('Top="',dataf2)+5,6) ;
             top := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) ;
             end
-            {$IFDEF unix}
-             else top :=  0 ;
-             top := top + 52;
-            {$ENDIF}
+
              {$IFDEF windows}
              else top :=  0 ;
               top := top + 50;
+            {$else}
+             else top :=  0 ;
+             top := top + 52;
             {$ENDIF}
 
             if   Pos('Width="',dataf2) > 0 then
@@ -557,7 +557,7 @@ if fileexists(pchar(dataf)) then
                 left := left + 8 ;
 {$ENDIF}
 
-{$IFDEF Linux}
+{$IFDEF unix}
 
      if  gINI.ReadBool('Options', 'AlwaystoFront', false) = true then
                 left := left + 1 ;
@@ -1064,7 +1064,7 @@ begin
       // left := left - 5 ;
      width := width + 8 ;
        {$ENDIF}
-    {$IFDEF Linux}
+    {$IFDEF unix}
       left := left + 1 ;
     {$ENDIF}
    end;
@@ -1100,7 +1100,7 @@ begin
      //  left := left + 5 ;
      width := width - 8 ;
       {$ENDIF}
- {$IFDEF Linux}
+ {$IFDEF unix}
       left := left - 1 ;
   {$ENDIF}
    end;

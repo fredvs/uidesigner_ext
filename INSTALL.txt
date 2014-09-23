@@ -1,5 +1,7 @@
 This is the extended version of fpGUI Designer.
- 
+It needs the last fpGUI-develop branch =>
+https://github.com/graemeg/fpgui/tree/develop
+
 With run-only-once, window list, undo feature, integration into IDE, editor launcher,...
 
 How to install it ?

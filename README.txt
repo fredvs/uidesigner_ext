@@ -3,6 +3,9 @@ This is the extended version of fpGUI Designer.
 With run-only-once, window list, undo feature, integration into IDE, editor launcher,...
 There are also some patches for integration with fpc, Lazarus, Typhon, Geany,...
 
+It needs the last fpGUI-develop branch =>
+https://github.com/graemeg/fpgui/tree/develop
+
 Fred van Stappen. fiens@hotmail.com  
 
 
