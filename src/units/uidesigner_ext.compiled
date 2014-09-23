@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="/usr/lib/codetyphon/fpc/bin/x86_64-linux/fpc" Date="1405633251"/>
-  <Params Value=" -MObjFPC -Sch -CX -O1 -Xs -XX -vewnhibq -Fi/home/fred/uidesigner_ext/src/units -Fu/home/fred/fpGUI-develop/lib/x86_64-linux -Fu/usr/lib/codetyphon/typhon/packager/units/x86_64-linux -Fu/home/fred/uidesigner_ext/src/ -FU/home/fred/uidesigner_ext/src/units/ uidesigner_ext.pas"/>
-</CONFIG>
