@@ -43,7 +43,7 @@ var
 begin
   r.SetRect(x, y, w, h);
   ACanvas.SetColor(clShadow1);
-  ACanvas.Clear(clgreen);
+  ACanvas.Clear(clWindowBackground);
   ACanvas.DrawRectangle(r);
 end;
 
