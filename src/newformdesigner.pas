@@ -1614,7 +1614,7 @@ begin
     previewmenu.AddMenuItem(sl[i], '', @OnStyleChange).Enabled := true;
 
   end;
-  previewmenu.MenuItem(2).Checked:=true;
+  previewmenu.MenuItem(8).Checked:=true;
   sl.Free;
 end;
 
