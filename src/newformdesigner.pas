@@ -622,6 +622,7 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
+
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
@@ -1611,7 +1612,9 @@ begin
     if sl[i] = 'auto' then
       continue;
     previewmenu.AddMenuItem(sl[i], '', @OnStyleChange).Enabled := true;
+
   end;
+  previewmenu.MenuItem(2).Checked:=true;
   sl.Free;
 end;
 

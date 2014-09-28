@@ -25,11 +25,17 @@ program uidesigner_ext;
 
 {$mode objfpc}{$H+}
 
-uses {$IFDEF UNIX} {$IFDEF UseCThreads}
-  cthreads, {$ENDIF} {$ENDIF}
+uses {$IFDEF UNIX}
+  cthreads, {$ENDIF}
   RunOnce_PostIt,
   fpg_cmdlineparams,
   mystyle,
+  mystyle1,
+  mystyle2,
+  mystyle3,
+  style_mint1,
+  style_mint2,
+  SystemColorsStyle,
   fpg_stylemanager,
   SysUtils,
   fpg_main,
@@ -62,8 +68,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
           RunOnce(filedir)
         else
           ifonlyone := False;
-        ;
-      end
+             end
       else
         RunOnce(filedir);
     end;
@@ -72,8 +77,20 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
     try
       RegisterWidgets;
       if not gCommandLineParams.IsParam('style') then
-        if fpgStyleManager.SetStyle('Demo Style') then
+      begin
+        {
+          if fpgStyleManager.SetStyle('Mint 2') then
           fpgStyle := fpgStyleManager.Style;
+          if fpgStyleManager.SetStyle('Mint 1') then
+          fpgStyle := fpgStyleManager.Style;
+         if fpgStyleManager.SetStyle('Demo Style3') then
+          fpgStyle := fpgStyleManager.Style;
+          if fpgStyleManager.SetStyle('Demo Style2') then
+          fpgStyle := fpgStyleManager.Style;
+          }
+        if fpgStyleManager.SetStyle('Demo Style1') then
+          fpgStyle := fpgStyleManager.Style;
+      end;
 
       PropList := TPropertyList.Create;
       maindsgn := TMainDesigner.Create;
@@ -84,6 +101,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
 
       fpgApplication.MainForm := frmMain;
 
+      fpgApplication;
       fpgApplication.Run;
 
       PropList.Free;
