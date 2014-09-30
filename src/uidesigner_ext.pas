@@ -33,7 +33,6 @@ uses {$IFDEF UNIX}
   mystyle1,
   mystyle2,
   mystyle3,
-  fpg_style_win8,
   style_elipse_silver,
   style_elipse_gray,
   style_elipse_purple,

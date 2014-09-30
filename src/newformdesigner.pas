@@ -809,7 +809,7 @@ begin
     Name := 'helpmenu';
     SetPosition(328, 52, 120, 20);
     AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
-    AddMenuItem('About UIdesigner_ext...', '', @miHelpAboutClick);
+    AddMenuItem('About Designer_ext...', '', @miHelpAboutClick);
    end;
 
   listundomenu := TfpgPopupMenu.Create(self);
@@ -995,7 +995,6 @@ indexundo := 0 ;
   InitMessage ;
   StartMessage(@onMessagePost, 1000);
  end;
-
 end;
 
 
@@ -1128,7 +1127,7 @@ begin
    hide;
 
  WindowAttributes := [waBorderless];
- MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     UIdesigner_ext'  ;
+ MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     Designer_ext'  ;
 
  show;
 
@@ -1618,6 +1617,7 @@ begin
   end;
   previewmenu.MenuItem(8).Checked:=true;
   sl.Free;
+
 end;
 
 procedure TfrmMain.miHelpAboutClick(Sender: TObject);

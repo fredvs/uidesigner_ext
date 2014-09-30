@@ -27,6 +27,8 @@ type
       AFlags: TfpgMenuItemFlags); override;
     procedure DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
       ABackgroundColor: TfpgColor); override;
+    function   HasButtonHoverEffect: boolean; override;
+
   end;
 
 
@@ -41,6 +43,11 @@ constructor TMyStyle.Create;
 begin
   inherited Create;
   fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+end;
+
+function TMyStyle.HasButtonHoverEffect: boolean;
+begin
+  Result := True;
 end;
 
 procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
@@ -91,7 +98,7 @@ begin
   // so we don't paint over the border
   InflateRect(r, -1, -1);
   // now paint the face of the button
-  if (btfIsPressed in AFlags) then
+  if (btfIsPressed in AFlags) or (btfHover in AFlags) then
   begin
     ACanvas.GradientFill(r21, clHilite1, clwhite, gdVertical);
     ACanvas.GradientFill(r22, clwhite, clHilite1, gdVertical);
@@ -99,8 +106,8 @@ begin
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
      InflateRect(r, -1, -1);
-    ACanvas.SetColor(cllime);
-    ACanvas.DrawRectangle(r);
+      if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
+      ACanvas.DrawRectangle(r);
   end
   else
   begin

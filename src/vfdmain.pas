@@ -731,7 +731,7 @@ end;
 procedure TMainDesigner.CreateWindows;
 begin
   frmMain := TfrmMain.Create(nil);
-  frmMain.WindowTitle := 'fpGUI Designer v' + program_version;
+  frmMain.WindowTitle := 'fpGUI Designer_ext v' + program_version;
   frmMain.Show;
 
   frmProperties := TfrmProperties.Create(nil);
