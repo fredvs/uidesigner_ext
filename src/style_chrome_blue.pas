@@ -40,7 +40,8 @@ uses
 constructor TMyStyle.Create;
 begin
   inherited Create;
-  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+ // fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+    fpgSetNamedColor(clWindowBackground, clLightBlue);
 end;
 
 procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
@@ -104,8 +105,8 @@ begin
   end
   else
   begin
-    ACanvas.GradientFill(r21, clnavy, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clnavy, gdVertical);
+    ACanvas.GradientFill(r21, clLightBlue, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightBlue, gdVertical);
  //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
@@ -130,8 +131,8 @@ begin
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
   begin
-    ACanvas.GradientFill(r21, clnavy, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clnavy, gdVertical);
+    ACanvas.GradientFill(r21, clLightBlue, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightBlue, gdVertical);
     ACanvas.SetTextColor(clblack);
   //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
@@ -145,13 +146,20 @@ end;
 procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
   ABackgroundColor: TfpgColor);
 var
-  FLightColor: TfpgColor;
-  FDarkColor: TfpgColor;
+  r21, r22: TfpgRect;
 begin
+  r21.Height := r.Height div 2;
+  r21.Width := r.Width;
+  r21.Top := r.top;
+  r21.Left := r.Left;
+
+  r22.Height := r.Height div 2;
+  r22.Width := r.Width;
+  r22.Top := r.top + r22.Height;
+  r22.Left := r.Left;
   // a possible future theme option
-  FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
-  FDarkColor := TfpgColor($beb8a4);  // color at bottom of menu bar
-  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
+  ACanvas.GradientFill(r21, clLightBlue, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightBlue, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);

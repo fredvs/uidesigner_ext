@@ -27,6 +27,8 @@ type
       AFlags: TfpgMenuItemFlags); override;
     procedure DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
       ABackgroundColor: TfpgColor); override;
+    procedure   DrawFocusRect(ACanvas: TfpgCanvas; r: TfpgRect); override;
+
   end;
 
 
@@ -37,15 +39,25 @@ uses
 
 { TMyStyle }
 
+
 constructor TMyStyle.Create;
 begin
   inherited Create;
-  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+//  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+   fpgSetNamedColor(clWindowBackground, clsilver);
+  end;
+
+procedure TMyStyle.DrawFocusRect(ACanvas: TfpgCanvas; r: TfpgRect);
+begin
+  ACanvas.SetLineStyle(1, lsSolid);
+  ACanvas.SetColor(cllime);
+  ACanvas.DrawRectangle(r);
 end;
 
 procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
+
 begin
   r.SetRect(x, y, w, h);
   ACanvas.SetColor(clShadow1);
@@ -79,6 +91,7 @@ begin
   ACanvas.SetColor(clWindowBackground);
   ACanvas.FillRectangle(r);
 
+
   if (btfFlat in AFlags) and not (btfIsPressed in AFlags) then
     Exit; // no need to go further
 
@@ -110,6 +123,8 @@ begin
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
   end;
+
+
 end;
 
 procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
@@ -145,17 +160,22 @@ end;
 procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
   ABackgroundColor: TfpgColor);
 var
-  FLightColor: TfpgColor;
-  FDarkColor: TfpgColor;
+  r21, r22: TfpgRect;
 begin
+  r21.Height := r.Height div 2;
+  r21.Width := r.Width;
+  r21.Top := r.top;
+  r21.Left := r.Left;
+
+  r22.Height := r.Height div 2;
+  r22.Width := r.Width;
+  r22.Top := r.top + r22.Height;
+  r22.Left := r.Left;
   // a possible future theme option
-  FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
-  FDarkColor := TfpgColor($beb8a4);  // color at bottom of menu bar
-  //  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
+  ACanvas.GradientFill(r21, clgray, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clgray, gdVertical);
 
-  ACanvas.GradientFill(r, clgridheader, clhilite1, gdVertical);
-
-  // inner bottom line
+   // inner bottom line
   ACanvas.SetColor(clShadow1);
   ACanvas.DrawLine(r.Left, r.Bottom - 1, r.Right + 1, r.Bottom - 1);   // bottom
   // outer bottom line

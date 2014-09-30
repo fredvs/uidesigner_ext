@@ -40,7 +40,8 @@ uses
 constructor TMyStyle.Create;
 begin
   inherited Create;
-  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+ // fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+   fpgSetNamedColor(clWindowBackground, clLightgreen);
 end;
 
 procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
@@ -105,8 +106,8 @@ begin
   end
   else
   begin
-    ACanvas.GradientFill(r21, cldarkgreen, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, cldarkgreen, gdVertical);
+    ACanvas.GradientFill(r21, clLightgreen, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightgreen, gdVertical);
      //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
@@ -147,15 +148,20 @@ end;
 procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
   ABackgroundColor: TfpgColor);
 var
-  FLightColor: TfpgColor;
-  FDarkColor: TfpgColor;
+  r21, r22: TfpgRect;
 begin
-  // a possible future theme option
-  FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
-  FDarkColor := TfpgColor($beb8a4);  // color at bottom of menu bar
-  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
+  r21.Height := r.Height div 2;
+  r21.Width := r.Width;
+  r21.Top := r.top;
+  r21.Left := r.Left;
 
-  //  ACanvas.GradientFill(r, clgridheader, clhilite1, gdVertical);
+  r22.Height := r.Height div 2;
+  r22.Width := r.Width;
+  r22.Top := r.top + r22.Height;
+  r22.Left := r.Left;
+  // a possible future theme option
+  ACanvas.GradientFill(r21, clLightgreen, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightgreen, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);

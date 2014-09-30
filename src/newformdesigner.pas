@@ -245,10 +245,11 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(378, 267, 276, 180);
-  WindowTitle := 'About UIdesigner_ext';
+  WindowTitle := 'About Designer_ext';
   Hint := '';
   WindowPosition := wpScreenCenter;
   Sizeable := False;
@@ -261,7 +262,7 @@ begin
     SetPosition(12, 16, 255, 31);
     FontDesc := 'Arial-20';
     Hint := '';
-    Text := 'UIDesigner_ext';
+    Text := 'Designer_ext';
   end;
 
   lblVersion := TfpgLabel.Create(self);
@@ -620,6 +621,7 @@ var
 
 begin
   {%region 'Auto-generated GUI code' -fold}
+
 
 
 
@@ -1625,8 +1627,10 @@ end;
 
 procedure TfrmMain.miHelpAboutGUI(Sender: TObject);
 begin
-  TfpgMessageDialog.AboutFPGui;
+TfpgMessageDialog.AboutFPGui;
 end;
+
+
 
 procedure TfrmMain.miMRUClick(Sender: TObject; const FileName: string);
 begin
