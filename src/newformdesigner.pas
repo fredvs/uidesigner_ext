@@ -223,6 +223,8 @@ uses
 // Anchor images
 {$I anchors.inc}
 
+// logo images
+{$I fpgui_logo.inc}
 
 {@VFD_NEWFORM_IMPL}
 
@@ -251,6 +253,7 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
     OnPaint := @FormPaint;
 
    {@VFD_BODY_BEGIN: frmAbout}
@@ -260,6 +263,7 @@ begin
   Hint := '';
   WindowPosition := wpScreenCenter;
   Sizeable := False;
+  BackgroundColor:= clwhite;
   OnShow := @FormShow;
 
   lblAppName := TfpgLabel.Create(self);
@@ -343,12 +347,14 @@ begin
     textcolor := clgreen;
     Text := '_ext => Fred van Stappen';
   end;
-
-   FImage := LoadImage_JPG('fpGUI_logo.jpg', 1);
-
-   RePaint;
   {@VFD_BODY_END: frmAbout}
   {%endregion}
+ FImage :=  fpgImages.AddBMP(
+    'fpgui_logo1', @extimg_fpgui_logo1,
+    sizeof(extimg_fpgui_logo1));
+
+   RePaint;
+
 end;
 
 class procedure TfrmAbout.Execute;
