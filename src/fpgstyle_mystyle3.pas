@@ -1,5 +1,8 @@
-
-unit mystyle3;
+{mystile (from Graeme) Style
+by Fred van Stappen
+fiens@hotmail.com
+}
+unit fpgstyle_mystyle3;
 
 {$mode objfpc}{$H+}
 

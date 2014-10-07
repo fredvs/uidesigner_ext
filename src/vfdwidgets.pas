@@ -43,6 +43,8 @@ implementation
 uses
   fpg_main,
   vfddesigner,
+  u_editgrid,
+  fpg_nicegrid,
   fpg_widget,
   fpg_form,
   fpg_label,
@@ -221,6 +223,16 @@ begin
   fpgImages.AddMaskedBMP(
     'vfd.stringgrid', @stdimg_vfd_stringgrid,
     sizeof(stdimg_vfd_stringgrid),
+    0, 0);
+
+  fpgImages.AddMaskedBMP(
+    'vfd.nicegrid', @stdimg_vfd_nicegrid,
+    sizeof(stdimg_vfd_nicegrid),
+    0, 0);
+
+  fpgImages.AddMaskedBMP(
+    'vfd.editgrid', @stdimg_vfd_editgrid,
+    sizeof(stdimg_vfd_editgrid),
     0, 0);
     
   fpgImages.AddMaskedBMP(
@@ -607,6 +619,47 @@ begin
   wc.AddProperty('ShowHint', TPropertyBoolean, '');
   wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
   wc.WidgetIconName := 'vfd.stringgrid';
+  RegisterVFDWidget(wc);
+
+ // NiceGrid
+  wc := TVFDWidgetClass.Create(TfpgNiceGrid);
+  wc.NameBase := 'NiceGrid';
+  wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
+  wc.AddProperty('AlternateColor', TPropertyColor, 'The color of every alternative row. Dependent on grid Options property.');
+  
+  wc.AddProperty('BackgroundColor', TPropertyColor, '');
+  wc.AddProperty('BorderStyle', TPropertyEnum, '');
+  wc.AddProperty('ColCount', TPropertyInteger, 'Defines the various columns for a grid. At least one column must exist.');
+   wc.AddProperty('Enabled', TPropertyBoolean, '');
+  wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the text');
+  wc.AddProperty('HeaderFont', TPropertyFontDesc, '');
+  wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
+  wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
+  wc.AddProperty('RowCount', TPropertyInteger, 'Default number of rows in the grid');
+  wc.AddProperty('ShowGrid', TPropertyBoolean, 'Must the grid lines be shown');
+  wc.AddProperty('ShowFooter', TPropertyBoolean, 'Must the grid footer be visible');
+  wc.AddProperty('ShowHint', TPropertyBoolean, '');
+  wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
+
+  wc.WidgetIconName := 'vfd.nicegrid';
+  RegisterVFDWidget(wc);
+
+// EditGrid
+  wc := TVFDWidgetClass.Create(TfpgEditGrid);
+  wc.NameBase := 'EditGrid';
+  wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
+  wc.AddProperty('BackgroundColor', TPropertyColor, '');
+  wc.AddProperty('BorderStyle', TPropertyEnum, '');
+   wc.AddProperty('Enabled', TPropertyBoolean, '');
+  wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the text');
+  wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
+  wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
+  wc.AddProperty('RowCount', TPropertyInteger, 'Default number of rows in the grid');
+  wc.AddProperty('ShowGrid', TPropertyBoolean, 'Must the grid lines be shown');
+  wc.AddProperty('ShowHint', TPropertyBoolean, '');
+  wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
+
+  wc.WidgetIconName := 'vfd.editgrid';
   RegisterVFDWidget(wc);
 
   // Bevel

@@ -13,7 +13,6 @@
       <MainUnit Value="0"/>
       <Title Value="uidesigner_ext"/>
       <UseAppBundle Value="False"/>
-      <Icon Value="0"/>
     </General>
     <VersionInfo>
       <StringTable ProductVersion=""/>
@@ -46,7 +45,6 @@
       <Unit1>
         <Filename Value="vfdmain.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="vfdmain"/>
       </Unit1>
       <Unit2>
         <Filename Value="vfdresizer.pas"/>
@@ -67,7 +65,6 @@
       <Unit6>
         <Filename Value="newformdesigner.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="newformdesigner"/>
       </Unit6>
       <Unit7>
         <Filename Value="vfdwidgets.pas"/>

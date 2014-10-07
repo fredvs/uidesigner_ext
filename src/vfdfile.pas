@@ -280,6 +280,7 @@ var
   fs: TFileStream;
 begin
   Result := False;
+if fname <> '' then begin
   fs := TFileStream.Create(fpgToOSEncoding(fname), fmOpenRead);
   try
     FFileData := ''; // make sure it is empty
@@ -290,6 +291,7 @@ begin
   finally
     fs.Free;
   end;
+end;
 end;
 
 function TVFDFile.MergeBlocks: string;

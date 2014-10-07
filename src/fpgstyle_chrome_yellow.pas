@@ -3,7 +3,7 @@ by Fred van Stappen
 fiens@hotmail.com
 }
 
-unit style_chrome_silver;
+unit fpgstyle_chrome_yellow;
 
 {$mode objfpc}{$H+}
 
@@ -27,7 +27,7 @@ type
       AFlags: TfpgMenuItemFlags); override;
     procedure DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
       ABackgroundColor: TfpgColor); override;
-    function   HasButtonHoverEffect: boolean; override;
+      function    HasButtonHoverEffect: boolean; override;
 
   end;
 
@@ -42,7 +42,8 @@ uses
 constructor TMyStyle.Create;
 begin
   inherited Create;
-  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+ // fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+   fpgSetNamedColor(clWindowBackground, cllightYellow);
 end;
 
 function TMyStyle.HasButtonHoverEffect: boolean;
@@ -91,30 +92,32 @@ begin
 
   // outer rectangle
   ACanvas.SetLineStyle(1, lsSolid);
- // ACanvas.SetColor(TfpgColor($a6a6a6));
-   ACanvas.SetColor(clblack);
+    ACanvas.SetColor(clblack);
+
   ACanvas.DrawRectangle(r);
 
   // so we don't paint over the border
   InflateRect(r, -1, -1);
   // now paint the face of the button
-  if (btfIsPressed in AFlags) or (btfHover in AFlags) then
+   if (btfIsPressed in AFlags) or (btfHover in AFlags) then
+
   begin
-    ACanvas.GradientFill(r21, clHilite1, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clHilite1, gdVertical);
-  //    ACanvas.SetColor(clblack);
+    ACanvas.GradientFill(r21, clYellow, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clYellow, gdVertical);
+     //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
      InflateRect(r, -1, -1);
       if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
-      ACanvas.DrawRectangle(r);
+
+    ACanvas.DrawRectangle(r);
+
   end
   else
   begin
-
-    ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
-  //    ACanvas.SetColor(clblack);
+    ACanvas.GradientFill(r21, clLightYellow, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightYellow, gdVertical);
+     //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
 
@@ -135,15 +138,17 @@ begin
   r22.Width := r.Width;
   r22.Top := r.top + r22.Height;
   r22.Left := r.Left;
-
+  ACanvas.SetColor(clwhite);
+  ACanvas.FillRectangle(r);
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
   begin
-    ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
-     ACanvas.SetColor(cldarkgray);
-       ACanvas.SetTextColor(clblack);
+    ACanvas.GradientFill(r21, clLightYellow, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightYellow, gdVertical);
+    //    ACanvas.SetColor(clblack);
+       ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
+    ACanvas.SetTextColor(clblack);
      InflateRect(r, -1, -1);
     ACanvas.SetColor(cllime);
     ACanvas.DrawRectangle(r);
@@ -165,8 +170,8 @@ begin
   r22.Top := r.top + r22.Height;
   r22.Left := r.Left;
   // a possible future theme option
-  ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
+  ACanvas.GradientFill(r21, clLightYellow, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightYellow, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);
@@ -178,6 +183,6 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Chrome silver', TMyStyle);
+  fpgStyleManager.RegisterClass('Chrome yellow', TMyStyle);
 
 end.

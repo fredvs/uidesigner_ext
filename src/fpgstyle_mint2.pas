@@ -1,5 +1,8 @@
-
-unit style_mint1;
+{Mint Style
+by Fred van Stappen
+fiens@hotmail.com
+}
+unit fpgstyle_mint2;
 
 {$mode objfpc}{$H+}
 
@@ -96,7 +99,7 @@ begin
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
  //   ACanvas.GradientFill(r, TfpgColor($fec475), TfpgColor($fb9d24), gdVertical);
-   ACanvas.GradientFill(r, cldarkseagreen, clolivedrab,  gdVertical);
+   ACanvas.GradientFill(r, cldarkseagreen, cldarkseagreen,  gdVertical);
 end;
 
 procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
@@ -109,7 +112,7 @@ begin
   FDarkColor  := TfpgColor($beb8a4);  // color at bottom of menu bar
 //  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
 
-  ACanvas.GradientFill(r, clgridheader, clhilite1, gdVertical);
+  ACanvas.GradientFill(r, clgridheader, clgridheader, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);
@@ -121,7 +124,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Mint 1', TMyStyle);
+  fpgStyleManager.RegisterClass('Mint 2', TMyStyle);
 
 end.
 

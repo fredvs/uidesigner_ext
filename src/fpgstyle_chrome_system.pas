@@ -29,11 +29,10 @@
 }
 
 {
-My Style by Fred van Stappen
+Chrome Style by Fred van Stappen
 fiens@hotmail.com
 }
-
-unit SystemColorsMyStyle1;
+unit fpgstyle_chrome_system;
 
 {$mode objfpc}{$H+}
 
@@ -55,9 +54,12 @@ type
     procedure LoadWindowsPalette;
     {$ENDIF}
   public
-    procedure   DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
-    procedure   DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags); override;
-    procedure   DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor); override;
+     procedure DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
+    { Buttons }
+    procedure DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
+      AFlags: TfpgButtonFlags); override;
+    { Menus }
+       function   HasButtonHoverEffect: boolean; override;
 
     constructor Create; override;
 
@@ -71,21 +73,9 @@ uses
 
 { TSystemColorsStyle }
 
-procedure TSystemColorsStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
-var
-  FLightColor: TfpgColor;
-  FDarkColor: TfpgColor;
+function TSystemColorsStyle.HasButtonHoverEffect: boolean;
 begin
-  FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
-  FDarkColor  := TfpgColor($beb8a4);  // color at bottom of menu bar
-  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
-
-  // inner bottom line
-  ACanvas.SetColor(clShadow1);
-  ACanvas.DrawLine(r.Left, r.Bottom-1, r.Right+1, r.Bottom-1);   // bottom
-  // outer bottom line
-  ACanvas.SetColor(clWhite);
-  ACanvas.DrawLine(r.Left, r.Bottom, r.Right+1, r.Bottom);   // bottom
+  Result := True;
 end;
 
 procedure TSystemColorsStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
@@ -98,11 +88,16 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TSystemColorsStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
+procedure TSystemColorsStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
+  AFlags: TfpgButtonFlags);
 var
-  r: TfpgRect;
+  r, r21, r22: TfpgRect;
 begin
   r.SetRect(x, y, w, h);
+
+  r21.SetRect(x, y, w, h div 2);
+
+  r22.SetRect(x, y + (h div 2), w, h div 2);
 
   if btfIsDefault in AFlags then
   begin
@@ -124,24 +119,36 @@ begin
 
   // outer rectangle
   ACanvas.SetLineStyle(1, lsSolid);
-  ACanvas.SetColor(TfpgColor($a6a6a6));
+ // ACanvas.SetColor(TfpgColor($a6a6a6));
+   ACanvas.SetColor(clblack);
   ACanvas.DrawRectangle(r);
 
   // so we don't paint over the border
   InflateRect(r, -1, -1);
   // now paint the face of the button
-  if (btfIsPressed in AFlags) then
+  if (btfIsPressed in AFlags) or (btfHover in AFlags) then
   begin
-    ACanvas.GradientFill(r, TfpgColor($cccccc), TfpgColor($e4e4e4), gdVertical);
+    ACanvas.GradientFill(r21, clHilite1, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clHilite1, gdVertical);
+  //    ACanvas.SetColor(clblack);
+       ACanvas.SetColor(cldarkgray);
+    ACanvas.DrawRectangle(r);
+     InflateRect(r, -1, -1);
+      if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
+      ACanvas.DrawRectangle(r);
   end
   else
   begin
-    ACanvas.GradientFill(r, TfpgColor($fafafa), TfpgColor($e2e2e2), gdVertical);
-    ACanvas.SetColor(TfpgColor($cccccc));
-    ACanvas.DrawLine(r.Right, r.Top, r.Right, r.Bottom);   // right
-    ACanvas.DrawLine(r.Right, r.Bottom, r.Left, r.Bottom);   // bottom
+
+    ACanvas.GradientFill(r21, clWindowBackground, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clWindowBackground, gdVertical);
+  //    ACanvas.SetColor(clblack);
+       ACanvas.SetColor(cldarkgray);
+    ACanvas.DrawRectangle(r);
+
   end;
 end;
+
 
 {$IFDEF LINUX}
 procedure TSystemColorsStyle.LoadGtkPalette;
@@ -321,7 +328,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('System Colors Style1', TSystemColorsStyle);
+  fpgStyleManager.RegisterClass('Chrome system', TSystemColorsStyle);
 
 end.
 

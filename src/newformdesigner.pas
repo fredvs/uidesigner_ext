@@ -32,6 +32,7 @@ uses
   RunOnce_PostIt,
   SysUtils,
   Classes,
+  fpg_imgfmt_jpg,
   fpg_base,
   fpg_main,
   fpg_widget,
@@ -181,6 +182,7 @@ type
      {@VFD_HEAD_BEGIN: frmAbout}
      lblAppName: TfpgLabel;
      lblVersion: TfpgLabel;
+     FImage: TfpgImage;
      btnClose: TfpgButton;
      lblWrittenBy: TfpgLabel;
      lblExtBy: TfpgLabel;
@@ -189,9 +191,11 @@ type
      {@VFD_HEAD_END: frmAbout}
      procedure   SetupCaptions;
      procedure   FormShow(Sender: TObject);
+     procedure FormPaint(Sender: TObject);
    public
      procedure   AfterCreate; override;
      class procedure Execute;
+
    end;
 
 {@VFD_NEWFORM_DECL}
@@ -224,10 +228,7 @@ uses
 
 procedure TfrmAbout.SetupCaptions;
 begin
-  WindowTitle := rsDlgProductInfo;
-  lblAppName.Text := cAppName;
   lblVersion.Text := Format(rsVersion, [cAppVersion]);
-  lblWrittenBy.Text := Format(rsWrittenBy, ['Graeme Geldenhuys']);
   lblURL.URL := fpGUIWebsite;
   lblURL.Text := fpGUIWebsite;
   lblCompiled.Text := Format(rsCompiledOn, [{$I %date%} + ' ' + {$I %time%}]);
@@ -241,15 +242,21 @@ begin
   lblURL.TextColor := clRoyalBlue;
 end;
 
+procedure TfrmAbout.FormPaint(Sender: TObject);
+begin
+  Canvas.DrawImage(16, 10, FImage);
+end;
+
 procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+    OnPaint := @FormPaint;
 
-  {@VFD_BODY_BEGIN: frmAbout}
+   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
-  SetPosition(378, 267, 276, 180);
-  WindowTitle := 'About Designer_ext';
+  SetPosition(378, 267, 276, 330);
+  WindowTitle := 'About designer_ext';
   Hint := '';
   WindowPosition := wpScreenCenter;
   Sizeable := False;
@@ -259,20 +266,22 @@ begin
   with lblAppName do
   begin
     Name := 'lblAppName';
-    SetPosition(12, 16, 255, 31);
+    SetPosition(32, 190, 255, 35);
     FontDesc := 'Arial-20';
     Hint := '';
-    Text := 'Designer_ext';
+     textcolor := clgreen;
+    Text := 'designer_ext';
   end;
 
   lblVersion := TfpgLabel.Create(self);
   with lblVersion do
   begin
     Name := 'lblVersion';
-    SetPosition(62, 48, 195, 20);
+    SetPosition(62, 220, 195, 24);
     Alignment := taRightJustify;
     FontDesc := '#Label2';
     Hint := '';
+     textcolor := clgreen;
     Text := 'Version:  %s';
   end;
 
@@ -280,7 +289,7 @@ begin
   with btnClose do
   begin
     Name := 'btnClose';
-    SetPosition(194, 148, 75, 24);
+    SetPosition(194, 298, 75, 24);
     Anchors := [anRight,anBottom];
     Text := 'Close';
     FontDesc := '#Label1';
@@ -294,17 +303,17 @@ begin
   with lblWrittenBy do
   begin
     Name := 'lblWrittenBy';
-    SetPosition(12, 100, 241, 14);
+    SetPosition(12, 250, 241, 14);
     FontDesc := 'Arial-9';
     Hint := '';
-    Text := 'Written by Graeme Geldenhuys';
+    Text := 'UIdesigner written by Graeme Geldenhuys';
   end;
 
   lblURL := TfpgHyperlink.Create(self);
   with lblURL do
   begin
     Name := 'lblURL';
-    SetPosition(12, 116, 246, 14);
+    SetPosition(12, 266, 246, 14);
     FontDesc := 'Arial-9:underline';
     Hint := '';
     HotTrackColor := clBlue;
@@ -318,7 +327,7 @@ begin
   with lblCompiled do
   begin
     Name := 'lblCompiled';
-    SetPosition(12, 132, 191, 13);
+    SetPosition(12, 287, 191, 13);
     FontDesc := 'Arial-8';
     Hint := '';
     Text := 'Compiled on:  %s';
@@ -328,12 +337,16 @@ begin
   with lblExtBy do
   begin
     Name := 'lblExtBy';
-    SetPosition(12, 152, 150, 14);
+    SetPosition(22, 302, 150, 14);
     FontDesc := 'Arial-9';
     Hint := '';
-    Text := '_ext by Fred van Stappen';
+    textcolor := clgreen;
+    Text := '_ext => Fred van Stappen';
   end;
 
+   FImage := LoadImage_JPG('fpGUI_logo.jpg', 1);
+
+   RePaint;
   {@VFD_BODY_END: frmAbout}
   {%endregion}
 end;
@@ -625,6 +638,7 @@ begin
 
 
 
+
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
@@ -809,7 +823,7 @@ begin
     Name := 'helpmenu';
     SetPosition(328, 52, 120, 20);
     AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
-    AddMenuItem('About Designer_ext...', '', @miHelpAboutClick);
+    AddMenuItem('About designer_ext...', '', @miHelpAboutClick);
    end;
 
   listundomenu := TfpgPopupMenu.Create(self);
@@ -1057,7 +1071,7 @@ begin
     fpgapplication.ProcessMessages;
     WindowType := wtpopup ;  // borderless, always on front but doesn't steal focus
     MainMenu.MenuItem(7).Visible:=true;
-   MainMenu.MenuItem(7).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' + program_version;    ;
+   MainMenu.MenuItem(7).Text:=  'Current file : ' + p + s + '     fpGUI designer_ext v' + program_version;    ;
     btnToFront.Text:='Normal';
    btnToFront.tag:=1;
  if idetemp = 1 then
@@ -1127,7 +1141,7 @@ begin
    hide;
 
  WindowAttributes := [waBorderless];
- MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     Designer_ext'  ;
+ MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     designer_ext'  ;
 
  show;
 
@@ -1602,7 +1616,7 @@ end;
 procedure TfrmMain.BuildThemePreviewMenu;
 var
   sl: TStringList;
-  i: integer;
+  i : integer;
 begin
   sl := TStringList.Create;
   fpgStyleManager.AssignStyleTypes(sl);
@@ -1615,7 +1629,11 @@ begin
     previewmenu.AddMenuItem(sl[i], '', @OnStyleChange).Enabled := true;
 
   end;
-  previewmenu.MenuItem(8).Checked:=true;
+
+   for i := 0 to numstyle-1 do
+   if previewmenu.MenuItem(i).Text = 'Demo Style1' then
+ previewmenu.MenuItem(i).Checked:=true;
+
   sl.Free;
 
 end;

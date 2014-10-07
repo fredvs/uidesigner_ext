@@ -3,7 +3,7 @@ by Fred van Stappen
 fiens@hotmail.com
 }
 
-unit style_elipse_green;
+unit fpgstyle_elipse_green;
 
 {$mode objfpc}{$H+}
 
@@ -190,7 +190,8 @@ begin
   r22.Width := r.Width;
   r22.Top := r.top + r22.Height;
   r22.Left := r.Left;
-
+  ACanvas.SetColor(clwhite);
+  ACanvas.FillRectangle(r);
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
   begin

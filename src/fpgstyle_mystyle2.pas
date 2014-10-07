@@ -1,5 +1,8 @@
-
-unit style_mint3;
+{mystile (from Graeme) Style
+by Fred van Stappen
+fiens@hotmail.com
+}
+unit fpgstyle_mystyle2;
 
 {$mode objfpc}{$H+}
 
@@ -26,7 +29,8 @@ type
 implementation
 
 uses
-  fpg_stylemanager ;
+  fpg_stylemanager
+  ;
 
 { TMyStyle }
 
@@ -48,7 +52,7 @@ end;
 
 procedure TMyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
 var
-  r : TfpgRect;
+  r: TfpgRect;
 begin
   r.SetRect(x, y, w, h);
 
@@ -80,12 +84,12 @@ begin
   // now paint the face of the button
   if (btfIsPressed in AFlags) then
   begin
-    ACanvas.GradientFill(r, cllime, TfpgColor($e4e4e4), gdVertical);
+    ACanvas.GradientFill(r, TfpgColor($cccccc), TfpgColor($e4e4e4), gdVertical);
   end
   else
   begin
-    ACanvas.GradientFill(r, TfpgColor($fafafa), cldarkseagreen, gdVertical);
-        ACanvas.SetColor(TfpgColor($cccccc));
+    ACanvas.GradientFill(r, TfpgColor($fafafa), TfpgColor($e2e2e2), gdVertical);
+    ACanvas.SetColor(TfpgColor($cccccc));
     ACanvas.DrawLine(r.Right, r.Top, r.Right, r.Bottom);   // right
     ACanvas.DrawLine(r.Right, r.Bottom, r.Left, r.Bottom);   // bottom
   end;
@@ -95,8 +99,8 @@ procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect; AFlags: TfpgMen
 begin
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
- //   ACanvas.GradientFill(r, TfpgColor($fec475), TfpgColor($fb9d24), gdVertical);
-   ACanvas.GradientFill(r, cldarkseagreen, clolivedrab,  gdVertical);
+   ACanvas.GradientFill(r, TfpgColor($fec475), TfpgColor($fb9d24), gdVertical);
+ //  ACanvas.GradientFill(r, clgreen, clblack, gdVertical);
 end;
 
 procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
@@ -107,9 +111,8 @@ begin
   // a possible future theme option
   FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
   FDarkColor  := TfpgColor($beb8a4);  // color at bottom of menu bar
-//  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
-
-  ACanvas.GradientFill(r, clgridheader, clhilite1, gdVertical);
+  ACanvas.GradientFill(r, clgray, clwhite, gdVertical);
+  // ACanvas.GradientFill(r,  clgray, clmoneygreen, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);
@@ -117,11 +120,12 @@ begin
   // outer bottom line
   ACanvas.SetColor(clWhite);
   ACanvas.DrawLine(r.Left, r.Bottom, r.Right+1, r.Bottom);   // bottom
+ //  ACanvas.SetTextColor(clwhite);
 end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Mint 3', TMyStyle);
+  fpgStyleManager.RegisterClass('Demo Style2', TMyStyle);
 
 end.
 
