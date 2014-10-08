@@ -33,7 +33,6 @@ uses
   fpg_listbox,
   fpg_memo,
   fpg_combobox,
-  fpg_menu,
   vfdresizer,
   vfdforms,
   vfdeditors,

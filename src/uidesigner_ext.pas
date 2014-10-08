@@ -99,7 +99,7 @@ uses {$IFDEF UNIX}
       RegisterWidgets;
       if not gCommandLineParams.IsParam('style') then
       begin
-            if fpgStyleManager.SetStyle('Demo Style1') then
+            if fpgStyleManager.SetStyle('Flat-Hoover silver') then
           fpgStyle := fpgStyleManager.Style;
       end;
 

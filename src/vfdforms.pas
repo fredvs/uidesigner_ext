@@ -730,6 +730,7 @@ begin
     Position := 4;
     ShowPosition := True;
     TabOrder := 3;
+    Style :=  StGradient ;
   end;
 
   chkFullPath := TfpgCheckBox.Create(self);
@@ -1042,7 +1043,8 @@ begin
     Position := 20;
     ShowPosition := True;
     TabOrder := 32;
-  end;
+    Style :=  StGradient ;
+    end;
 
   {@VFD_BODY_END: frmVFDSetup}
 
@@ -1101,7 +1103,8 @@ begin
     gINI.WriteBool('frmVFDSetupState', 'FirstLoad', False);
   }
   tag := 1;
-end;
+
+ end;
 
 {
 procedure TfrmVFDSetup.BeforeDestruction;

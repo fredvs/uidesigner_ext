@@ -10,7 +10,7 @@ unit fpgstyle_chrome_silver;
 interface
 
 uses
-  Classes, SysUtils, fpg_main, fpg_base;
+  Classes, fpg_main, fpg_base;
 
 type
 
@@ -42,7 +42,8 @@ uses
 constructor TMyStyle.Create;
 begin
   inherited Create;
-  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+//  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+  fpgSetNamedColor(clWindowBackground, clLightGray);
 end;
 
 function TMyStyle.HasButtonHoverEffect: boolean;

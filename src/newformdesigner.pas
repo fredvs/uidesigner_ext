@@ -32,7 +32,6 @@ uses
   RunOnce_PostIt,
   SysUtils,
   Classes,
-  fpg_imgfmt_jpg,
   fpg_base,
   fpg_main,
   fpg_widget,
@@ -254,6 +253,7 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
+
     OnPaint := @FormPaint;
 
    {@VFD_BODY_BEGIN: frmAbout}
@@ -331,7 +331,7 @@ begin
   with lblCompiled do
   begin
     Name := 'lblCompiled';
-    SetPosition(12, 287, 191, 13);
+    SetPosition(12, 287, 180, 13);
     FontDesc := 'Arial-8';
     Hint := '';
     Text := 'Compiled on:  %s';
@@ -1637,7 +1637,7 @@ begin
   end;
 
    for i := 0 to numstyle-1 do
-   if previewmenu.MenuItem(i).Text = 'Demo Style1' then
+   if previewmenu.MenuItem(i).Text = 'Flat-Hoover silver' then
  previewmenu.MenuItem(i).Checked:=true;
 
   sl.Free;

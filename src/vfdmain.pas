@@ -874,11 +874,23 @@ end;
 procedure TMainDesigner.SetEditedFileName(const Value: string);
 var
   aprocess: tprocess;
+  e : string;
 begin
   AProcess := TProcess.Create(nil);
 
   FEditedFileName := Value;
+
+  if pos('.lpi',FEditedFileName) > 0 then
+  begin
+  delete(FEditedFileName,pos('.lpi',FEditedFileName),4);
+  e := FEditedFileName;
+  FEditedFileName := FEditedFileName + '.lpr'  ;
+   if fileexists(FEditedFileName) then else
+   FEditedFileName := e + '.pas'  ;
+   end;
+
   s := ExtractFileName(FEditedFileName);
+
   p := ExtractFilePath(FEditedFileName);
   if s = '' then
   s := '[' + rsNewUnnamedForm + ']';

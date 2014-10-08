@@ -9,12 +9,13 @@ unit fpgstyle_hoover_silver;
 interface
 
 uses
-  Classes, SysUtils, fpg_main, fpg_base;
+  Classes, fpg_main, fpg_base;
 
 type
 
     TmyStyle = class(TfpgStyle)
     public
+     constructor Create; override;
     { General }
     procedure DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
     { Buttons }
@@ -31,6 +32,13 @@ implementation
 
 uses
   fpg_stylemanager;
+
+constructor TMyStyle.Create;
+begin
+  inherited Create;
+//  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+fpgSetNamedColor(clWindowBackground, clLightGray);
+end;
 
 function TmyStyle.HasButtonHoverEffect: boolean;
 begin
@@ -124,7 +132,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Hoover silver', TmyStyle);
+  fpgStyleManager.RegisterClass('Flat-Hoover silver', TmyStyle);
 
 end.
 

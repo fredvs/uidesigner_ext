@@ -9,7 +9,7 @@ unit fpgstyle_mystyle1;
 interface
 
 uses
-  Classes, SysUtils, fpg_main, fpg_base;
+  Classes, fpg_main, fpg_base;
 
 type
 

@@ -39,7 +39,7 @@ unit fpgstyle_hoover_system;
 interface
 
 uses
-  Classes, SysUtils, fpg_main, fpg_base;
+  Classes, fpg_main, fpg_base;
 
 type
 
@@ -312,7 +312,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Hoover system', TSystemColorsStyle);
+  fpgStyleManager.RegisterClass('Flat-Hoover system', TSystemColorsStyle);
 
 end.
 

@@ -39,7 +39,7 @@ unit fpgstyle_SystemColorsMyStyle2;
 interface
 
 uses
-  Classes, SysUtils, fpg_main, fpg_base;
+  Classes, fpg_main, fpg_base;
 
 type
 

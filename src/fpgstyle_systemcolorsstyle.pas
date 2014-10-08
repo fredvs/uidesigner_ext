@@ -35,7 +35,7 @@ unit fpgstyle_SystemColorsStyle;
 interface
 
 uses
-  Classes, SysUtils, fpg_main, fpg_base;
+  Classes, fpg_main, fpg_base;
 
 type
 

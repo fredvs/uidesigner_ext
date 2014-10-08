@@ -21,7 +21,6 @@ uses
   fpg_base,
   fpg_main,
   fpg_basegrid,
-  fpg_customgrid,
   fpg_grid,
   fpg_edit,
   fpg_combobox,
