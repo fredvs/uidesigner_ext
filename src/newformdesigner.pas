@@ -556,14 +556,14 @@ if fileexists(pchar(dataf)) then
                if   Pos('Left="',dataf2) > 0 then
                     begin
                        dataf := copy(dataf2,Pos('Left="',dataf2)+6,6) ;
-         left := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) ;
+         left := strtoint(copy(dataf,1 ,Pos('"',dataf)-1))  ;
                 end else left :=0 ;
 
                if   Pos('Top="',dataf2) > 0 then
                    begin
                   dataf := copy(dataf2,Pos('Top="',dataf2)+5,6) ;
-         top := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) + 74 ;
-            end  else top :=74 ;
+         top := strtoint(copy(dataf,1 ,Pos('"',dataf)-1)) + 69 ;
+            end  else top :=69 ;
 
             if   Pos('Width="',dataf2) > 0 then
               begin
@@ -580,7 +580,7 @@ if fileexists(pchar(dataf)) then
 {$IFDEF unix}
 
      if  gINI.ReadBool('Options', 'AlwaystoFront', false) = true then
-                left := left + 1 ;
+                left := left + 2 ;
 {$ENDIF}
  end;
    end;
@@ -1093,6 +1093,9 @@ begin
 
   if  idetemp = 2 then
   begin
+    {$IFDEF unix}
+      left := left + 2 ;
+    {$ENDIF}
     {$IFDEF windows}
    left := left + 8 ;
      {$ENDIF}
@@ -1129,6 +1132,9 @@ begin
 
   if  idetemp = 2 then
   begin
+   {$IFDEF unix}
+      left := left - 2 ;
+    {$ENDIF}
    {$IFDEF windows}
    left := left - 8 ;
      {$ENDIF}

@@ -20,7 +20,7 @@ Warning : If you want to re-compile uidesigner_ext, first load uidesigner_ext an
 Compile it (better not run it via Lazarus-run).
 After, as stand-alone, re-enable "Integration into IDE Typhon". 
 
-If uidesigner_ext do not load, even as stand-alone, it is surely because a other instance of uidesigner_ext is already running. If so, kill that instance via Ctrl-Alt-Del.
+If uidesigner_ext does not load, even as stand-alone, it is surely because a other instance of uidesigner_ext is already running. If so, kill that instance via Ctrl-Alt-Del.
 
 Fred van Stappen
 fiens@hotmail.com  
