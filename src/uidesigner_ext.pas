@@ -27,6 +27,7 @@ program uidesigner_ext;
 
 uses {$IFDEF UNIX}
   cthreads, {$ENDIF}
+  fpg_iniutils,
   RunOnce_PostIt,
   fpg_cmdlineparams,
   fpgstyle_mystyle,
@@ -73,8 +74,13 @@ uses {$IFDEF UNIX}
 
     if (isrunningIDE('typhon') = False) and (isrunningIDE('lazarus') = False) then
     begin
-      filedir := 'clear';
+        if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then
+      begin
+       ifonlyone := true;
+       filedir := 'clear';
       RunOnce(filedir);
+       end
+      else ifonlyone := false;
     end
     else
     begin
@@ -83,16 +89,16 @@ uses {$IFDEF UNIX}
         (ParamStr(1) = 'quit') then
         filedir := ParamStr(1);
 
-      if gCommandLineParams.IsParam('onlyone') then
+       if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then
+   //   if gCommandLineParams.IsParam('onlyone') then
       begin
-        if StrToInt(copy(gCommandLineParams.GetParam('onlyone'), 1, 1)) > 0 then
-          RunOnce(filedir)
-        else
-          ifonlyone := False;
-             end
-      else
-        RunOnce(filedir);
-    end;
+    //    if StrToInt(copy(gCommandLineParams.GetParam('onlyone'), 1, 1)) > 0 then
+           ifonlyone := true;
+          RunOnce(filedir) ;
+
+      end
+      else ifonlyone := false;
+      end;
 
     fpgApplication.Initialize;
     try

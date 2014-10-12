@@ -146,6 +146,8 @@ type
     lblName3: TfpgLabel;
     chkUndoOnExit: TfpgCheckBox;
     chkOneClick: TfpgCheckBox;
+     Labelonlyonce: TfpgLabel;
+     chkonlyonce: TfpgCheckBox;
     Label1: TfpgLabel;
     chkCodeRegions: TfpgCheckBox;
     cbIndentationType: TfpgComboBox;
@@ -560,6 +562,7 @@ begin
   chlGrid.FocusItem := gINI.ReadInteger('Options', 'GridResolution', 2);
   tbMRUFileCount.Position := gINI.ReadInteger('Options', 'MRUFileCount', 4);
   chkFullPath.Checked := gINI.ReadBool('Options', 'ShowFullPath', True);
+  chkonlyonce.Checked := gINI.ReadBool('Options', 'RunOnlyOnce', true);
   edtDefaultExt.Text := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
   chkUndoOnExit.Checked := gINI.ReadBool('Options', 'UndoOnExit', UndoOnPropExit);
   chkOneClick.Checked := gINI.ReadBool('Options', 'OneClickMove', True);
@@ -588,6 +591,9 @@ begin
   enableundo := checkBox1.Checked;
 
   gINI.WriteBool('Options', 'ShowFullPath', chkFullPath.Checked);
+
+  gINI.WriteBool('Options', 'RunOnlyOnce', chkonlyonce.Checked);
+
   gINI.WriteString('Options', 'DefaultFileExt', edtDefaultExt.Text);
   gINI.WriteBool('Options', 'UndoOnExit', chkUndoOnExit.Checked);
   gINI.WriteBool('Options', 'OneClickMove', chkOneClick.Checked);
@@ -1003,7 +1009,7 @@ begin
   with Label3 do
   begin
     Name := 'Label3';
-    SetPosition(288, 120, 116, 19);
+    SetPosition(258, 110, 116, 19);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Undo Feature';
@@ -1013,7 +1019,7 @@ begin
   with CheckBox1 do
   begin
     Name := 'CheckBox1';
-    SetPosition(300, 140, 120, 19);
+    SetPosition(260, 130, 120, 19);
     Checked := True;
     FontDesc := '#Label1';
     Hint := '';
@@ -1026,17 +1032,17 @@ begin
   with Label4 do
   begin
     Name := 'Label4';
-    SetPosition(304, 164, 104, 19);
+    SetPosition(260, 153, 104, 19);
     FontDesc := '#Label1';
     Hint := '';
-    Text := 'Maximum Undo:';
+    Text := 'Max Undo:';
   end;
 
   TrackBarUndo := TfpgTrackBar.Create(self);
   with TrackBarUndo do
   begin
     Name := 'TrackBarUndo';
-    SetPosition(408, 156, 100, 30);
+    SetPosition(330, 148, 100, 30);
     Hint := '';
     Min := 10;
     Position := 20;
@@ -1045,6 +1051,27 @@ begin
     TabOrder := 32;
     Style :=  StGradient ;
     end;
+
+   Labelonlyonce := TfpgLabel.Create(self);
+  with Labelonlyonce do
+  begin
+    Name := 'Labelonlyonce';
+    SetPosition(360, 185, 180, 19);
+    FontDesc := '#Label2';
+    Hint := '';
+    Text := 'Run Only One Instance';
+  end;
+
+  chkonlyonce := TfpgCheckBox.Create(self);
+  with chkonlyonce do
+  begin
+    Name := 'chkonlyonce';
+    SetPosition(380, 205, 120, 19);
+    Checked := True;
+    FontDesc := '#Label1';
+    Hint := 'If checked, only one instance will be loaded.';
+    Text := 'Only Once';
+  end;
 
   {@VFD_BODY_END: frmVFDSetup}
 

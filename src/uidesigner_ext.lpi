@@ -40,10 +40,12 @@
       <Unit0>
         <Filename Value="uidesigner_ext.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uidesigner_ext"/>
       </Unit0>
       <Unit1>
         <Filename Value="vfdmain.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="vfdmain"/>
       </Unit1>
       <Unit2>
         <Filename Value="vfdresizer.pas"/>
@@ -52,6 +54,7 @@
       <Unit3>
         <Filename Value="vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="vfdforms"/>
       </Unit3>
       <Unit4>
         <Filename Value="vfddesigner.pas"/>
