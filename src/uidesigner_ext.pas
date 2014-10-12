@@ -31,6 +31,7 @@ uses {$IFDEF UNIX}
   RunOnce_PostIt,
   fpg_cmdlineparams,
   fpgstyle_anim_chrome_silver,
+  fpgstyle_anim_ellipse_silver,
   fpgstyle_mystyle,
   fpgstyle_mystyle1,
   fpgstyle_mystyle2,
