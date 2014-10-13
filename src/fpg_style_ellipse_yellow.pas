@@ -3,7 +3,7 @@ by Fred van Stappen
 fiens@hotmail.com
 }
 
-unit fpgstyle_elipse_purple;
+unit fpg_style_ellipse_yellow;
 
 {$mode objfpc}{$H+}
 
@@ -14,7 +14,7 @@ uses
 
 type
 
-  TMyStyle = class(TfpgStyle)
+  TExtStyle = class(TfpgStyle)
   public
     constructor Create; override;
     { General }
@@ -27,7 +27,7 @@ type
       AFlags: TfpgMenuItemFlags); override;
     procedure DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
       ABackgroundColor: TfpgColor); override;
-    function    HasButtonHoverEffect: boolean; override;
+      function    HasButtonHoverEffect: boolean; override;
 
   end;
 
@@ -37,16 +37,21 @@ implementation
 uses
   fpg_stylemanager;
 
-{ TMyStyle }
+{ TExtStyle }
 
-constructor TMyStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
  // fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
-    fpgSetNamedColor(clWindowBackground, clViolet);
+    fpgSetNamedColor(clWindowBackground, clLightyellow);
 end;
 
-procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+function TExtStyle.HasButtonHoverEffect: boolean;
+begin
+  Result := True;
+end;
+
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -56,12 +61,7 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-function TMyStyle.HasButtonHoverEffect: boolean;
-begin
-  Result := True;
-end;
-
-procedure TMyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
   AFlags: TfpgButtonFlags);
 var
   r, r21, r22: TfpgRect;
@@ -102,28 +102,28 @@ begin
   // now paint the face of the button
   if (btfIsPressed in AFlags) or (btfHover in AFlags) then
   begin
-   ACanvas.GradientFill(r21, clmagenta, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clmagenta, gdVertical);
+   ACanvas.GradientFill(r21, clYellow, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clyellow, gdVertical);
    //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
-    InflateRect(r, -1, -1);
-       if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
-     ACanvas.DrawRectangle(r);
+     InflateRect(r, -1, -1);
+      if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
+
+    ACanvas.DrawRectangle(r);
   end
   else
   begin
 
-    ACanvas.GradientFill(r21, clViolet, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clViolet, gdVertical);
+    ACanvas.GradientFill(r21, cllightYellow, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, cllightYellow, gdVertical);
   //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
 
 
   end;
-
-   ACanvas.SetColor(clWindowBackground);
+    ACanvas.SetColor(clWindowBackground);
 //  ACanvas.SetColor(cldarkgray);
     acanvas.DrawLine(0,1,1,0);
     acanvas.DrawLine(0,2,2,0);
@@ -158,6 +158,8 @@ begin
     ACanvas.SetColor(cldarkgray);
    acanvas.DrawLine(0,h-6,6,h);
 
+
+
      ACanvas.SetColor(clgray);
     acanvas.DrawLine(w,h-6,w-6,h);
   ACanvas.SetColor(clWindowBackground);
@@ -172,10 +174,9 @@ begin
     InflateRect(r, 1, 1);
        ACanvas.SetColor(clWindowBackground);
     ACanvas.DrawRectangle(r);
-
 end;
 
-procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
   AFlags: TfpgMenuItemFlags);
 var
   r21, r22: TfpgRect;
@@ -189,13 +190,13 @@ begin
   r22.Width := r.Width;
   r22.Top := r.top + r22.Height;
   r22.Left := r.Left;
- ACanvas.SetColor(clwhite);
+  ACanvas.SetColor(clwhite);
   ACanvas.FillRectangle(r);
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
   begin
-    ACanvas.GradientFill(r21, clViolet, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clViolet, gdVertical);
+    ACanvas.GradientFill(r21, cllightYellow, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, cllightYellow, gdVertical);
      ACanvas.SetColor(cldarkgray);
        ACanvas.SetTextColor(clblack);
     ACanvas.DrawRectangle(r);
@@ -205,7 +206,7 @@ begin
   end;
 end;
 
-procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
   ABackgroundColor: TfpgColor);
 var
   FLightColor: TfpgColor;
@@ -216,7 +217,9 @@ begin
   FDarkColor := TfpgColor($beb8a4);  // color at bottom of menu bar
    ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
 
-   // inner bottom line
+//  ACanvas.GradientFill(r, clgridheader, clhilite1, gdVertical);
+
+  // inner bottom line
   ACanvas.SetColor(clShadow1);
   ACanvas.DrawLine(r.Left, r.Bottom - 1, r.Right + 1, r.Bottom - 1);   // bottom
   // outer bottom line
@@ -226,6 +229,6 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Elipse purple', TMyStyle);
+  fpgStyleManager.RegisterClass('Ellipse yellow', TExtStyle);
 
 end.

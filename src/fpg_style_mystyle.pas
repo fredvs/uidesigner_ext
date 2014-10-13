@@ -1,8 +1,39 @@
-{Mint Style
-by Fred van Stappen
-fiens@hotmail.com
-}
-unit fpgstyle_mint3;
+(*
+  A very quick and basic style implementation. It took all of 10 minutes.
+  To apply this style, follow these instructions:
+
+    1) (optional) Check if a style was specified via a command line parameter
+    2) If (1) was false, set the new default which will instantiate the new
+       style class and automatically free the old one.
+    3) Assign our new style instance to the fpgStyle variable
+
+
+  Example:
+
+    procedure MainProc;
+    var
+      frm: TMainForm;
+    begin
+      fpgApplication.Initialize;
+
+      { Set our new style as the default (before we create any forms), unless
+        a the end-user specified a different style via the command line. }
+      if not gCommandLineParams.IsParam('style') then
+        if fpgStyleManager.SetStyle('Demo Style') then
+          fpgStyle := fpgStyleManager.Style;
+
+      frm := TMainForm.Create(nil);
+      try
+        frm.Show;
+        fpgApplication.Run;
+      finally
+        frm.Free;
+      end;
+    end;
+
+*)
+
+unit fpg_style_mystyle;
 
 {$mode objfpc}{$H+}
 
@@ -29,7 +60,8 @@ type
 implementation
 
 uses
-  fpg_stylemanager ;
+  fpg_stylemanager
+  ;
 
 { TMyStyle }
 
@@ -45,13 +77,13 @@ var
 begin
   r.SetRect(x, y, w, h);
   ACanvas.SetColor(clShadow1);
-  ACanvas.Clear(clWindowBackground);
+  ACanvas.Clear(clYellow);
   ACanvas.DrawRectangle(r);
 end;
 
 procedure TMyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
 var
-  r : TfpgRect;
+  r: TfpgRect;
 begin
   r.SetRect(x, y, w, h);
 
@@ -83,12 +115,12 @@ begin
   // now paint the face of the button
   if (btfIsPressed in AFlags) then
   begin
-    ACanvas.GradientFill(r, cllime, TfpgColor($e4e4e4), gdVertical);
+    ACanvas.GradientFill(r, TfpgColor($cccccc), TfpgColor($e4e4e4), gdVertical);
   end
   else
   begin
-    ACanvas.GradientFill(r, TfpgColor($fafafa), cldarkseagreen, gdVertical);
-        ACanvas.SetColor(TfpgColor($cccccc));
+    ACanvas.GradientFill(r, TfpgColor($fafafa), TfpgColor($e2e2e2), gdVertical);
+    ACanvas.SetColor(TfpgColor($cccccc));
     ACanvas.DrawLine(r.Right, r.Top, r.Right, r.Bottom);   // right
     ACanvas.DrawLine(r.Right, r.Bottom, r.Left, r.Bottom);   // bottom
   end;
@@ -98,8 +130,7 @@ procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect; AFlags: TfpgMen
 begin
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
- //   ACanvas.GradientFill(r, TfpgColor($fec475), TfpgColor($fb9d24), gdVertical);
-   ACanvas.GradientFill(r, cldarkseagreen, clolivedrab,  gdVertical);
+    ACanvas.GradientFill(r, TfpgColor($fec475), TfpgColor($fb9d24), gdVertical);
 end;
 
 procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
@@ -110,9 +141,7 @@ begin
   // a possible future theme option
   FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
   FDarkColor  := TfpgColor($beb8a4);  // color at bottom of menu bar
-//  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
-
-  ACanvas.GradientFill(r, clgridheader, clhilite1, gdVertical);
+  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);
@@ -124,7 +153,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Mint 3', TMyStyle);
+  fpgStyleManager.RegisterClass('Demo Style', TMyStyle);
 
 end.
 

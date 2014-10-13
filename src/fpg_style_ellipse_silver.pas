@@ -3,7 +3,7 @@ by Fred van Stappen
 fiens@hotmail.com
 }
 
-unit fpgstyle_elipse_silver;
+unit fpg_style_ellipse_silver;
 
 {$mode objfpc}{$H+}
 
@@ -14,7 +14,7 @@ uses
 
 type
 
-  TMyStyle = class(TfpgStyle)
+  TExtStyle = class(TfpgStyle)
   public
     constructor Create; override;
     { General }
@@ -36,20 +36,20 @@ implementation
 uses
   fpg_stylemanager;
 
-{ TMyStyle }
+{ TExtStyle }
 
-constructor TMyStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
   fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
 end;
 
-function TMyStyle.HasButtonHoverEffect: boolean;
+function TExtStyle.HasButtonHoverEffect: boolean;
 begin
   Result := True;
 end;
 
-procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -59,7 +59,7 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TMyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
   AFlags: TfpgButtonFlags);
 var
   r, r21, r22: TfpgRect;
@@ -173,7 +173,7 @@ begin
     ACanvas.DrawRectangle(r);
 end;
 
-procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
   AFlags: TfpgMenuItemFlags);
 var
   r21, r22: TfpgRect;
@@ -203,7 +203,7 @@ begin
   end;
 end;
 
-procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
   ABackgroundColor: TfpgColor);
 var
   FLightColor: TfpgColor;
@@ -224,6 +224,6 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Elipse silver', TMyStyle);
+  fpgStyleManager.RegisterClass('Ellipse silver', TExtStyle);
 
 end.

@@ -2,7 +2,7 @@
 Hoover Style by Fred van Stappen
 fiens@hotmail.com
 }
-unit fpgstyle_hoover_silver;
+unit fpg_style_hoover_silver;
 
 {$mode objfpc}{$H+}
 
@@ -13,7 +13,7 @@ uses
 
 type
 
-    TmyStyle = class(TfpgStyle)
+    TExtStyle = class(TfpgStyle)
     public
      constructor Create; override;
     { General }
@@ -33,19 +33,19 @@ implementation
 uses
   fpg_stylemanager;
 
-constructor TMyStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
 //  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
 fpgSetNamedColor(clWindowBackground, clLightGray);
 end;
 
-function TmyStyle.HasButtonHoverEffect: boolean;
+function TExtStyle.HasButtonHoverEffect: boolean;
 begin
   Result := true;
 end;
 
-procedure TmyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -55,7 +55,7 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TmyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
   AFlags: TfpgButtonFlags);
 var
   r, r21, r22: TfpgRect;
@@ -100,7 +100,7 @@ begin
    //  ACanvas.DrawRectangle(r);
   end;
 end;
-procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
   AFlags: TfpgMenuItemFlags);
 var
   r21, r22: TfpgRect;
@@ -132,7 +132,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Flat-Hoover silver', TmyStyle);
+  fpgStyleManager.RegisterClass('Flat-Hoover silver', TExtStyle);
 
 end.
 

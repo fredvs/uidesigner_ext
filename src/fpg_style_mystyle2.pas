@@ -1,9 +1,8 @@
-{Mint Style
+{mystile (from Graeme) Style
 by Fred van Stappen
 fiens@hotmail.com
 }
-
-unit fpgstyle_mint1;
+unit fpg_style_mystyle2;
 
 {$mode objfpc}{$H+}
 
@@ -14,7 +13,7 @@ uses
 
 type
 
-  TMyStyle = class(TfpgStyle)
+  TExtStyle = class(TfpgStyle)
   public
     constructor Create; override;
     { General }
@@ -30,17 +29,18 @@ type
 implementation
 
 uses
-  fpg_stylemanager ;
+  fpg_stylemanager
+  ;
 
-{ TMyStyle }
+{ TExtStyle }
 
-constructor TMyStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
   fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
 end;
 
-procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -50,7 +50,7 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TMyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
 var
   r: TfpgRect;
 begin
@@ -95,26 +95,15 @@ begin
   end;
 end;
 
-procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect; AFlags: TfpgMenuItemFlags);
+procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect; AFlags: TfpgMenuItemFlags);
 begin
-   ACanvas.SetColor(clwhite);
-  ACanvas.FillRectangle(r);
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
-  begin
- //   ACanvas.GradientFill(r, TfpgColor($fec475), TfpgColor($fb9d24), gdVertical);
-   ACanvas.GradientFill(r, cldarkseagreen, clolivedrab,  gdVertical);
-      ACanvas.SetTextColor(clwhite);
-  //    ACanvas.SetColor(clblack);
-       ACanvas.SetColor(cldarkgray);
-    ACanvas.DrawRectangle(r);
-     InflateRect(r, -1, -1);
-    ACanvas.SetColor(cllime);
-    ACanvas.DrawRectangle(r);
-  end;
+   ACanvas.GradientFill(r, TfpgColor($fec475), TfpgColor($fb9d24), gdVertical);
+ //  ACanvas.GradientFill(r, clgreen, clblack, gdVertical);
 end;
 
-procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
+procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
 var
   FLightColor: TfpgColor;
   FDarkColor: TfpgColor;
@@ -122,9 +111,8 @@ begin
   // a possible future theme option
   FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
   FDarkColor  := TfpgColor($beb8a4);  // color at bottom of menu bar
-//  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
-
-  ACanvas.GradientFill(r, clgridheader, clhilite1, gdVertical);
+  ACanvas.GradientFill(r, clgray, clwhite, gdVertical);
+  // ACanvas.GradientFill(r,  clgray, clmoneygreen, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);
@@ -132,11 +120,12 @@ begin
   // outer bottom line
   ACanvas.SetColor(clWhite);
   ACanvas.DrawLine(r.Left, r.Bottom, r.Right+1, r.Bottom);   // bottom
+ //  ACanvas.SetTextColor(clwhite);
 end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Mint 1', TMyStyle);
+  fpgStyleManager.RegisterClass('Demo Style2', TExtStyle);
 
 end.
 

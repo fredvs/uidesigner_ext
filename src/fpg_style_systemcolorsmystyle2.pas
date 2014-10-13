@@ -28,7 +28,11 @@
   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 }
 
-unit fpgstyle_SystemColorsStyle;
+{
+My Style by Fred van Stappen
+fiens@hotmail.com
+}
+unit fpg_style_SystemColorsMyStyle2;
 
 {$mode objfpc}{$H+}
 
@@ -39,9 +43,9 @@ uses
 
 type
 
-  { TSystemColorsStyle }
+  { TSystemColorsMyStyle }
 
-  TSystemColorsStyle = class(TfpgStyle)
+  TExtStyle = class(TfpgStyle)
   private
     {$IFDEF LINUX}
     procedure LoadGtkPalette;
@@ -50,7 +54,11 @@ type
     procedure LoadWindowsPalette;
     {$ENDIF}
   public
+    procedure   DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
+    procedure   DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags); override;
+    
     constructor Create; override;
+
   end;
 
 
@@ -59,10 +67,65 @@ implementation
 uses
   fpg_stylemanager, {$IFDEF LINUX}fpg_gtk{$ELSE}{$IFDEF WINDOWS}fpg_WinAPI{$ENDIF}{$ENDIF};
 
-{ TSystemColorsStyle }
+{ TExtStyle }
+
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+var
+  r: TfpgRect;
+begin
+  r.SetRect(x, y, w, h);
+  ACanvas.SetColor(clShadow1);
+  ACanvas.Clear(clWindowBackground);
+  ACanvas.DrawRectangle(r);
+end;
+
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
+var
+  r: TfpgRect;
+begin
+  r.SetRect(x, y, w, h);
+
+  if btfIsDefault in AFlags then
+  begin
+    ACanvas.SetColor(TfpgColor($7b7b7b));
+    ACanvas.SetLineStyle(1, lsSolid);
+    ACanvas.DrawRectangle(r);
+    InflateRect(r, -1, -1);
+    Exclude(AFlags, btfIsDefault);
+    fpgStyle.DrawButtonFace(ACanvas, r.Left, r.Top, r.Width, r.Height, AFlags);
+    Exit; //==>
+  end;
+
+  // Clear the canvas
+  ACanvas.SetColor(clWindowBackground);
+  ACanvas.FillRectangle(r);
+
+  if (btfFlat in AFlags) and not (btfIsPressed in AFlags) then
+    Exit; // no need to go further
+
+  // outer rectangle
+  ACanvas.SetLineStyle(1, lsSolid);
+  ACanvas.SetColor(TfpgColor($a6a6a6));
+  ACanvas.DrawRectangle(r);
+
+  // so we don't paint over the border
+  InflateRect(r, -1, -1);
+  // now paint the face of the button
+  if (btfIsPressed in AFlags) then
+  begin
+    ACanvas.GradientFill(r, TfpgColor($cccccc), TfpgColor($e4e4e4), gdVertical);
+  end
+  else
+  begin
+    ACanvas.GradientFill(r, TfpgColor($fafafa), TfpgColor($e2e2e2), gdVertical);
+    ACanvas.SetColor(TfpgColor($cccccc));
+    ACanvas.DrawLine(r.Right, r.Top, r.Right, r.Bottom);   // right
+    ACanvas.DrawLine(r.Right, r.Bottom, r.Left, r.Bottom);   // bottom
+  end;
+end;
 
 {$IFDEF LINUX}
-procedure TSystemColorsStyle.LoadGtkPalette;
+procedure TExtStyle.LoadGtkPalette;
 var
   w: fpg_gtk.PGtkWidget=nil;
   st: fpg_gtk.PGtkStyle=nil;
@@ -134,7 +197,7 @@ end;
 {$ENDIF}
 
 {$IFDEF WINDOWS}
-procedure TSystemColorsStyle.LoadWindowsPalette;
+procedure TExtStyle.LoadWindowsPalette;
 var
   c: DWord;
 
@@ -226,7 +289,7 @@ begin
 end;
 {$ENDIF}
 
-constructor TSystemColorsStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
   {$IFDEF LINUX}
@@ -239,7 +302,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('System Colors', TSystemColorsStyle);
+  fpgStyleManager.RegisterClass('System Colors Style2', TExtStyle);
 
 end.
 

@@ -32,7 +32,7 @@
 Chrome Style by Fred van Stappen
 fiens@hotmail.com
 }
-unit fpgstyle_chrome_system;
+unit fpg_style_chrome_system;
 
 {$mode objfpc}{$H+}
 
@@ -45,7 +45,7 @@ type
 
   { TSystemColorsMyStyle }
 
-  TSystemColorsStyle = class(TfpgStyle)
+  TExtStyle = class(TfpgStyle)
   private
     {$IFDEF LINUX}
     procedure LoadGtkPalette;
@@ -71,14 +71,14 @@ implementation
 uses
   fpg_stylemanager, {$IFDEF LINUX}fpg_gtk{$ELSE}{$IFDEF WINDOWS}fpg_WinAPI{$ENDIF}{$ENDIF};
 
-{ TSystemColorsStyle }
+{ TExtStyle }
 
-function TSystemColorsStyle.HasButtonHoverEffect: boolean;
+function TExtStyle.HasButtonHoverEffect: boolean;
 begin
   Result := True;
 end;
 
-procedure TSystemColorsStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -88,7 +88,7 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TSystemColorsStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
   AFlags: TfpgButtonFlags);
 var
   r, r21, r22: TfpgRect;
@@ -151,7 +151,7 @@ end;
 
 
 {$IFDEF LINUX}
-procedure TSystemColorsStyle.LoadGtkPalette;
+procedure TExtStyle.LoadGtkPalette;
 var
   w: fpg_gtk.PGtkWidget=nil;
   st: fpg_gtk.PGtkStyle=nil;
@@ -223,7 +223,7 @@ end;
 {$ENDIF}
 
 {$IFDEF WINDOWS}
-procedure TSystemColorsStyle.LoadWindowsPalette;
+procedure TExtStyle.LoadWindowsPalette;
 var
   c: DWord;
 
@@ -315,7 +315,7 @@ begin
 end;
 {$ENDIF}
 
-constructor TSystemColorsStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
   {$IFDEF LINUX}
@@ -328,7 +328,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Chrome system', TSystemColorsStyle);
+  fpgStyleManager.RegisterClass('Chrome system', TExtStyle);
 
 end.
 

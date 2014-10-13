@@ -2,7 +2,7 @@
 by Fred van Stappen
 fiens@hotmail.com
 }
-unit fpgstyle_mystyle1;
+unit fpg_style_mystyle3;
 
 {$mode objfpc}{$H+}
 
@@ -13,7 +13,7 @@ uses
 
 type
 
-  TMyStyle = class(TfpgStyle)
+  TExtStyle = class(TfpgStyle)
   public
     constructor Create; override;
     { General }
@@ -31,15 +31,15 @@ implementation
 uses
   fpg_stylemanager ;
 
-{ TMyStyle }
+{ TExtStyle }
 
-constructor TMyStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
   fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
 end;
 
-procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -49,7 +49,7 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TMyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
 var
   r: TfpgRect;
 begin
@@ -94,15 +94,15 @@ begin
   end;
 end;
 
-procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect; AFlags: TfpgMenuItemFlags);
+procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect; AFlags: TfpgMenuItemFlags);
 begin
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
  //   ACanvas.GradientFill(r, TfpgColor($fec475), TfpgColor($fb9d24), gdVertical);
-   ACanvas.GradientFill(r, clgreen, clblack, gdVertical);
+   ACanvas.GradientFill(r, clgray, clblack, gdVertical);
 end;
 
-procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
+procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
 var
   FLightColor: TfpgColor;
   FDarkColor: TfpgColor;
@@ -124,7 +124,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Demo Style1', TMyStyle);
+  fpgStyleManager.RegisterClass('Demo Style3', TExtStyle);
 
 end.
 

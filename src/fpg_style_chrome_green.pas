@@ -1,9 +1,9 @@
-{Annimated Chrome Style
+{ Chrome Style
 by Fred van Stappen
 fiens@hotmail.com
 }
 
-unit fpgstyle_anim_chrome_silver;
+unit fpg_style_chrome_green;
 
 {$mode objfpc}{$H+}
 
@@ -14,15 +14,8 @@ uses
 
 type
 
-  TMyStyle = class(TfpgStyle)
-  private
-    fadein : boolean;
-     FTimer: TfpgTimer;
-      i: integer;
-    fbutton: TfpgWindowBase;
-    procedure   TimerFired(Sender: TObject);
-
-    public
+  TExtStyle = class(TfpgStyle)
+  public
     constructor Create; override;
     { General }
     procedure DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
@@ -34,7 +27,7 @@ type
       AFlags: TfpgMenuItemFlags); override;
     procedure DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
       ABackgroundColor: TfpgColor); override;
-    function   HasButtonHoverEffect: boolean; override;
+      function    HasButtonHoverEffect: boolean; override;
 
   end;
 
@@ -42,48 +35,23 @@ type
 implementation
 
 uses
-  fpg_stylemanager,
-   fpg_widget;
+  fpg_stylemanager;
 
-{ TMyStyle }
+{ TExtStyle }
 
-constructor TMyStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
-//  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
-  fpgSetNamedColor(clWindowBackground, clLightGray);
-  FTimer := TfpgTimer.Create(200);
-  FTimer.OnTimer := @TimerFired;
-  i := 2;
+ // fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+   fpgSetNamedColor(clWindowBackground, clLightgreen);
 end;
 
-procedure TMyStyle.TimerFired(Sender: TObject);
-begin
-  if fadein = true then
-  begin
-  inc(i);
-  if i > 4 then
-  begin
-    fadein := false ;
-    end;
-  end else
-    begin
-  dec(i);
-  if i < 1 then begin
-   fadein := true ;
-    end;
-    end;
-
-  if Assigned(fbutton) then
-    TfpgWidget(fbutton).Invalidate;
-end;
-
-function TMyStyle.HasButtonHoverEffect: boolean;
+function TExtStyle.HasButtonHoverEffect: boolean;
 begin
   Result := True;
 end;
 
-procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -93,7 +61,7 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TMyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
   AFlags: TfpgButtonFlags);
 var
   r, r21, r22: TfpgRect;
@@ -124,56 +92,39 @@ begin
 
   // outer rectangle
   ACanvas.SetLineStyle(1, lsSolid);
- // ACanvas.SetColor(TfpgColor($a6a6a6));
-   ACanvas.SetColor(clblack);
+    ACanvas.SetColor(clblack);
+
   ACanvas.DrawRectangle(r);
 
   // so we don't paint over the border
   InflateRect(r, -1, -1);
   // now paint the face of the button
-  if (btfIsPressed in AFlags) or (btfHover in AFlags) then
+   if (btfIsPressed in AFlags) or (btfHover in AFlags) then
+
   begin
-      if ACanvas.Window.ClassName = 'TfpgButton' then
-        fbutton := ACanvas.Window;
-
-      if i = 0 then  r21.SetRect(x, y, w,1) else
-  r21.SetRect(x, y, w, round(h * ((i) / 5)));
-
-  if i = 5 then  r22.SetRect(x, y+h, w,1) else
-
-  r22.SetRect(x, y + (i *(h div 5)), w, h - (i*(h div 5)));
-
-    if (btfIsPressed in AFlags) then begin
-    ACanvas.GradientFill(r21, clWindowBackground, clLightgreen, gdVertical);
-  ACanvas.GradientFill(r22,  clLightgreen, clWindowBackground, gdVertical);
-     end else
-  begin
-    ACanvas.GradientFill(r21, clWindowBackground, clLightYellow, gdVertical);
-  ACanvas.GradientFill(r22,  clLightYellow, clWindowBackground, gdVertical);
-  end;
-
-   ACanvas.SetColor(cldarkgray);
+    ACanvas.GradientFill(r21, clgreen, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clgreen, gdVertical);
+     //    ACanvas.SetColor(clblack);
+       ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
      InflateRect(r, -1, -1);
       if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
-      ACanvas.DrawRectangle(r);
-        if (btfIsPressed in AFlags) then else  FTimer.Enabled := True;
+
+    ACanvas.DrawRectangle(r);
+
   end
   else
   begin
-    FTimer.Enabled := False;
-            i := 2;
-            fadein := true;
-    ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
-  //    ACanvas.SetColor(clblack);
+    ACanvas.GradientFill(r21, clLightgreen, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightgreen, gdVertical);
+     //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
 
   end;
 end;
 
-procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
   AFlags: TfpgMenuItemFlags);
 var
   r21, r22: TfpgRect;
@@ -192,18 +143,19 @@ begin
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
   begin
-    ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
-     ACanvas.SetColor(cldarkgray);
-       ACanvas.SetTextColor(clblack);
+    ACanvas.GradientFill(r21, clgreen, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clgreen, gdVertical);
+    //    ACanvas.SetColor(clblack);
+       ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
+    ACanvas.SetTextColor(clblack);
      InflateRect(r, -1, -1);
     ACanvas.SetColor(cllime);
     ACanvas.DrawRectangle(r);
   end;
 end;
 
-procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
   ABackgroundColor: TfpgColor);
 var
   r21, r22: TfpgRect;
@@ -218,8 +170,8 @@ begin
   r22.Top := r.top + r22.Height;
   r22.Left := r.Left;
   // a possible future theme option
-  ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
+  ACanvas.GradientFill(r21, clLightgreen, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clLightgreen, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);
@@ -231,6 +183,6 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Anim Chrome Silver', TMyStyle);
+  fpgStyleManager.RegisterClass('Chrome green', TExtStyle);
 
 end.

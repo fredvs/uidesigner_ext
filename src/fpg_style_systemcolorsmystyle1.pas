@@ -29,10 +29,10 @@
 }
 
 {
-Hoover Style by Fred van Stappen
+My Style by Fred van Stappen
 fiens@hotmail.com
 }
-unit fpgstyle_hoover_system;
+unit fpg_style_SystemColorsMyStyle1;
 
 {$mode objfpc}{$H+}
 
@@ -45,7 +45,7 @@ type
 
   { TSystemColorsMyStyle }
 
-  TSystemColorsStyle = class(TfpgStyle)
+  TExtStyle = class(TfpgStyle)
   private
     {$IFDEF LINUX}
     procedure LoadGtkPalette;
@@ -54,13 +54,12 @@ type
     procedure LoadWindowsPalette;
     {$ENDIF}
   public
+    procedure   DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
+    procedure   DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags); override;
+    procedure   DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor); override;
+
     constructor Create; override;
-    { General }
-    procedure DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
-    { Buttons }
-    procedure DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
-      AFlags: TfpgButtonFlags); override;
-    function    HasButtonHoverEffect: boolean; override;
+
   end;
 
 
@@ -69,14 +68,26 @@ implementation
 uses
   fpg_stylemanager, {$IFDEF LINUX}fpg_gtk{$ELSE}{$IFDEF WINDOWS}fpg_WinAPI{$ENDIF}{$ENDIF};
 
-{ TSystemColorsStyle }
+{ TExtStyle }
 
-function TSystemColorsStyle.HasButtonHoverEffect: boolean;
+procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect; ABackgroundColor: TfpgColor);
+var
+  FLightColor: TfpgColor;
+  FDarkColor: TfpgColor;
 begin
-  Result := true;
+  FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
+  FDarkColor  := TfpgColor($beb8a4);  // color at bottom of menu bar
+  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
+
+  // inner bottom line
+  ACanvas.SetColor(clShadow1);
+  ACanvas.DrawLine(r.Left, r.Bottom-1, r.Right+1, r.Bottom-1);   // bottom
+  // outer bottom line
+  ACanvas.SetColor(clWhite);
+  ACanvas.DrawLine(r.Left, r.Bottom, r.Right+1, r.Bottom);   // bottom
 end;
 
-procedure TSystemColorsStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -86,56 +97,53 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TSystemColorsStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
-  AFlags: TfpgButtonFlags);
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord; AFlags: TfpgButtonFlags);
 var
-  r, r21, r22: TfpgRect;
+  r: TfpgRect;
 begin
   r.SetRect(x, y, w, h);
 
-  r21.SetRect(x, y, w, h div 2);
+  if btfIsDefault in AFlags then
+  begin
+    ACanvas.SetColor(TfpgColor($7b7b7b));
+    ACanvas.SetLineStyle(1, lsSolid);
+    ACanvas.DrawRectangle(r);
+    InflateRect(r, -1, -1);
+    Exclude(AFlags, btfIsDefault);
+    fpgStyle.DrawButtonFace(ACanvas, r.Left, r.Top, r.Width, r.Height, AFlags);
+    Exit; //==>
+  end;
 
-  r22.SetRect(x, y + (h div 2), w, h div 2);
-
-
-    ACanvas.SetColor(clWindowBackground);
+  // Clear the canvas
+  ACanvas.SetColor(clWindowBackground);
   ACanvas.FillRectangle(r);
 
   if (btfFlat in AFlags) and not (btfIsPressed in AFlags) then
     Exit; // no need to go further
 
+  // outer rectangle
+  ACanvas.SetLineStyle(1, lsSolid);
+  ACanvas.SetColor(TfpgColor($a6a6a6));
+  ACanvas.DrawRectangle(r);
+
+  // so we don't paint over the border
+  InflateRect(r, -1, -1);
   // now paint the face of the button
-  if (btfIsPressed in AFlags) or (btfHover in AFlags) then
+  if (btfIsPressed in AFlags) then
   begin
-
-    // outer rectangle
-    ACanvas.SetLineStyle(1, lsSolid);
-   // ACanvas.SetColor(TfpgColor($a6a6a6));
-     ACanvas.SetColor(clblack);
-    ACanvas.DrawRectangle(r);
-
-    // so we don't paint over the border
-    InflateRect(r, -1, -1);
-    ACanvas.GradientFill(r21, clHilite1, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clHilite1, gdVertical);
-  //    ACanvas.SetColor(clblack);
-       ACanvas.SetColor(cldarkgray);
-    ACanvas.DrawRectangle(r);
-     InflateRect(r, -1, -1);
-      if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
-      ACanvas.DrawRectangle(r);
+    ACanvas.GradientFill(r, TfpgColor($cccccc), TfpgColor($e4e4e4), gdVertical);
   end
   else
   begin
-
-   //    ACanvas.SetColor(cldarkgray);
-   //  ACanvas.DrawRectangle(r);
+    ACanvas.GradientFill(r, TfpgColor($fafafa), TfpgColor($e2e2e2), gdVertical);
+    ACanvas.SetColor(TfpgColor($cccccc));
+    ACanvas.DrawLine(r.Right, r.Top, r.Right, r.Bottom);   // right
+    ACanvas.DrawLine(r.Right, r.Bottom, r.Left, r.Bottom);   // bottom
   end;
 end;
 
-
 {$IFDEF LINUX}
-procedure TSystemColorsStyle.LoadGtkPalette;
+procedure TExtStyle.LoadGtkPalette;
 var
   w: fpg_gtk.PGtkWidget=nil;
   st: fpg_gtk.PGtkStyle=nil;
@@ -207,7 +215,7 @@ end;
 {$ENDIF}
 
 {$IFDEF WINDOWS}
-procedure TSystemColorsStyle.LoadWindowsPalette;
+procedure TExtStyle.LoadWindowsPalette;
 var
   c: DWord;
 
@@ -299,7 +307,7 @@ begin
 end;
 {$ENDIF}
 
-constructor TSystemColorsStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
   {$IFDEF LINUX}
@@ -312,7 +320,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Flat-Hoover system', TSystemColorsStyle);
+  fpgStyleManager.RegisterClass('System Colors Style1', TExtStyle);
 
 end.
 

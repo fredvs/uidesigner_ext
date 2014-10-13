@@ -1,9 +1,9 @@
-{Elipse Style
+{Animated Ellipse Style
 by Fred van Stappen
 fiens@hotmail.com
 }
 
-unit fpgstyle_elipse_green;
+unit fpg_style_anim_ellipse_silver_vert;
 
 {$mode objfpc}{$H+}
 
@@ -14,7 +14,14 @@ uses
 
 type
 
-  TMyStyle = class(TfpgStyle)
+  TExtStyle = class(TfpgStyle)
+  private
+  fadein : boolean;
+     FTimer: TfpgTimer;
+      i: integer;
+    fbutton: TfpgWindowBase;
+    procedure   TimerFired(Sender: TObject);
+
   public
     constructor Create; override;
     { General }
@@ -27,31 +34,55 @@ type
       AFlags: TfpgMenuItemFlags); override;
     procedure DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
       ABackgroundColor: TfpgColor); override;
-      function    HasButtonHoverEffect: boolean; override;
-
+     function   HasButtonHoverEffect: boolean; override;
   end;
 
 
 implementation
 
 uses
-  fpg_stylemanager;
+  fpg_stylemanager,
+   fpg_widget;
 
-{ TMyStyle }
+{ TExtStyle }
 
-constructor TMyStyle.Create;
+constructor TExtStyle.Create;
 begin
   inherited Create;
- // fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
-    fpgSetNamedColor(clWindowBackground, clLightgreen);
+  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+  FTimer := TfpgTimer.Create(200);
+  FTimer.OnTimer := @TimerFired;
+  i := 2;
 end;
 
-function TMyStyle.HasButtonHoverEffect: boolean;
+procedure TExtStyle.TimerFired(Sender: TObject);
+begin
+   FTimer.Enabled := False;
+  if fadein = true then
+  begin
+  inc(i);
+  if i > 4 then
+  begin
+    fadein := false ;
+    end;
+  end else
+    begin
+  dec(i);
+  if i < 1 then begin
+   fadein := true ;
+    end;
+    end;
+
+  if Assigned(fbutton) then
+    TfpgWidget(fbutton).Invalidate;
+end;
+
+function TExtStyle.HasButtonHoverEffect: boolean;
 begin
   Result := True;
 end;
 
-procedure TMyStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
+procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord);
 var
   r: TfpgRect;
 begin
@@ -61,11 +92,12 @@ begin
   ACanvas.DrawRectangle(r);
 end;
 
-procedure TMyStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
+procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
   AFlags: TfpgButtonFlags);
 var
   r, r21, r22: TfpgRect;
 begin
+   FTimer.Enabled := False;
   r.SetRect(x, y, w, h);
 
   r21.SetRect(x, y, w, h div 2);
@@ -102,21 +134,39 @@ begin
   // now paint the face of the button
   if (btfIsPressed in AFlags) or (btfHover in AFlags) then
   begin
-   ACanvas.GradientFill(r21, cllime, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, cllime, gdVertical);
-   //    ACanvas.SetColor(clblack);
+   if ACanvas.Window.ClassName = 'TfpgButton' then
+        fbutton := ACanvas.Window;
+
+      if i = 0 then  r21.SetRect(x, y, w,1) else
+  r21.SetRect(x, y, w, round(h * ((i) / 5)));
+
+  if i = 5 then  r22.SetRect(x, y+h, w,1) else
+
+  r22.SetRect(x, y + (i *(h div 5)), w, h - (i*(h div 5)));
+
+    if (btfIsPressed in AFlags) then begin
+    ACanvas.GradientFill(r21, clWindowBackground, clLightgreen, gdVertical);
+  ACanvas.GradientFill(r22,  clLightgreen, clWindowBackground, gdVertical);
+  end else
+  begin
+    ACanvas.GradientFill(r21, clWindowBackground, clLightYellow, gdVertical);
+  ACanvas.GradientFill(r22,  clLightYellow, clWindowBackground, gdVertical);
+  end;
+ 
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
      InflateRect(r, -1, -1);
-      if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
-
-    ACanvas.DrawRectangle(r);
+       if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
+      ACanvas.DrawRectangle(r);
+ //  if (btfIsPressed in AFlags) then else  FTimer.Enabled := True;
   end
   else
   begin
-
-    ACanvas.GradientFill(r21, clLightgreen, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clLightgreen, gdVertical);
+    FTimer.Enabled := False;
+            i := 2;
+            fadein := true;
+    ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
   //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
@@ -174,9 +224,11 @@ begin
     InflateRect(r, 1, 1);
        ACanvas.SetColor(clWindowBackground);
     ACanvas.DrawRectangle(r);
+
+  if (btfIsPressed in AFlags) then FTimer.Enabled := false  else if (btfHover in AFlags)  then FTimer.Enabled := True;
 end;
 
-procedure TMyStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
   AFlags: TfpgMenuItemFlags);
 var
   r21, r22: TfpgRect;
@@ -190,13 +242,13 @@ begin
   r22.Width := r.Width;
   r22.Top := r.top + r22.Height;
   r22.Left := r.Left;
-  ACanvas.SetColor(clwhite);
+ ACanvas.SetColor(clwhite);
   ACanvas.FillRectangle(r);
   inherited DrawMenuRow(ACanvas, r, AFlags);
   if (mifSelected in AFlags) and not (mifSeparator in AFlags) then
   begin
-    ACanvas.GradientFill(r21, clLightgreen, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clLightgreen, gdVertical);
+    ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
+    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
      ACanvas.SetColor(cldarkgray);
        ACanvas.SetTextColor(clblack);
     ACanvas.DrawRectangle(r);
@@ -206,7 +258,7 @@ begin
   end;
 end;
 
-procedure TMyStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
+procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
   ABackgroundColor: TfpgColor);
 var
   FLightColor: TfpgColor;
@@ -215,9 +267,7 @@ begin
   // a possible future theme option
   FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
   FDarkColor := TfpgColor($beb8a4);  // color at bottom of menu bar
-   ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
-
-//  ACanvas.GradientFill(r, clgridheader, clhilite1, gdVertical);
+    ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);
@@ -229,6 +279,6 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Elipse green', TMyStyle);
+  fpgStyleManager.RegisterClass('Anim Ellipse Silver vert', TExtStyle);
 
 end.
