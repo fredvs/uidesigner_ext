@@ -16,13 +16,14 @@ type
 
   TExtStyle = class(TfpgStyle)
   private
-    fadein : boolean;
-     FTimer: TfpgTimer;
-      i: integer;
+    fadein: boolean;
+    FTimer, FPressTimer: TfpgTimer;
+    i: integer;
     fbutton: TfpgWindowBase;
-    procedure   TimerFired(Sender: TObject);
+    procedure TimerFired(Sender: TObject);
+    procedure TimerPressed(Sender: TObject);
 
-    public
+  public
     constructor Create; override;
     { General }
     procedure DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
@@ -34,50 +35,64 @@ type
       AFlags: TfpgMenuItemFlags); override;
     procedure DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
       ABackgroundColor: TfpgColor); override;
-    function   HasButtonHoverEffect: boolean; override;
+    function HasButtonHoverEffect: boolean; override;
 
   end;
-
 
 implementation
 
 uses
   fpg_stylemanager,
-   fpg_widget;
+  fpg_widget;
+
+var
+  waspressed: boolean;
 
 { TExtStyle }
 
 constructor TExtStyle.Create;
 begin
   inherited Create;
-//  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
   fpgSetNamedColor(clWindowBackground, clLightGray);
   FTimer := TfpgTimer.Create(200);
   FTimer.OnTimer := @TimerFired;
+
+  FPressTimer := TfpgTimer.Create(1500);
+  FPressTimer.OnTimer := @TimerPressed;
+  FPressTimer.Enabled := False;
   i := 2;
+  waspressed := False;
+end;
+
+procedure TExtStyle.TimerPressed(Sender: TObject);
+begin
+  FPressTimer.Enabled := False;
+  waspressed := False;
 end;
 
 procedure TExtStyle.TimerFired(Sender: TObject);
 begin
-    FTimer.Enabled := False;
-  if fadein = true then
+  FTimer.Enabled := False;
+  if fadein = True then
   begin
-  inc(i);
-  if i > 4 then
-  begin
-    fadein := false ;
-    end;
-  end else
+    Inc(i);
+    if i > 4 then
     begin
-  dec(i);
-  if i < 1 then begin
-   fadein := true ;
+      fadein := False;
     end;
+  end
+  else
+  begin
+    Dec(i);
+    if i < 1 then
+    begin
+      fadein := True;
     end;
+  end;
 
-  if Assigned(fbutton) then
-
-    TfpgWidget(fbutton).Invalidate;
+  if fbutton <> nil then
+    if Assigned(fbutton) then
+      TfpgWidget(fbutton).Invalidate;
 end;
 
 function TExtStyle.HasButtonHoverEffect: boolean;
@@ -100,12 +115,12 @@ procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
 var
   r, r21, r22: TfpgRect;
 begin
-    FTimer.Enabled := False;
-   r.SetRect(x, y, w, h);
+  FTimer.Enabled := False;
+  r.SetRect(x, y, w, h);
 
-  r21.SetRect(x, y,  w div 2, h);
+  r21.SetRect(x, y, w div 2, h);
 
-  r22.SetRect(x + (w div 2), y , w div 2, h);
+  r22.SetRect(x + (w div 2), y, w div 2, h);
 
   if btfIsDefault in AFlags then
   begin
@@ -127,8 +142,7 @@ begin
 
   // outer rectangle
   ACanvas.SetLineStyle(1, lsSolid);
- // ACanvas.SetColor(TfpgColor($a6a6a6));
-   ACanvas.SetColor(clblack);
+  ACanvas.SetColor(clblack);
   ACanvas.DrawRectangle(r);
 
   // so we don't paint over the border
@@ -136,44 +150,59 @@ begin
   // now paint the face of the button
   if (btfIsPressed in AFlags) or (btfHover in AFlags) then
   begin
-      if ACanvas.Window.ClassName = 'TfpgButton' then
+    if ACanvas.Window.ClassName = 'TfpgButton' then
+      if waspressed = False then
         fbutton := ACanvas.Window;
 
-       if i = 0 then  r21.SetRect(x, y, 1,h) else
-  r21.SetRect(x, y, round(w * ((i) / 5)),h );
+    if i = 0 then
+      r21.SetRect(x, y, 1, h)
+    else
+      r21.SetRect(x, y, round(w * ((i) / 5)), h);
 
-  if i = 5 then  r22.SetRect(x+w, y, 1,h) else
+    if i = 5 then
+      r22.SetRect(x + w, y, 1, h)
+    else
 
-  r22.SetRect(x + (i *(w div 5)), y, w - (i*(w div 5)), h);
+      r22.SetRect(x + (i * (w div 5)), y, w - (i * (w div 5)), h);
 
 
-    if (btfIsPressed in AFlags) then begin
-    ACanvas.GradientFill(r21, clWindowBackground, clLightgreen, gdHorizontal);
-  ACanvas.GradientFill(r22,  clLightgreen, clWindowBackground, gdHorizontal);
-     end else
-  begin
-    ACanvas.GradientFill(r21, clWindowBackground, clLightYellow, gdHorizontal);
-  ACanvas.GradientFill(r22,  clLightYellow, clWindowBackground, gdHorizontal);
-  end;
+    if (btfIsPressed in AFlags) then
+    begin
+      waspressed := True;
+      FTimer.Enabled := False;
+      FPressTimer.Enabled := False;
+      ACanvas.GradientFill(r21, clWindowBackground, clLightgreen, gdHorizontal);
+      ACanvas.GradientFill(r22, clLightgreen, clWindowBackground, gdHorizontal);
+      fbutton := nil;
+      FPressTimer.Enabled := True;
+    end
+    else
+    begin
+      ACanvas.GradientFill(r21, clWindowBackground, clLightYellow, gdHorizontal);
+      ACanvas.GradientFill(r22, clLightYellow, clWindowBackground, gdHorizontal);
+    end;
 
-   ACanvas.SetColor(cldarkgray);
+    ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
-     InflateRect(r, -1, -1);
-      if (btfHover in AFlags)  then   ACanvas.SetColor(clyellow) else   ACanvas.SetColor(cllime);
-      ACanvas.DrawRectangle(r);
-        if (btfIsPressed in AFlags) then  FTimer.Enabled := False else  FTimer.Enabled := True;
+    InflateRect(r, -1, -1);
+    if (btfHover in AFlags) then
+      ACanvas.SetColor(clyellow)
+    else
+      ACanvas.SetColor(cllime);
+    ACanvas.DrawRectangle(r);
+    if (waspressed = False) and (btfHover in AFlags) then
+      FTimer.Enabled := True;
   end
   else
   begin
     FTimer.Enabled := False;
-            i := 2;
-            fadein := true;
+    i := 2;
+    fadein := True;
     ACanvas.GradientFill(r21, clsilver, clwhite, gdHorizontal);
     ACanvas.GradientFill(r22, clwhite, clsilver, gdHorizontal);
-  //    ACanvas.SetColor(clblack);
-       ACanvas.SetColor(cldarkgray);
+    //    ACanvas.SetColor(clblack);
+    ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
-
   end;
 end;
 
@@ -198,10 +227,10 @@ begin
   begin
     ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
     ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
-     ACanvas.SetColor(cldarkgray);
-       ACanvas.SetTextColor(clblack);
+    ACanvas.SetColor(cldarkgray);
+    ACanvas.SetTextColor(clblack);
     ACanvas.DrawRectangle(r);
-     InflateRect(r, -1, -1);
+    InflateRect(r, -1, -1);
     ACanvas.SetColor(cllime);
     ACanvas.DrawRectangle(r);
   end;
@@ -221,9 +250,9 @@ begin
   r22.Width := r.Width;
   r22.Top := r.top + r22.Height;
   r22.Left := r.Left;
-  // a possible future theme option
+
   ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
+  ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
 
   // inner bottom line
   ACanvas.SetColor(clShadow1);

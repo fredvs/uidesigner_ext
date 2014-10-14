@@ -1,4 +1,4 @@
-{ fpGUI style which load native system palette on Windows and Linux
+{ fpGUI style which load native system palette on Windows and unix
 
   Copyright (C) 2013 Krzysztof Dibowski dibowski_at_interia.pl
 
@@ -47,7 +47,7 @@ type
 
   TExtStyle = class(TfpgStyle)
   private
-    {$IFDEF LINUX}
+    {$IFDEF unix}
     procedure LoadGtkPalette;
     {$ENDIF}
     {$IFDEF WINDOWS}
@@ -69,7 +69,7 @@ type
 implementation
 
 uses
-  fpg_stylemanager, {$IFDEF LINUX}fpg_gtk{$ELSE}{$IFDEF WINDOWS}fpg_WinAPI{$ENDIF}{$ENDIF};
+  fpg_stylemanager, {$IFDEF unix}fpg_gtk{$ELSE}{$IFDEF WINDOWS}fpg_WinAPI{$ENDIF}{$ENDIF};
 
 { TExtStyle }
 
@@ -203,7 +203,7 @@ begin
 end;
 
 
-{$IFDEF LINUX}
+{$IFDEF unix}
 procedure TExtStyle.LoadGtkPalette;
 var
   w: fpg_gtk.PGtkWidget=nil;
@@ -372,7 +372,7 @@ end;
 constructor TExtStyle.Create;
 begin
   inherited Create;
-  {$IFDEF LINUX}
+  {$IFDEF unix}
   LoadGtkPalette;
   {$ENDIF}
   {$IFDEF WINDOWS}

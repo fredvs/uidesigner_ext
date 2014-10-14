@@ -634,6 +634,7 @@ end;
 procedure TfrmVFDSetup.btnOKClick(Sender: TObject);
 begin
   SaveSettings;
+
   ModalResult := mrOk;
 end;
 
