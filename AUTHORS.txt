@@ -1,5 +1,4 @@
- Here is a list of people that have contributed in some way towards
- the fpGUI project.
+Here is a list of people that have contributed in some way towards  the fpGUI project.
 
 Lead Developer and Maintainer
 -----------------------------

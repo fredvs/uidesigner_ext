@@ -13,7 +13,6 @@ Fred van Stappen. fiens@hotmail.com
    fpGUI's Visual User Interface Designer
    ======================================
 
-
 Introduction
 ============
 
