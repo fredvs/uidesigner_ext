@@ -1,10 +1,10 @@
-This is the extended version of fpGUI Designer.
+Designer_ext is the extended version of fpGUI UIDesigner.
  
 With run-only-once, window list, undo feature, integration into IDE, editor launcher, lot of new themes-styles,...
 
 There are also patches for integration with fpc, Lazarus, Typhon, Geany,...
 
-It needs the last fpGUI-develop branch =>
+Designer_ext needs the last fpGUI-develop branch =>
 https://github.com/graemeg/fpgui/tree/develop
 
 Fred van Stappen. fiens@hotmail.com  
