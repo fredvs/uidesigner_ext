@@ -14,7 +14,6 @@ type
 
   TCompareForm = class(TfpgForm)
   public
-    constructor Create(AOwner: TComponent); override;
     procedure AfterCreate; override;
     procedure onPaintCompare(Sender: TObject);
     procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton;
@@ -73,7 +72,6 @@ var
   oriMousePos, orimainform: TPoint;
   ired, igreen, iblue: integer;
 
-
 {@VFD_NEWFORM_IMPL}
 
 function IsStrANumber(const S: string): boolean;
@@ -83,6 +81,23 @@ begin
     StrToInt(S);
   except
     Result := False;
+  end;
+end;
+
+
+function hex2int(const S: string): integer;
+begin
+  Result := -1;
+  case uppercase(s) of
+    'F': Result := 15;
+    'E': Result := 14;
+    'D': Result := 13;
+    'C': Result := 12;
+    'B': Result := 11;
+    'A': Result := 14;
+    else
+      if IsStrANumber(s) then
+        Result := StrToInt(s);
   end;
 end;
 
@@ -139,297 +154,44 @@ end;
 
 function ConvertToInt(Value: string): boolean;
 var
-  vred, vgreen, vblue: string;
-  vtemp1, vtemp2: string;
+  colortmp: string;
   itemp1, itemp2: integer;
 begin
   Result := False;
-  vred := copy(Value, 2, 2);
+  itemp1 := -1;
+  itemp2 := -1;
 
-  vtemp1 := copy(vred, 1, 1);
+  colortmp := copy(Value, 2, 2);
+  itemp1 := hex2int(copy(colortmp, 1, 1));
 
-  case uppercase(vtemp1) of
-    'F':
-    begin
-      itemp1 := 15;
-      Result := True;
-    end;
-    'E':
-    begin
-      itemp1 := 14;
-      Result := True;
-    end;
-    'D':
-    begin
-      itemp1 := 13;
-      Result := True;
-    end;
-    'C':
-    begin
-      itemp1 := 12;
-      Result := True;
-    end;
-    'B':
-    begin
-      itemp1 := 11;
-      Result := True;
-    end;
-    'A':
-    begin
-      itemp1 := 10;
-      Result := True;
-    end
-    else
-    begin
-      if IsStrANumber(vtemp1) then
-      begin
-        itemp1 := StrToInt(vtemp1);
-        Result := True;
-      end;
-    end;
-  end;
+  if itemp1 > -1 then
+    itemp2 := hex2int(copy(colortmp, 2, 1));
 
-
-  if Result = True then
-  begin
-    vtemp2 := copy(vred, 2, 1);
-
-    case uppercase(vtemp2) of
-      'F':
-      begin
-        itemp2 := 15;
-        Result := True;
-      end;
-      'E':
-      begin
-        itemp2 := 14;
-        Result := True;
-      end;
-      'D':
-      begin
-        itemp2 := 13;
-        Result := True;
-      end;
-      'C':
-      begin
-        itemp2 := 12;
-        Result := True;
-      end;
-      'B':
-      begin
-        itemp2 := 11;
-        Result := True;
-      end;
-      'A':
-      begin
-        itemp2 := 10;
-        Result := True;
-      end
-      else
-      begin
-        if IsStrANumber(vtemp2) then
-        begin
-          itemp2 := StrToInt(vtemp2);
-          Result := True;
-        end;
-      end;
-    end;
-  end;
-
-
-  if Result = True then
+  if itemp2 > -1 then
   begin
     ired := (itemp1 * 16) + itemp2;
-    vgreen := copy(Value, 4, 2);
-    vtemp1 := copy(vgreen, 1, 1);
-
-    case uppercase(vtemp1) of
-      'F':
-      begin
-        itemp1 := 15;
-        Result := True;
-      end;
-      'E':
-      begin
-        itemp1 := 14;
-        Result := True;
-      end;
-      'D':
-      begin
-        itemp1 := 13;
-        Result := True;
-      end;
-      'C':
-      begin
-        itemp1 := 12;
-        Result := True;
-      end;
-      'B':
-      begin
-        itemp1 := 11;
-        Result := True;
-      end;
-      'A':
-      begin
-        itemp1 := 10;
-        Result := True;
-      end
-      else
-      begin
-        if IsStrANumber(vtemp1) then
-        begin
-          itemp1 := StrToInt(vtemp1);
-          Result := True;
-        end;
-      end;
-    end;
+    colortmp := copy(Value, 4, 2);
+    itemp1 := hex2int(copy(colortmp, 1, 1));
   end;
 
-  if Result = True then
-  begin
-    vtemp2 := copy(vgreen, 2, 1);
+  if itemp1 > -1 then
+    itemp2 := hex2int(copy(colortmp, 2, 1));
 
-    case uppercase(vtemp2) of
-      'F':
-      begin
-        itemp2 := 15;
-        Result := True;
-      end;
-      'E':
-      begin
-        itemp2 := 14;
-        Result := True;
-      end;
-      'D':
-      begin
-        itemp2 := 13;
-        Result := True;
-      end;
-      'C':
-      begin
-        itemp2 := 12;
-        Result := True;
-      end;
-      'B':
-      begin
-        itemp2 := 11;
-        Result := True;
-      end;
-      'A':
-      begin
-        itemp2 := 10;
-        Result := True;
-      end
-      else
-      begin
-        if IsStrANumber(vtemp2) then
-        begin
-          itemp2 := StrToInt(vtemp2);
-          Result := True;
-        end;
-      end;
-    end;
-  end;
-
-  if Result = True then
+  if itemp2 > -1 then
   begin
     igreen := (itemp1 * 16) + itemp2;
-
-    vblue := copy(Value, 6, 2);
-    vtemp1 := copy(vblue, 1, 1);
-
-    case uppercase(vtemp1) of
-      'F':
-      begin
-        itemp1 := 15;
-        Result := True;
-      end;
-      'E':
-      begin
-        itemp1 := 14;
-        Result := True;
-      end;
-      'D':
-      begin
-        itemp1 := 13;
-        Result := True;
-      end;
-      'C':
-      begin
-        itemp1 := 12;
-        Result := True;
-      end;
-      'B':
-      begin
-        itemp1 := 11;
-        Result := True;
-      end;
-      'A':
-      begin
-        itemp1 := 10;
-        Result := True;
-      end
-      else
-      begin
-        if IsStrANumber(vtemp1) then
-        begin
-          itemp1 := StrToInt(vtemp1);
-          Result := True;
-        end;
-      end;
-    end;
+    colortmp := copy(Value, 6, 2);
+    itemp1 := hex2int(copy(colortmp, 1, 1));
   end;
 
-  if Result = True then
-  begin
+  if itemp1 > -1 then
+    itemp2 := hex2int(copy(colortmp, 2, 1));
 
-    vtemp2 := copy(vblue, 2, 1);
-
-    case uppercase(vtemp2) of
-      'F':
-      begin
-        itemp2 := 15;
-        Result := True;
-      end;
-      'E':
-      begin
-        itemp2 := 14;
-        Result := True;
-      end;
-      'D':
-      begin
-        itemp2 := 13;
-        Result := True;
-      end;
-      'C':
-      begin
-        itemp2 := 12;
-        Result := True;
-      end;
-      'B':
-      begin
-        itemp2 := 11;
-        Result := True;
-      end;
-      'A':
-      begin
-        itemp2 := 10;
-        Result := True;
-      end
-      else
-      begin
-        if IsStrANumber(vtemp2) then
-        begin
-          itemp2 := StrToInt(vtemp2);
-          Result := True;
-        end;
-      end;
-    end;
-  end;
-
-  if Result = True then
+  if itemp2 > -1 then
     iblue := (itemp1 * 16) + itemp2;
 
+  if (itemp1 > -1) and (itemp2 > -1) then
+    Result := True;
 end;
 
 
@@ -518,12 +280,6 @@ constructor TMainForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FViaRGB := False;
-end;
-
-constructor TCompareForm.Create(AOwner: TComponent);
-begin
-  inherited Create(AOwner);
-
 end;
 
 procedure TMainForm.btnQuitClicked(Sender: TObject);
@@ -638,8 +394,8 @@ begin
     SetPosition(182, 280, 56, 26);
     TabOrder := 8;
     Text := '';
-    readonly := true;
-    Focusable:=false;
+    ReadOnly := True;
+    Focusable := False;
     FontDesc := '#Edit1';
     BackgroundColor := clWindowBackground;
   end;
@@ -652,8 +408,8 @@ begin
     TabOrder := 9;
     Text := '';
     FontDesc := '#Edit1';
-    Focusable:=false;
-    readonly := true;
+    Focusable := False;
+    ReadOnly := True;
     BackgroundColor := clWindowBackground;
   end;
 
@@ -665,8 +421,8 @@ begin
     TabOrder := 10;
     Text := '';
     FontDesc := '#Edit1';
-    readonly := true;
-    Focusable:=false;
+    ReadOnly := True;
+    Focusable := False;
     BackgroundColor := clWindowBackground;
   end;
 
@@ -692,7 +448,7 @@ begin
     Text := 'Green';
   end;
 
-  Label6 := TfpgLabel.Create(self); 
+  Label6 := TfpgLabel.Create(self);
   with Label6 do
   begin
     Name := 'Label6';
@@ -714,8 +470,8 @@ begin
     Value := 255;
     FontDesc := '#Edit1';
     OnChange := @RGBChanged;
-    OnExit:= @RGBChanged;
-   end;
+    OnExit := @RGBChanged;
+  end;
 
   edG := TfpgSpinEdit.Create(self);
   with edG do
@@ -728,7 +484,7 @@ begin
     Value := 255;
     FontDesc := '#Edit1';
     OnChange := @RGBChanged;
-    OnExit:= @RGBChanged;
+    OnExit := @RGBChanged;
   end;
 
   edB := TfpgSpinEdit.Create(self);
@@ -742,7 +498,7 @@ begin
     Value := 255;
     FontDesc := '#Edit1';
     OnChange := @RGBChanged;
-    OnExit:= @RGBChanged;
+    OnExit := @RGBChanged;
   end;
 
   bevel1 := Tfpgbevel.Create(self);
@@ -816,9 +572,6 @@ begin
   sleep(200);
   // link the two components
   ColorWheel1.ValueBar := ValueBar1;
-  //  ColorWheel1.BackgroundColor := clFuchsia;
-  //  ValueBar1.BackgroundColor := clFuchsia;
-  //  ColorWheel1.CursorSize := 400;
   UpdateHSVComponents;
   if not FViaRGB then
     UpdateRGBComponents;
