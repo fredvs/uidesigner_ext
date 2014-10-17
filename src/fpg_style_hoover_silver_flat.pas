@@ -2,7 +2,7 @@
 Hoover Style by Fred van Stappen
 fiens@hotmail.com
 }
-unit fpg_style_hoover_silver;
+unit fpg_style_hoover_silver_flat;
 
 {$mode objfpc}{$H+}
 
@@ -132,7 +132,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Flat-Hoover silver', TExtStyle);
+  fpgStyleManager.RegisterClass('Hoover Silver Flat', TExtStyle);
 
 end.
 

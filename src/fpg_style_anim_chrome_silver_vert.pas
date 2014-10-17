@@ -25,6 +25,7 @@ type
 
   public
     constructor Create; override;
+    destructor  Destroy; override;
     { General }
     procedure DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord); override;
     { Buttons }
@@ -63,6 +64,15 @@ begin
   FPressTimer.Enabled := False;
   i := 2;
   waspressed := False;
+end;
+
+destructor TExtStyle.Destroy;
+begin
+  FTimer.Enabled := False;
+  FPressTimer.Enabled := False;
+  FTimer.Free;
+  FPressTimer.Free;
+  inherited Destroy;
 end;
 
 procedure TExtStyle.TimerPressed(Sender: TObject);

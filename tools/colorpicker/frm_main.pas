@@ -32,6 +32,7 @@ type
     ColorWheel1: TfpgColorWheel;
     ValueBar1: TfpgValueBar;
     bevel1: Tfpgbevel;
+    panel1: Tfpgpanel;
     Label1: TfpgLabel;
     Label2: TfpgLabel;
     Label3: TfpgLabel;
@@ -59,6 +60,7 @@ type
     procedure ColorChanged(Sender: TObject);
     procedure RGBChanged(Sender: TObject);
     procedure ConvertToRGB(Sender: TObject);
+    procedure onPaintMain(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     procedure AfterCreate; override;
@@ -71,6 +73,7 @@ implementation
 var
   oriMousePos, orimainform: TPoint;
   ired, igreen, iblue: integer;
+  fbright : double;
 
 {@VFD_NEWFORM_IMPL}
 
@@ -120,7 +123,8 @@ end;
 
 procedure TCompareForm.onPaintCompare(Sender: TObject);
 begin
-  Canvas.TextColor := clblack;
+  if fbright > 0.5 then
+  Canvas.TextColor := clblack else Canvas.TextColor := clwhite ;
   Canvas.DrawText(30, 20, 'Tester');
   Canvas.DrawText(23, 45, 'Hold-Click');
   Canvas.DrawText(15, 60, 'moves panel');
@@ -247,6 +251,11 @@ begin
     UpdateRGBComponents;
 end;
 
+procedure TMainForm.onPaintMain(Sender: TObject);
+begin
+
+end;
+
 procedure TMainForm.RGBChanged(Sender: TObject);
 var
   rgb: TRGBTriple;
@@ -300,6 +309,7 @@ begin
   edH.Text := IntToStr(ColorWheel1.Hue);
   edS.Text := FormatFloat('0.000', ColorWheel1.Saturation);
   edV.Text := FormatFloat('0.000', ValueBar1.Value);
+  fbright := ValueBar1.Value ;
   bevel1.BackgroundColor := ValueBar1.SelectedColor;
   frmcompare.BackgroundColor := ValueBar1.SelectedColor;
 end;
@@ -346,11 +356,19 @@ begin
     SetPosition(20, 20, 272, 244);
   end;
 
+    panel1 := Tfpgpanel.Create(self);
+  with panel1 do
+  begin
+    Name := 'panel1';
+   SetPosition(303, 22, 54, 240);
+  end;
+
   ValueBar1 := TfpgValueBar.Create(self);
   with ValueBar1 do
   begin
     Name := 'ValueBar1';
-    SetPosition(304, 20, 52, 244);
+    SetPosition(304, 23, 52, 238);
+    CursorHeight:=15;
     OnChange := @ColorChanged;
   end;
 
@@ -391,7 +409,7 @@ begin
   with edH do
   begin
     Name := 'edH';
-    SetPosition(182, 280, 56, 26);
+    SetPosition(182, 280, 50, 26);
     TabOrder := 8;
     Text := '';
     ReadOnly := True;
@@ -404,7 +422,7 @@ begin
   with edS do
   begin
     Name := 'edS';
-    SetPosition(182, 308, 56, 26);
+    SetPosition(182, 308, 50, 26);
     TabOrder := 9;
     Text := '';
     FontDesc := '#Edit1';
@@ -417,7 +435,7 @@ begin
   with edV do
   begin
     Name := 'edV';
-    SetPosition(182, 336, 56, 26);
+    SetPosition(182, 336, 50, 26);
     TabOrder := 10;
     Text := '';
     FontDesc := '#Edit1';
@@ -561,12 +579,14 @@ begin
     OnChange := @chkCrossHairChange;
   end;
 
-
+  fbright := 1 ;
   updatewindowposition;
   orimainform.X := left;
   orimainform.Y := top;
   sleep(200);
   {@VFD_BODY_END: MainForm}
+
+
   frmcompare := TCompareForm.Create(nil);
   frmcompare.Show;
   sleep(200);

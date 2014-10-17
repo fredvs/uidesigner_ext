@@ -30,16 +30,15 @@ uses {$IFDEF UNIX}
   fpg_iniutils,
   RunOnce_PostIt,
   fpg_cmdlineparams,
+  fpg_style_anim_round_silver_horz,
+  fpg_style_round_silver_flat_horz,
+  fpg_style_anim_round_silver_flat_horz,
   fpg_style_anim_chrome_silver_vert,
   fpg_style_anim_chrome_silver_horz,
   fpg_style_anim_ellipse_silver_vert,
   fpg_style_anim_ellipse_silver_horz,
-  fpg_style_mystyle,
-  fpg_style_mystyle1,
-  fpg_style_mystyle2,
-  fpg_style_mystyle3,
-  fpg_style_hoover_system,
-  fpg_style_hoover_silver,
+  fpg_style_hoover_system_flat,
+  fpg_style_hoover_silver_flat,
   fpg_style_ellipse_silver,
   fpg_style_ellipse_system,
   fpg_style_ellipse_gray,
@@ -94,12 +93,9 @@ uses {$IFDEF UNIX}
         filedir := ParamStr(1);
 
        if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then
-   //   if gCommandLineParams.IsParam('onlyone') then
       begin
-    //    if StrToInt(copy(gCommandLineParams.GetParam('onlyone'), 1, 1)) > 0 then
-           ifonlyone := true;
+          ifonlyone := true;
           RunOnce(filedir) ;
-
       end
       else ifonlyone := false;
       end;
@@ -109,7 +105,7 @@ uses {$IFDEF UNIX}
       RegisterWidgets;
       if not gCommandLineParams.IsParam('style') then
       begin
-            if fpgStyleManager.SetStyle('Flat-Hoover silver') then
+            if fpgStyleManager.SetStyle('Hoover Silver Flat') then
           fpgStyle := fpgStyleManager.Style;
       end;
 
@@ -117,8 +113,6 @@ uses {$IFDEF UNIX}
       maindsgn := TMainDesigner.Create;
 
       maindsgn.CreateWindows;
-
-     // Making sure the correct form is set as the MainForm
 
       fpgApplication.MainForm := frmMain;
 

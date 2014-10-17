@@ -39,6 +39,7 @@
       <Unit0>
         <Filename Value="color_picker.lpr"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="color_picker"/>
       </Unit0>
       <Unit1>
         <Filename Value="frm_main.pas"/>

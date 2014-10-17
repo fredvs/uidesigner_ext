@@ -32,7 +32,7 @@
 Hoover Style by Fred van Stappen
 fiens@hotmail.com
 }
-unit fpg_style_hoover_system;
+unit fpg_style_hoover_system_flat;
 
 {$mode objfpc}{$H+}
 
@@ -312,7 +312,7 @@ end;
 
 
 initialization
-  fpgStyleManager.RegisterClass('Flat-Hoover system', TExtStyle);
+  fpgStyleManager.RegisterClass('Hoover System Flat', TExtStyle);
 
 end.
 
