@@ -61,8 +61,10 @@ type
 
   TMainDesigner = class(TObject)
   private
+    FShowGrid: boolean;
     procedure SetEditedFileName(const Value: string);
     procedure LoadDefaults;
+    procedure SetShowGrid(AValue: boolean);
   protected
     FDesigners: TList;
     FFile: TVFDFile;
@@ -98,6 +100,7 @@ type
     procedure OnExit(Sender: TObject);
     procedure OnOptionsClick(Sender: TObject);
     property EditedFileName: string read FEditedFileName write SetEditedFileName;
+    property ShowGrid: boolean read FShowGrid write SetShowGrid;
   end;
 
 
@@ -296,6 +299,13 @@ begin
         end;
       end;
   end;
+
+for n := 0 to FDesigners.Count - 1 do
+begin
+ selectedform := nil;
+ TFormDesigner(FDesigners[n]).Form.ShowGrid := FShowGrid;
+ end;
+
   frmMain.mru.AddItem(fname);
 
   if (enableundo = True) then
@@ -703,6 +713,7 @@ begin
       if nfrm.edName.Text <> '' then
         fd.Form.Name := nfrm.edName.Text;
       fd.Form.WindowTitle := fd.Form.Name;
+      fd.Form.ShowGrid := FShowGrid;
       fd.OneClickMove := OneClickMove;
       FDesigners.Add(fd);
       SelectedForm := fd;
@@ -938,15 +949,25 @@ end;
 
 procedure TMainDesigner.LoadDefaults;
 begin
-  case gINI.ReadInteger('Options', 'GridResolution', 1) of
-    0: GridResolution := 2;
-    1: GridResolution := 4;
-    2: GridResolution := 8;
-  end;
+  GridResolution := gINI.ReadInteger('Options', 'GridResolution', 4);
+  DefaultPasExt := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
+  UndoOnPropExit := gINI.ReadBool('Options', 'UndoOnExit', DefUndoOnPropExit);
+  OneClickMove := gINI.ReadBool('Options', 'OneClickMove', True);
   DefaultPasExt := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
   UndoOnPropExit := gINI.ReadBool('Options', 'UndoOnExit', DefUndoOnPropExit);
   OneClickMove := gINI.ReadBool('Options', 'OneClickMove', True);
   fpgApplication.HintPause := 1000;
+end;
+
+procedure TMainDesigner.SetShowGrid(AValue: boolean);
+var
+ i: integer;
+begin
+ if FShowGrid = AValue then
+ Exit;
+ FShowGrid := AValue;
+ for i := 0 to FDesigners.Count-1 do
+ TFormDesigner(FDesigners[i]).Form.ShowGrid := AValue;
 end;
 
 end.

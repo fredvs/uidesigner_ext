@@ -40,7 +40,6 @@
       <Unit0>
         <Filename Value="uidesigner_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="uidesigner_ext"/>
       </Unit0>
       <Unit1>
         <Filename Value="vfdmain.pas"/>
@@ -65,6 +64,7 @@
       <Unit6>
         <Filename Value="newformdesigner.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="newformdesigner"/>
       </Unit6>
       <Unit7>
         <Filename Value="vfdwidgets.pas"/>

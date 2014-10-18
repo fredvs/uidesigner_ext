@@ -67,11 +67,13 @@ type
   private
     FFileOpenRecent: TfpgMenuItem;
     FlistUndo: TfpgMenuItem;
+    procedure   FormShow(Sender: TObject);
     procedure   PaletteBarResized(Sender: TObject);
     procedure   miHelpAboutClick(Sender: TObject);
     procedure   miHelpAboutGUI(Sender: TObject);
     procedure   miMRUClick(Sender: TObject; const FileName: string);
     procedure   BuildThemePreviewMenu;
+    procedure   ToggleDesignerGrid(Sender: TObject);
 
   public
     {@VFD_HEAD_BEGIN: frmMain}
@@ -91,9 +93,11 @@ type
     helpmenu: TfpgPopupMenu;
     windowmenu: TfpgPopupMenu;
     previewmenu: TfpgPopupMenu;
+    btnGrid: TfpgButton;
     PanelMove: TfpgPanel;
     {@VFD_HEAD_END: frmMain}
     mru: TfpgMRU;
+    constructor Create(AOwner: TComponent); override;
     procedure   MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
     function    GetSelectedWidget: TVFDWidgetClass;
     procedure   SetSelectedWidget(wgc: TVFDWidgetClass);
@@ -410,8 +414,6 @@ begin
   btnSave.Left:= btnOpen.Left ;
   btnSave.UpdateWindowPosition;
 
-   btnToFront.Left := 83;
-   btnToFront.UpdateWindowPosition;
 
  filemenu.MenuItem(0).Visible:=false;
  filemenu.MenuItem(1).Visible:=false;
@@ -642,9 +644,6 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
-
-
-
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
@@ -718,16 +717,35 @@ begin
     OnClick   := @(maindsgn.OnSaveFile);
   end;
 
+  btnGrid := TfpgButton.Create(self);
+ with btnGrid do
+ begin
+ Name := 'btnGrid';
+ SetPosition(96, 33, 25, 24);
+ Text := '';
+ AllowAllUp := True;
+ FontDesc := '#Label1';
+ GroupIndex := 1;
+ Hint := 'Toggle designer grid';
+ ImageMargin := -1;
+ ImageName := 'vfd.grid';
+ ImageSpacing := 0;
+ TabOrder := 13;
+ Focusable := False;
+ AllowDown := True;
+ OnClick := @ToggleDesignerGrid;
+ end;
+
   btnToFront := TfpgButton.Create(self);
   with btnToFront do
   begin
     Name := 'btnToFront';
-    SetPosition(97, 33, 51, 24);
-    Text := 'to Front';
+    SetPosition(123, 33, 25, 24);
+    Text := '';
     FontDesc := '#Label1';
     Hint := 'Switch Designer Always-To-Front <> Normal';
     ImageMargin := -1;
-    ImageName := '';
+    ImageName := 'vfd.tofront';
     ImageSpacing := 0;
     TabOrder := 3;
     // ImageName := 'objectedit.bmp';
@@ -959,7 +977,8 @@ begin
   MainMenu.AddMenuItem('&Help', nil).SubMenu     := helpmenu;
   MainMenu.AddMenuItem('', nil) ;
 
-    if enableundo = true then MainMenu.MenuItem(1).Visible:= true else MainMenu.MenuItem(1).Visible:= false ;
+    if enableundo = true then MainMenu.MenuItem(1).Visible:= true else
+    MainMenu.MenuItem(1).Visible:= false ;
 
   FFileOpenRecent.SubMenu := miOpenRecentMenu;
   FlistUndo.SubMenu := listundomenu;
@@ -975,14 +994,14 @@ begin
       begin
      windowType := wtwindow ;
      MainMenu.MenuItem(7).Visible:=false;
-     btnToFront.Text:='to Front';
+    // btnToFront.Text:= 'toF' ;
    btnToFront.tag:=0;
       end
       else
        begin
      MainMenu.MenuItem(7).Visible:=true;
     MainMenu.MenuItem(7).Text:= WindowTitle;
-    btnToFront.Text:='Normal';
+    //btnToFront.Text:='toN';
    btnToFront.tag:=1;
      windowType := wtpopup ;
        end;
@@ -995,8 +1014,6 @@ begin
   btnOpen.Visible:=true;
   btnSave.Left:= 69 ;
   btnSave.UpdateWindowPosition;
-  btnToFront.Left := 97;
-  btnToFront.UpdateWindowPosition;
 
  filemenu.MenuItem(0).Visible:=true;
  filemenu.MenuItem(1).Visible:=true;
@@ -1017,6 +1034,30 @@ indexundo := 0 ;
  end;
 end;
 
+procedure TfrmMain.ToggleDesignerGrid(Sender: TObject);
+begin
+ maindsgn.ShowGrid := btnGrid.Down;
+end;
+
+procedure TfrmMain.FormShow(Sender: TObject);
+begin
+gINI.ReadFormState(self);
+UpdateWindowPosition;
+end;
+
+constructor TfrmMain.Create(AOwner: TComponent);
+begin
+inherited Create(AOwner);
+fpgImages.AddMaskedBMP( 'vfd.grid', @vfd_grid,
+sizeof(vfd_grid), 0, 0);
+
+fpgImages.AddMaskedBMP('vfd.tofront', @vfd_tofront,
+sizeof(vfd_tofront), 0, 0);
+
+
+
+OnShow := @FormShow;
+end;
 
 procedure TfrmMain.BeforeDestruction;
 begin
@@ -1070,7 +1111,6 @@ procedure  TfrmMain.ToFrontClick(Sender: TObject);
    else OnNevertofront(sender) ;
  end;
 
-
 procedure TfrmMain.OnAlwaysToFront(Sender: TObject);
 begin
    hide;
@@ -1078,7 +1118,7 @@ begin
     WindowType := wtpopup ;  // borderless, always on front but doesn't steal focus
     MainMenu.MenuItem(7).Visible:=true;
    MainMenu.MenuItem(7).Text:=  'Current file : ' + p + s + '     fpGUI designer_ext v' + program_version;    ;
-    btnToFront.Text:='Normal';
+   // btnToFront.Text:='toN';
    btnToFront.tag:=1;
  if idetemp = 1 then
   begin
@@ -1114,7 +1154,7 @@ begin
      fpgapplication.ProcessMessages;
       MainMenu.MenuItem(7).Text:= '';
       MainMenu.MenuItem(7).Visible:=false;
-        btnToFront.Text:='to Front';
+     //   btnToFront.Text:='toF';
    btnToFront.tag:=0;
   WindowType := wtwindow ;  // with borders, not on front.
   WindowAttributes := [];

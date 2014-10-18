@@ -135,8 +135,8 @@ type
   public
     {@VFD_HEAD_BEGIN: frmVFDSetup}
     lb1: TfpgLabel;
-    chlGrid: TfpgComboBox;
     btnOK: TfpgButton;
+    edtGridX: TfpgEditInteger;
     lblRecentFiles: TfpgLabel;
     tbMRUFileCount: TfpgTrackBar;
     chkFullPath: TfpgCheckBox;
@@ -507,8 +507,7 @@ begin
     frmMain.btnOpen.Visible := True;
     frmMain.btnSave.Left := 69;
     frmMain.btnSave.UpdateWindowPosition;
-    frmMain.btnToFront.Left := 97;
-    frmMain.btnToFront.UpdateWindowPosition;
+
     WindowAttributes := [];
     frmMain.filemenu.MenuItem(0).Visible := True;
     frmMain.filemenu.MenuItem(1).Visible := True;
@@ -559,7 +558,7 @@ begin
   CheckBox1.Checked := gINI.ReadBool('Options', 'EnableUndo', True);
   maxundo := TrackBarUndo.Position;
   FINIVersion := gINI.ReadInteger('Designer', 'Version', 0);
-  chlGrid.FocusItem := gINI.ReadInteger('Options', 'GridResolution', 2);
+  edtGridX.Value := gINI.ReadInteger('Options', 'GridResolution', 4);
   tbMRUFileCount.Position := gINI.ReadInteger('Options', 'MRUFileCount', 4);
   chkFullPath.Checked := gINI.ReadBool('Options', 'ShowFullPath', True);
   chkonlyonce.Checked := gINI.ReadBool('Options', 'RunOnlyOnce', true);
@@ -583,7 +582,7 @@ begin
     gINI.WriteString('Path', 'Application', ParamStr(0));
 
   gINI.WriteInteger('Designer', 'Version', cDesignerINIVersion);
-  gINI.WriteInteger('Options', 'GridResolution', chlGrid.FocusItem);
+  gINI.WriteInteger('Options', 'GridResolution', edtGridX.Value);
   gINI.WriteInteger('Options', 'MRUFileCount', tbMRUFileCount.Position);
   gINI.WriteInteger('Options', 'MaxUndo', TrackBarUndo.Position);
   gINI.WriteBool('Options', 'EnableUndo', CheckBox1.Checked);
@@ -686,20 +685,18 @@ begin
     Text := 'Grid resolution:';
   end;
 
-  chlGrid := TfpgComboBox.Create(self);
-  with chlGrid do
-  begin
-    Name := 'chlGrid';
-    SetPosition(144, 20, 52, 24);
-    ExtraHint := '';
-    FontDesc := '#List';
-    Hint := '';
-    Items.Add('1');
-    Items.Add('4');
-    Items.Add('8');
-    FocusItem := -1;
-    TabOrder := 1;
-  end;
+   edtGridX := TfpgEditInteger.Create(self);
+with edtGridX do
+ begin
+ Name := 'edtGridX';
+ SetPosition(130, 20, 35, 24);
+ FontDesc := '#Edit1';
+ Hint := '';
+ MaxValue := 10;
+ MinValue := 1;
+ TabOrder := 18;
+ Value := 4;
+ end;
 
   btnOK := TfpgButton.Create(self);
   with btnOK do
