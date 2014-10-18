@@ -33,6 +33,7 @@ type
   protected
     FValueBar: TfpgValueBar;
     FHue: longint;
+    FBorder: boolean;
     FSaturation: double;
     FMarginWidth: longint;
     FCursorSize: longint;
@@ -43,6 +44,7 @@ type
     procedure   HSFromPoint(X, Y: longint; out H: longint; out S: double);
     procedure   DrawCursor;
     procedure   SetMarginWidth(NewWidth: longint);
+    procedure   SetBorder(NewBorder: boolean);
     procedure   SetCursorSize(NewSize: longint);
     procedure   SetValueBar(AValueBar: TfpgValueBar);
     procedure   SetWhiteAreaPercent(WhiteAreaPercent: longint);
@@ -65,6 +67,7 @@ type
     property    Align;
     property    BackgroundColor;
     property    Enabled;
+    property    Border: boolean Read FBorder Write SetBorder default false;
     property    ValueBar: TfpgValueBar Read FValueBar Write SetValueBar;
     property    MarginWidth: longint Read FMarginWidth Write SetMarginWidth default 5;
     property    CursorSize: longint Read FCursorSize Write SetCursorSize default 5;
@@ -251,8 +254,11 @@ begin
     Canvas.DrawImage(FMarginWidth, FMarginWidth, FImage);
   end;
     // draw border-circle
-  Canvas.Color := clblack;
-  Canvas.DrawArc(FMarginWidth, FMarginWidth, DrawWidth, DrawHeight, 0, 360);
+    if FBorder = true then
+    begin
+ Canvas.Color := clblack;
+ Canvas.DrawArc(FMarginWidth, FMarginWidth, DrawWidth, DrawHeight, 0, 360);
+    end;
   DrawCursor;
 end;
 
@@ -401,6 +407,12 @@ procedure TfpgColorWheel.SetBackgroundColor(const AValue: TfpgColor);
 begin
   FRecalcWheel := True;
   inherited SetBackgroundColor(AValue);
+end;
+
+procedure  TfpgColorWheel.SetBorder(NewBorder: boolean);
+begin
+FBorder := NewBorder;
+Invalidate;
 end;
 
 procedure TfpgColorWheel.Notification(AComponent: TComponent; Operation: TOperation);
