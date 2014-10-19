@@ -596,7 +596,7 @@ if fileexists(pchar(dataf)) then
  end;
    end;
       CloseFile(f);
-      UpdateWindowPosition;
+       UpdateWindowPosition;
          end;
  end;
 
@@ -770,7 +770,7 @@ begin
     Name := 'wgpalette';
     SetPosition(152, 28, 600, 62);
     Anchors := [anLeft,anRight,anTop,anBottom];
-    //    Width := self.Width - Left - 3;
+     Width := self.Width - 150;
     Focusable := False;
     OnResize := @PaletteBarResized;
   end;
@@ -1053,6 +1053,7 @@ indexundo := 0 ;
   InitMessage ;
   StartMessage(@onMessagePost, 1000);
  end;
+ PaletteBarResized(self);
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
@@ -1638,7 +1639,7 @@ var
 begin
   x := 0;
   y := 0;
-  wgpalette.Width := width - 170;
+  wgpalette.Width := width - 160;
   for n := 0 to wgPalette.ComponentCount-1 do
   begin
     btn := wgPalette.Components[n] as TwgPaletteButton;

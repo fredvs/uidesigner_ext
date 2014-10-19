@@ -50,8 +50,8 @@ type
     edB: TfpgSpinEdit;
     Label7: TfpgLabel;
     Label8: TfpgLabel;
-    l_Hexa: TfpgLabel;
-    e_Hexa: TfpgEdit;
+    lblHexa: TfpgLabel;
+    edHexa: TfpgEdit;
     chkCrossHair: TfpgCheckBox;
 
     {@VFD_HEAD_END: WheelColorForm}
@@ -437,13 +437,13 @@ begin
   ColorWheel1.SetSelectedColor(c);
   // This will trigger ColorWheel and ValueBar OnChange event
   FViaRGB := False;
-  e_Hexa.Text := Hexa(rgb.Red, rgb.Green, rgb.Blue);
+  edHexa.Text := Hexa(rgb.Red, rgb.Green, rgb.Blue);
 
 end;
 
 procedure TWheelColorForm.ConvertToRGB(Sender: TObject);
 begin
-  if ConvertToInt(e_Hexa.Text) = True then
+  if ConvertToInt(edHexa.Text) = True then
   begin
     edR.Value := ired;
     edG.Value := igreen;
@@ -454,7 +454,7 @@ end;
 
 procedure TWheelColorForm.E_HexaKeyChar(Sender: TObject; AChar: TfpgChar; var Consumed: boolean);
 begin
-if Length(E_Hexa.Text)= 0 then
+if Length(EdHexa.Text)= 0 then
 begin
   if AChar<> '$' then
     Consumed:= True;
@@ -467,7 +467,7 @@ end;
 procedure TWheelColorForm.E_HexaKeyPress(Sender: TObject; var KeyCode: word; var ShiftState: TShiftState;
           var Consumed: boolean);
 begin
-  if ((KeyCode= KeyReturn) or (KeyCode= KeyPEnter)) and (Length(E_Hexa.Text)= 7) then
+  if ((KeyCode= KeyReturn) or (KeyCode= KeyPEnter)) and (Length(EdHexa.Text)= 7) then
   begin
     ConvertToRGB(self);
   end;
@@ -520,12 +520,12 @@ begin
   edR.Value := rgb.Red;
   edG.Value := rgb.Green;
   edB.Value := rgb.Blue;
-  e_Hexa.Text := Hexa(rgb.Red, rgb.Green, rgb.Blue);
+  edHexa.Text := Hexa(rgb.Red, rgb.Green, rgb.Blue);
 end;
 
 procedure TWheelColorForm.ColorBoxChange(Sender: TObject);
 begin
-  e_Hexa.Text := TColor(ColorList[ColorBox.FocusItem]).Value ;
+  edHexa.Text := TColor(ColorList[ColorBox.FocusItem]).Value ;
  ConvertToRGB(self);
 end;
 
@@ -560,7 +560,18 @@ begin
   begin
     Name := 'ColorWheel1';
     //Border:=true;
-    SetPosition(20, 20, 272, 244);
+    SetPosition(20, 20, 272, 250);
+  end;
+
+   chkCrossHair := TfpgCheckBox.Create(self);
+  with chkCrossHair do
+  begin
+    Name := 'chkCrossHair';
+    SetPosition(30, 270, 110, 20);
+    FontDesc := '#Label1';
+    TabOrder := 20;
+    Text := 'Large Cross';
+    OnChange := @chkCrossHairChange;
   end;
 
    panel1 := Tfpgpanel.Create(self);
@@ -755,20 +766,21 @@ begin
     SetPosition(20, 350, 100, 90);
   end;
 
-  l_Hexa := Tfpglabel.Create(self);
-  with l_Hexa do
+  lblHexa := Tfpglabel.Create(self);
+  with lblHexa do
   begin
-    Name := 'l_Hexa';
-    SetPosition(35, 297, 90, 16);
+    Name := 'lblHexa';
+    SetPosition(20, 297, 100, 16);
     FontDesc := '#Label1';
     Hint := '';
-    Text := 'Hexadec';
+    lblHexa.Alignment:=taCenter;
+    Text := 'Hexadecimal';
   end;
 
-  e_Hexa := Tfpgedit.Create(self);
-  with e_Hexa do
+  edHexa := Tfpgedit.Create(self);
+  with edHexa do
   begin
-    Name := 'e_Hexa';
+    Name := 'edHexa';
     SetPosition(20, 315, 100, 26);
     FontDesc := '#Label1';
     Hint := 'Mouse out change edit...';
@@ -800,18 +812,7 @@ begin
     Text := 'Bright';
   end;
 
-  chkCrossHair := TfpgCheckBox.Create(self);
-  with chkCrossHair do
-  begin
-    Name := 'chkCrossHair';
-    SetPosition(145, 420, 120, 20);
-    FontDesc := '#Label1';
-    TabOrder := 20;
-    Text := 'Large CrossHair';
-    OnChange := @chkCrossHairChange;
-  end;
-
-   for i := 0 to Pred(ColorList.Count) do
+    for i := 0 to Pred(ColorList.Count) do
     ColorBox.Items.Add(TColor(ColorList[i]).Name);
   fbright := 1 ;
   updatewindowposition;
