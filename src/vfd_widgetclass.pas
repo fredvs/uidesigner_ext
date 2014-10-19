@@ -15,7 +15,7 @@
       Main window functionality and designer class.
 }
 
-unit vfdwidgetclass;
+unit vfd_widgetclass;
 
 {$mode objfpc}{$H+}
 

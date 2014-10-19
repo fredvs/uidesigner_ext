@@ -21,7 +21,7 @@ fiens@hotmail.com
       This unit defines various forms/dialogs used in the UI Designer.
 }
 
-unit vfdforms;
+unit frm_vfdforms;
 
 {$mode objfpc}{$H+}
 
@@ -41,7 +41,7 @@ uses
   fpg_dialogs,
   fpg_trackbar,
   fpg_checkbox,
-  newformdesigner,
+  frm_main_designer,
   fpg_tree;
 
 type
@@ -182,7 +182,7 @@ uses
   fpg_constants,
   fpg_utils,
   vfd_constants,
-  vfdprops; // used to get Object Inspector defaults
+  vfd_props; // used to get Object Inspector defaults
 
 //const
  // cDesignerINIVersion = 1;
@@ -489,12 +489,12 @@ end;
 
 procedure TfrmVFDSetup.UndoLook(Sender: TObject);
 begin
-  frmMain.Hide;
+  frmMainDesigner.Hide;
   if checkbox1.Checked = False then
-    frmMain.MainMenu.MenuItem(1).Visible := True
+    frmMainDesigner.MainMenu.MenuItem(1).Visible := True
   else
-    frmMain.MainMenu.MenuItem(1).Visible := False;
-  frmMain.Show;
+    frmMainDesigner.MainMenu.MenuItem(1).Visible := False;
+  frmMainDesigner.Show;
 end;
 
 procedure TfrmVFDSetup.IdeIntegration(Sender: TObject);
@@ -502,28 +502,28 @@ begin
   if Sender = rbnone then
   begin
     rbnone.Checked := True;
-    frmMain.btnOpen.Visible := True;
-    frmMain.btnSave.Left := 69;
-    frmMain.btnSave.UpdateWindowPosition;
+    frmMainDesigner.btnOpen.Visible := True;
+    frmMainDesigner.btnSave.Left := 69;
+    frmMainDesigner.btnSave.UpdateWindowPosition;
 
     WindowAttributes := [];
-    frmMain.filemenu.MenuItem(0).Visible := True;
-    frmMain.filemenu.MenuItem(1).Visible := True;
-    // frmMain.filemenu.MenuItem(8).Visible:=true;
-    frmMain.filemenu.MenuItem(2).Visible := True;
-    // frmMain.filemenu.MenuItem(9).Visible:=true;
+    frmMainDesigner.filemenu.MenuItem(0).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(1).Visible := True;
+    // frmMainDesigner.filemenu.MenuItem(8).Visible:=true;
+    frmMainDesigner.filemenu.MenuItem(2).Visible := True;
+    // frmMainDesigner.filemenu.MenuItem(9).Visible:=true;
   end;
 
   if Sender = rbtyphon then
   begin
     rbtyphon.Checked := True;
-    frmmain.LoadIDEparameters(2);
+    frmMainDesigner.LoadIDEparameters(2);
   end;
 
   if Sender = rblaz then
   begin
     rblaz.Checked := True;
-    frmmain.LoadIDEparameters(1);
+    frmMainDesigner.LoadIDEparameters(1);
   end;
 end;
 
@@ -645,9 +645,9 @@ begin
     fpgapplication.ProcessMessages;
     gINI.WriteBool('Options', 'AlwaystoFront', chkAlwaystoFront.Checked);
     if chkAlwaystoFront.Checked = False then
-      frmMain.onnevertofront(Sender)
+      frmMainDesigner.onnevertofront(Sender)
     else
-      frmMain.onalwaystofront(Sender);
+      frmMainDesigner.onalwaystofront(Sender);
     if rblaz.Checked = True then
       IdeIntegration(rblaz);
     if rbtyphon.Checked = True then

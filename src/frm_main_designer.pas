@@ -22,7 +22,7 @@ fiens@hotmail.com
 }
 
 
-unit newformdesigner;
+unit frm_main_designer;
 
 {$mode objfpc}{$H+}
 
@@ -48,8 +48,8 @@ uses
   fpg_menu,
   fpg_mru,
   fpg_hyperlink,
-  vfdwidgetclass,
-  vfdwidgets;
+  vfd_widgetclass,
+  vfd_widgets;
 
 type
 
@@ -65,7 +65,7 @@ type
   end;
   
 
-  TfrmMain = class(TfpgForm)
+  TfrmMainDesigner = class(TfpgForm)
   private
     FFileOpenRecent: TfpgMenuItem;
     FlistUndo: TfpgMenuItem;
@@ -80,7 +80,7 @@ type
     procedure   ToggleDesignerGrid(Sender: TObject);
 
   public
-    {@VFD_HEAD_BEGIN: frmMain}
+    {@VFD_HEAD_BEGIN: frmMainDesigner}
     MainMenu: TfpgMenuBar;
     btnNewForm: TfpgButton;
     btnOpen: TfpgButton;
@@ -100,7 +100,7 @@ type
     previewmenu: TfpgPopupMenu;
     btnGrid: TfpgButton;
     PanelMove: TfpgPanel;
-    {@VFD_HEAD_END: frmMain}
+    {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
     procedure   MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
@@ -208,9 +208,12 @@ type
 
 {@VFD_NEWFORM_DECL}
 
+const
+ ext_version : string = '1.4' ;
+
 var
   frmProperties: TfrmProperties;
-  frmMain: TfrmMain;
+  frmMainDesigner: TfrmMainDesigner;
   ifonlyone : boolean;
   PropList: TPropertyList;
   oriMousePos: TPoint;
@@ -225,7 +228,7 @@ uses
   fpg_dialogs,
   fpg_constants,
   fpg_stylemanager,
-  vfdmain,
+  vfd_main,
   vfd_constants;
 
 // Anchor images
@@ -238,7 +241,8 @@ uses
 
 procedure TfrmAbout.SetupCaptions;
 begin
-  lblVersion.Text := Format(rsVersion, [cAppVersion]);
+  //lblVersion.Text := Format(rsVersion, [cAppVersion]);
+  lblVersion.Text := 'Version: ' +  ext_version ;
   lblURL.URL := fpGUIWebsite;
   lblURL.Text := fpGUIWebsite;
   lblCompiled.Text := Format(rsCompiledOn, [{$I %date%} + ' ' + {$I %time%}]);
@@ -268,7 +272,7 @@ begin
    {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(378, 267, 276, 330);
-  WindowTitle := 'About designer_ext';
+  WindowTitle := 'About Designer_ext';
   Hint := '';
   WindowPosition := wpScreenCenter;
   Sizeable := False;
@@ -378,7 +382,7 @@ begin
   end;
 end;
 
-procedure   TfrmMain.MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
+procedure   TfrmMainDesigner.MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
   var
   x : integer;
   begin
@@ -398,7 +402,7 @@ procedure   TfrmMain.MainCloseQueryEvent(Sender: TObject; var CanClose: boolean)
      inc(x);
      end;
     frmProperties.close;
-     frmMain.hide;
+     frmMainDesigner.hide;
     end else
     begin
     CanClose := true;
@@ -406,7 +410,7 @@ procedure   TfrmMain.MainCloseQueryEvent(Sender: TObject; var CanClose: boolean)
     end;
     end;
 
-procedure TfrmMain.LoadIDEparameters(ide :integer) ;
+procedure TfrmMainDesigner.LoadIDEparameters(ide :integer) ;
 var
 f : textfile ;
 dataf, dataf2 : string ;
@@ -430,7 +434,7 @@ begin
   begin
 {$if defined(cpu64)}
 {$IFDEF Windows}
- dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner_ext',GetAppConfigDir(false))-1)
+ dataf := copy(GetAppConfigDir(false),1,pos('Local\designer_ext',GetAppConfigDir(false))-1)
            +  'Roaming\typhon64\environmentoptions.xml';
   {$ENDIF}
 {$IFDEF unix}
@@ -439,7 +443,7 @@ dataf := GetUserDir +'.typhon64/environmentoptions.xml' ;
 
 {$else}
 {$IFDEF Windows}
-dataf := copy(GetAppConfigDir(false),1,pos('Local\uidesigner_ext',GetAppConfigDir(false))-1)
+dataf := copy(GetAppConfigDir(false),1,pos('Local\designer_ext',GetAppConfigDir(false))-1)
            +  'Roaming\typhon32\environmentoptions.xml';
   {$ENDIF}
 {$IFDEF unix}
@@ -452,7 +456,7 @@ dataf := GetUserDir +'.typhon32/environmentoptions.xml' ;
  if ide = 1 then
     begin
 {$IFDEF Windows}
-dataf := copy(GetAppConfigDir(false),1,pos('uidesigner_ext',GetAppConfigDir(false))-1)
+dataf := copy(GetAppConfigDir(false),1,pos('designer_ext',GetAppConfigDir(false))-1)
           +  'lazarus\environmentoptions.xml';
  {$ENDIF}
 {$IFDEF unix}
@@ -596,7 +600,7 @@ if fileexists(pchar(dataf)) then
          end;
  end;
 
-procedure TfrmMain.onMessagePost;
+procedure TfrmMainDesigner.onMessagePost;
 begin
 if theMessage = 'quit' then
  close else
@@ -608,37 +612,37 @@ if (FileExists(theMessage)) or (theMessage = 'closeall') then
 BringToFront;
 end;
 
-procedure TfrmMain.OnLoadUndo(Sender: TObject);
+procedure TfrmMainDesigner.OnLoadUndo(Sender: TObject);
  begin
     if Sender is TfpgMenuItem then begin
  maindsgn.loadundo(TfpgMenuItem(Sender).Tag) ;
       end;
   end;
 
-procedure TfrmMain.OnIndexUndo(Sender: TObject);
+procedure TfrmMainDesigner.OnIndexUndo(Sender: TObject);
  begin
- frmmain.undomenu.MenuItem(1).Enabled := true;
+ frmMainDesigner.undomenu.MenuItem(1).Enabled := true;
 if indexundo < length(ArrayUndo) -1  then
 begin
 inc(indexundo);
 maindsgn.loadundo(indexundo) ;
 
-end else  frmmain.undomenu.MenuItem(0).Enabled := false;
+end else  frmMainDesigner.undomenu.MenuItem(0).Enabled := false;
 
  end;
 
-procedure TfrmMain.OnIndexRedo(Sender: TObject);
+procedure TfrmMainDesigner.OnIndexRedo(Sender: TObject);
  begin
-  frmmain.undomenu.MenuItem(0).Enabled := true;
+  frmMainDesigner.undomenu.MenuItem(0).Enabled := true;
 if indexundo > 0 then
 begin
 dec(indexundo);
 maindsgn.loadundo(indexundo) ;
-end else  frmmain.undomenu.MenuItem(1).Enabled := false;
+end else  frmMainDesigner.undomenu.MenuItem(1).Enabled := false;
  end;
 
 
-procedure TfrmMain.AfterCreate;
+procedure TfrmMainDesigner.AfterCreate;
 var
   n, x, y , wscreen: integer;
   wgc: TVFDWidgetClass;
@@ -653,7 +657,7 @@ begin
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
   wscreen := fpgApplication.ScreenWidth;
-  {@VFD_BODY_BEGIN: frmMain}
+  {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMain';
  // SetPosition(96, 118, 800, 92);
   SetPosition(338, 140, 754, 92);
@@ -861,7 +865,7 @@ begin
     Name := 'helpmenu';
     SetPosition(448, 52, 120, 20);
     AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
-    AddMenuItem('About designer_ext...', '', @miHelpAboutClick);
+    AddMenuItem('About Designer_ext...', '', @miHelpAboutClick);
    end;
 
 
@@ -891,25 +895,25 @@ begin
     AddMenuItem('Object Inspector', '', @OnObjInspect);
     AddMenuItem('-', '', nil) ;
     MenuItem(1).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(2).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(3).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(4).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(5).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(6).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(7).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(8).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(9).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(10).Visible:=false;
-    AddMenuItem('', '',@frmmain.OnFormDesignShow);
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
     MenuItem(11).Visible:=false;
     MenuItem(2).Tag:=0;
     MenuItem(3).Tag:=1;
@@ -947,7 +951,7 @@ begin
     OnMouseUp := @onClickUpPanel ;
    end;
 
-  {@VFD_BODY_END: frmMain}
+  {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
 
   { Build component palette }
@@ -990,8 +994,8 @@ begin
   MainMenu.AddMenuItem('&Settings', nil).SubMenu := setmenu;
    MainMenu.AddMenuItem('&Preview', nil).SubMenu  := previewmenu;
    MainMenu.AddMenuItem('&Window', nil).SubMenu  := windowmenu;
-  MainMenu.AddMenuItem('&Help', nil).SubMenu     := helpmenu;
-  MainMenu.AddMenuItem('&Tools', nil).SubMenu     := toolsmenu;
+   MainMenu.AddMenuItem('&Tools', nil).SubMenu     := toolsmenu;
+   MainMenu.AddMenuItem('&Help', nil).SubMenu     := helpmenu;
   MainMenu.AddMenuItem('', nil) ;
 
     if enableundo = true then MainMenu.MenuItem(1).Visible:= true else
@@ -1051,18 +1055,18 @@ indexundo := 0 ;
  end;
 end;
 
-procedure TfrmMain.ToggleDesignerGrid(Sender: TObject);
+procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
 begin
  maindsgn.ShowGrid := btnGrid.Down;
 end;
 
-procedure TfrmMain.FormShow(Sender: TObject);
+procedure TfrmMainDesigner.FormShow(Sender: TObject);
 begin
 gINI.ReadFormState(self);
 UpdateWindowPosition;
 end;
 
-constructor TfrmMain.Create(AOwner: TComponent);
+constructor TfrmMainDesigner.Create(AOwner: TComponent);
 begin
 inherited Create(AOwner);
 fpgImages.AddMaskedBMP( 'vfd.grid', @vfd_grid,
@@ -1076,7 +1080,7 @@ sizeof(vfd_tofront), 0, 0);
 OnShow := @FormShow;
 end;
 
-procedure TfrmMain.BeforeDestruction;
+procedure TfrmMainDesigner.BeforeDestruction;
 begin
   gINI.WriteFormState(self);
   gINI.WriteInteger('Options', 'IDE', idetemp);
@@ -1084,7 +1088,7 @@ begin
   inherited BeforeDestruction;
 end;
 
-procedure TfrmMain.OnPaletteClick(Sender: TObject);
+procedure TfrmMainDesigner.OnPaletteClick(Sender: TObject);
 var
   s: string;
   i: integer;
@@ -1100,18 +1104,18 @@ begin
   chlPalette.FocusItem := i;
 end;
 
-procedure TfrmMain.onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
+procedure TfrmMainDesigner.onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
  begin
  oriMousePos := AMousePos;
  PanelMove.Tag:=1;
   end;
 
-procedure TfrmMain.onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
+procedure TfrmMainDesigner.onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
  begin
   PanelMove.Tag:=0;
   end;
 
-procedure TfrmMain.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint) ;
+procedure TfrmMainDesigner.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint) ;
  begin
   if PanelMove.Tag = 1 then
   begin
@@ -1122,19 +1126,19 @@ procedure TfrmMain.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const A
   end;
  end;
 
-procedure  TfrmMain.ToFrontClick(Sender: TObject);
+procedure  TfrmMainDesigner.ToFrontClick(Sender: TObject);
  begin
    if  btnToFront.Tag = 0 then Onalwaystofront(sender)
    else OnNevertofront(sender) ;
  end;
 
-procedure TfrmMain.OnAlwaysToFront(Sender: TObject);
+procedure TfrmMainDesigner.OnAlwaysToFront(Sender: TObject);
 begin
    hide;
     fpgapplication.ProcessMessages;
-    WindowType := wtpopup ;  // borderless, always on front but doesn't steal focus
+    WindowType := wtpopup ;
     MainMenu.MenuItem(7).Visible:=true;
-   MainMenu.MenuItem(7).Text:=  'Current file : ' + p + s + '     fpGUI designer_ext v' + program_version;    ;
+   MainMenu.MenuItem(7).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' +  ext_version;    ;
    // btnToFront.Text:='toN';
    btnToFront.tag:=1;
  if idetemp = 1 then
@@ -1165,7 +1169,7 @@ UpdateWindowPosition;
    frmProperties.Show;
    end;
 
-procedure TfrmMain.OnNeverToFront(Sender: TObject);
+procedure TfrmMainDesigner.OnNeverToFront(Sender: TObject);
 begin
    hide;
      fpgapplication.ProcessMessages;
@@ -1204,19 +1208,19 @@ begin
    frmProperties.Show;
   end;
 
-procedure TfrmMain.OnHideClick(Sender: TObject);
+procedure TfrmMainDesigner.OnHideClick(Sender: TObject);
 
 begin
    hide;
 
  WindowAttributes := [waBorderless];
- MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     designer_ext'  ;
+ MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     Designer_ext'  ;
 
  show;
 
 end;
 
-procedure TfrmMain.OnShowClick(Sender: TObject);
+procedure TfrmMainDesigner.OnShowClick(Sender: TObject);
 
 begin
     hide;
@@ -1226,14 +1230,14 @@ begin
 
 end;
 
-procedure TfrmMain.OnObjInspect(Sender: TObject);
+procedure TfrmMainDesigner.OnObjInspect(Sender: TObject);
 begin
    frmProperties.hide;
    fpgapplication.ProcessMessages;
    frmProperties.Show;
  end;
 
-procedure TfrmMain.OnFormDesignShow(Sender: TObject);
+procedure TfrmMainDesigner.OnFormDesignShow(Sender: TObject);
 begin
   if Sender is TfpgMenuItem then begin
   ArrayFormDesign[TfpgMenuItem(Sender).Tag].Form.Hide;
@@ -1627,7 +1631,7 @@ begin
   editor.SetPosition(x, editor.Top, Width - ScrollBarWidth - x, editor.Height);
 end;
 
-procedure TfrmMain.PaletteBarResized(Sender: TObject);
+procedure TfrmMainDesigner.PaletteBarResized(Sender: TObject);
 var
   btn: TwgPaletteButton;
   x, y, n: integer;
@@ -1650,7 +1654,7 @@ begin
   end;
  end;
 
-procedure TfrmMain.OnStyleChange(Sender: TObject);
+procedure TfrmMainDesigner.OnStyleChange(Sender: TObject);
 var
   x : integer;
 begin
@@ -1682,7 +1686,7 @@ TfpgMenuItem(Sender).Checked:= true;
 
 end;
 
-procedure TfrmMain.BuildThemePreviewMenu;
+procedure TfrmMainDesigner.BuildThemePreviewMenu;
 var
   sl: TStringList;
   i : integer;
@@ -1707,17 +1711,17 @@ begin
 
 end;
 
-procedure TfrmMain.miHelpAboutClick(Sender: TObject);
+procedure TfrmMainDesigner.miHelpAboutClick(Sender: TObject);
 begin
   TfrmAbout.Execute;
 end;
 
-procedure TfrmMain.miHelpAboutGUI(Sender: TObject);
+procedure TfrmMainDesigner.miHelpAboutGUI(Sender: TObject);
 begin
 TfpgMessageDialog.AboutFPGui;
 end;
 
-procedure TfrmMain.micolorwheel(Sender: TObject);
+procedure TfrmMainDesigner.micolorwheel(Sender: TObject);
 var
   frm: TWheelColorForm;
 begin
@@ -1725,7 +1729,7 @@ begin
   frm.Show;
 end;
 
-procedure TfrmMain.miimageconv(Sender: TObject);
+procedure TfrmMainDesigner.miimageconv(Sender: TObject);
 var
   frm: TImageConvert;
 begin
@@ -1734,14 +1738,14 @@ begin
 end;
 
 
-procedure TfrmMain.miMRUClick(Sender: TObject; const FileName: string);
+procedure TfrmMainDesigner.miMRUClick(Sender: TObject; const FileName: string);
 begin
   maindsgn.EditedFileName := FileName;
   maindsgn.OnLoadFile(maindsgn);
 end;
 
 
-function TfrmMain.GetSelectedWidget: TVFDWidgetClass;
+function TfrmMainDesigner.GetSelectedWidget: TVFDWidgetClass;
 begin
   if chlPalette.FocusItem > 0 then
     Result := TVFDWidgetClass(chlPalette.Items.Objects[chlPalette.FocusItem])
@@ -1749,7 +1753,7 @@ begin
     Result := nil;
 end;
 
-procedure TfrmMain.SetSelectedWidget(wgc: TVFDWidgetClass);
+procedure TfrmMainDesigner.SetSelectedWidget(wgc: TVFDWidgetClass);
 var
   n: integer;
 begin

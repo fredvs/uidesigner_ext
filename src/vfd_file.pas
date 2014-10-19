@@ -16,7 +16,7 @@
       marker searching.
 }
 
-unit vfdfile;
+unit vfd_file;
 
 {$mode objfpc}{$H+}
 
@@ -66,7 +66,7 @@ implementation
 
 uses
   fpg_iniutils,
-  vfdutils;
+  vfd_utils;
 
 const
   cBlockPrefix = '{@VFD_';

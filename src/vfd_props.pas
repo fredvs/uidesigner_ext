@@ -15,7 +15,7 @@
       Property editors.
 }
 
-unit vfdprops;
+unit vfd_props;
 
 {$mode objfpc}{$H+}
 
@@ -27,7 +27,7 @@ uses
   fpg_base,
   fpg_main,
   fpg_widget,
-  vfdwidgetclass,
+  vfd_widgetclass,
   fpg_edit,
   fpg_button,
   fpg_combobox;
@@ -174,8 +174,8 @@ implementation
 
 uses
   TypInfo,
-  vfdformparser,
-  vfdeditors,
+  vfd_formparser,
+  vfd_editors,
   vfd_constants,
   fpg_dialogs;
 

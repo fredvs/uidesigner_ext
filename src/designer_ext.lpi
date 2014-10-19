@@ -11,7 +11,7 @@
       </Flags>
       <SessionStorage Value="None"/>
       <MainUnit Value="0"/>
-      <Title Value="uidesigner_ext"/>
+      <Title Value="designer_ext"/>
       <UseAppBundle Value="False"/>
     </General>
     <VersionInfo>
@@ -38,7 +38,7 @@
     </RequiredPackages>
     <Units Count="16">
       <Unit0>
-        <Filename Value="uidesigner_ext.pas"/>
+        <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
@@ -106,7 +106,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="uidesigner_ext"/>
+      <Filename Value="designer_ext"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

@@ -1,3 +1,9 @@
+{ 
+This is the extended version of fpGUI uidesigner.
+With window list, undo feature, integration into IDE, editor launcher,...
+Fred van Stappen
+fiens@hotmail.com
+}
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
@@ -16,7 +22,7 @@
 }
 
 
-unit vfddesigner;
+unit vfd_designer;
 
 {$mode objfpc}{$H+}
 
@@ -34,12 +40,12 @@ uses
   fpg_memo,
   fpg_combobox,
   fpg_menu,
-  vfdresizer,
-  vfdforms,
-  vfdeditors,
-  vfdwidgetclass,
-  vfdwidgets,
-  newformdesigner;
+  vfd_resizer,
+  frm_vfdforms,
+  vfd_editors,
+  vfd_widgetclass,
+  vfd_widgets,
+  frm_main_designer;
 
 type
 
@@ -150,8 +156,8 @@ implementation
 
 uses
   TypInfo,
-  vfdmain,
-  vfdutils,
+  vfd_main,
+  vfd_utils,
   vfd_constants,
   fpg_tree;
 
@@ -330,7 +336,7 @@ begin
 
   shift := (ssShift in msg.Params.mouse.shiftstate);
 
-  wgc := frmMain.SelectedWidget;
+  wgc := frmMainDesigner.SelectedWidget;
   pwg := TfpgWidget(msg.dest);
   wgd := WidgetDesigner(TfpgWidget(msg.dest));
   if wgd = nil then
@@ -364,7 +370,7 @@ begin
       if not shift then
       begin
         FForm.MouseCursor      := mcDefault;
-        frmMain.SelectedWidget := nil;
+        frmMainDesigner.SelectedWidget := nil;
       end;
     end;
   end

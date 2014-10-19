@@ -16,7 +16,7 @@
       form .pas file.
 }
 
-unit vfdformparser;
+unit vfd_formparser;
 
 {$mode objfpc}{$H+}
 
@@ -29,9 +29,9 @@ uses
   fpg_main,
   fpg_widget,
   fpg_form,
-  vfddesigner,
-  vfdwidgetclass,
-  vfdwidgets;
+  vfd_designer,
+  vfd_widgetclass,
+  vfd_widgets;
 
 type
   TVFDFormParser = class(TObject)

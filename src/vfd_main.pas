@@ -21,7 +21,7 @@ fiens@hotmail.com
       Main window functionality and designer class.
 }
 
-unit vfdmain;
+unit vfd_main;
 
 {$mode objfpc}{$H+}
 
@@ -34,12 +34,12 @@ uses
   fpg_base,
   fpg_main,
   fpg_constants,
-  vfdprops,
-  vfdforms,
-  vfddesigner,
-  vfdfile,
+  vfd_props,
+  frm_vfdforms,
+  vfd_designer,
+  vfd_file,
   fpg_dialogs,
-  newformdesigner;
+  frm_main_designer;
 
 const
   program_version = FPGUI_VERSION;
@@ -116,7 +116,7 @@ uses
  fpg_iniutils,
  fpg_utils,
  vfd_constants,
- vfdformparser;
+ vfd_formparser;
 
 var
   DefaultPasExt: string = '.pas';
@@ -137,18 +137,18 @@ begin
   end;
   FDesigners.Clear;
   n := 0;
-  frmmain.windowmenu.MenuItem(1).Visible := False;
+  frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
 
   for n := 0 to 9 do
   begin
-    frmmain.windowmenu.MenuItem(n + 2).Visible := False;
-    frmmain.windowmenu.MenuItem(n + 2).Text := '';
+    frmMainDesigner.windowmenu.MenuItem(n + 2).Visible := False;
+    frmMainDesigner.windowmenu.MenuItem(n + 2).Text := '';
   end;
 
   for n := 0 to 99 do
   begin
-    frmmain.listundomenu.MenuItem(n).Visible := False;
-    frmmain.listundomenu.MenuItem(n).Text := '';
+    frmMainDesigner.listundomenu.MenuItem(n).Visible := False;
+    frmMainDesigner.listundomenu.MenuItem(n).Text := '';
   end;
   SetLength(ArrayFormDesign, 0);
 
@@ -159,9 +159,9 @@ begin
       deletefile(ArrayUndo[n].FileName);
   end;
   indexundo := 0;
-  frmmain.undomenu.MenuItem(0).Enabled := False;
-  frmmain.undomenu.MenuItem(1).Enabled := False;
-  frmmain.undomenu.MenuItem(3).Enabled := False;
+  frmMainDesigner.undomenu.MenuItem(0).Enabled := False;
+  frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
+  frmMainDesigner.undomenu.MenuItem(3).Enabled := False;
   SetLength(ArrayUndo, 0);
   OnNewForm(Sender);
 end;
@@ -198,7 +198,7 @@ begin
   begin
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
-      frmmain.Hide;
+      frmMainDesigner.Hide;
       frmProperties.Hide;
     end;
     Exit;
@@ -206,14 +206,14 @@ begin
 
   for n := 0 to 9 do
   begin
-    frmmain.windowmenu.MenuItem(n + 2).Visible := False;
-    frmmain.windowmenu.MenuItem(n + 2).Text := '';
+    frmMainDesigner.windowmenu.MenuItem(n + 2).Visible := False;
+    frmMainDesigner.windowmenu.MenuItem(n + 2).Text := '';
   end;
 
   for n := 0 to 99 do
   begin
-    frmmain.listundomenu.MenuItem(n).Visible := False;
-    frmmain.listundomenu.MenuItem(n).Text := '';
+    frmMainDesigner.listundomenu.MenuItem(n).Visible := False;
+    frmMainDesigner.listundomenu.MenuItem(n).Text := '';
   end;
 
   for n := 0 to FDesigners.Count - 1 do
@@ -228,7 +228,7 @@ begin
     //  ShowMessage('File does not exists.', 'Error loading form');
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
-      frmmain.Hide;
+      frmMainDesigner.Hide;
       frmProperties.Hide;
     end;
     Exit;
@@ -237,7 +237,7 @@ begin
   if FFile.LoadFile(fname) = False then
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
-      frmmain.Hide;
+      frmMainDesigner.Hide;
       frmProperties.Hide;
     end;
 
@@ -245,7 +245,7 @@ begin
   begin
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
-      frmmain.Hide;
+      frmMainDesigner.Hide;
       frmProperties.Hide;
     end;
   end
@@ -253,7 +253,7 @@ begin
   begin
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
-      frmmain.Show;
+      frmMainDesigner.Show;
       frmProperties.Show;
     end;
   end;
@@ -288,11 +288,11 @@ begin
           else
             CreateParseForm(bl.FormName, bl.Data, bl2.Data);
 
-          frmmain.windowmenu.MenuItem(1).Visible := True;
+          frmMainDesigner.windowmenu.MenuItem(1).Visible := True;
           if x < 10 then
           begin
-            frmmain.windowmenu.MenuItem(x + 2).Visible := True;
-            frmmain.windowmenu.MenuItem(x + 2).Text := bl.FormName;
+            frmMainDesigner.windowmenu.MenuItem(x + 2).Visible := True;
+            frmMainDesigner.windowmenu.MenuItem(x + 2).Text := bl.FormName;
           end;
           // fnametemp := bl.FormName ;
           Inc(x);
@@ -306,13 +306,13 @@ begin
  TFormDesigner(FDesigners[n]).Form.ShowGrid := FShowGrid;
  end;
 
-  frmMain.mru.AddItem(fname);
+  frmMainDesigner.mru.AddItem(fname);
 
   if (enableundo = True) then
     SaveUndo(Sender, 5);
-  frmmain.undomenu.MenuItem(0).Enabled := False;
-  frmmain.undomenu.MenuItem(1).Enabled := False;
-  frmmain.undomenu.MenuItem(3).Enabled := False;
+  frmMainDesigner.undomenu.MenuItem(0).Enabled := False;
+  frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
+  frmMainDesigner.undomenu.MenuItem(3).Enabled := False;
 
 end;
 
@@ -386,7 +386,7 @@ begin
     finally
       CloseFile(ff);
     end;
-    frmMain.mru.AddItem(fname);
+    frmMainDesigner.mru.AddItem(fname);
   except
     on E: Exception do
       raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' +
@@ -421,8 +421,8 @@ begin
 
   for n := 0 to 9 do
   begin
-    frmmain.windowmenu.MenuItem(n + 2).Visible := False;
-    frmmain.windowmenu.MenuItem(n + 2).Text := '';
+    frmMainDesigner.windowmenu.MenuItem(n + 2).Visible := False;
+    frmMainDesigner.windowmenu.MenuItem(n + 2).Text := '';
   end;
 
   for n := 0 to FDesigners.Count - 1 do
@@ -454,18 +454,18 @@ begin
           else
             CreateParseForm(bl.FormName, bl.Data, bl2.Data);
 
-          frmmain.windowmenu.MenuItem(1).Visible := True;
+          frmMainDesigner.windowmenu.MenuItem(1).Visible := True;
           if x < 10 then
           begin
-            frmmain.windowmenu.MenuItem(x + 2).Visible := True;
-            frmmain.windowmenu.MenuItem(x + 2).Text := bl.FormName;
+            frmMainDesigner.windowmenu.MenuItem(x + 2).Visible := True;
+            frmMainDesigner.windowmenu.MenuItem(x + 2).Text := bl.FormName;
           end;
           Inc(x);
         end;
       end;
   end;
   ifundo := False;
-  frmmain.undomenu.MenuItem(1).Enabled := True;
+  frmMainDesigner.undomenu.MenuItem(1).Enabled := True;
 
   x := 0;
   while x < length(ArrayFormDesign) do
@@ -602,24 +602,24 @@ begin
 
   if dd = 0 then
   begin
-    undofile2 := frmmain.listundomenu.MenuItem(0).Text;
+    undofile2 := frmMainDesigner.listundomenu.MenuItem(0).Text;
     n := length(ArrayUndo) - 1;
     while (n > 0) do
     begin
-      frmmain.listundomenu.MenuItem(n).Text := frmmain.listundomenu.MenuItem(n - 1).Text;
+      frmMainDesigner.listundomenu.MenuItem(n).Text := frmMainDesigner.listundomenu.MenuItem(n - 1).Text;
       Dec(n);
     end;
     if length(ArrayUndo) > 1 then
-      frmmain.listundomenu.MenuItem(1).Text := undofile2;
+      frmMainDesigner.listundomenu.MenuItem(1).Text := undofile2;
   end;
 
-  frmmain.listundomenu.MenuItem(0).Text := undotime + ' => ' + TempForm;
+  frmMainDesigner.listundomenu.MenuItem(0).Text := undotime + ' => ' + TempForm;
 
-  frmmain.undomenu.MenuItem(0).Enabled := True;
-  frmmain.undomenu.MenuItem(3).Enabled := True;
+  frmMainDesigner.undomenu.MenuItem(0).Enabled := True;
+  frmMainDesigner.undomenu.MenuItem(3).Enabled := True;
 
   for n := 0 to length(ArrayUndo) - 1 do
-  frmmain.listundomenu.MenuItem(n).Visible := True;
+  frmMainDesigner.listundomenu.MenuItem(n).Visible := True;
 
   ifundo := False;
 end;
@@ -726,9 +726,9 @@ begin
         SetLength(ArrayFormDesign, length(ArrayFormDesign) + 1);
         x := length(ArrayFormDesign);
         ArrayFormDesign[x - 1] := fd;
-        frmmain.windowmenu.MenuItem(1).Visible := True;
-        frmmain.windowmenu.MenuItem(x + 1).Visible := True;
-        frmmain.windowmenu.MenuItem(x + 1).Text := fd.Form.Name;
+        frmMainDesigner.windowmenu.MenuItem(1).Visible := True;
+        frmMainDesigner.windowmenu.MenuItem(x + 1).Visible := True;
+        frmMainDesigner.windowmenu.MenuItem(x + 1).Text := fd.Form.Name;
       end;
       if (enableundo = True) then
         SaveUndo(Sender, 7);
@@ -741,9 +741,9 @@ end;
 
 procedure TMainDesigner.CreateWindows;
 begin
-  frmMain := TfrmMain.Create(nil);
-  frmMain.WindowTitle := 'fpGUI Designer_ext v' + program_version;
-  frmMain.Show;
+  frmMainDesigner := TfrmMainDesigner.Create(nil);
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version;
+  frmMainDesigner.Show;
 
   frmProperties := TfrmProperties.Create(nil);
   frmProperties.Show;
@@ -778,7 +778,7 @@ begin
   FFile.Free;
 
   frmProperties.Free;
-  frmMain.Free;
+  frmMainDesigner.Free;
   inherited;
 end;
 
@@ -859,22 +859,22 @@ end;
 procedure TMainDesigner.OnExit(Sender: TObject);
 begin
   frmProperties.Close;
-  frmMain.Close;
+  frmMainDesigner.Close;
 end;
 
 procedure TMainDesigner.OnOptionsClick(Sender: TObject);
 var
   frm: TfrmVFDSetup;
 begin
-  // gINI.WriteFormState(frmMain);
+  // gINI.WriteFormState(frmMainDesigner);
   frm := TfrmVFDSetup.Create(nil);
   try
     if frm.ShowModal = mrOk then
     begin
-      //  frmMain.WindowType:=wtpopup;
+      //  frmMainDesigner.WindowType:=wtpopup;
       LoadDefaults;
-      frmMain.mru.MaxItems := gINI.ReadInteger('Options', 'MRUFileCount', 4);
-      frmMain.mru.ShowFullPath := gINI.ReadBool('Options', 'ShowFullPath', True);
+      frmMainDesigner.mru.MaxItems := gINI.ReadInteger('Options', 'MRUFileCount', 4);
+      frmMainDesigner.mru.ShowFullPath := gINI.ReadBool('Options', 'ShowFullPath', True);
     end;
   finally
     frm.Free;
@@ -905,11 +905,11 @@ begin
   p := ExtractFilePath(FEditedFileName);
   if s = '' then
   s := '[' + rsNewUnnamedForm + ']';
-  frmMain.WindowTitle := 'fpGUI Designer v' + program_version + ' - ' + p + s;
+  frmMainDesigner.WindowTitle := 'fpGUI Designer v' + ext_version + ' - ' + p + s;
 
-  if frmMain.btnToFront.Tag = 1 then
-    frmMain.MainMenu.MenuItem(6).Text :=
-      'Current file : ' + p + s + '     fpGUI Designer v' + program_version;
+  if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(6).Text :=
+      'Current file : ' + p + s + '     fpGUI Designer v' + ext_version;
 
    {$IFDEF Linux}
   if (fileexists(PChar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0) > 1) then

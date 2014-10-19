@@ -15,7 +15,7 @@
       Setting up of widgets, properties and images.
 }
 
-unit vfdwidgets;
+unit vfd_widgets;
 
 {$mode objfpc}{$H+}
 
@@ -24,8 +24,8 @@ interface
 uses
   SysUtils,
   contnrs,
-  vfdwidgetclass,
-  vfdprops;
+  vfd_widgetclass,
+  vfd_props;
 
 procedure RegisterWidgets;
 procedure RegisterVFDWidget(awc: TVFDWidgetClass);
@@ -40,7 +40,7 @@ implementation
 
 uses
   fpg_main,
-  vfddesigner,
+  vfd_designer,
   u_editgrid,
   fpg_nicegrid,
   fpg_widget,
@@ -68,7 +68,7 @@ uses
   fpg_splitter,
   fpg_hyperlink,
   fpg_toggle,
-  vfdpropeditgrid;
+  vfd_propeditgrid;
 
 type
   TVFDPageControlWidgetClass = class(TVFDWidgetClass)

@@ -7,10 +7,10 @@ With run-only-once, window list, undo feature, integration into IDE, editor laun
 
 How to install it ?
 
-Just compile /uidesigner_ext/src/uidesigner_ext.pas
+Just compile /designer_ext/src/designer_ext.pas
 
 For integation with fpc, Lazarus, Typhon, Geany, external-code-editor, ..., you may use the patches...
-Those patches are in /uidesigner_ext/patch.
+Those patches are in /designer_ext/patch.
 
 Please read the readme-patch-files before to apply patch.
 

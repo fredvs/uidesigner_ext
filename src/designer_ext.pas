@@ -21,7 +21,7 @@ fiens@hotmail.com
       The starting unit for the UI Designer project.
 }
 
-program uidesigner_ext;
+program designer_ext;
 
 {$mode objfpc}{$H+}
 
@@ -64,9 +64,9 @@ uses {$IFDEF UNIX}
   fpg_stylemanager,
   SysUtils,
   fpg_main,
-  vfdmain,
-  newformdesigner,
-  vfdwidgets;
+  vfd_main,
+  frm_main_designer,
+  vfd_widgets;
 
   procedure MainProc;
   var
@@ -114,7 +114,7 @@ uses {$IFDEF UNIX}
 
       maindsgn.CreateWindows;
 
-      fpgApplication.MainForm := frmMain;
+      fpgApplication.MainForm := frmMainDesigner;
 
       fpgApplication;
       fpgApplication.Run;
