@@ -7,7 +7,7 @@ fiens@hotmail.com
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
-    Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2014 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
@@ -321,8 +321,6 @@ end;
 procedure TWidgetOrderForm.SetupCaptions;
 begin
   inherited SetupCaptions;
-  WindowTitle := rsDlgWidgetOrder;
-  lblTitle.Text := fpgAddColon(rsFormTitle);
   btnOK.Text := rsOK;
   btnCancel.Text := rsCancel;
   btnUp.Text := rsUp;
@@ -359,7 +357,7 @@ begin
     SetPosition(4, 4, 248, 16);
     FontDesc := '#Label1';
     Hint := '';
-    Text := 'Form %s:';
+    Text := 'Form: %s:';
   end;
 
   btnOK := TfpgButton.Create(self);
