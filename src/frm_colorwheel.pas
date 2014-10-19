@@ -1,4 +1,4 @@
-unit frm_main;
+unit frm_colorwheel;
 
 {$mode objfpc}{$H+}
 
@@ -15,6 +15,7 @@ type
   TCompareForm = class(TfpgForm)
   public
     procedure AfterCreate; override;
+    procedure onclosecompare(Sender: TObject; var closeac : Tcloseaction);
     procedure onPaintCompare(Sender: TObject);
     procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton;
       AShift: TShiftState; const AMousePos: TPoint);
@@ -24,9 +25,9 @@ type
       const AMousePos: TPoint);
   end;
 
-  TMainForm = class(TfpgForm)
+  TWheelColorForm = class(TfpgForm)
   private
-    {@VFD_HEAD_BEGIN: MainForm}
+    {@VFD_HEAD_BEGIN: WheelColorForm}
     frmcompare: TCompareForm;
     ColorBox: TfpgComboBox;
     Button1: TfpgButton;
@@ -53,9 +54,10 @@ type
     e_Hexa: TfpgEdit;
     chkCrossHair: TfpgCheckBox;
 
-    {@VFD_HEAD_END: MainForm}
+    {@VFD_HEAD_END: WheelColorForm}
     FViaRGB: boolean; // to prevent recursive changes
     procedure btnQuitClicked(Sender: TObject);
+    procedure onclosemain(Sender: TObject; var closeac : Tcloseaction);
     procedure chkCrossHairChange(Sender: TObject);
     procedure UpdateHSVComponents;
     procedure UpdateRGBComponents;
@@ -83,7 +85,7 @@ type
     end;
 
 var
-  oriMousePos, orimainform: TPoint;
+  oriMousePos, oriWheelColorForm: TPoint;
   ired, igreen, iblue: integer;
   fbright : double;
   ColorList : TList;
@@ -362,8 +364,9 @@ begin
   OnMouseDown := @onClickDownPanel;
   OnMouseUp := @onClickUpPanel;
   OnPaint := @onpaintcompare;
-  left := orimainform.X + 167;
-  top := orimainform.y + 285;
+  onclose := @onclosecompare;
+  left := oriWheelColorForm.X + 167;
+  top := oriWheelColorForm.y + 285;
   UpdateWindowPosition;
 
 end;
@@ -402,20 +405,25 @@ begin
   end;
 end;
 
+procedure TCompareForm.onclosecompare(Sender: TObject; var closeac : Tcloseaction);
+begin
+closeac := caFree;
+end;
+
 ////////////////
 
-procedure TMainForm.ColorChanged(Sender: TObject);
+procedure TWheelColorForm.ColorChanged(Sender: TObject);
 begin
   UpdateHSVComponents;
   if not FViaRGB then
     UpdateRGBComponents;
 end;
 
-procedure TMainForm.onPaintMain(Sender: TObject);
+procedure TWheelColorForm.onPaintMain(Sender: TObject);
 begin
  end;
 
-procedure TMainForm.RGBChanged(Sender: TObject);
+procedure TWheelColorForm.RGBChanged(Sender: TObject);
 var
   rgb: TRGBTriple;
   c: TfpgColor;
@@ -433,7 +441,7 @@ begin
 
 end;
 
-procedure TMainForm.ConvertToRGB(Sender: TObject);
+procedure TWheelColorForm.ConvertToRGB(Sender: TObject);
 begin
   if ConvertToInt(e_Hexa.Text) = True then
   begin
@@ -444,7 +452,7 @@ begin
   end;
 end;
 
-procedure TMainForm.E_HexaKeyChar(Sender: TObject; AChar: TfpgChar; var Consumed: boolean);
+procedure TWheelColorForm.E_HexaKeyChar(Sender: TObject; AChar: TfpgChar; var Consumed: boolean);
 begin
 if Length(E_Hexa.Text)= 0 then
 begin
@@ -456,7 +464,7 @@ else
     Consumed:= True;
 end;
 
-procedure TMainForm.E_HexaKeyPress(Sender: TObject; var KeyCode: word; var ShiftState: TShiftState;
+procedure TWheelColorForm.E_HexaKeyPress(Sender: TObject; var KeyCode: word; var ShiftState: TShiftState;
           var Consumed: boolean);
 begin
   if ((KeyCode= KeyReturn) or (KeyCode= KeyPEnter)) and (Length(E_Hexa.Text)= 7) then
@@ -465,7 +473,7 @@ begin
   end;
 end;
 
-constructor TMainForm.Create(AOwner: TComponent);
+constructor TWheelColorForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FViaRGB := False;
@@ -473,12 +481,18 @@ begin
   LoadColorList;
 end;
 
-procedure TMainForm.btnQuitClicked(Sender: TObject);
+procedure TWheelColorForm.onclosemain(Sender: TObject; var closeac : Tcloseaction);
+begin
+frmcompare.close;
+closeac := caFree;
+end;
+
+procedure TWheelColorForm.btnQuitClicked(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TMainForm.chkCrossHairChange(Sender: TObject);
+procedure TWheelColorForm.chkCrossHairChange(Sender: TObject);
 begin
   if chkCrossHair.Checked then
     ColorWheel1.CursorSize := 400
@@ -486,7 +500,7 @@ begin
     ColorWheel1.CursorSize := 5;
 end;
 
-procedure TMainForm.UpdateHSVComponents;
+procedure TWheelColorForm.UpdateHSVComponents;
 begin
   edH.Text := IntToStr(ColorWheel1.Hue);
   edS.Text := FormatFloat('0.000', ColorWheel1.Saturation);
@@ -496,7 +510,7 @@ begin
   frmcompare.BackgroundColor := ValueBar1.SelectedColor;
 end;
 
-procedure TMainForm.UpdateRGBComponents;
+procedure TWheelColorForm.UpdateRGBComponents;
 var
   rgb: TRGBTriple;
   c: TfpgColor;
@@ -509,22 +523,23 @@ begin
   e_Hexa.Text := Hexa(rgb.Red, rgb.Green, rgb.Blue);
 end;
 
-procedure TMainForm.ColorBoxChange(Sender: TObject);
+procedure TWheelColorForm.ColorBoxChange(Sender: TObject);
 begin
   e_Hexa.Text := TColor(ColorList[ColorBox.FocusItem]).Value ;
  ConvertToRGB(self);
 end;
 
-procedure TMainForm.AfterCreate;
+procedure TWheelColorForm.AfterCreate;
 var
   i : integer;
 begin
-  {@VFD_BODY_BEGIN: MainForm}
-  Name := 'MainForm';
+  {@VFD_BODY_BEGIN: WheelColorForm}
+  Name := 'WheelColorForm';
   SetPosition(349, 242, 380, 450);
   WindowTitle := 'Color Picker';
   WindowPosition := wpScreenCenter;
-  //OnPaint := @onpaintmain;
+  Sizeable:=false;
+  onclose := @onclosemain;
 
   Button1 := TfpgButton.Create(self);
   with Button1 do
@@ -800,15 +815,12 @@ begin
     ColorBox.Items.Add(TColor(ColorList[i]).Name);
   fbright := 1 ;
   updatewindowposition;
-  orimainform.X := left;
-  orimainform.Y := top;
-  sleep(200);
-  {@VFD_BODY_END: MainForm}
-
+  oriWheelColorForm.X := left;
+  oriWheelColorForm.Y := top;
+  {@VFD_BODY_END: WheelColorForm}
 
   frmcompare := TCompareForm.Create(nil);
   frmcompare.Show;
-  sleep(200);
   // link the two components
   ColorWheel1.ValueBar := ValueBar1;
   UpdateHSVComponents;

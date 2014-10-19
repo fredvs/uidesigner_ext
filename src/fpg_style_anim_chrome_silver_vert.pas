@@ -120,10 +120,27 @@ procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord)
 var
   r: TfpgRect;
 begin
-  r.SetRect(x, y, w, h);
+   r.SetRect(x, y, w, h);
+   if ACanvas.Window.ClassName = 'TfpgValueBar' then
+   begin
+    ACanvas.SetColor(clblack);
+   ACanvas.DrawRectangle(r);
+
+   r.SetRect(x+1, y+1, w-2, h-2);
+    ACanvas.SetColor(cllime);
+      ACanvas.DrawRectangle(r);
+
+     r.SetRect(x+2, y+2, w-4, h-4);
+    ACanvas.SetColor(clwhite);
+      ACanvas.DrawRectangle(r);
+
+   end else
+     begin
+
   ACanvas.SetColor(clShadow1);
   ACanvas.Clear(clWindowBackground);
   ACanvas.DrawRectangle(r);
+end;
 end;
 
 procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;

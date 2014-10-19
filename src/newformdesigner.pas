@@ -30,6 +30,8 @@ interface
 
 uses
   RunOnce_PostIt,
+  frm_colorwheel,
+  frm_imageconvert,
   SysUtils,
   Classes,
   fpg_base,
@@ -71,6 +73,8 @@ type
     procedure   PaletteBarResized(Sender: TObject);
     procedure   miHelpAboutClick(Sender: TObject);
     procedure   miHelpAboutGUI(Sender: TObject);
+    procedure   micolorwheel(Sender: TObject);
+    procedure   miimageconv(Sender: TObject);
     procedure   miMRUClick(Sender: TObject; const FileName: string);
     procedure   BuildThemePreviewMenu;
     procedure   ToggleDesignerGrid(Sender: TObject);
@@ -91,6 +95,7 @@ type
     setmenu: TfpgPopupMenu;
     miOpenRecentMenu: TfpgPopupMenu;
     helpmenu: TfpgPopupMenu;
+    toolsmenu: TfpgPopupMenu;
     windowmenu: TfpgPopupMenu;
     previewmenu: TfpgPopupMenu;
     btnGrid: TfpgButton;
@@ -841,14 +846,25 @@ begin
   MenuItem(3).Enabled:=false;
   end;
 
+   toolsmenu := TfpgPopupMenu.Create(self);
+  with toolsmenu do
+  begin
+    Name := 'toolsmenu';
+    SetPosition(328, 52, 120, 20);
+    AddMenuItem('Color Wheel', '', @micolorwheel);
+    AddMenuItem('Image Convertor', '', @miimageconv);
+   end;
+
   helpmenu := TfpgPopupMenu.Create(self);
   with helpmenu do
   begin
     Name := 'helpmenu';
-    SetPosition(328, 52, 120, 20);
+    SetPosition(448, 52, 120, 20);
     AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
     AddMenuItem('About designer_ext...', '', @miHelpAboutClick);
    end;
+
+
 
   listundomenu := TfpgPopupMenu.Create(self);
   x := 0;
@@ -975,6 +991,7 @@ begin
    MainMenu.AddMenuItem('&Preview', nil).SubMenu  := previewmenu;
    MainMenu.AddMenuItem('&Window', nil).SubMenu  := windowmenu;
   MainMenu.AddMenuItem('&Help', nil).SubMenu     := helpmenu;
+  MainMenu.AddMenuItem('&Tools', nil).SubMenu     := toolsmenu;
   MainMenu.AddMenuItem('', nil) ;
 
     if enableundo = true then MainMenu.MenuItem(1).Visible:= true else
@@ -993,14 +1010,14 @@ begin
         if  gINI.ReadBool('Options', 'AlwaysToFront', false) = FALSE then
       begin
      windowType := wtwindow ;
-     MainMenu.MenuItem(7).Visible:=false;
+     MainMenu.MenuItem(8).Visible:=false;
     // btnToFront.Text:= 'toF' ;
    btnToFront.tag:=0;
       end
       else
        begin
-     MainMenu.MenuItem(7).Visible:=true;
-    MainMenu.MenuItem(7).Text:= WindowTitle;
+     MainMenu.MenuItem(8).Visible:=true;
+    MainMenu.MenuItem(8).Text:= WindowTitle;
     //btnToFront.Text:='toN';
    btnToFront.tag:=1;
      windowType := wtpopup ;
@@ -1700,6 +1717,21 @@ begin
 TfpgMessageDialog.AboutFPGui;
 end;
 
+procedure TfrmMain.micolorwheel(Sender: TObject);
+var
+  frm: TWheelColorForm;
+begin
+  frm := TWheelColorForm.Create(nil);
+  frm.Show;
+end;
+
+procedure TfrmMain.miimageconv(Sender: TObject);
+var
+  frm: TImageConvert;
+begin
+  frm := TImageConvert.Create(nil);
+  frm.Show;
+end;
 
 
 procedure TfrmMain.miMRUClick(Sender: TObject; const FileName: string);
