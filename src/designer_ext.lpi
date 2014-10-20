@@ -139,9 +139,7 @@
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
       </Verbosity>
       <WriteFPCLogo Value="False"/>
-      <ConfigFile>
-        <CustomConfigFile Value="True"/>
-      </ConfigFile>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
 </CONFIG>

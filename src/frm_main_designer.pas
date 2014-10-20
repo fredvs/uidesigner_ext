@@ -234,6 +234,9 @@ uses
 // Anchor images
 {$I anchors.inc}
 
+// ext images
+{$I ext.inc}
+
 // logo images
 {$I fpgui_logo.inc}
 

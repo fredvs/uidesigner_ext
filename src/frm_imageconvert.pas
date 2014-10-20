@@ -175,9 +175,10 @@ end;
 procedure TImageConvert.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
+
   {@VFD_BODY_BEGIN: MainForm}
   Name := 'MainForm';
-  SetPosition(478, 227, 630, 378);
+  SetPosition(478, 227, 700, 378);
   WindowTitle := 'Bitmap Image Conversion into Pascal resource';
   Hint := '';
   ShowHint := True;
@@ -203,7 +204,7 @@ begin
   with memImages do
   begin
     Name := 'memImages';
-    SetPosition(4, 56, 622, 318);
+    SetPosition(4, 56, 692, 318);
     Anchors := [anLeft,anRight,anTop,anBottom];
     FontDesc := '#Edit2';
     Hint := '';
@@ -221,24 +222,10 @@ begin
     Anchors := [];
     Text := 'Convert';
     FontDesc := '#Label1';
-    Hint := '';
+    Hint := 'Conver bitmap image into Pascal resource';
     ImageName := '';
     TabOrder := 4;
     OnClick := @btnConvertClicked;
-  end;
-
-  btnClear := TfpgButton.Create(self);
-  with btnClear do
-  begin
-    Name := 'btnClear';
-    SetPosition(498, 8, 48, 24);
-    Anchors := [];
-    Text := 'Clear';
-    FontDesc := '#Label1';
-    Hint := 'Clear text box';
-    ImageName := '';
-    TabOrder := 6;
-    OnClick  := @btnClearClicked;
   end;
 
   Label1 := TfpgLabel.Create(self);
@@ -255,9 +242,9 @@ begin
   with btnCopy do
   begin
     Name := 'btnCopy';
-    SetPosition(464, 8, 29, 24);
+    SetPosition(464, 8, 70, 24);
+     Text := 'Copy';
     Anchors := [];
-    Text := '';
     FontDesc := '#Label1';
     Hint := 'Copy to clipboard';
     ImageName := 'stdimg.copy';
@@ -265,16 +252,30 @@ begin
     OnClick := @btnCopyClicked;
   end;
 
+    btnClear := TfpgButton.Create(self);
+  with btnClear do
+  begin
+    Name := 'btnClear';
+    SetPosition(540, 8, 60, 24);
+    Anchors := [];
+    Text := 'Clear';
+    FontDesc := '#Label1';
+    Hint := 'Clear text box';
+    ImageName := '';
+    TabOrder := 6;
+    OnClick  := @btnClearClicked;
+  end;
+
   Button2 := TfpgButton.Create(self);
   with Button2 do
   begin
     Name := 'Button2';
-    SetPosition(584, 8, 40, 24);
+    SetPosition(636, 8, 60, 24);
     Anchors := [];
     Text := 'Quit';
     FontDesc := '#Label1';
     Hint := 'Close Image Convertor';
-    ImageName := '';
+    ImageName := 'stdimg.close';
     TabOrder := 7;
     OnClick := @btnquitClicked;
   end;

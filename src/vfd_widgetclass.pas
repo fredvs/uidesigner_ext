@@ -27,7 +27,9 @@ uses
   fpg_base,
   fpg_main,
   fpg_widget,
+  fpg_dialogs,
   fpg_menu;
+
 
 type
   TWidgetClass = class of TfpgWidget;

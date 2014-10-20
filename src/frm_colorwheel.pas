@@ -12,6 +12,28 @@ uses
 
 type
 
+  TColorPickedEvent = procedure(Sender: TObject; const AMousePos: TPoint; const AColor: TfpgColor) of object;
+
+  TPickerButton = class(TfpgButton)
+  private
+    FContinuousResults: Boolean;
+    FOnColorPicked: TColorPickedEvent;
+    FColorPos: TPoint;
+    FColor: TfpgColor;
+    FColorPicking: Boolean;
+  private
+    procedure   DoColorPicked;
+  protected
+    procedure   HandleLMouseDown(X, Y: integer; ShiftState: TShiftState); override;
+    procedure   HandleLMouseUp(x, y: integer; shiftstate: TShiftState); override;
+    procedure   HandleMouseMove(x, y: integer; btnstate: word; shiftstate: TShiftState); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  published
+    property    ContinuousResults: Boolean read FContinuousResults write FContinuousResults;
+    property    OnColorPicked: TColorPickedEvent read FOnColorPicked write FOnColorPicked;
+  end;
+
   TCompareForm = class(TfpgForm)
   public
     procedure AfterCreate; override;
@@ -53,9 +75,14 @@ type
     lblHexa: TfpgLabel;
     edHexa: TfpgEdit;
     chkCrossHair: TfpgCheckBox;
+    btnPicker: TPickerButton;
+    chkContinuous: TfpgCheckBox;
 
     {@VFD_HEAD_END: WheelColorForm}
     FViaRGB: boolean; // to prevent recursive changes
+    FColorPicking: Boolean;
+    procedure btnColorPicked(Sender: TObject; const AMousePos: TPoint; const AColor: TfpgColor);
+    procedure chkContinuousChanged(Sender: TObject);
     procedure btnQuitClicked(Sender: TObject);
     procedure onclosemain(Sender: TObject; var closeac : Tcloseaction);
     procedure chkCrossHairChange(Sender: TObject);
@@ -77,6 +104,11 @@ type
 {@VFD_NEWFORM_DECL}
 
 implementation
+
+uses
+  frm_main_designer;
+
+{$I ext.inc}
 
 type
   TColor = class
@@ -352,7 +384,55 @@ begin
   AColor:= TColor.Create; AColor.Name:= 'clYellowGreen '; AColor.Value:= '$9acd32'; ColorList.Add(AColor);
 end;
 
-///////////////////
+{ TPickerButton }
+
+procedure TPickerButton.DoColorPicked;
+var
+  pt: TPoint;
+begin
+  pt := WindowToScreen(self, FColorPos);
+  FColor := fpgApplication.GetScreenPixelColor(pt);
+  if Assigned(FOnColorPicked) then
+    FOnColorPicked(self, FColorPos, FColor);
+end;
+
+procedure TPickerButton.HandleLMouseDown(X, Y: integer; ShiftState: TShiftState);
+begin
+  inherited HandleLMouseDown(X, Y, ShiftState);
+  MouseCursor := mcCross;
+  FColorPicking := True;
+  CaptureMouse;
+end;
+
+procedure TPickerButton.HandleLMouseUp(x, y: integer; shiftstate: TShiftState);
+begin
+  inherited HandleLMouseUp(x, y, shiftstate);
+  ReleaseMouse;
+  FColorPicking := False;
+  MouseCursor := mcDefault;
+  DoColorPicked;
+end;
+
+procedure TPickerButton.HandleMouseMove(x, y: integer; btnstate: word;
+  shiftstate: TShiftState);
+begin
+  //inherited HandleMouseMove(x, y, btnstate, shiftstate);
+  if not FColorPicking then
+    Exit;
+  FColorPos.x := x;
+  FColorPos.y := y;
+  if FContinuousResults then
+    DoColorPicked;
+end;
+
+constructor TPickerButton.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FColorPicking := False;
+  FContinuousResults := False;
+end;
+
+/////////////////// TCompareForm
 procedure TCompareForm.AfterCreate;
 begin
 
@@ -410,7 +490,17 @@ begin
 closeac := caFree;
 end;
 
-////////////////
+////////////////  TWheelColorForm
+
+procedure TWheelColorForm.btnColorPicked(Sender: TObject; const AMousePos: TPoint; const AColor: TfpgColor);
+begin
+  ColorWheel1.SetSelectedColor(AColor);
+end;
+
+procedure TWheelColorForm.chkContinuousChanged(Sender: TObject);
+begin
+  btnPicker.ContinuousResults := chkContinuous.Checked;
+end;
 
 procedure TWheelColorForm.ColorChanged(Sender: TObject);
 begin
@@ -541,19 +631,8 @@ begin
   Sizeable:=false;
   onclose := @onclosemain;
 
-  Button1 := TfpgButton.Create(self);
-  with Button1 do
-  begin
-    Name := 'Button1';
-    SetPosition(290, 418, 70, 26);
-    //   Anchors := [anRight,anBottom];
-    Text := 'Quit';
-    FontDesc := '#Label1';
-    Hint := '';
-    ImageName := '';
-    TabOrder := 0;
-    OnClick := @btnQuitClicked;
-  end;
+  fpgImages.AddMaskedBMP('vfd.picker', @vfd_picker,
+  sizeof(vfd_picker), 0, 0);
 
   ColorWheel1 := TfpgColorWheel.Create(self);
   with ColorWheel1 do
@@ -812,6 +891,46 @@ begin
     Text := 'Bright';
   end;
 
+  btnPicker := TPickerButton.Create(self);
+  with btnPicker do
+  begin
+    Name := 'btnPicker';
+    SetPosition(125, 410, 80, 24);
+    Text := 'Picker';
+    FontDesc := '#Label1';
+    Hint := 'Click on Picker and maintain click => release get the color';
+    ImageName := 'vfd.picker';
+    FShowHint:=true;
+    TabOrder := 24;
+    OnColorPicked := @btnColorPicked;
+  end;
+
+  chkContinuous := TfpgCheckBox.Create(self);
+  with chkContinuous do
+  begin
+    Name := 'chkContinous';
+    SetPosition(210, 413, 80, 20);
+    FontDesc := '#Label1';
+    Hint := '';
+    TabOrder := 25;
+    Text := 'Continous';
+    OnChange := @chkContinuousChanged;
+  end;
+
+  Button1 := TfpgButton.Create(self);
+  with Button1 do
+  begin
+    Name := 'Button1';
+    SetPosition(300, 418, 70, 26);
+    //   Anchors := [anRight,anBottom];
+    Text := 'Quit';
+    FontDesc := '#Label1';
+    Hint := '';
+    ImageName := 'stdimg.close';
+    TabOrder := 0;
+    OnClick := @btnQuitClicked;
+  end;
+
     for i := 0 to Pred(ColorList.Count) do
     ColorBox.Items.Add(TColor(ColorList[i]).Name);
   fbright := 1 ;
@@ -828,6 +947,7 @@ begin
   if not FViaRGB then
     UpdateRGBComponents;
 
+  FColorPicking := False;
 end;
 
 
