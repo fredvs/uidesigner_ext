@@ -653,6 +653,7 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
+
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
@@ -660,7 +661,7 @@ begin
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMain';
  // SetPosition(96, 118, 800, 92);
-  SetPosition(338, 140, 754, 92);
+  SetPosition(338, 140, 800, 92);
   WindowTitle := 'frmMain';
   Hint := '';
   ShowHint := True;
