@@ -190,13 +190,13 @@ type
      {@VFD_HEAD_BEGIN: frmAbout}
      lblAppName: TfpgLabel;
      lblVersion: TfpgLabel;
-     FImage: TfpgImage;
      btnClose: TfpgButton;
      lblWrittenBy: TfpgLabel;
      lblExtBy: TfpgLabel;
      lblURL: TfpgHyperlink;
      lblCompiled: TfpgLabel;
      {@VFD_HEAD_END: frmAbout}
+     Fimage : Tfpgimage;
      procedure   SetupCaptions;
      procedure   FormShow(Sender: TObject);
      procedure FormPaint(Sender: TObject);
@@ -521,9 +521,10 @@ if fileexists(pchar(dataf)) then
               top := top + 50;
             {$else}
              else top :=  0 ;
-             top := top + 52;
-            {$ENDIF}
+             top := top + 48;
 
+            {$ENDIF}
+                  UpdateWindowPosition;
             if   Pos('Width="',dataf2) > 0 then
               begin
                   dataf := copy(dataf2,Pos('Width="',dataf2)+7,6) ;
@@ -541,7 +542,7 @@ if fileexists(pchar(dataf)) then
               end;
 
          ////
-
+            UpdateWindowPosition;
 {$IFDEF Windows}
        if  gINI.ReadBool('Options', 'AlwaystoFront', false) = true then
          begin
