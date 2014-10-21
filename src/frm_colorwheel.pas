@@ -8,7 +8,7 @@ uses
   SysUtils, Classes, fpg_base, fpg_main,
   fpg_edit, fpg_form, fpg_label, fpg_button,
   fpg_checkbox, fpg_combobox,
-  fpg_panel, fpg_ColorWheel, fpg_Tab, fpg_spinedit;
+  fpg_panel, fpg_ColorWheel, fpg_spinedit;
 
 type
 
@@ -50,7 +50,6 @@ type
   TWheelColorForm = class(TfpgForm)
   private
     {@VFD_HEAD_BEGIN: WheelColorForm}
-    afpgTabSheet : TfpgTabSheet;
     frmcompare: TCompareForm;
     ColorBox: TfpgComboBox;
     Button1: TfpgButton;
