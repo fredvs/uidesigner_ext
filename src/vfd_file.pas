@@ -89,7 +89,7 @@ procedure TVFDFile.AddNewFormDecl(formname, formheadblock: string);
 var
   s: string;
 begin
-  s :=
+ s :=
       Ind(1) + 'T' + formname + ' = class(TfpgForm)' + LineEnding +
       Ind(1) + 'private' + LineEnding +
       Ind(2) + '{@VFD_HEAD_BEGIN: ' + formname + '}' + LineEnding

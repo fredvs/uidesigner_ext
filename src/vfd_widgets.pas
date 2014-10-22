@@ -363,6 +363,7 @@ begin
   wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
   wc.AddProperty('ShowHint', TPropertyBoolean, '');
   wc.AddProperty('Sizeable', TPropertyBoolean, 'Can the form be resized at runtime');
+  {
   wc.AddProperty('BackgroundColor', TPropertyColor, '');
   wc.AddProperty('TextColor', TPropertyColor, '');
   wc.AddProperty('MaxHeight', TPropertyInteger, '');
@@ -371,6 +372,7 @@ begin
   wc.AddProperty('MinWidth', TPropertyInteger, '');
   wc.AddProperty('FullScreen', TPropertyBoolean, '');
   wc.AddProperty('WindowPosition', TPropertyEnum, '');
+  }
   FVFDFormWidget := wc;
 
   // Label

@@ -80,23 +80,23 @@ type
   public
     {@VFD_HEAD_BEGIN: frmMainDesigner}
     MainMenu: TfpgMenuBar;
-    chlPalette: TfpgComboBox;
     filemenu: TfpgPopupMenu;
-    undomenu: TfpgPopupMenu;
-    listundomenu: TfpgPopupMenu;
     formmenu: TfpgPopupMenu;
-    setmenu: TfpgPopupMenu;
     miOpenRecentMenu: TfpgPopupMenu;
-    helpmenu: TfpgPopupMenu;
+    setmenu: TfpgPopupMenu;
+    undomenu: TfpgPopupMenu;
     toolsmenu: TfpgPopupMenu;
+    helpmenu: TfpgPopupMenu;
+    listundomenu: TfpgPopupMenu;
     windowmenu: TfpgPopupMenu;
     previewmenu: TfpgPopupMenu;
     btnNewForm: TfpgButton;
     btnOpen: TfpgButton;
     btnSave: TfpgButton;
+    btnGrid: TfpgButton;
     btnToFront: TfpgButton;
     wgpalette: TwgPalette;
-    btnGrid: TfpgButton;
+    chlPalette: TfpgComboBox;
     PanelMove: TfpgPanel;
     {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
@@ -184,14 +184,14 @@ type
   TfrmAbout = class(TfpgForm)
    private
      {@VFD_HEAD_BEGIN: frmAbout}
-     lblAppName: TfpgLabel;
-     lblVersion: TfpgLabel;
-     btnClose: TfpgButton;
-     lblWrittenBy: TfpgLabel;
-     lblExtBy: TfpgLabel;
-     lblURL: TfpgHyperlink;
-     lblCompiled: TfpgLabel;
-     {@VFD_HEAD_END: frmAbout}
+    lblAppName: TfpgLabel;
+    lblVersion: TfpgLabel;
+    btnClose: TfpgButton;
+    lblWrittenBy: TfpgLabel;
+    lblURL: TfpgHyperlink;
+    lblCompiled: TfpgLabel;
+    lblExtBy: TfpgLabel;
+    {@VFD_HEAD_END: frmAbout}
      Fimage : Tfpgimage;
      procedure   SetupCaptions;
      procedure   FormShow(Sender: TObject);
@@ -271,7 +271,6 @@ begin
   WindowTitle := 'About Designer_ext';
   Hint := '';
   WindowPosition := wpScreenCenter;
-  Sizeable := False;
   BackgroundColor:= clwhite;
   OnShow := @FormShow;
 
@@ -282,8 +281,8 @@ begin
     SetPosition(32, 190, 255, 35);
     FontDesc := 'Arial-20';
     Hint := '';
-     textcolor := clgreen;
     Text := 'designer_ext';
+    TextColor := TfpgColor($4B8133);
   end;
 
   lblVersion := TfpgLabel.Create(self);
@@ -294,8 +293,8 @@ begin
     Alignment := taRightJustify;
     FontDesc := '#Label2';
     Hint := '';
-     textcolor := clgreen;
     Text := 'Version:  %s';
+    TextColor := TfpgColor($3A8230);
   end;
 
   btnClose := TfpgButton.Create(self);
@@ -329,10 +328,10 @@ begin
     SetPosition(12, 266, 246, 14);
     FontDesc := 'Arial-9:underline';
     Hint := '';
-    HotTrackColor := clBlue;
+    HotTrackColor := TfpgColor($80000001);
     HotTrackFont := 'Arial-9:underline';
     Text := 'http://fpgui.sourceforge.net';
-    TextColor := clRoyalBlue;
+    TextColor := TfpgColor($80000001);
     URL := 'http://fpgui.sourceforge.net';
   end;
 
@@ -353,9 +352,10 @@ begin
     SetPosition(22, 302, 150, 14);
     FontDesc := 'Arial-9';
     Hint := '';
-    textcolor := clgreen;
     Text := '_ext => Fred van Stappen';
+    TextColor := TfpgColor($4DC63D);
   end;
+
   {@VFD_BODY_END: frmAbout}
   {%endregion}
  FImage :=  fpgImages.AddBMP(
@@ -636,7 +636,7 @@ end else  frmMainDesigner.undomenu.MenuItem(1).Enabled := false;
 
 procedure TfrmMainDesigner.AfterCreate;
 var
-  n, x, y , wscreen: integer;
+  n, x, y : integer;
   wgc: TVFDWidgetClass;
   btn: TwgPaletteButton;
   mi: TfpgMenuItem;
@@ -644,12 +644,8 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-  maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
-  enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
-  wscreen := fpgApplication.ScreenWidth;
   {@VFD_BODY_BEGIN: frmMainDesigner}
-
   Name := 'frmMainDesigner';
   SetPosition(338, 140, 800, 92);
   WindowTitle := 'frmMainDesigner';
@@ -658,8 +654,6 @@ begin
   WindowPosition := wpUser;
   MinHeight := 82;
   MinWidth := 315;
-  OnCloseQuery:= @MainCloseQueryEvent;
-  x := 0;
 
   MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do
@@ -696,7 +690,7 @@ begin
     AddMenuItem('Tab Order...', '', @(maindsgn.OnEditTabOrder));
     AddMenuItem('-', '', nil);
     AddMenuItem('Edit special...', '', nil).Enabled := False; // TODO
-   end;
+  end;
 
   miOpenRecentMenu := TfpgPopupMenu.Create(self);
   with miOpenRecentMenu do
@@ -705,38 +699,36 @@ begin
     SetPosition(336, 68, 128, 20);
   end;
 
-    setmenu := TfpgPopupMenu.Create(self);
+  setmenu := TfpgPopupMenu.Create(self);
   with setmenu do
   begin
     Name := 'setmenu';
-     SetPosition(464, 48, 120, 20);
-      AddMenuItem('General Settings', '', @(maindsgn.OnOptionsClick));
-     end;
+    SetPosition(464, 48, 120, 20);
+    AddMenuItem('General Settings', '', @(maindsgn.OnOptionsClick));
+  end;
 
-   undomenu := TfpgPopupMenu.Create(self);
+  undomenu := TfpgPopupMenu.Create(self);
   with undomenu do
   begin
     Name := 'undomenu';
-     SetPosition(464, 48, 120, 20);
-
+    SetPosition(464, 48, 120, 20);
     AddMenuItem('Undo', 'Ctrl+Z',@OnIndexUndo);
     AddMenuItem('ReDo', 'Ctrl+Maj+Z',@OnIndexRedo);
     AddMenuItem('-', '', nil);
     FlistUndo := AddMenuItem('Undo List...', '',nil);
-
-  MenuItem(0).Enabled:=false;
-  MenuItem(1).Enabled:=false;
-  MenuItem(3).Enabled:=false;
+    MenuItem(0).Enabled:=false;
+    MenuItem(1).Enabled:=false;
+    MenuItem(3).Enabled:=false;
   end;
 
-   toolsmenu := TfpgPopupMenu.Create(self);
+  toolsmenu := TfpgPopupMenu.Create(self);
   with toolsmenu do
   begin
     Name := 'toolsmenu';
     SetPosition(328, 52, 120, 20);
     AddMenuItem('Color Wheel', '', @micolorwheel);
     AddMenuItem('Image Convertor', '', @miimageconv);
-   end;
+  end;
 
   helpmenu := TfpgPopupMenu.Create(self);
   with helpmenu do
@@ -745,22 +737,18 @@ begin
     SetPosition(448, 52, 120, 20);
     AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
     AddMenuItem('About Designer_ext...', '', @miHelpAboutClick);
-   end;
+  end;
 
   listundomenu := TfpgPopupMenu.Create(self);
   with listundomenu do
   begin
     Name := 'listundomenu';
     SetPosition(328, 52, 120, 20);
-
-    while x < 100 do
+    for x:=0 to 99 do
     begin
-     AddMenuItem('', '',@OnLoadUndo);
-     MenuItem(x).Visible:=false;
-     MenuItem(x).Tag:=x;
-    inc(x);
-    end;
-
+    AddMenuItem('', '',@OnLoadUndo);
+    MenuItem(x).Visible:=false;
+    MenuItem(x).Tag:=x;
   end;
 
   windowmenu := TfpgPopupMenu.Create(self);
@@ -860,23 +848,23 @@ begin
   end;
 
   btnGrid := TfpgButton.Create(self);
- with btnGrid do
- begin
- Name := 'btnGrid';
- SetPosition(96, 33, 25, 24);
- Text := '';
- AllowAllUp := True;
- FontDesc := '#Label1';
- GroupIndex := 1;
- Hint := 'Toggle designer grid';
- ImageMargin := -1;
- ImageName := 'vfd.grid';
- ImageSpacing := 0;
- TabOrder := 13;
- Focusable := False;
- AllowDown := True;
- OnClick := @ToggleDesignerGrid;
- end;
+  with btnGrid do
+  begin
+    Name := 'btnGrid';
+    SetPosition(96, 33, 25, 24);
+    Text := '';
+    AllowAllUp := True;
+    FontDesc := '#Label1';
+    GroupIndex := 1;
+    Hint := 'Toggle designer grid';
+    ImageMargin := -1;
+    ImageName := 'vfd.grid';
+    ImageSpacing := 0;
+    TabOrder := 13;
+    Focusable := False;
+    AllowDown := True;
+    OnClick := @ToggleDesignerGrid;
+  end;
 
   btnToFront := TfpgButton.Create(self);
   with btnToFront do
@@ -903,7 +891,7 @@ begin
     Name := 'wgpalette';
     SetPosition(152, 28, 600, 62);
     Anchors := [anLeft,anRight,anTop,anBottom];
-     Width := self.Width - 150;
+    Width := self.Width - 150;
     Focusable := False;
     OnResize := @PaletteBarResized;
   end;
@@ -913,7 +901,6 @@ begin
   begin
     Name := 'chlPalette';
     SetPosition(16, 64, 132, 22);
-   //     SetPosition(4, 67, 144, 22);
     Anchors := [anLeft,anBottom];
     ExtraHint := '';
     FontDesc := '#List';
@@ -921,6 +908,7 @@ begin
     Items.Add('-');
     FocusItem := 0;
     TabOrder := 5;
+    //     SetPosition(4, 67, 144, 22);
   end;
 
   PanelMove := TfpgPanel.Create(self);
@@ -929,17 +917,17 @@ begin
     Name := 'PanelMove';
     SetPosition(0, 0, 13, 92);
     Align := alLeft;
+    BackgroundColor := TfpgColor($FFC0DCC0);
     FontDesc := '#Label1';
     Hint := 'Hold click to move palette...';
     Style := bsFlat;
     Text := '';
     tag := 0 ;
     visible := false;
-    BackgroundColor:=clmoneygreen;
     OnMouseMove:= @onMovemovepanel ;
     OnMouseDown := @onClickDownPanel ;
     OnMouseUp := @onClickUpPanel ;
-   end;
+  end;
 
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
@@ -948,6 +936,10 @@ begin
 
   x := 0;
   y := 0;
+
+  OnCloseQuery:= @MainCloseQueryEvent;
+  maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
+  enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
  
   for n := 0 to VFDWidgetCount-1 do
   begin
@@ -1046,6 +1038,8 @@ indexundo := 0 ;
  PaletteBarResized(self);
 end;
 
+end;
+
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
 begin
  maindsgn.ShowGrid := btnGrid.Down;
@@ -1121,8 +1115,7 @@ procedure  TfrmMainDesigner.ToFrontClick(Sender: TObject);
 procedure TfrmMainDesigner.OnAlwaysToFront(Sender: TObject);
 begin
    hide;
-   PanelMove.visible := true;
-    fpgapplication.ProcessMessages;
+   fpgapplication.ProcessMessages;
     WindowType := wtpopup ;
     MainMenu.MenuItem(8).Visible:=true;
    MainMenu.MenuItem(8).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' +  ext_version;    ;
@@ -1150,7 +1143,8 @@ begin
      end;
 
 UpdateWindowPosition;
-       show;
+PanelMove.visible := true;
+show;
     frmProperties.hide;
    fpgapplication.ProcessMessages;
    frmProperties.Show;
