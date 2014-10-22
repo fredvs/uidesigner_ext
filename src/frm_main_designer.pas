@@ -57,14 +57,12 @@ type
   public
     VFDWidget: TVFDWidgetClass;
   end;
-  
-
+ 
   TwgPalette = class(TfpgWidget)
   protected
     procedure HandlePaint; override;
   end;
-  
-
+ 
   TfrmMainDesigner = class(TfpgForm)
   private
     FFileOpenRecent: TfpgMenuItem;
@@ -82,11 +80,6 @@ type
   public
     {@VFD_HEAD_BEGIN: frmMainDesigner}
     MainMenu: TfpgMenuBar;
-    btnNewForm: TfpgButton;
-    btnOpen: TfpgButton;
-    btnSave: TfpgButton;
-    btnToFront: TfpgButton;
-    wgpalette: TwgPalette;
     chlPalette: TfpgComboBox;
     filemenu: TfpgPopupMenu;
     undomenu: TfpgPopupMenu;
@@ -98,6 +91,11 @@ type
     toolsmenu: TfpgPopupMenu;
     windowmenu: TfpgPopupMenu;
     previewmenu: TfpgPopupMenu;
+    btnNewForm: TfpgButton;
+    btnOpen: TfpgButton;
+    btnSave: TfpgButton;
+    btnToFront: TfpgButton;
+    wgpalette: TwgPalette;
     btnGrid: TfpgButton;
     PanelMove: TfpgPanel;
     {@VFD_HEAD_END: frmMainDesigner}
@@ -142,7 +140,6 @@ type
     function    GetItem(index: integer): TVFDWidgetProperty;
   end;
 
-
   TwgPropertyList = class(TfpgListBox)
   protected
     procedure   DrawItem(num: integer; rect: TfpgRect; flags: integer); override;
@@ -168,7 +165,6 @@ type
     function    RowHeight: integer; override;
     procedure   RealignEditor;
   end;
-
 
   TfrmProperties = class(TfpgForm)
   protected
@@ -203,7 +199,6 @@ type
    public
      procedure   AfterCreate; override;
      class procedure Execute;
-
    end;
 
 {@VFD_NEWFORM_DECL}
@@ -267,8 +262,6 @@ end;
 procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
-
-
 
     OnPaint := @FormPaint;
 
@@ -426,13 +419,10 @@ begin
   btnSave.Left:= btnOpen.Left ;
   btnSave.UpdateWindowPosition;
 
-
  filemenu.MenuItem(0).Visible:=false;
  filemenu.MenuItem(1).Visible:=false;
  filemenu.MenuItem(2).Visible:=false;
- //filemenu.MenuItem(9).Visible:=false;
- //filemenu.MenuItem(8).Visible:=false;
-
+ 
  if ide = 2 then
   begin
 {$if defined(cpu64)}
@@ -630,9 +620,8 @@ if indexundo < length(ArrayUndo) -1  then
 begin
 inc(indexundo);
 maindsgn.loadundo(indexundo) ;
-
-end else  frmMainDesigner.undomenu.MenuItem(0).Enabled := false;
-
+end else
+frmMainDesigner.undomenu.MenuItem(0).Enabled := false;
  end;
 
 procedure TfrmMainDesigner.OnIndexRedo(Sender: TObject);
@@ -645,7 +634,6 @@ maindsgn.loadundo(indexundo) ;
 end else  frmMainDesigner.undomenu.MenuItem(1).Enabled := false;
  end;
 
-
 procedure TfrmMainDesigner.AfterCreate;
 var
   n, x, y , wscreen: integer;
@@ -656,23 +644,22 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
-
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
 
   wscreen := fpgApplication.ScreenWidth;
   {@VFD_BODY_BEGIN: frmMainDesigner}
-  Name := 'frmMain';
- // SetPosition(96, 118, 800, 92);
+
+  Name := 'frmMainDesigner';
   SetPosition(338, 140, 800, 92);
-  WindowTitle := 'frmMain';
+  WindowTitle := 'frmMainDesigner';
   Hint := '';
   ShowHint := True;
   WindowPosition := wpUser;
   MinHeight := 82;
   MinWidth := 315;
   OnCloseQuery:= @MainCloseQueryEvent;
+  x := 0;
 
   MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do
@@ -680,6 +667,147 @@ begin
     Name := 'MainMenu';
     SetPosition(0, 0, 753, 24);
     Align := alTop;
+  end;
+
+  filemenu := TfpgPopupMenu.Create(self);
+  with filemenu do
+  begin
+    Name := 'filemenu';
+    SetPosition(464, 64, 120, 20);
+    AddMenuItem('Create New File...', 'Ctrl+N', @(maindsgn.OnNewFile));
+    AddMenuItem('Open...', 'Ctrl+O', @(maindsgn.OnLoadFile));
+    FFileOpenRecent := AddMenuItem('Open Recent...', '', nil);
+    AddMenuItem('-', '', nil);
+    mi := AddMenuItem('Save', 'Ctrl+S', @(maindsgn.OnSaveFile));
+    mi.Tag := 10;
+    AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @(maindsgn.OnSaveFile));
+    AddMenuItem('-', '', nil);
+    AddMenuItem('Add New Form to Unit...', '', @(maindsgn.OnNewForm));
+    AddMenuItem('-', '', nil);
+    AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
+  end;
+
+  formmenu := TfpgPopupMenu.Create(self);
+  with formmenu do
+  begin
+    Name := 'formmenu';
+    SetPosition(464, 48, 120, 20);
+    AddMenuItem('Widget Order...', '', @(maindsgn.OnEditWidgetOrder));
+    AddMenuItem('Tab Order...', '', @(maindsgn.OnEditTabOrder));
+    AddMenuItem('-', '', nil);
+    AddMenuItem('Edit special...', '', nil).Enabled := False; // TODO
+   end;
+
+  miOpenRecentMenu := TfpgPopupMenu.Create(self);
+  with miOpenRecentMenu do
+  begin
+    Name := 'miOpenRecentMenu';
+    SetPosition(336, 68, 128, 20);
+  end;
+
+    setmenu := TfpgPopupMenu.Create(self);
+  with setmenu do
+  begin
+    Name := 'setmenu';
+     SetPosition(464, 48, 120, 20);
+      AddMenuItem('General Settings', '', @(maindsgn.OnOptionsClick));
+     end;
+
+   undomenu := TfpgPopupMenu.Create(self);
+  with undomenu do
+  begin
+    Name := 'undomenu';
+     SetPosition(464, 48, 120, 20);
+
+    AddMenuItem('Undo', 'Ctrl+Z',@OnIndexUndo);
+    AddMenuItem('ReDo', 'Ctrl+Maj+Z',@OnIndexRedo);
+    AddMenuItem('-', '', nil);
+    FlistUndo := AddMenuItem('Undo List...', '',nil);
+
+  MenuItem(0).Enabled:=false;
+  MenuItem(1).Enabled:=false;
+  MenuItem(3).Enabled:=false;
+  end;
+
+   toolsmenu := TfpgPopupMenu.Create(self);
+  with toolsmenu do
+  begin
+    Name := 'toolsmenu';
+    SetPosition(328, 52, 120, 20);
+    AddMenuItem('Color Wheel', '', @micolorwheel);
+    AddMenuItem('Image Convertor', '', @miimageconv);
+   end;
+
+  helpmenu := TfpgPopupMenu.Create(self);
+  with helpmenu do
+  begin
+    Name := 'helpmenu';
+    SetPosition(448, 52, 120, 20);
+    AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
+    AddMenuItem('About Designer_ext...', '', @miHelpAboutClick);
+   end;
+
+  listundomenu := TfpgPopupMenu.Create(self);
+  with listundomenu do
+  begin
+    Name := 'listundomenu';
+    SetPosition(328, 52, 120, 20);
+
+    while x < 100 do
+    begin
+     AddMenuItem('', '',@OnLoadUndo);
+     MenuItem(x).Visible:=false;
+     MenuItem(x).Tag:=x;
+    inc(x);
+    end;
+
+  end;
+
+  windowmenu := TfpgPopupMenu.Create(self);
+  with windowmenu do
+  begin
+    Name := 'windowmenu';
+    SetPosition(328, 52, 120, 20);
+    AddMenuItem('Object Inspector', '', @OnObjInspect);
+    AddMenuItem('-', '', nil) ;
+    MenuItem(1).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(2).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(3).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(4).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(5).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(6).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(7).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(8).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(9).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(10).Visible:=false;
+    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
+    MenuItem(11).Visible:=false;
+    MenuItem(2).Tag:=0;
+    MenuItem(3).Tag:=1;
+    MenuItem(4).Tag:=2;
+    MenuItem(5).Tag:=3;
+    MenuItem(6).Tag:=4;
+    MenuItem(7).Tag:=5;
+    MenuItem(8).Tag:=6;
+    MenuItem(9).Tag:=7;
+    MenuItem(10).Tag:=8;
+    MenuItem(11).Tag:=9;
+  end;
+
+  previewmenu := TfpgPopupMenu.Create(self);
+  with previewmenu do
+  begin
+    Name := 'previewmenu';
+    SetPosition(324, 36, 120, 20);
   end;
 
   btnNewForm := TfpgButton.Create(self);
@@ -793,150 +921,6 @@ begin
     Items.Add('-');
     FocusItem := 0;
     TabOrder := 5;
-  end;
-
-  filemenu := TfpgPopupMenu.Create(self);
-  with filemenu do
-  begin
-    Name := 'filemenu';
-    SetPosition(464, 64, 120, 20);
-    AddMenuItem('Create New File...', 'Ctrl+N', @(maindsgn.OnNewFile));
-    AddMenuItem('Open...', 'Ctrl+O', @(maindsgn.OnLoadFile));
-    FFileOpenRecent := AddMenuItem('Open Recent...', '', nil);
-    AddMenuItem('-', '', nil);
-    mi := AddMenuItem('Save', 'Ctrl+S', @(maindsgn.OnSaveFile));
-    mi.Tag := 10;
-    AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @(maindsgn.OnSaveFile));
-    AddMenuItem('-', '', nil);
-    AddMenuItem('Add New Form to Unit...', '', @(maindsgn.OnNewForm));
-    AddMenuItem('-', '', nil);
-    AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
-  end;
-
-  formmenu := TfpgPopupMenu.Create(self);
-  with formmenu do
-  begin
-    Name := 'formmenu';
-    SetPosition(464, 48, 120, 20);
-    AddMenuItem('Widget Order...', '', @(maindsgn.OnEditWidgetOrder));
-    AddMenuItem('Tab Order...', '', @(maindsgn.OnEditTabOrder));
-    AddMenuItem('-', '', nil);
-    AddMenuItem('Edit special...', '', nil).Enabled := False; // TODO
-   end;
-
-  miOpenRecentMenu := TfpgPopupMenu.Create(self);
-  with miOpenRecentMenu do
-  begin
-    Name := 'miOpenRecentMenu';
-    SetPosition(336, 68, 128, 20);
-  end;
-
-    setmenu := TfpgPopupMenu.Create(self);
-  with setmenu do
-  begin
-    Name := 'setmenu';
-     SetPosition(464, 48, 120, 20);
-      AddMenuItem('General Settings', '', @(maindsgn.OnOptionsClick));
-     end;
-
-   undomenu := TfpgPopupMenu.Create(self);
-  with undomenu do
-  begin
-    Name := 'undomenu';
-     SetPosition(464, 48, 120, 20);
-
-    AddMenuItem('Undo', 'Ctrl+Z',@OnIndexUndo);
-    AddMenuItem('ReDo', 'Ctrl+Maj+Z',@OnIndexRedo);
-    AddMenuItem('-', '', nil);
-    FlistUndo := AddMenuItem('Undo List...', '',nil);
-
-  MenuItem(0).Enabled:=false;
-  MenuItem(1).Enabled:=false;
-  MenuItem(3).Enabled:=false;
-  end;
-
-   toolsmenu := TfpgPopupMenu.Create(self);
-  with toolsmenu do
-  begin
-    Name := 'toolsmenu';
-    SetPosition(328, 52, 120, 20);
-    AddMenuItem('Color Wheel', '', @micolorwheel);
-    AddMenuItem('Image Convertor', '', @miimageconv);
-   end;
-
-  helpmenu := TfpgPopupMenu.Create(self);
-  with helpmenu do
-  begin
-    Name := 'helpmenu';
-    SetPosition(448, 52, 120, 20);
-    AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
-    AddMenuItem('About Designer_ext...', '', @miHelpAboutClick);
-   end;
-
-
-
-  listundomenu := TfpgPopupMenu.Create(self);
-  x := 0;
-   with listundomenu do
-  begin
-    Name := 'listundomenu';
-    SetPosition(328, 52, 120, 20);
-
-    while x < 100 do
-    begin
-     AddMenuItem('', '',@OnLoadUndo);
-     MenuItem(x).Visible:=false;
-     MenuItem(x).Tag:=x;
-    inc(x);
-    end;
-
-  end;
-
-  windowmenu := TfpgPopupMenu.Create(self);
-  with windowmenu do
-  begin
-    Name := 'windowmenu';
-    SetPosition(328, 52, 120, 20);
-    AddMenuItem('Object Inspector', '', @OnObjInspect);
-    AddMenuItem('-', '', nil) ;
-    MenuItem(1).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(2).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(3).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(4).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(5).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(6).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(7).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(8).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(9).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(10).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(11).Visible:=false;
-    MenuItem(2).Tag:=0;
-    MenuItem(3).Tag:=1;
-    MenuItem(4).Tag:=2;
-    MenuItem(5).Tag:=3;
-    MenuItem(6).Tag:=4;
-    MenuItem(7).Tag:=5;
-    MenuItem(8).Tag:=6;
-    MenuItem(9).Tag:=7;
-    MenuItem(10).Tag:=8;
-    MenuItem(11).Tag:=9;
-  end;
-
-  previewmenu := TfpgPopupMenu.Create(self);
-  with previewmenu do
-  begin
-    Name := 'previewmenu';
-    SetPosition(324, 36, 120, 20);
   end;
 
   PanelMove := TfpgPanel.Create(self);
@@ -1078,12 +1062,8 @@ begin
 inherited Create(AOwner);
 fpgImages.AddMaskedBMP( 'vfd.grid', @vfd_grid,
 sizeof(vfd_grid), 0, 0);
-
 fpgImages.AddMaskedBMP('vfd.tofront', @vfd_tofront,
 sizeof(vfd_tofront), 0, 0);
-
-
-
 OnShow := @FormShow;
 end;
 
@@ -1091,7 +1071,6 @@ procedure TfrmMainDesigner.BeforeDestruction;
 begin
   gINI.WriteFormState(self);
   gINI.WriteInteger('Options', 'IDE', idetemp);
-
   inherited BeforeDestruction;
 end;
 
@@ -1220,13 +1199,10 @@ begin
 procedure TfrmMainDesigner.OnHideClick(Sender: TObject);
 
 begin
-   hide;
-
+  hide;
  WindowAttributes := [waBorderless];
  MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     Designer_ext'  ;
-
  show;
-
 end;
 
 procedure TfrmMainDesigner.OnShowClick(Sender: TObject);
@@ -1236,7 +1212,6 @@ begin
   MainMenu.MenuItem(7).Text:= '';
   WindowAttributes := [];
    Show;
-
 end;
 
 procedure TfrmMainDesigner.OnObjInspect(Sender: TObject);
@@ -1254,7 +1229,6 @@ begin
   end;
 end;
 
-
 { TfrmProperties }
 
 procedure TfrmProperties.AfterCreate;
@@ -1267,15 +1241,13 @@ begin
   Name := 'frmProperties';
   WindowTitle := 'Properties';
   SetPosition(100, 240, 250, 450);
- // WindowPosition := wpUser;
-
+ 
     if  gINI.ReadBool('frmPropertiesState', 'FirstLoad', true) = false  then
   begin
                     gINI.ReadFormState(self) ;
                     UpdateWindowPosition;
                       end else
     gINI.WriteBool('frmPropertiesState', 'FirstLoad', false);
-
 
     fpgImages.AddMaskedBMP(
     'vfd.anchorleft', @vfd_anchorleft,
@@ -1321,8 +1293,6 @@ begin
   lstProps.Props.Widget := edName;
 
   y := lstProps.Bottom + 5;
-
-  //inc(y, gap+5);
 
   l3         := CreateLabel(self, 3, y + 1, 'Left:');
   l3.Anchors := [anLeft, anBottom];
@@ -1431,8 +1401,6 @@ begin
   edOther.FontDesc := '#Edit2';
   edOther.OnChange := @(maindsgn.OnOtherChange);
   {%endregion}
-
-
 end;
 
 procedure TfrmProperties.BeforeDestruction;
@@ -1692,7 +1660,6 @@ TfpgMenuItem(Sender).Checked:= true;
    frmProperties.Show;
      end;
  end;
-
 end;
 
 procedure TfrmMainDesigner.BuildThemePreviewMenu;
@@ -1746,13 +1713,11 @@ begin
   frm.Show;
 end;
 
-
 procedure TfrmMainDesigner.miMRUClick(Sender: TObject; const FileName: string);
 begin
   maindsgn.EditedFileName := FileName;
   maindsgn.OnLoadFile(maindsgn);
 end;
-
 
 function TfrmMainDesigner.GetSelectedWidget: TVFDWidgetClass;
 begin
@@ -1813,9 +1778,7 @@ end;
 procedure TwgPalette.HandlePaint;
 begin
   Canvas.Clear(clWindowBackground);
-
 end;
-
 
 end.
 
