@@ -950,6 +950,7 @@ begin
     Style := bsFlat;
     Text := '';
     tag := 0 ;
+    visible := false;
     BackgroundColor:=clmoneygreen;
     OnMouseMove:= @onMovemovepanel ;
     OnMouseDown := @onClickDownPanel ;
@@ -1141,10 +1142,11 @@ procedure  TfrmMainDesigner.ToFrontClick(Sender: TObject);
 procedure TfrmMainDesigner.OnAlwaysToFront(Sender: TObject);
 begin
    hide;
+   PanelMove.visible := true;
     fpgapplication.ProcessMessages;
     WindowType := wtpopup ;
-    MainMenu.MenuItem(7).Visible:=true;
-   MainMenu.MenuItem(7).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' +  ext_version;    ;
+    MainMenu.MenuItem(8).Visible:=true;
+   MainMenu.MenuItem(8).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' +  ext_version;    ;
    // btnToFront.Text:='toN';
    btnToFront.tag:=1;
  if idetemp = 1 then
@@ -1178,9 +1180,10 @@ UpdateWindowPosition;
 procedure TfrmMainDesigner.OnNeverToFront(Sender: TObject);
 begin
    hide;
+   PanelMove.visible := false;
      fpgapplication.ProcessMessages;
-      MainMenu.MenuItem(7).Text:= '';
-      MainMenu.MenuItem(7).Visible:=false;
+      MainMenu.MenuItem(8).Text:= '';
+      MainMenu.MenuItem(8).Visible:=false;
      //   btnToFront.Text:='toF';
    btnToFront.tag:=0;
   WindowType := wtwindow ;  // with borders, not on front.
@@ -1296,8 +1299,8 @@ begin
   w     := Width - x2;
   y     := 3;
 
-  l1      := CreateLabel(self, 0, y, 'Class:');
-  lbClass := CreateLabel(self, x2, y, 'CLASS');
+  l1      := CreateLabel(self, 0, y-1, 'Class:');
+  lbClass := CreateLabel(self, x2, y-1, 'CLASS');
   lbClass.Width := w;
   lbClass.FontDesc := '#Label2';
   lbClass.Anchors := [anLeft, anRight, anTop];

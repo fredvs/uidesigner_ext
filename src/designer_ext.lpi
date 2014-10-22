@@ -40,6 +40,7 @@
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="designer_ext"/>
       </Unit0>
       <Unit1>
         <Filename Value="vfdmain.pas"/>
@@ -139,6 +140,7 @@
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
       </Verbosity>
       <WriteFPCLogo Value="False"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
 </CONFIG>

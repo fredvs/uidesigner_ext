@@ -237,6 +237,8 @@ begin
 
   end;
   FTimer.Enabled := False;
+   if ACanvas.Window.ClassName = 'TfpgButton' then
+   begin
   ACanvas.SetColor(clWindowBackground);
   //  ACanvas.SetColor(cldarkgray);
   acanvas.DrawLine(0, 1, 1, 0);
@@ -285,6 +287,11 @@ begin
   InflateRect(r, 1, 1);
   ACanvas.SetColor(clWindowBackground);
   ACanvas.DrawRectangle(r);
+  end else
+  begin
+   ACanvas.SetColor(clgray);
+   ACanvas.DrawRectangle(r);
+  end;
 
   if (waspressed = False) and (btfHover in AFlags) then
     FTimer.Enabled := True;

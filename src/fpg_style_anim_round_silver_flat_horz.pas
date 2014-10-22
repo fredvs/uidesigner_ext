@@ -192,12 +192,17 @@ begin
 
   ACanvas.SetColor(clblack);
   ACanvas.SetLineStyle(1, lsDot);
-
-    ACanvas.DrawArc(3, 3, w div 2, h,90, 180);  /// arc left
-    ACanvas.DrawArc((w div 2)+3, 3, w div 2, h,270, 180);  /// arc right
+  
+if ACanvas.Window.ClassName = 'TfpgButton' then
+   begin
+   ACanvas.DrawArc(3, 3, w div 2, h,90, 180);  /// arc left
+   ACanvas.DrawArc((w div 2)+3, 3, w div 2, h,270, 180);  /// arc right
    ACanvas.Drawline((h div 2)+11, 3,((h div 2)+ w-h)-3, 3);  /// line up
    ACanvas.Drawline((h div 2)+6, h+2,((h div 2)+ w-h), h+2); /// line down
-
+end
+else begin
+ ACanvas.DrawRectangle(2,2,w-4,h-4);
+end; 
   // restore previous settings
   ACanvas.SetColor(oldColor);
   ACanvas.SetLineStyle(oldLineWidth, oldLineStyle);
@@ -273,10 +278,14 @@ begin
       ACanvas.GradientFill(r21, clsilver, clLightYellow, gdHorizontal);
       ACanvas.GradientFill(r22, clLightYellow, clsilver, gdHorizontal);
     end;
+    
     ////////////
-    ACanvas.Color := clWindowBackground;
+    /// The background circle for button
+     if ACanvas.Window.ClassName = 'TfpgButton' then
+     begin
+     ACanvas.Color := clWindowBackground;
 
-   for ib := 1 to h div 2 do
+   for ib := 1 to (w div 4) + 1 do
     begin
     ACanvas.DrawArc(-1*ib, 0, w div 2, h,90, 180);  /// arc left
     ACanvas.DrawArc((w div 2)+ (ib*1), 0, w div 2, h,270, 180);
@@ -291,9 +300,15 @@ begin
 
     ACanvas.DrawArc(0, 0, w div 2, h,90, 180);  /// arc left
     ACanvas.DrawArc(w div 2, 0, w div 2, h,270, 180);  /// arc right
-    ACanvas.Drawline(h div 2, 0,(h div 2)+ w-h, 0);  /// line up
-    ACanvas.Drawline(h div 2, h-1,(h div 2)+ w-h, h-1); /// line down
+    ACanvas.Drawline(w div 4, 0,w div 4 * 3, 0);  /// line up
+   ACanvas.Drawline(w div 4, h-1,w div 4 * 3, h-1); /// line down
 
+ end else
+  begin
+  ACanvas.SetColor(clgray);
+   ACanvas.DrawRectangle(r);
+  end;
+ 
   ///////////
   end
   else
