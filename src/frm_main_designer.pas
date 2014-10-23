@@ -239,7 +239,6 @@ uses
 
 procedure TfrmAbout.SetupCaptions;
 begin
-  //lblVersion.Text := Format(rsVersion, [cAppVersion]);
   lblVersion.Text := 'Version: ' +  ext_version ;
   lblURL.URL := fpGUIWebsite;
   lblURL.Text := fpGUIWebsite;
@@ -263,22 +262,31 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-    OnPaint := @FormPaint;
 
-   {@VFD_BODY_BEGIN: frmAbout}
+
+  {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(378, 267, 276, 330);
   WindowTitle := 'About Designer_ext';
   Hint := '';
+  BackGroundColor := $FFFFFFFF;
+  Sizeable := False;
+  TextColor := $FF000000;
+  MaxHeight := 0;
+  MaxWidth := 0;
+  MinHeight := 32;
+  MinWidth := 32;
+  FullScreen := False;
   WindowPosition := wpScreenCenter;
-  BackgroundColor:= clwhite;
   OnShow := @FormShow;
+  OnPaint := @FormPaint;
 
   lblAppName := TfpgLabel.Create(self);
   with lblAppName do
   begin
     Name := 'lblAppName';
     SetPosition(32, 190, 255, 35);
+    BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-20';
     Hint := '';
     Text := 'designer_ext';
@@ -291,6 +299,7 @@ begin
     Name := 'lblVersion';
     SetPosition(62, 220, 195, 24);
     Alignment := taRightJustify;
+    BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Version:  %s';
@@ -316,6 +325,7 @@ begin
   begin
     Name := 'lblWrittenBy';
     SetPosition(12, 250, 241, 14);
+    BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
     Text := 'UIdesigner written by Graeme Geldenhuys';
@@ -326,12 +336,13 @@ begin
   begin
     Name := 'lblURL';
     SetPosition(12, 266, 246, 14);
+    BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9:underline';
     Hint := '';
     HotTrackColor := TfpgColor($80000001);
     HotTrackFont := 'Arial-9:underline';
     Text := 'http://fpgui.sourceforge.net';
-    TextColor := TfpgColor($80000001);
+    TextColor := TfpgColor($0032D2);
     URL := 'http://fpgui.sourceforge.net';
   end;
 
@@ -340,6 +351,7 @@ begin
   begin
     Name := 'lblCompiled';
     SetPosition(12, 287, 180, 13);
+    BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
     Text := 'Compiled on:  %s';
@@ -350,6 +362,7 @@ begin
   begin
     Name := 'lblExtBy';
     SetPosition(22, 302, 150, 14);
+    BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
     Text := '_ext => Fred van Stappen';
@@ -651,9 +664,15 @@ begin
   WindowTitle := 'frmMainDesigner';
   Hint := '';
   ShowHint := True;
-  WindowPosition := wpUser;
+  BackGroundColor := $80000001;
+  Sizeable := True;
+  TextColor := $80000008;
+  MaxHeight := 0;
+  MaxWidth := 0;
   MinHeight := 82;
   MinWidth := 315;
+  FullScreen := False;
+  WindowPosition := wpUser;
 
   MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do
@@ -878,7 +897,6 @@ begin
     ImageName := 'vfd.tofront';
     ImageSpacing := 0;
     TabOrder := 3;
-    // ImageName := 'objectedit.bmp';
     Focusable := False;
     Tag := 0;
     OnClick   := @ToFrontClick;
