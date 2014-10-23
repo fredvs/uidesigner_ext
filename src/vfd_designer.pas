@@ -1212,62 +1212,12 @@ begin
   if IsStoredProp(FForm, PropInfo) then
   s := s + Ind(1) + 'BackGroundColor := $' + IntToHex(i,0) + ';' + LineEnding;
 
-  // Sizeable property
-   PropInfo := GetPropInfo(FForm.ClassType, 'Sizeable');
-  i := GetOrdProp(FForm, 'Sizeable');
-  if IsStoredProp(FForm, PropInfo) then
-  begin
-    if PropInfo^.Default <> i then
-    begin
-      if i = 1 then
-        t := 'True'
-      else
-        t := 'False';
-      s := s + Ind(1) + 'Sizeable := ' + t + ';' + LineEnding;
-    end;
-  end;
-
   // TextColor property
     PropInfo := GetPropInfo(FForm.ClassType, 'TextColor');
      i := GetOrdProp(FForm, 'TextColor');
   if IsStoredProp(FForm, PropInfo) then
   s := s + Ind(1) + 'TextColor := $' + IntToHex(i,0) + ';' + LineEnding;
 
-  // MaxHeight property
-    PropInfo := GetPropInfo(FForm.ClassType, 'MaxHeight');
-     i := GetOrdProp(FForm, 'MaxHeight');
-  if IsStoredProp(FForm, PropInfo) then
-  s := s + Ind(1) + 'MaxHeight := ' + IntToStr(i) + ';' + LineEnding;
-
-  // MaxWidth property
-    PropInfo := GetPropInfo(FForm.ClassType, 'MaxWidth');
-     i := GetOrdProp(FForm, 'MaxWidth');
-  if IsStoredProp(FForm, PropInfo) then
-  s := s + Ind(1) + 'MaxWidth := ' + IntToStr(i) + ';' + LineEnding;
-
-  // MinHeight property
-    PropInfo := GetPropInfo(FForm.ClassType, 'MinHeight');
-     i := GetOrdProp(FForm, 'MinHeight');
-  if IsStoredProp(FForm, PropInfo) then
-  s := s + Ind(1) + 'MinHeight := ' + IntToStr(i) + ';' + LineEnding;
-
-  // MinWidth property
-    PropInfo := GetPropInfo(FForm.ClassType, 'MinWidth');
-     i := GetOrdProp(FForm, 'MinWidth');
-  if IsStoredProp(FForm, PropInfo) then
-  s := s + Ind(1) + 'MinWidth := ' + IntToStr(i) + ';' + LineEnding;
-
-  // FullScreen property
-    PropInfo := GetPropInfo(FForm.ClassType, 'FullScreen');
-     i := GetOrdProp(FForm, 'FullScreen');
-      if IsStoredProp(FForm, PropInfo) then
-     begin
-           if i = 1 then
-             t := 'True'
-           else
-             t := 'False';
-           s := s + Ind(1) + 'FullScreen := ' + t + ';' + LineEnding;
-         end;
  {
 // WindowPosition property     /// TODO
     PropInfo := GetPropInfo(FForm.ClassType, 'WindowPosition');

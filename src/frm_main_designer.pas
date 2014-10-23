@@ -272,11 +272,6 @@ begin
   BackGroundColor := $FFFFFFFF;
   Sizeable := False;
   TextColor := $FF000000;
-  MaxHeight := 0;
-  MaxWidth := 0;
-  MinHeight := 32;
-  MinWidth := 32;
-  FullScreen := False;
   WindowPosition := wpScreenCenter;
   OnShow := @FormShow;
   OnPaint := @FormPaint;
@@ -665,14 +660,10 @@ begin
   Hint := '';
   ShowHint := True;
   BackGroundColor := $80000001;
-  Sizeable := True;
   TextColor := $80000008;
-  MaxHeight := 0;
-  MaxWidth := 0;
+  WindowPosition := wpUser;
   MinHeight := 82;
   MinWidth := 315;
-  FullScreen := False;
-  WindowPosition := wpUser;
 
   MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do

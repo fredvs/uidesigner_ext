@@ -515,22 +515,7 @@ begin
       TfpgForm(wg).BackgroundColor := ival ;
        end;
   end
-    else if ident = 'SIZEABLE' then
-  begin
-    lok := (wg is TfpgForm);
-    if lok then
-    begin
-      lok := CheckSymbol(s, ':=');
-      if lok then
-      begin
-        bval := GetBoolValue(s);
-        lok  := CheckSymbol(s, ';');
-      end;
-      if lok then
-      TfpgForm(wg).sizeable := bval ;
-       end;
-  end
-  else if ident = 'TEXTCOLOR' then
+   else if ident = 'TEXTCOLOR' then
   begin
     lok := (wg is TfpgForm);
     if lok then
@@ -545,82 +530,7 @@ begin
       TfpgForm(wg).TextColor := ival ;
        end;
   end
-  else if ident = 'MAXHEIGHT' then
-  begin
-    lok := (wg is TfpgForm);
-    if lok then
-    begin
-      lok := CheckSymbol(s, ':=');
-      if lok then
-      begin
-        ival := GetIntValue(s);
-        lok  := CheckSymbol(s, ';');
-      end;
-      if lok then
-      TfpgForm(wg).MaxHeight := ival ;
-       end;
-  end
-  else if ident = 'MAXWIDTH' then
-  begin
-    lok := (wg is TfpgForm);
-    if lok then
-    begin
-      lok := CheckSymbol(s, ':=');
-      if lok then
-      begin
-        ival := GetIntValue(s);
-        lok  := CheckSymbol(s, ';');
-      end;
-      if lok then
-      TfpgForm(wg).MaxWidth := ival ;
-       end;
-  end
-  else if ident = 'MINHEIGHT' then
-  begin
-    lok := (wg is TfpgForm);
-    if lok then
-    begin
-      lok := CheckSymbol(s, ':=');
-      if lok then
-      begin
-        ival := GetIntValue(s);
-        lok  := CheckSymbol(s, ';');
-      end;
-      if lok then
-      TfpgForm(wg).MinHeight := ival ;
-       end;
-  end
-  else if ident = 'MINWIDTH' then
-  begin
-    lok := (wg is TfpgForm);
-    if lok then
-    begin
-      lok := CheckSymbol(s, ':=');
-      if lok then
-      begin
-        ival := GetIntValue(s);
-        lok  := CheckSymbol(s, ';');
-      end;
-      if lok then
-      TfpgForm(wg).MinWidth := ival ;
-       end;
-  end
-   else if ident = 'FULLSCREEN' then
-  begin
-    lok := (wg is TfpgForm);
-    if lok then
-    begin
-      lok := CheckSymbol(s, ':=');
-      if lok then
-      begin
-        bval := GetBoolValue(s);
-        lok  := CheckSymbol(s, ';');
-      end;
-      if lok then
-      TfpgForm(wg).FullScreen := bval ;
-       end;
-  end
-   {
+    {
 
   else if ident = 'WINDOWPOSITION' then     /// TODO
   begin
