@@ -1,8 +1,10 @@
-{ 
-This is the extended version of fpGUI uidesigner.
-With window list, undo feature, integration into IDE, editor launcher,...
+{
+This is the extended version of fpGUI uidesigner => Designer_ext.
+With window list, undo feature, integration into IDE, editor launcher, extra-properties editor,...
+
 Fred van Stappen
 fiens@hotmail.com
+2013 - 2014
 }
 {
     fpGUI  -  Free Pascal GUI Toolkit
@@ -629,7 +631,7 @@ begin
 
   if SelectedForm <> nil then
   begin
-    SelectedForm.OnPropNameChange(Sender);
+     SelectedForm.OnPropNameChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 0);
@@ -905,11 +907,11 @@ begin
   p := ExtractFilePath(FEditedFileName);
   if s = '' then
   s := '[' + rsNewUnnamedForm + ']';
-  frmMainDesigner.WindowTitle := 'fpGUI Designer v' + ext_version + ' - ' + p + s;
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' - ' + p + s;
 
   if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(6).Text :=
-      'Current file : ' + p + s + '     fpGUI Designer v' + ext_version;
+      'Current file : ' + p + s + '     fpGUI Designer_ext v' + ext_version;
 
    {$IFDEF Linux}
   if (fileexists(PChar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0) > 1) then

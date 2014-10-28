@@ -16,9 +16,9 @@ type
     FilenameEdit1: TfpgFileNameEdit;
     memImages: TfpgMemo;
     Button1: TfpgButton;
-    btnClear: TfpgButton;
     Label1: TfpgLabel;
     btnCopy: TfpgButton;
+    btnClear: TfpgButton;
     Button2: TfpgButton;
     {@VFD_HEAD_END: MainForm}
     procedure onclosemain(Sender: TObject; var closeac : Tcloseaction);
@@ -182,7 +182,7 @@ begin
   WindowTitle := 'Bitmap Image Conversion into Pascal resource';
   Hint := '';
   ShowHint := True;
-  Sizeable:=false;
+  BackGroundColor := $80000001;
   WindowPosition := wpScreenCenter;
   DNDEnabled := True;
   onclose := @onclosemain;
@@ -192,7 +192,7 @@ begin
   begin
     Name := 'FilenameEdit1';
     SetPosition(4, 8, 384, 24);
-    Anchors := [];
+    Anchors := [anLeft,anRight,anTop];
     ExtraHint := '';
     FileName := '';
     Filter := '';
@@ -219,12 +219,14 @@ begin
   begin
     Name := 'Button1';
     SetPosition(396, 8, 64, 24);
-    Anchors := [];
-    Text := 'Convert';
+    Anchors := [anRight,anTop];
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := 'Conver bitmap image into Pascal resource';
     ImageName := '';
     TabOrder := 4;
+    Text := 'Convert';
     OnClick := @btnConvertClicked;
   end;
 
@@ -243,26 +245,30 @@ begin
   begin
     Name := 'btnCopy';
     SetPosition(464, 8, 70, 24);
-     Text := 'Copy';
-    Anchors := [];
+    Anchors := [anRight,anTop];
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := 'Copy to clipboard';
     ImageName := 'stdimg.copy';
     TabOrder := 8;
+    Text := 'Copy';
     OnClick := @btnCopyClicked;
   end;
 
-    btnClear := TfpgButton.Create(self);
+  btnClear := TfpgButton.Create(self);
   with btnClear do
   begin
     Name := 'btnClear';
     SetPosition(540, 8, 60, 24);
-    Anchors := [];
-    Text := 'Clear';
+    Anchors := [anRight,anTop];
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := 'Clear text box';
     ImageName := '';
     TabOrder := 6;
+    Text := 'Clear';
     OnClick  := @btnClearClicked;
   end;
 
@@ -271,12 +277,14 @@ begin
   begin
     Name := 'Button2';
     SetPosition(636, 8, 60, 24);
-    Anchors := [];
-    Text := 'Quit';
+    Anchors := [anRight,anTop];
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := 'Close Image Convertor';
     ImageName := 'stdimg.close';
     TabOrder := 7;
+    Text := 'Quit';
     OnClick := @btnquitClicked;
   end;
 

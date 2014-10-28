@@ -1,4 +1,12 @@
 {
+This is the extended version of fpGUI uidesigner => Designer_ext.
+With window list, undo feature, integration into IDE, editor launcher, extra-properties editor,...
+
+Fred van Stappen
+fiens@hotmail.com
+2013 - 2014
+}
+{
     fpGUI  -  Free Pascal GUI Toolkit
 
     Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
@@ -30,7 +38,8 @@ uses
   fpg_widget,
   fpg_form,
   vfd_designer,
-  vfd_widgetclass,
+  frm_main_designer, 
+   vfd_widgetclass,
   vfd_widgets;
 
 type
@@ -46,6 +55,7 @@ type
     procedure   ParseFormWidgets;
     procedure   NextLine;
     function    ReadWGProperty(propline: string; wg: TfpgWidget; wgc: TVFDWidgetClass): boolean;
+    function    ReadWGVirtualProperty(s: String; s2: String; ident: String; wg: TfpgWidget) : boolean;
   public
     constructor Create(const FormName, FormHead, FormBody: string);
     destructor  Destroy; override;
@@ -61,7 +71,6 @@ function  GetIntValue(var s: string): integer;
 function  GetBoolValue(var s: string): boolean;
 function  GetFloatValue(var s: string): extended;
 function  GetColorValue(var s: string): integer;
-
 
 implementation
 
@@ -410,9 +419,303 @@ begin
   end;
 end;
 
+function  TVFDFormParser.ReadWGVirtualProperty(s: String; s2: String; ident: String; wg: TfpgWidget) : boolean;
+var
+  sval: string;
+  ival: longint;
+  bval: boolean;
+  Begin
+    result := false ;
+   if ident = 'SIZEABLE' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'siz=True');
+       frmProperties.cbsizeable.Items[0] ;
+                   end else  begin
+       frmProperties.cbsizeable.Items[1] ;
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' +'siz=False');
+       end;
+       end;
+      end;
+       end
+     else if ident = 'VISIBLE' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+        TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'vis=True');
+       frmProperties.cbvisible.Items[0] ;
+            end else  begin
+       frmProperties.cbvisible.Items[1] ;
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'vis=False');
+       end;
+       end;
+      end else  ///// other widget
+      begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+        TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.Parent).Name + '.' +  wg.Name + '.' + 'vis=True');
+       frmProperties.cbvisible.Items[0] ;
+            end else  begin
+       frmProperties.cbvisible.Items[1] ;
+       TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.Parent).Name + '.' +  wg.Name + '.'  + 'vis=False');
+       end;
+       end;
+      end;
+        ///////////////
+      end
+        else if ident = 'FOCUSABLE' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+        TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'foc=True');
+       frmProperties.cbvisible.Items[0] ;
+            end else  begin
+       frmProperties.cbvisible.Items[1] ;
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'foc=False');
+       end;
+       end;
+      end else  ///// other widget
+      begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+        TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.Parent).Name + '.' +  wg.Name + '.' + 'fov=True');
+       frmProperties.cbvisible.Items[0] ;
+            end else  begin
+       frmProperties.cbvisible.Items[1] ;
+       TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.Parent).Name + '.' +  wg.Name + '.'  + 'foc=False');
+       end;
+       end;
+      end;
+        ///////////////
+    end
+      else if ident = 'FULLSCREEN' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+        TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'ful=True');
+       frmProperties.cbfullscreen.Items[1] ;
+            end else  begin
+       frmProperties.cbfullscreen.Items[0] ;
+        TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'ful=False');
+       end;
+       end;
+      end;
+       end
+     else if ident = 'ENABLED' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+        TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'ena=True');
+       frmProperties.cbenabled.Items[0] ;
+            end else  begin
+       frmProperties.cbenabled.Items[1] ;
+        TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'ena=False');
+       end;
+       end;
+      end;
+      end
+   else if ident = 'MINWIDTH' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        ival := GetIntValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then
+      begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' +  'miw=' + inttostr(ival));  ///
+       frmProperties.edminwidth.Text := inttostr(ival) ;
+      end;
+     end;
+    end
+     else if ident = 'MAXWIDTH' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        ival := GetIntValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then
+      begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'maw=' + inttostr(ival));  ///
+       frmProperties.edmaxwidth.Text := inttostr(ival) ;
+      end;
+     end;
+    end
+  else if ident = 'MINHEIGHT' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        ival := GetIntValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then
+      begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'mih=' + inttostr(ival));  ///
+       frmProperties.edminheight.Text := inttostr(ival) ;
+      end;
+     end;
+    end
+   else if ident = 'MAXHEIGHT' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        ival := GetIntValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then
+      begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'mah=' + inttostr(ival));  ///
+       frmProperties.edmaxheight.Text := inttostr(ival) ;
+      end;
+     end;
+    end    else if ident = 'TAG' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        ival := GetIntValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then
+      begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'tag=' + inttostr(ival));  ///
+      frmProperties.edtag.Text := inttostr(ival) ;
+     end;
+     end else  ///// other widget
+      begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        ival := GetIntValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.parent).Name + '.' + wg.Name + '.' + 'tag=' + inttostr(ival));  ///
+      frmProperties.edtag.Text := inttostr(ival) ;
+       end;
+      end;
+        ///////////////
+    end
+ //    {
+    else if ident = 'WINDOWPOSITION' then
+  begin
+    if (pos('WINDOWPOSITION', s2) > 0) and (pos('//', s2) = 0) and
+  ((pos('{', s2) = 0) or (pos('{', s2) > 1)) and
+  (pos(':=', s2) > 0) and  (pos(';', s2) > 0) then
+  begin
+        if  pos('WPUSER', s2) > 0 then begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'wip=wpUser');  ///
+      frmProperties.cbWindowPosition.FocusItem:=0;
+      frmProperties.cbWindowPosition.text := 'wpUser';
+       end else
+        if  pos('WPAUTO', s2) > 0 then begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'wip=wpAuto');  ///
+      frmProperties.cbWindowPosition.FocusItem:=1;
+      frmProperties.cbWindowPosition.text := 'wpAuto';
+       end else
+        if  pos('WPSCREENCENTER', s2) > 0 then begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'wip=wpScreenCenter');  ///
+      frmProperties.cbWindowPosition.FocusItem:=2;
+      frmProperties.cbWindowPosition.text := 'wpScreenCenter';
+       end else
+        if  pos('WPONETHIRDDOWN', s2) > 0 then begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'wip=wpOneThirdDown');  ///
+      frmProperties.cbWindowPosition.FocusItem:=3;
+      frmProperties.cbWindowPosition.text := 'wpOneThirdDown';
+      end;
+        result := true;
+       end;
+   end;
+  end;
+
 function TVFDFormParser.ReadWGProperty(propline: string; wg: TfpgWidget; wgc: TVFDWidgetClass): boolean;
 var
-  s: string;
+  s, s2: string;
   n: integer;
   ident: string;
   lok: boolean;
@@ -422,9 +725,9 @@ var
   wga: TAnchors;
 begin
   s := propline;
-
+    s2 := trim(UpperCase(line));
   ident := UpperCase(GetIdentifier(s));
-  //writeln('ident: ',ident);
+ // writeln('ident: ',ident);
   sval  := '';
 
   lok := False;
@@ -514,41 +817,8 @@ begin
       if lok then
       TfpgForm(wg).BackgroundColor := ival ;
        end;
-  end
-   else if ident = 'TEXTCOLOR' then
-  begin
-    lok := (wg is TfpgForm);
-    if lok then
-    begin
-      lok := CheckSymbol(s, ':=');
-      if lok then
-      begin
-        ival := GetColorValue(s);
-        lok  := CheckSymbol(s, ';');
-      end;
-      if lok then
-      TfpgForm(wg).TextColor := ival ;
-       end;
-  end
-    {
+  end else lok := ReadWGVirtualProperty(s, s2, ident, wg) ;
 
-  else if ident = 'WINDOWPOSITION' then     /// TODO
-  begin
-    lok := (wg is TfpgForm);
-    if lok then
-    begin
-      lok := CheckSymbol(s, ':=');
-      if lok then
-      begin
-        ival := GetIntValue(s);
-        lok  := CheckSymbol(s, ';');
-      end;
-      if lok then
-      TfpgForm(wg).WindowPosition := ival ;
-       end;
-   end
-  }
-  ;
 
   if not lok then
     if wgc <> nil then
@@ -561,8 +831,7 @@ begin
 
   if not lok then
     DebugLn('unknown: ', line);
-
-  Result := lok;
+     Result := lok;
 end;
 
 end.

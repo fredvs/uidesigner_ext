@@ -1,8 +1,10 @@
-{ 
-This is the extended version of fpGUI uidesigner.
-With window list, undo feature, integration into IDE, editor launcher,...
+{
+This is the extended version of fpGUI uidesigner => Designer_ext.
+With window list, undo feature, integration into IDE, editor launcher, extra-properties editor,...
+
 Fred van Stappen
 fiens@hotmail.com
+2013 - 2014
 }
 {
     fpGUI  -  Free Pascal GUI Toolkit

@@ -30,7 +30,7 @@ uses
 const
   cFileFilter = '%s (%s)|%s';
   cPascalSourceFiles = '*.pp;*.pas;*.inc;*.dpr;*.lpr';
-  cAppName = 'UIDesigner_ext';
+  cAppName = 'Designer_ext';
   cAppVersion = FPGUI_VERSION;
   cAppNameAndVersion = cAppName + ' v' + cAppVersion;
   cDesignerINIVersion = 1;

@@ -1,11 +1,12 @@
-{ 
-This is the extended version of fpGUI uidesigner.
-With window list, undo feature, integration into IDE, editor launcher,...
+{
+This is the extended version of fpGUI uidesigner => Designer_ext.
+With window list, undo feature, integration into IDE, editor launcher, extra-properties editor,...
+
 Fred van Stappen
 fiens@hotmail.com
+2013 - 2014
 }
-{
-    fpGUI  -  Free Pascal GUI Toolkit
+{ fpGUI - Free Pascal GUI Toolkit
 
     Copyright (C) 2006 - 2014 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
@@ -19,6 +20,7 @@ fiens@hotmail.com
 
     Description:
       Essential classes used by the fpGUI Designer
+
 }
 
 
@@ -174,11 +176,20 @@ type
     lbClass: TfpgLabel;
     edName: TfpgEdit;
     edOther: TfpgMemo;
+
     btnTop, btnLeft, btnWidth, btnHeight: TfpgButton;
     btnAnLeft, btnAnTop, btnAnRight, btnAnBottom: TfpgButton;
     lstProps: TwgPropertyList;
+    virtualpanel : Tfpgpanel;
+    cbsizeable, cbfullscreen, cbvisible,cbenabled, cbWindowPosition, cbFocusable : TfpgCombobox;
+    edmaxheight, edminheight, edmaxwidth, edminwidth, edTag : Tfpgedit;
+
     procedure   AfterCreate; override;
     procedure   BeforeDestruction; override;
+    procedure   Vpanelpaint(Sender: TObject);
+    procedure   frmPropertiesPaint(Sender: TObject);
+    procedure   VirtualPropertiesUpdate(Sender: TObject);
+
   end;
 
   TfrmAbout = class(TfpgForm)
@@ -224,6 +235,7 @@ uses
   fpg_constants,
   fpg_stylemanager,
   vfd_main,
+  vfd_designer,
   vfd_constants;
 
 // Anchor images
@@ -236,6 +248,16 @@ uses
 {$I fpgui_logo.inc}
 
 {@VFD_NEWFORM_IMPL}
+
+function IsStrANumber(const S: string): boolean;
+begin
+  Result := True;
+  try
+    StrToInt(S);
+  except
+    Result := False;
+  end;
+end;
 
 procedure TfrmAbout.SetupCaptions;
 begin
@@ -263,16 +285,23 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
-
-  {@VFD_BODY_BEGIN: frmAbout}
+     {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
-  SetPosition(378, 267, 276, 330);
+  SetPosition(400, 387, 276, 330);
   WindowTitle := 'About Designer_ext';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
   Sizeable := False;
-  TextColor := $FF000000;
+  Visible := True;
+  FullScreen := False;
+  Enabled := True;
+  MinWidth := 0;
+  MaxWidth := 0;
+  MinHeight := 0;
+  MaxHeight := 0;
   WindowPosition := wpScreenCenter;
+  WindowPosition := wpScreenCenter;
+  Tag := 0;
   OnShow := @FormShow;
   OnPaint := @FormPaint;
 
@@ -313,6 +342,7 @@ begin
     ImageName := 'stdimg.close';
     ModalResult := mrOK;
     TabOrder := 2;
+    TextColor := TfpgColor($FF000000);
   end;
 
   lblWrittenBy := TfpgLabel.Create(self);
@@ -324,6 +354,7 @@ begin
     FontDesc := 'Arial-9';
     Hint := '';
     Text := 'UIdesigner written by Graeme Geldenhuys';
+    TextColor := TfpgColor($FF000000);
   end;
 
   lblURL := TfpgHyperlink.Create(self);
@@ -350,6 +381,7 @@ begin
     FontDesc := 'Arial-8';
     Hint := '';
     Text := 'Compiled on:  %s';
+    TextColor := TfpgColor($FF000000);
   end;
 
   lblExtBy := TfpgLabel.Create(self);
@@ -371,7 +403,6 @@ begin
     sizeof(extimg_fpgui_logo1));
 
    RePaint;
-
 end;
 
 class procedure TfrmAbout.Execute;
@@ -380,7 +411,7 @@ var
 begin
   frm := TfrmAbout.Create(nil);
   try
-    frm.ShowModal;
+     frm.ShowModal;
   finally
     frm.Free;
   end;
@@ -655,15 +686,21 @@ begin
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(338, 140, 800, 92);
+  SetPosition(383, 241, 780, 92);
   WindowTitle := 'frmMainDesigner';
   Hint := '';
   ShowHint := True;
   BackGroundColor := $80000001;
-  TextColor := $80000008;
+  Sizeable := True;
+  Visible := True;
+  FullScreen := False;
+  Enabled := True;
+  MinWidth := 770;
+  MaxWidth := 0;
+  MinHeight := 90;
+  MaxHeight := 0;
   WindowPosition := wpUser;
-  MinHeight := 82;
-  MinWidth := 315;
+  Tag := 0;
 
   MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do
@@ -898,7 +935,7 @@ begin
   with wgpalette do
   begin
     Name := 'wgpalette';
-    SetPosition(152, 28, 600, 62);
+    SetPosition(152, 28, 606, 62);
     Anchors := [anLeft,anRight,anTop,anBottom];
     Width := self.Width - 150;
     Focusable := False;
@@ -926,7 +963,7 @@ begin
     Name := 'PanelMove';
     SetPosition(0, 0, 13, 92);
     Align := alLeft;
-    BackgroundColor := TfpgColor($FFC0DCC0);
+    BackgroundColor := TfpgColor($FEFEBA);
     FontDesc := '#Label1';
     Hint := 'Hold click to move palette...';
     Style := bsFlat;
@@ -940,6 +977,7 @@ begin
 
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
+
 
   { Build component palette }
 
@@ -1046,7 +1084,6 @@ indexundo := 0 ;
  end;
  PaletteBarResized(self);
 end;
-
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
@@ -1240,11 +1277,20 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
   inherited;
   Name := 'frmProperties';
   WindowTitle := 'Properties';
-  SetPosition(100, 240, 250, 450);
- 
+  left := 200;
+  top := 240;
+  width := 270;
+  height := 450 ;
+
+ // MinWidth := 268;
+ // MinHeight := 448;
+
+  OnResize:= @frmPropertiesPaint;
+
     if  gINI.ReadBool('frmPropertiesState', 'FirstLoad', true) = false  then
   begin
                     gINI.ReadFormState(self) ;
@@ -1274,74 +1320,208 @@ begin
   w     := Width - x2;
   y     := 3;
 
-  l1      := CreateLabel(self, 0, y-1, 'Class:');
-  lbClass := CreateLabel(self, x2, y-1, 'CLASS');
+  l1 := TfpgLabel.Create(self);
+  l1.Text := 'Class:' ;
+  l1.Top:= y-1;
+  l1.left:=5;
+
+  lbClass := TfpgLabel.Create(self);
+  lbClass.Text := '' ;
+  lbClass.Top:= y-1;
+  lbClass.left:= x2;
   lbClass.Width := w;
+  lbClass.height := 22;
   lbClass.FontDesc := '#Label2';
   lbClass.Anchors := [anLeft, anRight, anTop];
   Inc(y, gap);
 
-  l2           := CreateLabel(self, 0, y + 1, 'Name:');
-  edName       := CreateEdit(self, x2, y, w, 0);
-  edName.Text  := 'NAME';
+  l2  := TfpgLabel.Create(self);
+  l2.Text := 'Name:' ;
+  l2.Top:= y+1;
+  l2.left:=5;
+
+  edName := TfpgEdit.Create(self);
+  edName.Text := '' ;
+  edName.width := width - l2.Right + 28 ;
+  edName.Top:= y-2;
+  edName.left:= x2;
   edName.Anchors := [anLeft, anRight, anTop];
   edName.OnChange := @(maindsgn.OnPropNameChange);
 
   Inc(y, gap + 5);
 
   lstProps         := TwgPropertyList.Create(self);
-  lstProps.SetPosition(0, y, Width, self.Height - y - 220);
+  lstProps.SetPosition(0, y, Width, (self.Height - y - 150)div 2);
   lstProps.Anchors := AllAnchors;
   lstProps.Props   := PropList;
   lstProps.Props.Widget := edName;
 
-  y := lstProps.Bottom + 5;
+  y := lstProps.Bottom ;
 
-  l3         := CreateLabel(self, 3, y + 1, 'Left:');
+   virtualpanel := Tfpgpanel.Create(self);
+   virtualpanel.SetPosition(0, y, Width, 110);
+   virtualpanel.Anchors := [anLeft, anRight];
+   virtualpanel.BackgroundColor := $CCCCCC ;
+   virtualpanel.Style := bsFlat;
+   virtualpanel.Visible:=false;
+   virtualpanel.Text:='';
+   virtualpanel.OnPaint:= @vpanelpaint;
+
+   cbfocusable := TfpgCombobox.Create(virtualpanel);
+   cbfocusable.Items.Add('True');
+   cbfocusable.Items.Add('False');
+   cbfocusable.FocusItem:=0;
+   cbfocusable.Text:='True';
+   cbfocusable.BackgroundColor := $E0E0E0;
+   cbfocusable.height:= 21;
+   cbfocusable.OnExit:=  @VirtualPropertiesUpdate;
+
+   cbsizeable := TfpgCombobox.Create(virtualpanel);
+   cbsizeable.Items.Add('True');
+   cbsizeable.Items.Add('False');
+   cbsizeable.FocusItem:=0;
+   cbsizeable.Text:='True';
+   cbsizeable.BackgroundColor := $E0E0E0;
+   cbsizeable.height:= 21;
+   cbsizeable.OnExit:=  @VirtualPropertiesUpdate;
+
+   cbvisible := TfpgCombobox.Create(virtualpanel);
+   cbvisible.Items.Add('True');
+   cbvisible.Items.Add('False');
+   cbvisible.FocusItem:=0;
+   cbvisible.Text:='True';
+   cbvisible.BackgroundColor := $E0E0E0;
+   cbvisible.height:= 21;
+   cbvisible.OnExit:=  @VirtualPropertiesUpdate;   ;
+
+   cbfullscreen := TfpgCombobox.Create(virtualpanel);
+   cbfullscreen.Items.Add('False');
+   cbfullscreen.Items.Add('True');
+   cbfullscreen.FocusItem:=0;
+   cbfullscreen.Text:='False';
+   cbfullscreen.BackgroundColor := $E0E0E0;
+   cbfullscreen.height:= 21;
+   cbfullscreen.OnExit:=  @VirtualPropertiesUpdate;   ;
+
+   cbenabled := TfpgCombobox.Create(virtualpanel);
+   cbenabled.Items.Add('True');
+   cbenabled.Items.Add('False');
+   cbenabled.FocusItem:=0;
+   cbenabled.Text:='True';
+   cbenabled.BackgroundColor := $E0E0E0;
+   cbenabled.height:= 21;
+   cbenabled.OnExit:=  @VirtualPropertiesUpdate;   ;
+
+   edminwidth := TfpgEdit.Create(virtualpanel);
+   edminwidth.Text := '0';
+   edminwidth.BackgroundColor := $E0E0E0;
+   edminwidth.height:= 21;
+   edminwidth.OnExit:=  @VirtualPropertiesUpdate;   ;
+
+
+   edminheight := TfpgEdit.Create(virtualpanel);
+   edminheight.Text := '0';
+   edminheight.BackgroundColor := $E0E0E0;
+   edminheight.height:= 21;
+   edminheight.OnExit:=  @VirtualPropertiesUpdate;   ;
+
+   edmaxwidth := TfpgEdit.Create(virtualpanel);
+   edmaxwidth.Text := '0';
+   edmaxwidth.BackgroundColor := $E0E0E0;
+   edmaxwidth.height:= 21;
+   edmaxwidth.OnExit:=  @VirtualPropertiesUpdate;   ;
+
+   edmaxheight := TfpgEdit.Create(virtualpanel);
+   edmaxheight.Text := '0';
+   edmaxheight.BackgroundColor := $E0E0E0;
+   edmaxheight.height:= 21;
+   edmaxheight.OnExit:=  @VirtualPropertiesUpdate;
+
+   cbWindowPosition := TfpgCombobox.Create(virtualpanel);
+   cbWindowPosition.Items.Add('wpUser');
+   cbWindowPosition.Items.Add('wpAuto');
+   cbWindowPosition.Items.Add('wpScreenCenter');
+   cbWindowPosition.Items.Add('wpOneThirdDown');
+   cbWindowPosition.FocusItem:=0;
+   cbWindowPosition.Text:='wpUser';
+   cbWindowPosition.BackgroundColor := $E0E0E0;
+   cbWindowPosition.height:= 21;
+   cbWindowPosition.OnExit :=  @VirtualPropertiesUpdate;
+
+   edTag := TfpgEdit.Create(virtualpanel);
+   edTag.Text := '0';
+   edTag.BackgroundColor := $E0E0E0;
+   edTag.height:= 21;
+   edTag.OnExit := @VirtualPropertiesUpdate;
+
+  y := virtualpanel.Bottom + 5;
+
+  l3         := CreateLabel(self, 5, y + 1, 'Left:');
   l3.Anchors := [anLeft, anBottom];
-  btnLeft    := CreateButton(self, 50, y - 2, 48, '1234', @(maindsgn.OnPropPosEdit));
+
+    l6 := TfpgLabel.Create(self);
+  l6.Text := 'Height:' ;
+  l6.Top:= y + gap + 5;
+ // l6.left:=110;
+  l6.height:=22;
+  l6.Anchors := [anright, anBottom];
+
+   l6.Left:= width - (48 * 2)- 10 ;
+
+    l4 := CreateLabel(self, 110, y, 'Top:');
+  l4.Anchors := [anright, anBottom];
+
+   l4.Left:= width - (48 * 2 )- 10 ;
+
+
+  btnLeft    := CreateButton(self, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnLeft do
   begin
     Height        := 22;
     Anchors       := [anLeft, anBottom];
     Focusable     := False;
   end;
-  l4 := CreateLabel(self, 110, y, 'Top:');
-  l4.Anchors := [anLeft, anBottom];
-  btnTop     := CreateButton(self, 160, y - 2, 48, '45', @(maindsgn.OnPropPosEdit));
+
+  btnTop     := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+
   with btnTop do
   begin
     Height        := 22;
-    Anchors       := [anLeft, anBottom];
+    Anchors       := [anright, anBottom];
     Focusable     := False;
   end;
+
+   btnTop.Left:= width - (btnTop.Width )- 5 ;
+
   Inc(y, gap + 5);
-  l5         := CreateLabel(self, 3, y + 1, 'Width:');
-  l5.Anchors := [anLeft, anBottom];
-  btnWidth   := CreateButton(self, 50, y - 2, 48, '1234', @(maindsgn.OnPropPosEdit));
+  l5         := CreateLabel(self, 5, y + 1, 'Width:');
+  l5.Anchors := [anleft, anBottom];
+
+  btnWidth   := CreateButton(self, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnWidth do
   begin
     Height        := 22;
-    Anchors       := [anLeft, anBottom];
+    Anchors       := [anleft, anBottom];
     Focusable     := False;
   end;
-  l6 := CreateLabel(self, 110, y, 'Height:');
-  l6.Anchors := [anLeft, anBottom];
-  btnHeight  := CreateButton(self, 160, y - 2, 48, '45', @(maindsgn.OnPropPosEdit));
+
+  btnHeight  := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnHeight do
   begin
     Height        := 22;
-    Anchors       := [anLeft, anBottom];
+    Anchors       := [anright, anBottom];
     Focusable     := False;
   end;
   Inc(y, gap + 5);
 
-  l8         := CreateLabel(self, 3, y + 1, 'Anchors:');
+  l8         := CreateLabel(self, 5, y + 1, 'Anchors:');
   l8.Anchors := [anLeft, anBottom];
+
+   btnHeight.Left:= width - (btnHeight.Width )- 5 ;
 
   x := 64;
 
-  btnAnLeft := CreateButton(self, x, y - 2, 28, '', nil);
+  btnAnLeft := CreateButton(self, x, y - 2, 26, '', nil);
   with btnAnLeft do
   begin
     ImageName  := 'vfd.anchorleft';
@@ -1349,9 +1529,10 @@ begin
     AllowAllUp := True;
     GroupIndex := 1;
     Focusable  := False;
-    Anchors    := [anLeft, anBottom];
+    Anchors    := [anright, anBottom];
     OnClick    := @(maindsgn.OnAnchorChange);
   end;
+    btnAnLeft.Left:= width - (btnAnLeft.Width * 4)- 50 ;
 
   Inc(x, 30);
   btnAnTop := CreateButton(self, x, y - 2, 26, '', nil);
@@ -1362,9 +1543,10 @@ begin
     AllowAllUp := True;
     GroupIndex := 2;
     Focusable  := False;
-    Anchors    := [anLeft, anBottom];
+    Anchors    := [anright, anBottom];
     OnClick    := @(maindsgn.OnAnchorChange);
   end;
+   btnAnTop.Left:= width - (btnAnTop.Width * 3)- 35 ;
 
   Inc(x, 30);
   btnAnBottom := CreateButton(self, x, y - 2, 26, '', nil);
@@ -1375,9 +1557,10 @@ begin
     AllowAllUp := True;
     GroupIndex := 3;
     Focusable  := False;
-    Anchors    := [anLeft, anBottom];
+    Anchors    := [ anBottom, anright];
     OnClick    := @(maindsgn.OnAnchorChange);
   end;
+   btnAnBottom.Left:= width - (btnAnBottom.Width * 2)- 20 ;
 
   Inc(x, 30);
   btnAnRight := CreateButton(self, x, y - 2, 26, '', nil);
@@ -1388,22 +1571,26 @@ begin
     AllowAllUp := True;
     GroupIndex := 4;
     Focusable  := False;
-    Anchors    := [anLeft, anBottom];
+    Anchors    := [ anBottom, anright];
     OnClick    := @(maindsgn.OnAnchorChange);
-  end;
+    end;
 
-  y := btnAnRight.Bottom + 5;
+   btnAnRight.Left:= width - btnAnRight.Width -5 ;
 
-  l7         := CreateLabel(self, 0, y, 'Unknown lines:');
+   y := btnAnRight.Bottom + 5;
+
+  l7         := CreateLabel(self, 5, y, 'Unknown lines:');
   l7.Anchors := [anLeft, anBottom];
   Inc(y, 16);
 
   edOther          := TfpgMemo.Create(self);
-  edOther.SetPosition(0, y, self.Width, self.Height - y);
+  edOther.BackgroundColor:=$EEEEEE;
+  edOther.SetPosition(0, y, self.Width, 78);
   edOther.Anchors  := [anLeft, anRight, anBottom];
   edOther.FontDesc := '#Edit2';
   edOther.OnChange := @(maindsgn.OnOtherChange);
   {%endregion}
+
 end;
 
 procedure TfrmProperties.BeforeDestruction;
@@ -1412,9 +1599,140 @@ begin
   inherited BeforeDestruction;
 end;
 
+procedure  TfrmProperties.frmPropertiesPaint(Sender: TObject);
+begin
+  edName.width := width - l2.Right + 28 ;
+ edName.UpdateWindowPosition;
+
+ if virtualpanel.Height < 50 then begin
+    lstProps.Height:= 186 + frmproperties.Height - 448   ;
+     virtualpanel.top:= frmproperties.lstProps.Height + frmproperties.lstProps.top -4 ;
+  end else
+ begin
+     lstProps.Height:= 97+ frmproperties.Height - 448   ;
+     virtualpanel.top:= frmproperties.lstProps.Height + frmproperties.lstProps.top -4 ;
+ end;
+  virtualpanel.UpdateWindowPosition;
+  lstProps.UpdateWindowPosition;
+end;
+
+procedure  TfrmProperties.Vpanelpaint(Sender: TObject);
+var
+  x, y : integer;
+begin
+
+ virtualpanel.Canvas.SetColor(clblack);
+ virtualpanel.Canvas.DrawText(4,2,60,20,'Visible');
+ if virtualpanel.height > 66 then
+ virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2,60,20,'Enabled');
+
+  y := 22;
+ virtualpanel.Canvas.DrawText(4,2+y,60,20,'Focusable');
+ if virtualpanel.height > 66 then
+ virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2+y,60,20,'Tag')
+   else
+  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+35,2+y,60,20,'Tag');
+
+ y := 22*2;
+ virtualpanel.Canvas.DrawText(4,2+y,60,20,'FullScreen');
+ virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2+y,60,20,'Sizable');
+
+ y := 22*3;
+ virtualpanel.Canvas.DrawText(4,2+y,60,20,'MinWidth');
+ virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2+y,60,20,'MaxWidth');
+
+ y := 22*4;
+ virtualpanel.Canvas.DrawText(4,2+y,60,20,'MinHeight');
+ virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2+y,60,20,'MaxHeight');
+
+   y := 22*5;
+ virtualpanel.Canvas.DrawText(4,2+y,60,20,'WindowPosition');
+
+  y := 22;
+ virtualpanel.Canvas.SetColor(clgray);
+  While y < virtualpanel.Height do
+ begin
+ virtualpanel.Canvas.DrawLine(0,y,virtualpanel.Width,y);
+ y := y + 22
+ end;
+
+ virtualpanel.Canvas.DrawLine(0,0,virtualpanel.Width-1,0);   //top
+ virtualpanel.Canvas.DrawLine(0,virtualpanel.Height-1,virtualpanel.Width-1,virtualpanel.Height-1);  //bottom
+ virtualpanel.Canvas.DrawLine(virtualpanel.Width-1,0,virtualpanel.Width-1,virtualpanel.Height-1);  //right
+ virtualpanel.Canvas.DrawLine(0,0,0,virtualpanel.Height-1);   // left
+
+ y := 22 ;
+
+ cbvisible.top:= 1;
+ cbenabled.top:= 1;
+
+ if virtualpanel.Height>66 then begin
+ cbenabled.Visible:=true;
+ cbvisible.Left:=  (virtualpanel.Width div 4) + 1; ;
+ cbvisible.width:= (virtualpanel.Width div 4) - 1;
+ cbenabled.Left:= (3 *(virtualpanel.Width div 4)) + 1;
+ cbenabled.width:= (virtualpanel.Width div 4) - 1;
+ end else
+ begin
+  cbenabled.Visible:=false;
+  cbvisible.width:= (virtualpanel.Width div 4) - 1;
+  cbvisible.Left:= 82;
+  cbvisible.width:= (virtualpanel.Width) - cbvisible.Left -1 ;
+ end;
+
+  cbfocusable.top:= y +1;
+  cbfocusable.Left:= (virtualpanel.Width div 4) + 1;
+  cbfocusable.width:= (virtualpanel.Width div 4) - 1;
+
+  edtag.top:= y +1;
+  edtag.Left:= (3 *(virtualpanel.Width div 4)) + 1;
+  edtag.width:= (virtualpanel.Width div 4) - 1;
+
+  cbfullscreen.top:= (y*2) +1;
+  cbfullscreen.Left:= (virtualpanel.Width div 4) + 1;
+  cbfullscreen.width:= (virtualpanel.Width div 4) - 1;
+
+  cbsizeable.top:=(y*2) +1;
+  cbsizeable.Left:= (3 *(virtualpanel.Width div 4)) + 1;
+  cbsizeable.width:= (virtualpanel.Width div 4) - 1;
+
+  edminwidth.top:= (y*3) +1;
+  edminwidth.Left:= (virtualpanel.Width div 4) + 1;
+  edminwidth.width:= (virtualpanel.Width div 4) - 1;
+
+  edmaxwidth.top:=(y*3) +1;
+  edmaxwidth.Left:= (3 *(virtualpanel.Width div 4)) + 1;
+  edmaxwidth.width:= (virtualpanel.Width div 4) - 1;
+
+  edminheight.top:= (y*4) +1;
+  edminheight.Left:= (virtualpanel.Width div 4) + 1;
+  edminheight.width:= (virtualpanel.Width div 4) - 1;
+
+  edmaxheight.top:=(y*4) +1;
+  edmaxheight.Left:= (3 *(virtualpanel.Width div 4)) + 1;
+  edmaxheight.width:= (virtualpanel.Width div 4) - 1;
+
+  cbwindowposition.top:= (y*5) +1;
+  cbwindowposition.Left:= 105;
+  cbwindowposition.width:= (virtualpanel.Width) - cbwindowposition.Left -1 ;
+
+  cbsizeable.UpdateWindowPosition;
+ cbfocusable.UpdateWindowPosition;
+ cbvisible.UpdateWindowPosition;
+ cbfullscreen.UpdateWindowPosition;
+ cbenabled.UpdateWindowPosition;
+ edminwidth.UpdateWindowPosition;
+ edmaxwidth.UpdateWindowPosition;
+ edminheight.UpdateWindowPosition;
+ edmaxheight.UpdateWindowPosition;
+ cbwindowposition.UpdateWindowPosition;
+ edtag.UpdateWindowPosition;
+
+end;
+
 procedure TfrmProperties.HandleKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean);
 begin
-  if keycode = keyF11 then
+   if keycode = keyF11 then
   begin
     if maindsgn.selectedform <> nil then
     begin
@@ -1425,6 +1743,188 @@ begin
   end;
   inherited;
 end;
+
+procedure   TfrmProperties.VirtualPropertiesUpdate(Sender: TObject);
+var
+  x, y : integer ;
+  TheWidget, TheParent : TfpgWidget ;
+  ok : boolean;
+begin
+     if  lstProps.Props.Widget is TDesignedForm then begin
+
+      TheWidget := lstProps.Props.Widget ;
+
+       if IsStrANumber(edminwidth.text) then edminwidth.text := inttostr(strtoint(edminwidth.text)) else edminwidth.text := '0';
+       if IsStrANumber(edmaxwidth.text) then edmaxwidth.text := inttostr(strtoint(edmaxwidth.text)) else edmaxwidth.text := '0';
+       if IsStrANumber(edminheight.text) then edminheight.text := inttostr(strtoint(edminheight.text)) else edminheight.text := '0';
+       if IsStrANumber(edmaxheight.text) then edmaxheight.text := inttostr(strtoint(edmaxheight.text)) else edmaxheight.text := '0';
+       if IsStrANumber(edtag.text) then edtag.text := inttostr(strtoint(edtag.text)) else edtag.text := '0';
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'siz=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'siz=' + cbsizeable.Text ;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'siz=True');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'foc=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'foc=' + cbfocusable.Text ;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'foc=True');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'vis=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'vis=' + cbvisible.Text ;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'vis=True');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'ful=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'ful=' + cbfullscreen.Text ;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'ful=False');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'ena=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'ena=' + cbenabled.Text ;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'ena=True');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'miw=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'miw=' + edminwidth.Text ;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'miw=0');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'maw=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'maw=' + edmaxwidth.Text;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'maw=0');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'mih=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'mih=' + edminheight.Text;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'mih=0');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'mah=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'mah=' + edmaxheight.Text;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'mah=0');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'wip=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'wip=' + cbWindowPosition.Text;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'wip=wpUser');
+
+   ok := false;
+   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
+   begin
+   if pos(TDesignedForm(TheWidget).Name + '.' + 'tag=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+   begin
+   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'tag=' + edtag.Text;
+   ok := true;
+   end;
+   end;
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'tag=0');
+
+   end else
+
+   begin
+
+  TheParent := lstProps.Props.Widget ;
+  TheWidget := lstProps.Props.Widget ;
+
+  while TheParent.HasParent = true do
+   TheParent :=  TheParent.Parent;
+
+  ok := false;
+   for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
+ if pos(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.' + 'vis=',TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+ begin
+  ok := true;
+  TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'vis=' + cbvisible.Text;
+ end;
+ end;
+ if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'vis=True');
+
+ ok := false;
+    for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
+  if pos(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.' + 'tag=',TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+  begin
+   ok := true;
+   TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'tag=' + edtag.Text;
+  end;
+  end;
+  if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'tag=0');
+
+   ok := false;
+    for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
+  if pos(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.' + 'foc=',TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+  begin
+   ok := true;
+   TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'foc=' + cbfocusable.Text;
+  end;
+  end;
+  if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'foc=True');
+
+   end;
+
+end;
+
 
 { TPropertyList }
 

@@ -9,7 +9,6 @@
         <MainUnitHasTitleStatement Value="False"/>
         <LRSInOutputDirectory Value="False"/>
       </Flags>
-      <SessionStorage Value="None"/>
       <MainUnit Value="0"/>
       <Title Value="designer_ext"/>
       <UseAppBundle Value="False"/>
@@ -17,6 +16,104 @@
     <VersionInfo>
       <StringTable ProductVersion=""/>
     </VersionInfo>
+    <CustomData Count="15">
+      <Item0 Name="lazpackager/copyright" Value="2012 Jane Doe"/>
+      <Item1 Name="lazpackager/deb/ppa" Value="ppa:johndoe/use-your-own"/>
+      <Item2 Name="lazpackager/deb/series" Value="precise"/>
+      <Item3 Name="lazpackager/deb/tpl_changelog" Value="?PACKAGE_NAME? (?FULLVERSION?) ?SERIES?; urgency=low
+
+  * Original version ?VERSION? packaged with lazdebian
+
+ -- ?MAINTAINER? &lt;?MAINTAINER_EMAIL?>  ?DATER?
+"/>
+      <Item4 Name="lazpackager/deb/tpl_control" Value="Source: ?PACKAGE_NAME?
+Maintainer: ?MAINTAINER? &lt;?MAINTAINER_EMAIL?>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.3
+Build-Depends: fpc, lazarus, lcl, lcl-utils, debhelper (>= 8)
+
+Package: ?PACKAGE_NAME?
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+Description: ?DESCRIPTION?
+ ?DESCRIPTION_LONG?
+"/>
+      <Item5 Name="lazpackager/deb/tpl_copyright" Value="Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: *
+Copyright: ?COPYRIGHT?
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License along
+ with this program; if not, write to the Free Software Foundation, Inc.,
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ /usr/share/common-licenses/GPL-2
+"/>
+      <Item6 Name="lazpackager/deb/tpl_rules" Value="#!/usr/bin/make -f
+
+ROOT = $(CURDIR)/debian/?PACKAGE_NAME?
+
+override_dh_auto_clean:
+	$(RM) -r lib
+	$(RM) lib *.res ?EXECUTABLE?
+
+override_dh_auto_build:
+	typhoonbuild ?PROJECT?
+
+override_dh_auto_install:
+	install -d -m 755 $(ROOT)/usr/bin
+	install -s -m 755 ?EXECUTABLE? $(ROOT)/usr/bin
+
+%:
+	dh $@
+"/>
+      <Item7 Name="lazpackager/description" Value="this is a program"/>
+      <Item8 Name="lazpackager/description_long" Value="long description may not be empty!"/>
+      <Item9 Name="lazpackager/export_cmd" Value="?CP? *.lpi ?TEMPFOLDER?/
+?CP? *.lpr ?TEMPFOLDER?/
+?CP? *.pas ?TEMPFOLDER?/
+?CP? *.lfm ?TEMPFOLDER?/
+?CP? *.ico ?TEMPFOLDER?/
+"/>
+      <Item10 Name="lazpackager/maintainer" Value="John Doe"/>
+      <Item11 Name="lazpackager/maintainer_email" Value="john_doe@example.invalid"/>
+      <Item12 Name="lazpackager/package_name" Value="debian-package-name"/>
+      <Item13 Name="lazpackager/tpl_makefile" Value="PREFIX = /usr/local
+
+# debuild will set DESTDIR to the fakeroot path and
+# in the override rules we will change PREFIX to /usr
+BINDIR = $(DESTDIR)$(PREFIX)/bin
+
+.PHONY : all
+all:
+	typhoonbuild ?PROJECT?
+
+.PHONY : clean
+clean:
+	$(RM) -r lib
+	$(RM) *.res
+	$(RM) ?EXECUTABLE?
+
+.PHONY : install
+install:
+	mkdir -p $(BINDIR)
+	install -s ?EXECUTABLE? $(BINDIR)/
+"/>
+      <Item14 Name="lazpackager/use_existing_makefile" Value="False"/>
+    </CustomData>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
     </BuildModes>
@@ -40,66 +137,84 @@
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
+        <TopLine Value="25"/>
+        <CursorPos X="18" Y="26"/>
+        <UsageCount Value="113"/>
       </Unit0>
       <Unit1>
         <Filename Value="vfdmain.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit1>
       <Unit2>
         <Filename Value="vfdresizer.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit2>
       <Unit3>
         <Filename Value="vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit3>
       <Unit4>
         <Filename Value="vfddesigner.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit4>
       <Unit5>
         <Filename Value="vfdfile.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit5>
       <Unit6>
         <Filename Value="newformdesigner.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit6>
       <Unit7>
         <Filename Value="vfdwidgets.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit7>
       <Unit8>
         <Filename Value="vfdwidgetclass.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit8>
       <Unit9>
         <Filename Value="vfdeditors.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit9>
       <Unit10>
         <Filename Value="vfdformparser.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit10>
       <Unit11>
         <Filename Value="vfdprops.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit11>
       <Unit12>
         <Filename Value="vfdutils.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit12>
       <Unit13>
         <Filename Value="vfdpropeditgrid.pas"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit13>
       <Unit14>
         <Filename Value="anchors.inc"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit14>
       <Unit15>
         <Filename Value="icons.inc"/>
         <IsPartOfProject Value="True"/>
+        <UsageCount Value="113"/>
       </Unit15>
     </Units>
   </ProjectOptions>
@@ -139,7 +254,6 @@
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
       </Verbosity>
       <WriteFPCLogo Value="False"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
 </CONFIG>

@@ -1,13 +1,3 @@
-{
-Name:    NiceGrid
-Author:  "Jean Pierre Anghel" <jean-pierre.anghel@orange.fr>
-Date:    2012-01-21
-Description:
-This grid widget is a port of the VCL NiceGrid component found at 
-[http://www.priyatna.org]. The original author gave permission to port this
-component to Free Pascal and fpGUI. Below is the emails giving permission.
-}
-
 unit fpg_nicegrid;
 {$mode objfpc}{$H+}
 
@@ -396,7 +386,7 @@ type
     property HeaderFontColor: TfpgColor read FHeaderFontColor write SetHeaderFontColor;
     property FooterFont: string read FFooterFont write SetFooterFont;
     property FooterFontColor: TfpgColor read FFooterFontColor write SetFooterFontColor;
-    property SelectionColor: TfpgColor read FSelectionColor write SetSelectionColor default $00CAFFFF;
+    property SelectionColor: TfpgColor read FSelectionColor write SetSelectionColor default $FFCAFFFF;
     property FitToWidth: Boolean read FFitToWidth write SetFitToWidth default False;
     property AutoColWidth: Boolean read FAutoColWidth write SetAutoColWidth default False;
     property ReadOnly: Boolean read FReadOnly write SetReadOnly default False;
@@ -501,7 +491,7 @@ begin
   FHeaderLightColor := clHilite1; 
   FHeaderDarkColor := clShadow1;
   FHeaderFont:='Arial-8';
-  FSelectionColor := $00CAFFFF;
+  FSelectionColor := $FFCAFFFF;
   FFooterFont := 'Arial-8';
   FooterFontColor := clRed;
   FDefRowHeight := 18;
@@ -1380,7 +1370,6 @@ begin
   l := GetColCoord(x);
   t := FDefRowheight * y;
   w := 0;
-  if ColCount > 0 then
   if (FColumns[x].FVisible)
     then w := FColumns[x].FWidth;
   h := FDefRowHeight;
@@ -3227,7 +3216,6 @@ end;
 
 function TfpgNiceColumns.GetItem(Index: Integer): TfpgNiceColumn;
 begin
-  if Count > 0 then
   Result := TfpgNiceColumn(inherited GetItem(Index));
 end;
 

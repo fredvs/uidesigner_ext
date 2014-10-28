@@ -1,4 +1,12 @@
 {
+This is the extended version of fpGUI uidesigner => Designer_ext.
+With window list, undo feature, integration into IDE, editor launcher, extra-properties editor,...
+
+Fred van Stappen
+fiens@hotmail.com
+2013 - 2014
+}
+{
     fpGUI  -  Free Pascal GUI Toolkit
 
     Copyright (C) 2006 - 2010 See the file AUTHORS.txt, included in this
@@ -357,20 +365,20 @@ var
 begin
   LoadIcons;
 
+  //TfpgForm.Focused:=true;
+  //TfpgForm.WindowType:=(wtChild, wtWindow, wtModalForm, wtPopup);  ;
+  //TfpgForm.WindowAttribute:= (waSizeable, waAutoPos, waScreenCenterPos, waStayOnTop,
+  //    waFullScreen, waBorderless, waUnblockableMessages, waX11SkipWMHints,
+  //    waOneThirdDownPos);
+
   wc          := TVFDWidgetClass.Create(TfpgForm);
   wc.NameBase := 'frm';
   wc.AddProperty('WindowTitle', TPropertyString, '');
   wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
   wc.AddProperty('ShowHint', TPropertyBoolean, '');
-  //wc.AddProperty('Sizeable', TPropertyBoolean, 'Can the form be resized at runtime');
   wc.AddProperty('BackgroundColor', TPropertyColor, '');
-  wc.AddProperty('TextColor', TPropertyColor, '');
-  //wc.AddProperty('MaxHeight', TPropertyInteger, '');
-  //wc.AddProperty('MaxWidth', TPropertyInteger, '');
-  //wc.AddProperty('MinHeight', TPropertyInteger, '');
-  //wc.AddProperty('MinWidth', TPropertyInteger, '');
-  //wc.AddProperty('FullScreen', TPropertyBoolean, '');
-  // wc.AddProperty('WindowPosition', TPropertyEnum, '');   // TODO
+  wc.AddProperty('WindowPosition', TPropertyInteger, '');
+
   FVFDFormWidget := wc;
 
   // Label
@@ -378,6 +386,7 @@ begin
   wc.NameBase := 'Label';
   wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
   wc.AddProperty('Alignment', TPropertyEnum, 'Horizontal text alignment');
+  wc.AddProperty('AutoSize', TPropertyBoolean, 'Change Height based on FontDesc being set');
   wc.AddProperty('BackgroundColor', TPropertyColor, '');
   wc.AddProperty('Enabled', TPropertyBoolean, '');
   wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the label text');
@@ -434,8 +443,8 @@ begin
   wc          := TVFDWidgetClass.Create(TfpgButton);
   wc.NameBase := 'Button';
   wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
-  wc.AddProperty('Text', TPropertyString, 'Initial text');
   wc.AddProperty('AllowAllUp', TPropertyBoolean, '');
+  wc.AddProperty('AllowDown', TPropertyBoolean, '');
   wc.AddProperty('BackgroundColor', TPropertyColor, '');
   wc.AddProperty('Down', TPropertyBoolean, 'Only valid when in group mode');
   wc.AddProperty('Embedded', TPropertyBoolean, 'No focus rectangle will be drawn. eg: Toolbar buttons');
@@ -453,6 +462,7 @@ begin
   wc.AddProperty('ShowHint', TPropertyBoolean, '');
   wc.AddProperty('ShowImage', TPropertyBoolean, 'Boolean value');
   wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
+  wc.AddProperty('Text', TPropertyString, 'Initial text');
   wc.AddProperty('TextColor', TPropertyColor, '');
   wc.WidgetIconName := 'vfd.button';
   RegisterVFDWidget(wc);
