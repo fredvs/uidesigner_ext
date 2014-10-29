@@ -792,7 +792,7 @@ procedure TFormDesigner.UpdateVirtualPropWin(TheWidget : TfpgWidget) ;
 var
   i : integer;
   ok : boolean;
-
+  TheParent : TfpgWidget ;
 begin
     if(TheWidget is TfpgForm) then
   begin
@@ -1037,15 +1037,19 @@ begin
     end else
    begin       ////// other widget
 
+    TheParent := TheWidget ;
+
+  while TheParent.HasParent = true do
+   TheParent :=  TheParent.Parent;
         // visible
       i := 0 ;
       ok := false;
-        if (TheWidget.Parent) is TDesignedForm then
-         if TDesignedForm(TheWidget.Parent).Virtualprop.Count > 0 then
+        if (TheParent) is TDesignedForm then
+         if TDesignedForm(TheParent).Virtualprop.Count > 0 then
      begin
-    while i < TDesignedForm(TheWidget.Parent).Virtualprop.Count do
+    while i < TDesignedForm(TheParent).Virtualprop.Count do
     begin
-      if   pos(TheWidget.Parent.Name + '.' +  (TheWidget).Name + '.' +  'vis=False', TDesignedForm(TheWidget.Parent).Virtualprop.Strings[i]) > 0 then
+      if   pos(TheParent.Name + '.' +  (TheWidget).Name + '.' +  'vis=False', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
     begin
     frmProperties.cbvisible.text:='False';
     frmProperties.cbvisible.FocusItem:=1;
@@ -1062,12 +1066,12 @@ begin
 
     i := 0 ;
       ok := false;
-        if (TheWidget.Parent) is TDesignedForm then
-         if TDesignedForm(TheWidget.Parent).Virtualprop.Count > 0 then
+        if (TheParent) is TDesignedForm then
+         if TDesignedForm(TheParent).Virtualprop.Count > 0 then
      begin
-    while i < TDesignedForm(TheWidget.Parent).Virtualprop.Count do
+    while i < TDesignedForm(TheParent).Virtualprop.Count do
     begin
-      if   pos(TheWidget.Parent.Name + '.' +  (TheWidget).Name+ '.' +  'foc=False', TDesignedForm(TheWidget.Parent).Virtualprop.Strings[i]) > 0 then
+      if   pos(TheParent.Name + '.' +  (TheWidget).Name+ '.' +  'foc=False', TDesignedForm(TheWidget.Parent).Virtualprop.Strings[i]) > 0 then
     begin
     frmProperties.cbfocusable.text:='False';
     frmProperties.cbfocusable.FocusItem:=1;
@@ -1086,15 +1090,15 @@ begin
     i := 0 ;
       ok := false;
 
-    if (TheWidget.Parent) is TDesignedForm then
-         if TDesignedForm(TheWidget.Parent).Virtualprop.Count > 0 then
+    if (TheParent) is TDesignedForm then
+         if TDesignedForm(TheParent).Virtualprop.Count > 0 then
      begin
-    while i <  TDesignedForm(TheWidget.parent).Virtualprop.Count  do
+    while i <  TDesignedForm(TheParent).Virtualprop.Count  do
     begin
-    if pos(TheWidget.Parent.Name + '.' +  (TheWidget).Name + '.' +  'tag=',TDesignedForm(TheWidget.parent).Virtualprop.Strings[i]) > 0 then
+    if pos(TheParent.Name + '.' +  (TheWidget).Name + '.' +  'tag=',TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
       begin
-    frmProperties.edtag.text :=  copy(TDesignedForm(TheWidget.parent).Virtualprop.Strings[i],pos('tag=',TDesignedForm(TheWidget.parent).Virtualprop.Strings[i])+4,
-      length(TDesignedForm(TheWidget.parent).Virtualprop.Strings[i])-pos('tag=',TDesignedForm(TheWidget.Parent).Virtualprop.Strings[i])-3) ;
+    frmProperties.edtag.text :=  copy(TDesignedForm(TheParent).Virtualprop.Strings[i],pos('tag=',TDesignedForm(TheParent).Virtualprop.Strings[i])+4,
+      length(TDesignedForm(TheParent).Virtualprop.Strings[i])-pos('tag=',TDesignedForm(TheParent).Virtualprop.Strings[i])-3) ;
     ok := true;
     end;
     inc(i);
@@ -1697,23 +1701,30 @@ function TFormDesigner.GetVirtualWidgetSourceImpl(TheWidget: TfpgWidget): string
  var
  x : integer;
  s : string;
+TheParent : TfpgWidget ;
 begin
     s := '';
-    if TDesignedForm(TheWidget.Parent).Virtualprop.Count > 0 then
+
+   TheParent := TheWidget ;
+
+  while TheParent.HasParent = true do
+   TheParent :=  TheParent.Parent;
+
+    if TDesignedForm(TheParent).Virtualprop.Count > 0 then
         begin
    // Visible
       x := 0 ;
-      while x < TDesignedForm(TheWidget.Parent).Virtualprop.Count do
+      while x < TDesignedForm(TheParent).Virtualprop.Count do
     begin
-      if pos(TheWidget.Parent.Name + '.' +  TheWidget.name + '.' + 'vis=False',TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x]) > 0 then
+      if pos(TheParent.Name + '.' +  TheWidget.name + '.' + 'vis=False',TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
          s := s + '    Visible := False' + ';' + LineEnding ;
         inc(x);
       end;
       x := 0 ;
       // Focusable
-     while x < TDesignedForm(TheWidget.Parent).Virtualprop.Count do
+     while x < TDesignedForm(TheParent).Virtualprop.Count do
     begin
-      if pos(TheWidget.Parent.Name + '.' +  TheWidget.name + '.' + 'foc=False',TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x]) > 0 then
+      if pos(TheParent.Name + '.' +  TheWidget.name + '.' + 'foc=False',TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
          s := s + '    Focusable := False' + ';' + LineEnding ;
         inc(x);
       end;
@@ -1721,11 +1732,11 @@ begin
       x := 0 ;
      while x < TDesignedForm(TheWidget.Parent).Virtualprop.Count do
     begin
-      if pos(TheWidget.Parent.Name + '.' +  TheWidget.name + '.' + 'tag=',TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x]) > 0 then
-      if strtoint(copy(TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x],pos('tag=',TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x])+4,
-      length(TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x])-pos('tag=',TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x])-3)) > 0 then
-       s := s + '    Tag := ' + copy(TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x],pos('tag=',TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x])+4,
-      length(TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x])-pos('tag=',TDesignedForm(TheWidget.Parent).Virtualprop.Strings[x])-3) + ';' + LineEnding ;
+      if pos(TheParent.Name + '.' +  TheWidget.name + '.' + 'tag=',TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
+      if strtoint(copy(TDesignedForm(TheParent).Virtualprop.Strings[x],pos('tag=',TDesignedForm(TheParent).Virtualprop.Strings[x])+4,
+      length(TDesignedForm(TheParent).Virtualprop.Strings[x])-pos('tag=',TDesignedForm(TheParent).Virtualprop.Strings[x])-3)) > 0 then
+       s := s + '    Tag := ' + copy(TDesignedForm(TheParent).Virtualprop.Strings[x],pos('tag=',TDesignedForm(TheParent).Virtualprop.Strings[x])+4,
+      length(TDesignedForm(TheParent).Virtualprop.Strings[x])-pos('tag=',TDesignedForm(TheParent).Virtualprop.Strings[x])-3) + ';' + LineEnding ;
        inc(x);
    end;
   end;

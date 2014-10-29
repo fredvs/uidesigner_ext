@@ -1277,7 +1277,6 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
   inherited;
   Name := 'frmProperties';
   WindowTitle := 'Properties';
@@ -1285,7 +1284,6 @@ begin
   top := 240;
   width := 270;
   height := 450 ;
-
  // MinWidth := 268;
  // MinHeight := 448;
 
@@ -1885,11 +1883,13 @@ begin
 
    begin
 
-  TheParent := lstProps.Props.Widget ;
+  TheParent := lstProps.Props.Widget.Parent ;
   TheWidget := lstProps.Props.Widget ;
 
   while TheParent.HasParent = true do
    TheParent :=  TheParent.Parent;
+
+  //TDesignedForm(TheParent).WindowType:=;
 
   ok := false;
    for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
