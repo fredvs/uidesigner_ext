@@ -32,7 +32,7 @@ interface
 
 uses
   RunOnce_PostIt,
-  frm_colorwheel,
+  frm_colorpicker,
   frm_imageconvert,
   SysUtils,
   Classes,
@@ -112,8 +112,8 @@ type
     property    SelectedWidget: TVFDWidgetClass read GetSelectedWidget write SetSelectedWidget;
     procedure   onhideclick(Sender: TObject);
     procedure   onshowclick(Sender: TObject);
-    procedure   Onalwaystofront(Sender: TObject);
-    procedure   Onnevertofront(Sender: TObject);
+    procedure   onalwaystofront(Sender: TObject);
+    procedure   OnNevertoFront(Sender: TObject);
     procedure   OnLoadUndo(Sender: TObject);
     procedure   OnIndexUndo(Sender: TObject);
     procedure   OnIndexRedo(Sender: TObject);
@@ -278,7 +278,7 @@ end;
 
 procedure TfrmAbout.FormPaint(Sender: TObject);
 begin
-  Canvas.DrawImage(16, 10, FImage);
+  Canvas.DrawImage(5, 5, FImage);
 end;
 
 procedure TfrmAbout.AfterCreate;
@@ -288,21 +288,13 @@ begin
 
      {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
-  SetPosition(400, 387, 276, 330);
+  SetPosition(971, 311, 278, 195);
   WindowTitle := 'About Designer_ext';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
   Sizeable := False;
-  Visible := True;
-  FullScreen := False;
-  Enabled := True;
-  MinWidth := 0;
-  MaxWidth := 0;
-  MinHeight := 0;
-  MaxHeight := 0;
   WindowPosition := wpScreenCenter;
   WindowPosition := wpScreenCenter;
-  Tag := 0;
   OnShow := @FormShow;
   OnPaint := @FormPaint;
 
@@ -310,11 +302,11 @@ begin
   with lblAppName do
   begin
     Name := 'lblAppName';
-    SetPosition(32, 190, 255, 35);
+    SetPosition(108, 10, 167, 35);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-20';
     Hint := '';
-    Text := 'designer_ext';
+    Text := 'Designer_ext';
     TextColor := TfpgColor($4B8133);
   end;
 
@@ -322,7 +314,7 @@ begin
   with lblVersion do
   begin
     Name := 'lblVersion';
-    SetPosition(62, 220, 195, 24);
+    SetPosition(158, 44, 107, 24);
     Alignment := taRightJustify;
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := '#Label2';
@@ -335,14 +327,16 @@ begin
   with btnClose do
   begin
     Name := 'btnClose';
-    SetPosition(194, 298, 75, 24);
+    SetPosition(196, 163, 75, 24);
     Anchors := [anRight,anBottom];
-    Text := 'Close';
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := '';
     ImageName := 'stdimg.close';
     ModalResult := mrOK;
     TabOrder := 2;
+    Text := 'Close';
     TextColor := TfpgColor($FF000000);
   end;
 
@@ -350,7 +344,7 @@ begin
   with lblWrittenBy do
   begin
     Name := 'lblWrittenBy';
-    SetPosition(12, 245, 241, 14);
+    SetPosition(12, 109, 245, 14);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
@@ -362,7 +356,7 @@ begin
   with lblURL do
   begin
     Name := 'lblURL';
-    SetPosition(12, 261, 246, 14);
+    SetPosition(52, 125, 162, 14);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9:underline';
     Hint := '';
@@ -377,7 +371,7 @@ begin
   with lblCompiled do
   begin
     Name := 'lblCompiled';
-    SetPosition(12, 279, 180, 13);
+    SetPosition(36, 91, 188, 13);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
@@ -389,7 +383,7 @@ begin
   with lblExtBy do
   begin
     Name := 'lblExtBy';
-    SetPosition(22, 296, 150, 14);
+    SetPosition(14, 156, 150, 14);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
@@ -401,7 +395,7 @@ begin
   with lblExtMail do
   begin
     Name := 'lblExtMail';
-    SetPosition(62, 310, 110, 14);
+    SetPosition(38, 174, 114, 18);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
@@ -699,21 +693,14 @@ begin
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(383, 241, 780, 92);
+  SetPosition(385, 50, 780, 92);
   WindowTitle := 'frmMainDesigner';
   Hint := '';
   ShowHint := True;
   BackGroundColor := $80000001;
-  Sizeable := True;
-  Visible := True;
-  FullScreen := False;
-  Enabled := True;
   MinWidth := 770;
-  MaxWidth := 0;
   MinHeight := 90;
-  MaxHeight := 0;
   WindowPosition := wpUser;
-  Tag := 0;
 
   MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do
@@ -786,7 +773,7 @@ begin
   begin
     Name := 'toolsmenu';
     SetPosition(328, 52, 120, 20);
-    AddMenuItem('Color Wheel', '', @micolorwheel);
+    AddMenuItem('Color Picker', '', @micolorwheel);
     AddMenuItem('Image Convertor', '', @miimageconv);
   end;
 
@@ -863,13 +850,15 @@ begin
   begin
     Name := 'btnNewForm';
     SetPosition(16, 33, 25, 24);
-    Text := '';
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := 'Add New Form to Unit';
     ImageMargin := -1;
     ImageName := 'vfd.newform';
     ImageSpacing := 0;
     TabOrder := 1;
+    Text := '';
     Focusable := False;
     OnClick   := @(maindsgn.OnNewForm);
   end;
@@ -879,13 +868,15 @@ begin
   begin
     Name := 'btnOpen';
     SetPosition(42, 33, 25, 24);
-    Text := '';
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := 'Open a file';
     ImageMargin := -1;
     ImageName := 'stdimg.open';
     ImageSpacing := 0;
     TabOrder := 2;
+    Text := '';
     Focusable := False;
     OnClick   := @(maindsgn.OnLoadFile);
   end;
@@ -895,13 +886,15 @@ begin
   begin
     Name := 'btnSave';
     SetPosition(68, 33, 25, 24);
-    Text := '';
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := 'Save the current form design';
     ImageMargin := -1;
     ImageName := 'stdimg.save';
     ImageSpacing := 0;
     TabOrder := 3;
+    Text := '';
     Focusable := False;
     Tag := 10;
     OnClick   := @(maindsgn.OnSaveFile);
@@ -912,8 +905,8 @@ begin
   begin
     Name := 'btnGrid';
     SetPosition(96, 33, 25, 24);
-    Text := '';
     AllowAllUp := True;
+    AllowDown := True;
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := 'Toggle designer grid';
@@ -921,8 +914,8 @@ begin
     ImageName := 'vfd.grid';
     ImageSpacing := 0;
     TabOrder := 13;
+    Text := '';
     Focusable := False;
-    AllowDown := True;
     OnClick := @ToggleDesignerGrid;
   end;
 
@@ -931,15 +924,16 @@ begin
   begin
     Name := 'btnToFront';
     SetPosition(123, 33, 25, 24);
-    Text := '';
+    AllowDown := True;
     FontDesc := '#Label1';
+    GroupIndex := 1;
     Hint := 'Switch Designer Always-To-Front <> Normal';
     ImageMargin := -1;
     ImageName := 'vfd.tofront';
     ImageSpacing := 0;
     TabOrder := 3;
+    Text := '';
     Focusable := False;
-    Tag := 0;
     OnClick   := @ToFrontClick;
     hide;
   end;
@@ -950,8 +944,8 @@ begin
     Name := 'wgpalette';
     SetPosition(152, 28, 606, 62);
     Anchors := [anLeft,anRight,anTop,anBottom];
-    Width := self.Width - 150;
     Focusable := False;
+    Width := self.Width - 150;
     OnResize := @PaletteBarResized;
   end;
 
@@ -981,8 +975,7 @@ begin
     Hint := 'Hold click to move palette...';
     Style := bsFlat;
     Text := '';
-    tag := 0 ;
-    visible := false;
+    Visible := False;
     OnMouseMove:= @onMovemovepanel ;
     OnMouseDown := @onClickDownPanel ;
     OnMouseUp := @onClickUpPanel ;
@@ -1779,7 +1772,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'siz=True');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'siz=' + cbsizeable.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1790,7 +1783,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'foc=True');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'   + 'foc=' + cbfocusable.Text );
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1801,7 +1794,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'vis=True');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'vis=' + cbvisible.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1812,7 +1805,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'ful=False');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'ful=' + cbfullscreen.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1823,7 +1816,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'ena=True');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'ena=' + cbenabled.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1834,7 +1827,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'miw=0');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'miw=' + edminwidth.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1845,7 +1838,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'maw=0');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + edmaxwidth.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1856,7 +1849,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'mih=0');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'   + 'mih=' + edminheight.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1867,7 +1860,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'mah=0');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'mah=' + edmaxheight.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1878,7 +1871,7 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'wip=wpUser');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'   + 'wip=' + cbWindowPosition.Text);
 
    ok := false;
    for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
@@ -1889,11 +1882,12 @@ begin
    ok := true;
    end;
    end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'tag=0');
+   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'   + 'tag=' + edtag.Text);
 
    end else
 
    begin
+   //////////////// Other  widgets
 
   TheWidget := lstProps.Props.Widget ;
 
@@ -1911,7 +1905,7 @@ begin
   TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'vis=' + cbvisible.Text;
  end;
  end;
- if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'vis=True');
+ if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'vis=' + cbvisible.Text);
 
  ok := false;
     for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
@@ -1921,7 +1915,7 @@ begin
    TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'tag=' + edtag.Text;
   end;
   end;
-  if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'tag=0');
+  if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'   + 'tag=' + edtag.Text);
 
    ok := false;
     for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
@@ -1931,7 +1925,7 @@ begin
    TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'foc=' + cbfocusable.Text;
   end;
   end;
-  if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'foc=True');
+  if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'foc=' + cbfocusable.Text);
 
    end;
 
@@ -2214,9 +2208,9 @@ end;
 
 procedure TfrmMainDesigner.micolorwheel(Sender: TObject);
 var
-  frm: TWheelColorForm;
+  frm: TColorPickerForm;
 begin
-  frm := TWheelColorForm.Create(nil);
+  frm := TColorPickerForm.Create(nil);
   frm.Show;
 end;
 

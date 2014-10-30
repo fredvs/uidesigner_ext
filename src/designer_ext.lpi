@@ -12,7 +12,6 @@
       <MainUnit Value="0"/>
       <Title Value="designer_ext"/>
       <UseAppBundle Value="False"/>
-      <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
       <StringTable ProductVersion=""/>
@@ -140,82 +139,82 @@ install:
         <IsPartOfProject Value="True"/>
         <TopLine Value="25"/>
         <CursorPos X="18" Y="26"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit0>
       <Unit1>
         <Filename Value="vfdmain.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit1>
       <Unit2>
         <Filename Value="vfdresizer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit2>
       <Unit3>
         <Filename Value="vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit3>
       <Unit4>
         <Filename Value="vfddesigner.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit4>
       <Unit5>
         <Filename Value="vfdfile.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit5>
       <Unit6>
         <Filename Value="newformdesigner.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit6>
       <Unit7>
         <Filename Value="vfdwidgets.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit7>
       <Unit8>
         <Filename Value="vfdwidgetclass.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit8>
       <Unit9>
         <Filename Value="vfdeditors.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit9>
       <Unit10>
         <Filename Value="vfdformparser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit10>
       <Unit11>
         <Filename Value="vfdprops.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit11>
       <Unit12>
         <Filename Value="vfdutils.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit12>
       <Unit13>
         <Filename Value="vfdpropeditgrid.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit13>
       <Unit14>
         <Filename Value="anchors.inc"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit14>
       <Unit15>
         <Filename Value="icons.inc"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="116"/>
+        <UsageCount Value="117"/>
       </Unit15>
     </Units>
   </ProjectOptions>
@@ -254,8 +253,6 @@ install:
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
       </Verbosity>
       <WriteFPCLogo Value="False"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
-  <EditorMacros Count="0"/>
 </CONFIG>
