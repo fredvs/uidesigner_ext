@@ -202,6 +202,7 @@ type
     lblURL: TfpgHyperlink;
     lblCompiled: TfpgLabel;
     lblExtBy: TfpgLabel;
+    lblExtMail: TfpgLabel;
     {@VFD_HEAD_END: frmAbout}
      Fimage : Tfpgimage;
      procedure   SetupCaptions;
@@ -349,7 +350,7 @@ begin
   with lblWrittenBy do
   begin
     Name := 'lblWrittenBy';
-    SetPosition(12, 250, 241, 14);
+    SetPosition(12, 245, 241, 14);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
@@ -361,7 +362,7 @@ begin
   with lblURL do
   begin
     Name := 'lblURL';
-    SetPosition(12, 266, 246, 14);
+    SetPosition(12, 261, 246, 14);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9:underline';
     Hint := '';
@@ -376,7 +377,7 @@ begin
   with lblCompiled do
   begin
     Name := 'lblCompiled';
-    SetPosition(12, 287, 180, 13);
+    SetPosition(12, 279, 180, 13);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
@@ -388,11 +389,23 @@ begin
   with lblExtBy do
   begin
     Name := 'lblExtBy';
-    SetPosition(22, 302, 150, 14);
+    SetPosition(22, 296, 150, 14);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
     Text := '_ext => Fred van Stappen';
+    TextColor := TfpgColor($4DC63D);
+  end;
+
+  lblExtMail := TfpgLabel.Create(self);
+  with lblExtMail do
+  begin
+    Name := 'lblExtMail';
+    SetPosition(62, 310, 110, 14);
+    BackgroundColor := TfpgColor($FFFFFFFF);
+    FontDesc := 'Arial-9';
+    Hint := '';
+    Text := 'fiens@hotmail.com';
     TextColor := TfpgColor($4DC63D);
   end;
 
@@ -1286,7 +1299,6 @@ begin
   height := 450 ;
  // MinWidth := 268;
  // MinHeight := 448;
-
   OnResize:= @frmPropertiesPaint;
 
     if  gINI.ReadBool('frmPropertiesState', 'FirstLoad', true) = false  then
@@ -1883,13 +1895,13 @@ begin
 
    begin
 
-  TheParent := lstProps.Props.Widget.Parent ;
   TheWidget := lstProps.Props.Widget ;
 
+  TheParent := TheWidget ;
   while TheParent.HasParent = true do
-   TheParent :=  TheParent.Parent;
+  TheParent :=  TheParent.Parent;
 
-  //TDesignedForm(TheParent).WindowType:=;
+  // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));
 
   ok := false;
    for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin

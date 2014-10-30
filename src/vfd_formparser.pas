@@ -424,7 +424,12 @@ var
   sval: string;
   ival: longint;
   bval: boolean;
+   TheParent : TfpgWidget ;
   Begin
+    TheParent := wg ;
+  while TheParent.HasParent = true do
+  TheParent :=  TheParent.Parent;
+
     result := false ;
    if ident = 'SIZEABLE' then
   begin
@@ -481,11 +486,11 @@ var
       if result then begin
       if bval = true then
       begin
-        TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.Parent).Name + '.' +  wg.Name + '.' + 'vis=True');
+        TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  wg.Name + '.' + 'vis=True');
        frmProperties.cbvisible.Items[0] ;
             end else  begin
        frmProperties.cbvisible.Items[1] ;
-       TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.Parent).Name + '.' +  wg.Name + '.'  + 'vis=False');
+       TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  wg.Name + '.'  + 'vis=False');
        end;
        end;
       end;
@@ -523,11 +528,11 @@ var
       if result then begin
       if bval = true then
       begin
-        TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.Parent).Name + '.' +  wg.Name + '.' + 'fov=True');
+        TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  wg.Name + '.' + 'foc=True');
        frmProperties.cbvisible.Items[0] ;
             end else  begin
        frmProperties.cbvisible.Items[1] ;
-       TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.Parent).Name + '.' +  wg.Name + '.'  + 'foc=False');
+       TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  wg.Name + '.'  + 'foc=False');
        end;
        end;
       end;
@@ -675,7 +680,7 @@ var
         result  := CheckSymbol(s, ';');
       end;
       if result then begin
-      TDesignedForm(wg.Parent).Virtualprop.Add(TDesignedForm(wg.parent).Name + '.' + wg.Name + '.' + 'tag=' + inttostr(ival));  ///
+      TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' + wg.Name + '.' + 'tag=' + inttostr(ival));  ///
       frmProperties.edtag.Text := inttostr(ival) ;
        end;
       end;

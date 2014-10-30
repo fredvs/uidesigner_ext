@@ -1037,11 +1037,12 @@ begin
     end else
    begin       ////// other widget
 
-    TheParent := TheWidget ;
-
+   TheParent := TheWidget ;
   while TheParent.HasParent = true do
-   TheParent :=  TheParent.Parent;
-        // visible
+  TheParent :=  TheParent.Parent;
+   // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));
+
+   // visible
       i := 0 ;
       ok := false;
         if (TheParent) is TDesignedForm then
@@ -1706,9 +1707,9 @@ begin
     s := '';
 
    TheParent := TheWidget ;
-
   while TheParent.HasParent = true do
-   TheParent :=  TheParent.Parent;
+  TheParent :=  TheParent.Parent;
+   // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));
 
     if TDesignedForm(TheParent).Virtualprop.Count > 0 then
         begin
@@ -1730,7 +1731,7 @@ begin
       end;
       // Tag
       x := 0 ;
-     while x < TDesignedForm(TheWidget.Parent).Virtualprop.Count do
+     while x < TDesignedForm(TheParent).Virtualprop.Count do
     begin
       if pos(TheParent.Name + '.' +  TheWidget.name + '.' + 'tag=',TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
       if strtoint(copy(TDesignedForm(TheParent).Virtualprop.Strings[x],pos('tag=',TDesignedForm(TheParent).Virtualprop.Strings[x])+4,
