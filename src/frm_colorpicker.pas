@@ -426,28 +426,25 @@ begin
 end;
 
 procedure TfrmAbout.AfterCreate;
-var
-y : integer ;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-   y := 180;
      {@VFD_BODY_BEGIN: frmAbout}
-     
   Name := 'frmAbout';
-  SetPosition(20, 20, 276, 150);
+  SetPosition(149, 65, 276, 150);
   WindowTitle := 'About Color_Picker';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
-  WindowPosition := wpScreenCenter;
   Sizeable := False;
+  WindowPosition := wpScreenCenter;
   OnShow := @FormShow;
-    
+  UpdateWindowPosition;
+
   lblAppName := TfpgLabel.Create(self);
   with lblAppName do
   begin
     Name := 'lblAppName';
-    SetPosition(32, 190-y, 255, 35);
+    SetPosition(36, 8, 176, 35);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-20';
     Hint := '';
@@ -459,7 +456,7 @@ begin
   with lblVersion do
   begin
     Name := 'lblVersion';
-    SetPosition(62, 220-y, 195, 24);
+    SetPosition(170, 36, 96, 19);
     Alignment := taRightJustify;
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := '#Label2';
@@ -472,14 +469,14 @@ begin
   with btnClose do
   begin
     Name := 'btnClose';
-    SetPosition(194, 298-y, 75, 24);
+    SetPosition(190, 120, 80, 23);
     Anchors := [anRight,anBottom];
-    Text := 'Close';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.close';
     ModalResult := mrOK;
     TabOrder := 2;
+    Text := 'Close';
     TextColor := TfpgColor($FF000000);
   end;
 
@@ -487,7 +484,8 @@ begin
   with lblWrittenBy do
   begin
     Name := 'lblWrittenBy';
-    SetPosition(12, 250-y, 241, 14);
+    SetPosition(8, 64, 264, 15);
+    Alignment := taCenter;
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
@@ -499,7 +497,8 @@ begin
   with lblURL do
   begin
     Name := 'lblURL';
-    SetPosition(12, 266-y, 246, 14);
+    SetPosition(16, 80, 240, 15);
+    Alignment := taCenter;
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9:underline';
     Hint := '';
@@ -514,7 +513,7 @@ begin
   with lblDeveloper do
   begin
     Name := 'lblDeveloper';
-    SetPosition(12, 287-y, 180, 13);
+    SetPosition(12, 108, 116, 15);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
@@ -526,7 +525,7 @@ begin
   with lblExtBy do
   begin
     Name := 'lblExtBy';
-    SetPosition(12, 302-y, 150, 14);
+    SetPosition(12, 124, 104, 35);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
@@ -534,8 +533,8 @@ begin
     TextColor := TfpgColor($4DC63D);
   end;
 
-  UpdateWindowPosition;
-   
+UpdateWindowPosition;
+
   {@VFD_BODY_END: frmAbout}
   {%endregion}
 

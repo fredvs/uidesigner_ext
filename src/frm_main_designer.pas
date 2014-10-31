@@ -328,7 +328,6 @@ begin
     SetPosition(196, 163, 75, 24);
     Anchors := [anRight,anBottom];
     FontDesc := '#Label1';
-    GroupIndex := 1;
     Hint := '';
     ImageName := 'stdimg.close';
     ModalResult := mrOK;
