@@ -285,7 +285,6 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
      {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(971, 311, 278, 195);
@@ -293,7 +292,6 @@ begin
   Hint := '';
   BackGroundColor := $FFFFFFFF;
   Sizeable := False;
-  WindowPosition := wpScreenCenter;
   WindowPosition := wpScreenCenter;
   OnShow := @FormShow;
   OnPaint := @FormPaint;
@@ -329,7 +327,6 @@ begin
     Name := 'btnClose';
     SetPosition(196, 163, 75, 24);
     Anchors := [anRight,anBottom];
-    AllowDown := True;
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := '';
@@ -690,7 +687,6 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(385, 50, 780, 92);
@@ -850,9 +846,7 @@ begin
   begin
     Name := 'btnNewForm';
     SetPosition(16, 33, 25, 24);
-    AllowDown := True;
     FontDesc := '#Label1';
-    GroupIndex := 1;
     Hint := 'Add New Form to Unit';
     ImageMargin := -1;
     ImageName := 'vfd.newform';
@@ -868,9 +862,7 @@ begin
   begin
     Name := 'btnOpen';
     SetPosition(42, 33, 25, 24);
-    AllowDown := True;
     FontDesc := '#Label1';
-    GroupIndex := 1;
     Hint := 'Open a file';
     ImageMargin := -1;
     ImageName := 'stdimg.open';
@@ -886,9 +878,7 @@ begin
   begin
     Name := 'btnSave';
     SetPosition(68, 33, 25, 24);
-    AllowDown := True;
     FontDesc := '#Label1';
-    GroupIndex := 1;
     Hint := 'Save the current form design';
     ImageMargin := -1;
     ImageName := 'stdimg.save';
@@ -896,7 +886,6 @@ begin
     TabOrder := 3;
     Text := '';
     Focusable := False;
-    Tag := 10;
     OnClick   := @(maindsgn.OnSaveFile);
   end;
 
@@ -906,9 +895,7 @@ begin
     Name := 'btnGrid';
     SetPosition(96, 33, 25, 24);
     AllowAllUp := True;
-    AllowDown := True;
     FontDesc := '#Label1';
-    GroupIndex := 1;
     Hint := 'Toggle designer grid';
     ImageMargin := -1;
     ImageName := 'vfd.grid';
@@ -916,6 +903,7 @@ begin
     TabOrder := 13;
     Text := '';
     Focusable := False;
+    AllowDown := True;
     OnClick := @ToggleDesignerGrid;
   end;
 
@@ -924,9 +912,7 @@ begin
   begin
     Name := 'btnToFront';
     SetPosition(123, 33, 25, 24);
-    AllowDown := True;
     FontDesc := '#Label1';
-    GroupIndex := 1;
     Hint := 'Switch Designer Always-To-Front <> Normal';
     ImageMargin := -1;
     ImageName := 'vfd.tofront';
@@ -934,7 +920,7 @@ begin
     TabOrder := 3;
     Text := '';
     Focusable := False;
-    OnClick   := @ToFrontClick;
+    onClick   := @ToFrontClick;
     hide;
   end;
 

@@ -444,7 +444,7 @@ begin
   wc.NameBase := 'Button';
   wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
   wc.AddProperty('AllowAllUp', TPropertyBoolean, '');
-  wc.AddProperty('AllowDown', TPropertyBoolean, '');
+  //wc.AddProperty('AllowDown', TPropertyBoolean, '');
   wc.AddProperty('BackgroundColor', TPropertyColor, '');
   wc.AddProperty('Down', TPropertyBoolean, 'Only valid when in group mode');
   wc.AddProperty('Embedded', TPropertyBoolean, 'No focus rectangle will be drawn. eg: Toolbar buttons');
