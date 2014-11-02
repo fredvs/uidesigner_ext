@@ -21,10 +21,10 @@ type
     btnClear: TfpgButton;
     Button2: TfpgButton;
     {@VFD_HEAD_END: MainForm}
-    procedure onclosemain(Sender: TObject; var closeac : Tcloseaction);
+    procedure onclosemain(Sender: TObject; var closeac: Tcloseaction);
     procedure MemoDragEnter(Sender, Source: TObject; AMimeList: TStringList;
       var AMimeChoice: TfpgString; var ADropAction: TfpgDropAction;
-      var Accept: Boolean);
+      var Accept: boolean);
     procedure MemoDragDrop(Sender, Source: TObject; X, Y: integer; AData: variant);
     function ConvertImage(const AFileName: string): string;
     procedure btnClearClicked(Sender: TObject);
@@ -44,14 +44,14 @@ uses
 
 {@VFD_NEWFORM_IMPL}
 
-procedure TImageConvert.onclosemain(Sender: TObject; var closeac : Tcloseaction);
+procedure TImageConvert.onclosemain(Sender: TObject; var closeac: Tcloseaction);
 begin
-closeac := caFree;
+  closeac := caFree;
 end;
 
 procedure TImageConvert.MemoDragEnter(Sender, Source: TObject;
   AMimeList: TStringList; var AMimeChoice: TfpgString;
-  var ADropAction: TfpgDropAction; var Accept: Boolean);
+  var ADropAction: TfpgDropAction; var Accept: boolean);
 var
   s: string;
 begin
@@ -69,8 +69,8 @@ begin
   end;
 end;
 
-procedure TImageConvert.MemoDragDrop(Sender, Source: TObject; X, Y: integer;
-  AData: variant);
+procedure TImageConvert.MemoDragDrop(Sender, Source: TObject;
+  X, Y: integer; AData: variant);
 var
   fileName: string;
   sl: TStringList;
@@ -81,7 +81,7 @@ begin
     sl.Text := AData;
     try
       memImages.BeginUpdate;
-      for i := 0 to sl.Count-1 do
+      for i := 0 to sl.Count - 1 do
       begin
         fileName := sl[i];
         fileName := StringReplace(fileName, 'file://', '', []);
@@ -103,7 +103,7 @@ var
   InStream: TFileStream;
   I, Count: longint;
   b: byte;
-  Line, ToAdd: String;
+  Line, ToAdd: string;
   ConstName: string;
 
   procedure WriteStr(const St: string);
@@ -125,12 +125,12 @@ begin
 
     InStream.Seek(0, soFromBeginning);
     Count := InStream.Size;
-    WriteStrLn(Format('  %s: array[0..%d] of byte = (',[ConstName, Count-1]));
+    WriteStrLn(Format('  %s: array[0..%d] of byte = (', [ConstName, Count - 1]));
     Line := Prefix;
     for I := 1 to Count do
     begin
       InStream.Read(B, 1);
-      ToAdd := Format('%3d',[b]);
+      ToAdd := Format('%3d', [b]);
       if I < Count then
         ToAdd := ToAdd + ',';
       Line := Line + ToAdd;
@@ -140,7 +140,7 @@ begin
         Line := PreFix;
       end;
     end; { for }
-    WriteStrln(Line+');');
+    WriteStrln(Line + ');');
     WriteStrLn('');
   finally
     InStream.Free;
@@ -169,7 +169,7 @@ end;
 
 procedure TImageConvert.btnquitClicked(Sender: TObject);
 begin
- close;
+  Close;
 end;
 
 procedure TImageConvert.AfterCreate;
@@ -192,7 +192,7 @@ begin
   begin
     Name := 'FilenameEdit1';
     SetPosition(4, 8, 384, 24);
-    Anchors := [anLeft,anRight,anTop];
+    Anchors := [anLeft, anRight, anTop];
     ExtraHint := '';
     FileName := '';
     Filter := '';
@@ -205,13 +205,13 @@ begin
   begin
     Name := 'memImages';
     SetPosition(4, 56, 692, 318);
-    Anchors := [anLeft,anRight,anTop,anBottom];
+    Anchors := [anLeft, anRight, anTop, anBottom];
     FontDesc := '#Edit2';
     Hint := '';
     TabOrder := 5;
     AcceptDrops := True;
-    OnDragEnter  := @MemoDragEnter;
-    OnDragDrop  := @MemoDragDrop;
+    OnDragEnter := @MemoDragEnter;
+    OnDragDrop := @MemoDragDrop;
   end;
 
   Button1 := TfpgButton.Create(self);
@@ -219,7 +219,7 @@ begin
   begin
     Name := 'Button1';
     SetPosition(396, 8, 64, 24);
-    Anchors := [anRight,anTop];
+    Anchors := [anRight, anTop];
     AllowDown := True;
     FontDesc := '#Label1';
     GroupIndex := 1;
@@ -245,7 +245,7 @@ begin
   begin
     Name := 'btnCopy';
     SetPosition(464, 8, 70, 24);
-    Anchors := [anRight,anTop];
+    Anchors := [anRight, anTop];
     AllowDown := True;
     FontDesc := '#Label1';
     GroupIndex := 1;
@@ -261,7 +261,7 @@ begin
   begin
     Name := 'btnClear';
     SetPosition(540, 8, 60, 24);
-    Anchors := [anRight,anTop];
+    Anchors := [anRight, anTop];
     AllowDown := True;
     FontDesc := '#Label1';
     GroupIndex := 1;
@@ -269,7 +269,7 @@ begin
     ImageName := '';
     TabOrder := 6;
     Text := 'Clear';
-    OnClick  := @btnClearClicked;
+    OnClick := @btnClearClicked;
   end;
 
   Button2 := TfpgButton.Create(self);
@@ -277,7 +277,7 @@ begin
   begin
     Name := 'Button2';
     SetPosition(636, 8, 60, 24);
-    Anchors := [anRight,anTop];
+    Anchors := [anRight, anTop];
     AllowDown := True;
     FontDesc := '#Label1';
     GroupIndex := 1;

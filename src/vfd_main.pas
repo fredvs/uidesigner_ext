@@ -38,9 +38,11 @@ uses
   fpg_constants,
   vfd_props,
   frm_vfdforms,
+  fpg_widget ,
   vfd_designer,
   vfd_file,
   fpg_dialogs,
+  frm_multiselect,
   frm_main_designer;
 
 const
@@ -404,6 +406,9 @@ var
   bl, bl2: TVFDFileBlock;
   FFileUndo: TVFDFile;
 begin
+
+//if fileexists(ArrayUndo[undoindex].FileName) then
+//begin
   ifundo := True;
   FFileUndo := TVFDFile.Create;
 
@@ -599,7 +604,8 @@ begin
     case typeundo of
       5: tempform := 'Init Root.';
       6: tempform := selectedform.Form.Name + ' => was saved.';
-      7: tempform := selectedform.Form.Name + ' => new form.'
+      7: tempform := selectedform.Form.Name + ' => new form.';
+      8: tempform := selectedform.Form.Name + ' => Properties changed by Multi-Selector.'
     end;
 
   if dd = 0 then
@@ -627,18 +633,27 @@ begin
 end;
 
 procedure TMainDesigner.OnPropNameChange(Sender: TObject);
-begin
-
-  if SelectedForm <> nil then
+var
+  TheParent : Tfpgwidget;
+   begin
+    if SelectedForm <> nil then
   begin
      SelectedForm.OnPropNameChange(Sender);
-    fpgapplication.ProcessMessages;
+     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 0);
+     TheParent := frmProperties.lstProps.Props.Widget ;
+     while TheParent.HasParent do
+     TheParent := frmProperties.lstProps.Props.Widget.Parent ;
+
+   frmMultiSelect.Getwidgetlist(TheParent);
+  fpgapplication.ProcessMessages;
   end;
 end;
 
 procedure TMainDesigner.OnPropPosEdit(Sender: TObject);
+var
+  TheParent : Tfpgwidget;
 begin
   if SelectedForm <> nil then
   begin
@@ -646,6 +661,12 @@ begin
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 1);
+
+   TheParent := frmProperties.lstProps.Props.Widget ;
+     while TheParent.HasParent do
+     TheParent := frmProperties.lstProps.Props.Widget.Parent ;
+
+   frmMultiSelect.Procupdategrid(TheParent);
   end;
 end;
 
@@ -677,6 +698,7 @@ begin
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 4);
   end;
+     frmmultiselect.Procupdategrid(Tfpgwidget(SelectedForm)) ;
 end;
 
 procedure TMainDesigner.OnNewForm(Sender: TObject);

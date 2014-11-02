@@ -34,6 +34,7 @@ uses
   RunOnce_PostIt,
   frm_colorpicker,
   frm_imageconvert,
+  frm_multiselect,
   SysUtils,
   Classes,
   fpg_base,
@@ -81,7 +82,7 @@ type
 
   public
     {@VFD_HEAD_BEGIN: frmMainDesigner}
-    MainMenu: TfpgMenuBar;
+     MainMenu: TfpgMenuBar;
     filemenu: TfpgPopupMenu;
     formmenu: TfpgPopupMenu;
     miOpenRecentMenu: TfpgPopupMenu;
@@ -100,6 +101,7 @@ type
     wgpalette: TwgPalette;
     chlPalette: TfpgComboBox;
     PanelMove: TfpgPanel;
+    btnSelected: TfpgButton;
     {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
@@ -120,6 +122,7 @@ type
     procedure   OnObjInspect(Sender: TObject);
     procedure   ToFrontClick(Sender: TObject);
     procedure   OnFormDesignShow(Sender: TObject);
+    procedure   onMultiSelect(Sender: TObject);
     procedure   LoadIDEparameters(ide :integer) ;
     procedure   onMessagePost;
     procedure   OnStyleChange(Sender: TObject);
@@ -352,7 +355,7 @@ begin
   with lblURL do
   begin
     Name := 'lblURL';
-    SetPosition(52, 125, 162, 14);
+    SetPosition(16, 125, 162, 14);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9:underline';
     Hint := '';
@@ -367,7 +370,7 @@ begin
   with lblCompiled do
   begin
     Name := 'lblCompiled';
-    SetPosition(36, 91, 188, 13);
+    SetPosition(12, 91, 188, 13);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
@@ -427,6 +430,12 @@ procedure   TfrmMainDesigner.MainCloseQueryEvent(Sender: TObject; var CanClose: 
     if (IsRunningIDE('typhon') = false) and (IsRunningIDE('lazarus') = false)
    then
    begin
+     x := 0 ;
+   if assigned(frmmultiselect.cbSelected) then while x < length(frmmultiselect.cbSelected) do
+begin
+  frmmultiselect.cbSelected[x].Free;
+inc(x);
+end;
      CanClose := true;
      end else
    begin
@@ -441,8 +450,16 @@ procedure   TfrmMainDesigner.MainCloseQueryEvent(Sender: TObject; var CanClose: 
      end;
     frmProperties.close;
      frmMainDesigner.hide;
+     frmmultiselect.hide;
+
     end else
     begin
+     x := 0 ;
+   if assigned(frmmultiselect.cbSelected) then while x < length(frmmultiselect.cbSelected) do
+begin
+  frmmultiselect.cbSelected[x].Free;
+inc(x);
+end;
     CanClose := true;
     end;
     end;
@@ -688,7 +705,7 @@ begin
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(385, 50, 780, 92);
+  SetPosition(414, 161, 780, 92);
   WindowTitle := 'frmMainDesigner';
   Hint := '';
   ShowHint := True;
@@ -791,6 +808,8 @@ begin
     AddMenuItem('', '',@OnLoadUndo);
     MenuItem(x).Visible:=false;
     MenuItem(x).Tag:=x;
+  end;
+
   end;
 
   windowmenu := TfpgPopupMenu.Create(self);
@@ -923,11 +942,27 @@ begin
     hide;
   end;
 
+  btnSelected := TfpgButton.Create(self);
+  with btnSelected do
+  begin
+    Name := 'btnSelected';
+    SetPosition(152, 33, 25, 24);
+    FontDesc := '#Label1';
+    Hint := 'Multi-Selector => Select objects and apply changes';
+     ImageMargin := -1;
+     ImageSpacing := 0;
+     ImageName := 'vfd.select';
+    TabOrder := 20;
+    Text := '';
+    Focusable := False;
+     OnClick := @onmultiselect;
+  end;
+
   wgpalette := TwgPalette.Create(self);
   with wgpalette do
   begin
     Name := 'wgpalette';
-    SetPosition(152, 28, 606, 62);
+    SetPosition(180, 28, 606, 62);
     Anchors := [anLeft,anRight,anTop,anBottom];
     Focusable := False;
     Width := self.Width - 150;
@@ -938,7 +973,7 @@ begin
   with chlPalette do
   begin
     Name := 'chlPalette';
-    SetPosition(16, 64, 132, 22);
+    SetPosition(16, 64, 156, 22);
     Anchors := [anLeft,anBottom];
     ExtraHint := '';
     FontDesc := '#List';
@@ -1074,7 +1109,7 @@ indexundo := 0 ;
   StartMessage(@onMessagePost, 1000);
  end;
  PaletteBarResized(self);
-end;
+ frmMultiSelect := Tfrm_multiselect.Create(nil);
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
@@ -1095,6 +1130,8 @@ fpgImages.AddMaskedBMP( 'vfd.grid', @vfd_grid,
 sizeof(vfd_grid), 0, 0);
 fpgImages.AddMaskedBMP('vfd.tofront', @vfd_tofront,
 sizeof(vfd_tofront), 0, 0);
+fpgImages.AddMaskedBMP('vfd.select', @vfd_select,
+sizeof(vfd_select), 0, 0);
 OnShow := @FormShow;
 end;
 
@@ -1148,6 +1185,20 @@ procedure  TfrmMainDesigner.ToFrontClick(Sender: TObject);
    if  btnToFront.Tag = 0 then Onalwaystofront(sender)
    else OnNevertofront(sender) ;
  end;
+
+procedure   TfrmMainDesigner.onmultiselect(Sender: TObject);
+var
+  TheParent : Tfpgwidget;
+   begin
+   TheParent := frmProperties.lstProps.Props.Widget ;
+
+   while TheParent.HasParent do
+     TheParent := frmProperties.lstProps.Props.Widget.Parent ;
+
+  //  frmselected := TheParent ;
+  frmMultiSelect.Getwidgetlist(TheParent);
+  frmMultiSelect.Show;
+end;
 
 procedure TfrmMainDesigner.OnAlwaysToFront(Sender: TObject);
 begin
@@ -1267,6 +1318,7 @@ var
   x, x2, w, y, gap: integer;
 begin
   {%region 'Auto-generated GUI code' -fold}
+
 
   inherited;
   Name := 'frmProperties';
@@ -1606,7 +1658,7 @@ end;
 
 procedure  TfrmProperties.Vpanelpaint(Sender: TObject);
 var
-  x, y : integer;
+ y : integer;
 begin
 
  virtualpanel.Canvas.SetColor(clblack);
@@ -1734,7 +1786,7 @@ end;
 
 procedure   TfrmProperties.VirtualPropertiesUpdate(Sender: TObject);
 var
-  x, y : integer ;
+  x : integer ;
   TheWidget, TheParent : TfpgWidget ;
   ok : boolean;
 begin

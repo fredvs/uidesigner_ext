@@ -13,31 +13,35 @@ uses
 
 type
 
-  TColorPickedEvent = procedure(Sender: TObject; const AMousePos: TPoint; const AColor: TfpgColor) of object;
+  TColorPickedEvent = procedure(Sender: TObject; const AMousePos: TPoint;
+    const AColor: TfpgColor) of object;
 
   TPickerButton = class(TfpgButton)
   private
-    FContinuousResults: Boolean;
+    FContinuousResults: boolean;
     FOnColorPicked: TColorPickedEvent;
     FColorPos: TPoint;
     FColor: TfpgColor;
-    FColorPicking: Boolean;
+    FColorPicking: boolean;
   private
-    procedure   DoColorPicked;
+    procedure DoColorPicked;
   protected
-    procedure   HandleLMouseDown(X, Y: integer; ShiftState: TShiftState); override;
-    procedure   HandleLMouseUp(x, y: integer; shiftstate: TShiftState); override;
-    procedure   HandleMouseMove(x, y: integer; btnstate: word; shiftstate: TShiftState); override;
+    procedure HandleLMouseDown(X, Y: integer; ShiftState: TShiftState); override;
+    procedure HandleLMouseUp(x, y: integer; shiftstate: TShiftState); override;
+    procedure HandleMouseMove(x, y: integer; btnstate: word;
+      shiftstate: TShiftState); override;
   public
     constructor Create(AOwner: TComponent); override;
   published
-    property    ContinuousResults: Boolean read FContinuousResults write FContinuousResults;
-    property    OnColorPicked: TColorPickedEvent read FOnColorPicked write FOnColorPicked;
+    property ContinuousResults: boolean read FContinuousResults
+      write FContinuousResults;
+    property OnColorPicked: TColorPickedEvent
+      read FOnColorPicked write FOnColorPicked;
   end;
 
-   TfrmAbout = class(TfpgForm)
-   private
-     {@VFD_HEAD_BEGIN: frmAbout}
+  TfrmAbout = class(TfpgForm)
+  private
+    {@VFD_HEAD_BEGIN: frmAbout}
     lblAppName: TfpgLabel;
     lblVersion: TfpgLabel;
     btnClose: TfpgButton;
@@ -46,16 +50,16 @@ type
     lblDeveloper: TfpgLabel;
     lblExtBy: TfpgLabel;
     {@VFD_HEAD_END: frmAbout}
-     procedure   FormShow(Sender: TObject);
-     public
-     procedure   AfterCreate; override;
-     class procedure Execute;
-   end;
+    procedure FormShow(Sender: TObject);
+  public
+    procedure AfterCreate; override;
+    class procedure Execute;
+  end;
 
   TCompareForm = class(TfpgForm)
   public
     procedure AfterCreate; override;
-    procedure onclosecompare(Sender: TObject; var closeac : Tcloseaction);
+    procedure onclosecompare(Sender: TObject; var closeac: Tcloseaction);
     procedure onPaintCompare(Sender: TObject);
     procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton;
       AShift: TShiftState; const AMousePos: TPoint);
@@ -95,15 +99,16 @@ type
     chkCrossHair: TfpgCheckBox;
     btnPicker: TPickerButton;
     chkContinuous: TfpgCheckBox;
-     
+
     {@VFD_HEAD_END: WheelColorForm}
     FViaRGB: boolean; // to prevent recursive changes
-    FColorPicking: Boolean;
+    FColorPicking: boolean;
     procedure miHelpAboutClick(Sender: TObject);
-    procedure btnColorPicked(Sender: TObject; const AMousePos: TPoint; const AColor: TfpgColor);
+    procedure btnColorPicked(Sender: TObject; const AMousePos: TPoint;
+      const AColor: TfpgColor);
     procedure chkContinuousChanged(Sender: TObject);
     procedure btnQuitClicked(Sender: TObject);
-    procedure onclosemain(Sender: TObject; var closeac : Tcloseaction);
+    procedure onclosemain(Sender: TObject; var closeac: Tcloseaction);
     procedure chkCrossHairChange(Sender: TObject);
     procedure UpdateHSVComponents;
     procedure UpdateRGBComponents;
@@ -113,9 +118,9 @@ type
     procedure onPaintMain(Sender: TObject);
     procedure ColorBoxChange(Sender: TObject);
     procedure E_HexaKeyChar(Sender: TObject; AChar: TfpgChar; var Consumed: boolean);
-    procedure E_HexaKeyPress(Sender: TObject; var KeyCode: word; var ShiftState: TShiftState;
-          var Consumed: boolean);
-    public
+    procedure E_HexaKeyPress(Sender: TObject; var KeyCode: word;
+      var ShiftState: TShiftState; var Consumed: boolean);
+  public
     MainMenu: TfpgMenuBar;
     helpmenu: TfpgPopupMenu;
     constructor Create(AOwner: TComponent); override;
@@ -126,22 +131,43 @@ type
 
 implementation
 
-
-{$I ext.inc}
-
 type
   TColor = class
     Name: string;
     Value: string;
-    end;
+  end;
+
+const
+  icn_picker: array[0..333] of byte = (
+    66, 77, 78, 1, 0, 0, 0, 0, 0, 0, 118, 0, 0, 0, 40, 0, 0,
+    0, 18, 0, 0, 0, 18, 0, 0, 0, 1, 0, 4, 0, 0, 0, 0, 0,
+    216, 0, 0, 0, 19, 11, 0, 0, 19, 11, 0, 0, 16, 0, 0, 0, 16,
+    0, 0, 0, 0, 0, 0, 0, 132, 132, 0, 0, 255, 255, 0, 0, 0, 0,
+    132, 0, 132, 132, 132, 0, 206, 214, 214, 0, 0, 0, 255, 0, 255, 255, 255,
+    0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0,
+    255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 85,
+    85, 85, 85, 85, 85, 85, 85, 85, 0, 0, 0, 85, 34, 34, 37, 85, 85,
+    85, 85, 85, 0, 0, 0, 82, 34, 34, 34, 37, 85, 85, 85, 85, 0, 0,
+    0, 85, 80, 5, 85, 85, 85, 85, 85, 85, 0, 0, 0, 85, 80, 32, 5,
+    85, 85, 85, 85, 85, 0, 0, 0, 85, 85, 1, 64, 85, 85, 85, 85, 85,
+    0, 0, 0, 85, 85, 2, 20, 5, 85, 85, 85, 85, 0, 0, 0, 85, 85,
+    80, 33, 64, 85, 85, 85, 85, 0, 0, 0, 85, 85, 85, 5, 116, 5, 85,
+    85, 85, 0, 0, 0, 85, 85, 85, 80, 87, 64, 85, 85, 85, 0, 0, 0,
+    85, 85, 85, 85, 5, 116, 3, 85, 85, 0, 0, 0, 85, 85, 85, 85, 80,
+    83, 48, 69, 85, 0, 0, 0, 85, 85, 85, 85, 85, 54, 3, 52, 85, 0,
+    0, 0, 85, 85, 85, 85, 85, 99, 99, 51, 69, 0, 0, 0, 85, 85, 85,
+    85, 85, 85, 54, 99, 53, 0, 0, 0, 85, 85, 85, 85, 85, 85, 55, 99,
+    53, 0, 0, 0, 85, 85, 85, 85, 85, 85, 83, 51, 69, 0, 0, 0, 85,
+    85, 85, 85, 85, 85, 85, 85, 85, 0, 0, 0);
+
 
 var
   oriMousePos, oriWheelColorForm: TPoint;
   ired, igreen, iblue: integer;
-  fbright : double;
-  ColorList : TList;
-   AColor : TColor;
-   y : integer;
+  fbright: double;
+  ColorList: TList;
+  AColor: TColor;
+  y: integer;
 
 {@VFD_NEWFORM_IMPL}
 
@@ -261,151 +287,574 @@ end;
 
 procedure LoadColorList;
 begin
-  AColor:= TColor.Create; AColor.Name:= 'clAliceBlue '; AColor.Value:= '$f0f8ff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clAntiqueWhite '; AColor.Value:= '$faebd7'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clAqua '; AColor.Value:= '$00ffff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clAquamarine '; AColor.Value:= '$7fffd4'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clAzure '; AColor.Value:= '$f0ffff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clBeige '; AColor.Value:= '$f5f5dc'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clBisque '; AColor.Value:= '$ffe4c4'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clBlack '; AColor.Value:= '$000000'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clBlanchedAlmond '; AColor.Value:= '$ffebcd'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clBlue '; AColor.Value:= '$0000ff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clBlueViolet '; AColor.Value:= '$8a2be2'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clBrown '; AColor.Value:= '$a52a2a'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clBurlyWood '; AColor.Value:= '$deb887'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clCadetBlue '; AColor.Value:= '$5f9ea0'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clChartreuse '; AColor.Value:= '$7fff00'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clChocolate '; AColor.Value:= '$d2691e'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clCoral '; AColor.Value:= '$ff7f50'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clCornflowerBlue '; AColor.Value:= '$6495ed'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clCornsilk '; AColor.Value:= '$fff8dc'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clCrimson '; AColor.Value:= '$dc143c'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clCyan '; AColor.Value:= '$00ffff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkBlue '; AColor.Value:= '$00008b'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkCyan '; AColor.Value:= '$008b8b'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkGoldenrod '; AColor.Value:= '$b8860b'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkGray '; AColor.Value:= '$a9a9a9'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkGreen '; AColor.Value:= '$006400'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkKhaki '; AColor.Value:= '$bdb76b'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkMagenta '; AColor.Value:= '$8b008b'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkOliveGreen '; AColor.Value:= '$556b2f'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkOrange '; AColor.Value:= '$ff8c00'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkOrchid '; AColor.Value:= '$9932cc'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkRed '; AColor.Value:= '$8b0000'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkSalmon '; AColor.Value:= '$e9967a'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkSeaGreen '; AColor.Value:= '$8fbc8f'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkSlateBlue '; AColor.Value:= '$483d8b'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkSlateGray '; AColor.Value:= '$2f4f4f'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkTurquoise '; AColor.Value:= '$00ced1'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDarkViolet '; AColor.Value:= '$9400d3'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDeepPink '; AColor.Value:= '$ff1493'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDeepSkyBlue '; AColor.Value:= '$00bfff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDimGray '; AColor.Value:= '$696969'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clDodgerBlue '; AColor.Value:= '$1e90ff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clFireBrick '; AColor.Value:= '$b22222'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clFloralWhite '; AColor.Value:= '$fffaf0'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clForestGreen '; AColor.Value:= '$228b22'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clFuchsia '; AColor.Value:= '$ff00ff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clGainsboro '; AColor.Value:= '$dcdcdc'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clGhostWhite '; AColor.Value:= '$f8f8ff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clGold '; AColor.Value:= '$ffd700'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clGoldenrod '; AColor.Value:= '$daa520'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clGray '; AColor.Value:= '$808080'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clGreen '; AColor.Value:= '$008000'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clGreenYellow '; AColor.Value:= '$adff2f'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clHoneydew '; AColor.Value:= '$f0fff0'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clHotPink '; AColor.Value:= '$ff69b4'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clIndianRed '; AColor.Value:= '$cd5c5c'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clIndigo '; AColor.Value:= '$4b0082'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clIvory '; AColor.Value:= '$fffff0'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clKhaki '; AColor.Value:= '$f0e68c'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLavender '; AColor.Value:= '$e6e6fa'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLavenderBlush '; AColor.Value:= '$fff0f5'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLawnGreen '; AColor.Value:= '$7cfc00'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLemonChiffon '; AColor.Value:= '$fffacd'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightBlue '; AColor.Value:= '$add8e6'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightCoral '; AColor.Value:= '$f08080'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightCyan '; AColor.Value:= '$e0ffff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightGoldenrodYellow '; AColor.Value:= '$fafad2'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightGreen '; AColor.Value:= '$90ee90'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightGray '; AColor.Value:= '$d3d3d3'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightPink '; AColor.Value:= '$ffb6c1'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightSalmon '; AColor.Value:= '$ffa07a'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightSeaGreen '; AColor.Value:= '$20b2aa'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightSkyBlue '; AColor.Value:= '$87cefa'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightSlateGray '; AColor.Value:= '$778899'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightSteelBlue '; AColor.Value:= '$b0c4de'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLightYellow '; AColor.Value:= '$ffffe0'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLime '; AColor.Value:= '$00ff00'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLimeGreen '; AColor.Value:= '$32cd32'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clLinen '; AColor.Value:= '$faf0e6'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMagenta '; AColor.Value:= '$ff00ff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMaroon '; AColor.Value:= '$800000'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumAquamarine '; AColor.Value:= '$66cdaa'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumBlue '; AColor.Value:= '$0000cd'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumOrchid '; AColor.Value:= '$ba55d3'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumPurple '; AColor.Value:= '$9370db'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumSeaGreen '; AColor.Value:= '$3cb371'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumSlateBlue '; AColor.Value:= '$7b68ee'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumSpringGreen '; AColor.Value:= '$00fa9a'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumTurquoise '; AColor.Value:= '$48d1cc'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMediumVioletRed '; AColor.Value:= '$c71585'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMidnightBlue '; AColor.Value:= '$191970'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMintCream '; AColor.Value:= '$f5fffa'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMistyRose '; AColor.Value:= '$ffe4e1'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clMoccasin '; AColor.Value:= '$ffe4b5'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clNavajoWhite '; AColor.Value:= '$ffdead'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clNavy '; AColor.Value:= '$000080'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clOldLace '; AColor.Value:= '$fdf5e6'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clOlive '; AColor.Value:= '$808000'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clOliveDrab '; AColor.Value:= '$6b8e23'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clOrange '; AColor.Value:= '$ffa500'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clOrangeRed '; AColor.Value:= '$ff4500'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clOrchid '; AColor.Value:= '$da70d6'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPaleGoldenrod '; AColor.Value:= '$eee8aa'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPaleGreen '; AColor.Value:= '$98fb98'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPaleTurquoise '; AColor.Value:= '$afeeee'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPaleVioletRed '; AColor.Value:= '$db7093'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPaleBlue '; AColor.Value:= '$e9f5fe'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPapayaWhip '; AColor.Value:= '$ffefd5'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPeachPuff '; AColor.Value:= '$ffdab9'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPeru '; AColor.Value:= '$cd853f'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPink '; AColor.Value:= '$ffc0cb'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPlum '; AColor.Value:= '$dda0dd'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPowderBlue '; AColor.Value:= '$b0e0e6'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clPurple '; AColor.Value:= '$800080'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clRed '; AColor.Value:= '$ff0000'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clRosyBrown '; AColor.Value:= '$bc8f8f'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clRoyalBlue '; AColor.Value:= '$4169e1'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSaddleBrown '; AColor.Value:= '$8b4513'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSalmon '; AColor.Value:= '$fa8072'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSandyBrown '; AColor.Value:= '$f4a460'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSeaGreen '; AColor.Value:= '$2e8b57'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSeashell '; AColor.Value:= '$fff5ee'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSienna '; AColor.Value:= '$a0522d'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSilver '; AColor.Value:= '$c0c0c0'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSkyBlue2 '; AColor.Value:= '$87ceeb'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSlateBlue '; AColor.Value:= '$6a5acd'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSlateGray '; AColor.Value:= '$708090'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSnow '; AColor.Value:= '$fffafa'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSpringGreen '; AColor.Value:= '$00ff7f'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clSteelBlue '; AColor.Value:= '$4682b4'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clTan '; AColor.Value:= '$d2b48c'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clTeal '; AColor.Value:= '$008080'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clThistle '; AColor.Value:= '$d8bfd8'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clTomato '; AColor.Value:= '$ff6347'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clTurquoise '; AColor.Value:= '$40e0d0'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clViolet '; AColor.Value:= '$ee82ee'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clWheat '; AColor.Value:= '$f5deb3'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clWhite '; AColor.Value:= '$ffffff'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clWhiteSmoke '; AColor.Value:= '$f5f5f5'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clYellow '; AColor.Value:= '$ffff00'; ColorList.Add(AColor);
-  AColor:= TColor.Create; AColor.Name:= 'clYellowGreen '; AColor.Value:= '$9acd32'; ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clAliceBlue ';
+  AColor.Value := '$f0f8ff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clAntiqueWhite ';
+  AColor.Value := '$faebd7';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clAqua ';
+  AColor.Value := '$00ffff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clAquamarine ';
+  AColor.Value := '$7fffd4';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clAzure ';
+  AColor.Value := '$f0ffff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clBeige ';
+  AColor.Value := '$f5f5dc';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clBisque ';
+  AColor.Value := '$ffe4c4';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clBlack ';
+  AColor.Value := '$000000';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clBlanchedAlmond ';
+  AColor.Value := '$ffebcd';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clBlue ';
+  AColor.Value := '$0000ff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clBlueViolet ';
+  AColor.Value := '$8a2be2';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clBrown ';
+  AColor.Value := '$a52a2a';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clBurlyWood ';
+  AColor.Value := '$deb887';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clCadetBlue ';
+  AColor.Value := '$5f9ea0';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clChartreuse ';
+  AColor.Value := '$7fff00';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clChocolate ';
+  AColor.Value := '$d2691e';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clCoral ';
+  AColor.Value := '$ff7f50';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clCornflowerBlue ';
+  AColor.Value := '$6495ed';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clCornsilk ';
+  AColor.Value := '$fff8dc';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clCrimson ';
+  AColor.Value := '$dc143c';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clCyan ';
+  AColor.Value := '$00ffff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkBlue ';
+  AColor.Value := '$00008b';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkCyan ';
+  AColor.Value := '$008b8b';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkGoldenrod ';
+  AColor.Value := '$b8860b';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkGray ';
+  AColor.Value := '$a9a9a9';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkGreen ';
+  AColor.Value := '$006400';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkKhaki ';
+  AColor.Value := '$bdb76b';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkMagenta ';
+  AColor.Value := '$8b008b';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkOliveGreen ';
+  AColor.Value := '$556b2f';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkOrange ';
+  AColor.Value := '$ff8c00';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkOrchid ';
+  AColor.Value := '$9932cc';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkRed ';
+  AColor.Value := '$8b0000';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkSalmon ';
+  AColor.Value := '$e9967a';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkSeaGreen ';
+  AColor.Value := '$8fbc8f';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkSlateBlue ';
+  AColor.Value := '$483d8b';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkSlateGray ';
+  AColor.Value := '$2f4f4f';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkTurquoise ';
+  AColor.Value := '$00ced1';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDarkViolet ';
+  AColor.Value := '$9400d3';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDeepPink ';
+  AColor.Value := '$ff1493';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDeepSkyBlue ';
+  AColor.Value := '$00bfff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDimGray ';
+  AColor.Value := '$696969';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clDodgerBlue ';
+  AColor.Value := '$1e90ff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clFireBrick ';
+  AColor.Value := '$b22222';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clFloralWhite ';
+  AColor.Value := '$fffaf0';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clForestGreen ';
+  AColor.Value := '$228b22';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clFuchsia ';
+  AColor.Value := '$ff00ff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clGainsboro ';
+  AColor.Value := '$dcdcdc';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clGhostWhite ';
+  AColor.Value := '$f8f8ff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clGold ';
+  AColor.Value := '$ffd700';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clGoldenrod ';
+  AColor.Value := '$daa520';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clGray ';
+  AColor.Value := '$808080';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clGreen ';
+  AColor.Value := '$008000';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clGreenYellow ';
+  AColor.Value := '$adff2f';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clHoneydew ';
+  AColor.Value := '$f0fff0';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clHotPink ';
+  AColor.Value := '$ff69b4';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clIndianRed ';
+  AColor.Value := '$cd5c5c';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clIndigo ';
+  AColor.Value := '$4b0082';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clIvory ';
+  AColor.Value := '$fffff0';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clKhaki ';
+  AColor.Value := '$f0e68c';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLavender ';
+  AColor.Value := '$e6e6fa';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLavenderBlush ';
+  AColor.Value := '$fff0f5';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLawnGreen ';
+  AColor.Value := '$7cfc00';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLemonChiffon ';
+  AColor.Value := '$fffacd';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightBlue ';
+  AColor.Value := '$add8e6';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightCoral ';
+  AColor.Value := '$f08080';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightCyan ';
+  AColor.Value := '$e0ffff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightGoldenrodYellow ';
+  AColor.Value := '$fafad2';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightGreen ';
+  AColor.Value := '$90ee90';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightGray ';
+  AColor.Value := '$d3d3d3';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightPink ';
+  AColor.Value := '$ffb6c1';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightSalmon ';
+  AColor.Value := '$ffa07a';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightSeaGreen ';
+  AColor.Value := '$20b2aa';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightSkyBlue ';
+  AColor.Value := '$87cefa';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightSlateGray ';
+  AColor.Value := '$778899';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightSteelBlue ';
+  AColor.Value := '$b0c4de';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLightYellow ';
+  AColor.Value := '$ffffe0';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLime ';
+  AColor.Value := '$00ff00';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLimeGreen ';
+  AColor.Value := '$32cd32';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clLinen ';
+  AColor.Value := '$faf0e6';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMagenta ';
+  AColor.Value := '$ff00ff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMaroon ';
+  AColor.Value := '$800000';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumAquamarine ';
+  AColor.Value := '$66cdaa';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumBlue ';
+  AColor.Value := '$0000cd';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumOrchid ';
+  AColor.Value := '$ba55d3';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumPurple ';
+  AColor.Value := '$9370db';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumSeaGreen ';
+  AColor.Value := '$3cb371';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumSlateBlue ';
+  AColor.Value := '$7b68ee';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumSpringGreen ';
+  AColor.Value := '$00fa9a';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumTurquoise ';
+  AColor.Value := '$48d1cc';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMediumVioletRed ';
+  AColor.Value := '$c71585';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMidnightBlue ';
+  AColor.Value := '$191970';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMintCream ';
+  AColor.Value := '$f5fffa';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMistyRose ';
+  AColor.Value := '$ffe4e1';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clMoccasin ';
+  AColor.Value := '$ffe4b5';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clNavajoWhite ';
+  AColor.Value := '$ffdead';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clNavy ';
+  AColor.Value := '$000080';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clOldLace ';
+  AColor.Value := '$fdf5e6';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clOlive ';
+  AColor.Value := '$808000';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clOliveDrab ';
+  AColor.Value := '$6b8e23';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clOrange ';
+  AColor.Value := '$ffa500';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clOrangeRed ';
+  AColor.Value := '$ff4500';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clOrchid ';
+  AColor.Value := '$da70d6';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPaleGoldenrod ';
+  AColor.Value := '$eee8aa';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPaleGreen ';
+  AColor.Value := '$98fb98';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPaleTurquoise ';
+  AColor.Value := '$afeeee';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPaleVioletRed ';
+  AColor.Value := '$db7093';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPaleBlue ';
+  AColor.Value := '$e9f5fe';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPapayaWhip ';
+  AColor.Value := '$ffefd5';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPeachPuff ';
+  AColor.Value := '$ffdab9';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPeru ';
+  AColor.Value := '$cd853f';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPink ';
+  AColor.Value := '$ffc0cb';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPlum ';
+  AColor.Value := '$dda0dd';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPowderBlue ';
+  AColor.Value := '$b0e0e6';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clPurple ';
+  AColor.Value := '$800080';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clRed ';
+  AColor.Value := '$ff0000';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clRosyBrown ';
+  AColor.Value := '$bc8f8f';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clRoyalBlue ';
+  AColor.Value := '$4169e1';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSaddleBrown ';
+  AColor.Value := '$8b4513';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSalmon ';
+  AColor.Value := '$fa8072';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSandyBrown ';
+  AColor.Value := '$f4a460';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSeaGreen ';
+  AColor.Value := '$2e8b57';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSeashell ';
+  AColor.Value := '$fff5ee';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSienna ';
+  AColor.Value := '$a0522d';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSilver ';
+  AColor.Value := '$c0c0c0';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSkyBlue2 ';
+  AColor.Value := '$87ceeb';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSlateBlue ';
+  AColor.Value := '$6a5acd';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSlateGray ';
+  AColor.Value := '$708090';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSnow ';
+  AColor.Value := '$fffafa';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSpringGreen ';
+  AColor.Value := '$00ff7f';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clSteelBlue ';
+  AColor.Value := '$4682b4';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clTan ';
+  AColor.Value := '$d2b48c';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clTeal ';
+  AColor.Value := '$008080';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clThistle ';
+  AColor.Value := '$d8bfd8';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clTomato ';
+  AColor.Value := '$ff6347';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clTurquoise ';
+  AColor.Value := '$40e0d0';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clViolet ';
+  AColor.Value := '$ee82ee';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clWheat ';
+  AColor.Value := '$f5deb3';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clWhite ';
+  AColor.Value := '$ffffff';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clWhiteSmoke ';
+  AColor.Value := '$f5f5f5';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clYellow ';
+  AColor.Value := '$ffff00';
+  ColorList.Add(AColor);
+  AColor := TColor.Create;
+  AColor.Name := 'clYellowGreen ';
+  AColor.Value := '$9acd32';
+  ColorList.Add(AColor);
 end;
 
 
- { frmAbout}
+{ frmAbout}
 
 class procedure TfrmAbout.Execute;
 var
@@ -413,7 +862,7 @@ var
 begin
   frm := TfrmAbout.Create(nil);
   try
-     frm.ShowModal;
+    frm.ShowModal;
   finally
     frm.Free;
   end;
@@ -426,25 +875,28 @@ begin
 end;
 
 procedure TfrmAbout.AfterCreate;
+var
+  y: integer;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-     {@VFD_BODY_BEGIN: frmAbout}
+
+
+  {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
-  SetPosition(149, 65, 276, 150);
+  SetPosition(143, 130, 242, 145);
   WindowTitle := 'About Color_Picker';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
   Sizeable := False;
   WindowPosition := wpScreenCenter;
   OnShow := @FormShow;
-  UpdateWindowPosition;
 
   lblAppName := TfpgLabel.Create(self);
   with lblAppName do
   begin
     Name := 'lblAppName';
-    SetPosition(36, 8, 176, 35);
+    SetPosition(36, 0, 160, 31);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-20';
     Hint := '';
@@ -456,7 +908,7 @@ begin
   with lblVersion do
   begin
     Name := 'lblVersion';
-    SetPosition(170, 36, 96, 19);
+    SetPosition(138, 32, 80, 19);
     Alignment := taRightJustify;
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := '#Label2';
@@ -469,12 +921,13 @@ begin
   with btnClose do
   begin
     Name := 'btnClose';
-    SetPosition(190, 120, 80, 23);
-    Anchors := [anRight,anBottom];
+    SetPosition(153, 112, 80, 23);
+    Anchors := [];
+    AllowDown := True;
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.close';
-    ModalResult := mrOK;
+    ModalResult := mrOk;
     TabOrder := 2;
     Text := 'Close';
     TextColor := TfpgColor($FF000000);
@@ -484,8 +937,7 @@ begin
   with lblWrittenBy do
   begin
     Name := 'lblWrittenBy';
-    SetPosition(8, 64, 264, 15);
-    Alignment := taCenter;
+    SetPosition(24, 56, 188, 19);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
     Hint := '';
@@ -497,8 +949,7 @@ begin
   with lblURL do
   begin
     Name := 'lblURL';
-    SetPosition(16, 80, 240, 15);
-    Alignment := taCenter;
+    SetPosition(24, 76, 164, 19);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9:underline';
     Hint := '';
@@ -513,7 +964,7 @@ begin
   with lblDeveloper do
   begin
     Name := 'lblDeveloper';
-    SetPosition(12, 108, 116, 15);
+    SetPosition(16, 104, 112, 15);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
@@ -525,7 +976,7 @@ begin
   with lblExtBy do
   begin
     Name := 'lblExtBy';
-    SetPosition(12, 124, 104, 35);
+    SetPosition(16, 120, 100, 15);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
@@ -533,12 +984,11 @@ begin
     TextColor := TfpgColor($4DC63D);
   end;
 
-UpdateWindowPosition;
-
   {@VFD_BODY_END: frmAbout}
   {%endregion}
 
 end;
+
 
 { TPickerButton }
 
@@ -594,7 +1044,7 @@ begin
 
   Name := 'frmcompare';
   SetPosition(220, 180, 100, 100);
- // WindowPosition := wpUser;
+  // WindowPosition := wpUser;
   WindowType := wtPopup;
   OnMouseMove := @onMovemovepanel;
   OnMouseDown := @onClickDownPanel;
@@ -602,7 +1052,7 @@ begin
   OnPaint := @onpaintcompare;
   onclose := @onclosecompare;
   left := oriWheelColorForm.X + 167;
-  top := oriWheelColorForm.y + 295  ;
+  top := oriWheelColorForm.y + 295;
   UpdateWindowPosition;
 
 end;
@@ -610,7 +1060,9 @@ end;
 procedure TCompareForm.onPaintCompare(Sender: TObject);
 begin
   if fbright > 0.5 then
-  Canvas.TextColor := clblack else Canvas.TextColor := clwhite ;
+    Canvas.TextColor := clblack
+  else
+    Canvas.TextColor := clwhite;
   Canvas.DrawText(30, 20, 'Tester');
   Canvas.DrawText(23, 45, 'Hold-Click');
   Canvas.DrawText(15, 60, 'moves panel');
@@ -641,14 +1093,15 @@ begin
   end;
 end;
 
-procedure TCompareForm.onclosecompare(Sender: TObject; var closeac : Tcloseaction);
+procedure TCompareForm.onclosecompare(Sender: TObject; var closeac: Tcloseaction);
 begin
-closeac := caFree;
+  closeac := caFree;
 end;
 
 ////////////////  TColorPickerForm
 
-procedure TColorPickerForm.btnColorPicked(Sender: TObject; const AMousePos: TPoint; const AColor: TfpgColor);
+procedure TColorPickerForm.btnColorPicked(Sender: TObject; const AMousePos: TPoint;
+  const AColor: TfpgColor);
 begin
   ColorWheel1.SetSelectedColor(AColor);
 end;
@@ -672,7 +1125,7 @@ end;
 
 procedure TColorPickerForm.onPaintMain(Sender: TObject);
 begin
- end;
+end;
 
 procedure TColorPickerForm.RGBChanged(Sender: TObject);
 var
@@ -703,22 +1156,24 @@ begin
   end;
 end;
 
-procedure TColorPickerForm.E_HexaKeyChar(Sender: TObject; AChar: TfpgChar; var Consumed: boolean);
+procedure TColorPickerForm.E_HexaKeyChar(Sender: TObject; AChar: TfpgChar;
+  var Consumed: boolean);
 begin
-if Length(EdHexa.Text)= 0 then
-begin
-  if AChar<> '$' then
-    Consumed:= True;
-end
-else
-  if ((AChar< '0') or (AChar> '9')) and ((AChar< 'A') or (AChar> 'F')) and ((AChar< 'a') or (AChar> 'f')) then
-    Consumed:= True;
+  if Length(EdHexa.Text) = 0 then
+  begin
+    if AChar <> '$' then
+      Consumed := True;
+  end
+  else
+  if ((AChar < '0') or (AChar > '9')) and ((AChar < 'A') or (AChar > 'F')) and
+    ((AChar < 'a') or (AChar > 'f')) then
+    Consumed := True;
 end;
 
-procedure TColorPickerForm.E_HexaKeyPress(Sender: TObject; var KeyCode: word; var ShiftState: TShiftState;
-          var Consumed: boolean);
+procedure TColorPickerForm.E_HexaKeyPress(Sender: TObject; var KeyCode: word;
+  var ShiftState: TShiftState; var Consumed: boolean);
 begin
-  if ((KeyCode= KeyReturn) or (KeyCode= KeyPEnter)) and (Length(EdHexa.Text)= 7) then
+  if ((KeyCode = KeyReturn) or (KeyCode = KeyPEnter)) and (Length(EdHexa.Text) = 7) then
   begin
     ConvertToRGB(self);
   end;
@@ -728,14 +1183,14 @@ constructor TColorPickerForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FViaRGB := False;
-  ColorList:= TList.Create;
+  ColorList := TList.Create;
   LoadColorList;
 end;
 
-procedure TColorPickerForm.onclosemain(Sender: TObject; var closeac : Tcloseaction);
+procedure TColorPickerForm.onclosemain(Sender: TObject; var closeac: Tcloseaction);
 begin
-frmcompare.close;
-closeac := caFree;
+  frmcompare.Close;
+  closeac := caFree;
 end;
 
 procedure TColorPickerForm.btnQuitClicked(Sender: TObject);
@@ -756,7 +1211,7 @@ begin
   edH.Text := IntToStr(ColorWheel1.Hue);
   edS.Text := FormatFloat('0.000', ColorWheel1.Saturation);
   edV.Text := FormatFloat('0.000', ValueBar1.Value);
-  fbright := ValueBar1.Value ;
+  fbright := ValueBar1.Value;
   bevel1.BackgroundColor := ValueBar1.SelectedColor;
   frmcompare.BackgroundColor := ValueBar1.SelectedColor;
 end;
@@ -776,24 +1231,24 @@ end;
 
 procedure TColorPickerForm.ColorBoxChange(Sender: TObject);
 begin
-  edHexa.Text := TColor(ColorList[ColorBox.FocusItem]).Value ;
- ConvertToRGB(self);
+  edHexa.Text := TColor(ColorList[ColorBox.FocusItem]).Value;
+  ConvertToRGB(self);
 end;
 
 procedure TColorPickerForm.AfterCreate;
 var
-  i : integer;
+  i: integer;
 begin
-  y := 20 ;
+  y := 20;
   {@VFD_BODY_BEGIN: WheelColorForm}
   Name := 'WheelColorForm';
   SetPosition(349, 242, 380, 452 + y);
   WindowTitle := 'Color_Picker';
   WindowPosition := wpScreenCenter;
-  Sizeable:=false;
+  Sizeable := False;
   onclose := @onclosemain;
-  
-   MainMenu := TfpgMenuBar.Create(self);
+
+  MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do
   begin
     Name := 'MainMenu';
@@ -809,18 +1264,18 @@ begin
     AddMenuItem('About Color_Picker...', '', @miHelpAboutClick);
   end;
 
-  fpgImages.AddMaskedBMP('vfd.picker', @vfd_picker,
-  sizeof(vfd_picker), 0, 0);
+  fpgImages.AddMaskedBMP('icn.picker', @icn_picker,
+    sizeof(icn_picker), 0, 0);
 
   ColorWheel1 := TfpgColorWheel.Create(self);
   with ColorWheel1 do
   begin
     Name := 'ColorWheel1';
-    Border:=true;
+    Border := True;
     SetPosition(20, 20 + y, 272, 250);
   end;
 
-   chkCrossHair := TfpgCheckBox.Create(self);
+  chkCrossHair := TfpgCheckBox.Create(self);
   with chkCrossHair do
   begin
     Name := 'chkCrossHair';
@@ -831,12 +1286,12 @@ begin
     OnChange := @chkCrossHairChange;
   end;
 
-   panel1 := Tfpgpanel.Create(self);
+  panel1 := Tfpgpanel.Create(self);
   with panel1 do
   begin
-    panel1.BackgroundColor:=clgray;
+    panel1.BackgroundColor := clgray;
     Name := 'panel1';
-   SetPosition(301, 22 + y, 56, 242);
+    SetPosition(301, 22 + y, 56, 242);
   end;
 
   ValueBar1 := TfpgValueBar.Create(self);
@@ -844,27 +1299,27 @@ begin
   begin
     Name := 'ValueBar1';
     SetPosition(304, 24 + y, 52, 238);
-    CursorHeight:=15;
-    ValueBar1.MarginWidth:=1;
-       OnChange := @ColorChanged;
+    CursorHeight := 15;
+    ValueBar1.MarginWidth := 1;
+    OnChange := @ColorChanged;
   end;
 
   Label10 := TfpgLabel.Create(self);
   with Label10 do
   begin
     Name := 'Label10';
-    SetPosition(170,270 + y,164,16);
+    SetPosition(170, 270 + y, 164, 16);
     Alignment := taCenter;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Predefined Colors';
   end;
 
-   ColorBox := TfpgComboBox.Create(self);
+  ColorBox := TfpgComboBox.Create(self);
   with ColorBox do
   begin
     Name := 'ColorBox';
-    SetPosition(170, 288 + y,164,20);
+    SetPosition(170, 288 + y, 164, 20);
     FontDesc := '#List';
     OnChange := @ColorBoxChange;
   end;
@@ -1030,7 +1485,7 @@ begin
     SetPosition(20, 297 + y, 100, 16);
     FontDesc := '#Label1';
     Hint := '';
-    lblHexa.Alignment:=taCenter;
+    lblHexa.Alignment := taCenter;
     Text := 'Hexadecimal';
   end;
 
@@ -1043,10 +1498,10 @@ begin
     Hint := 'Mouse out change edit...';
     showhint := True;
     Text := '';
-    MaxLength:= 7;
+    MaxLength := 7;
     OnMouseExit := @ConvertToRGB;
-    OnKeyChar:= @E_HexaKeyChar;
-    OnKeyPress:= @E_HexaKeyPress;
+    OnKeyChar := @E_HexaKeyChar;
+    OnKeyPress := @E_HexaKeyPress;
   end;
 
   Label7 := TfpgLabel.Create(self);
@@ -1078,14 +1533,14 @@ begin
     FontDesc := '#Label1';
     Hint := 'Click on Picker and maintain click => release get the color';
     ImageName := 'vfd.picker';
-    ShowHint:=true;
+    ShowHint := True;
     TabOrder := 24;
     OnColorPicked := @btnColorPicked;
   end;
 
-  fpgapplication.HintPause:=1500;
+  fpgapplication.HintPause := 1500;
 
- chkContinuous := TfpgCheckBox.Create(self);
+  chkContinuous := TfpgCheckBox.Create(self);
   with chkContinuous do
   begin
     Name := 'chkContinous';
@@ -1111,31 +1566,31 @@ begin
     OnClick := @btnQuitClicked;
   end;
 
- MainMenu.AddMenuItem('&About', nil).SubMenu     := helpmenu;
+  MainMenu.AddMenuItem('&About', nil).SubMenu := helpmenu;
 
-    for i := 0 to Pred(ColorList.Count) do
+  for i := 0 to Pred(ColorList.Count) do
     ColorBox.Items.Add(TColor(ColorList[i]).Name);
-  fbright := 1 ;
+  fbright := 1;
   updatewindowposition;
   oriWheelColorForm.X := left;
   oriWheelColorForm.Y := top;
 
   fpgapplication.ProcessMessages;
   {@VFD_BODY_END: WheelColorForm}
-    frmcompare := TCompareForm.Create(nil);
+  frmcompare := TCompareForm.Create(nil);
 
-   frmcompare.Show;
+  frmcompare.Show;
 
-   frmcompare.left := oriWheelColorForm.X + 167;
-  frmcompare.top := oriWheelColorForm.y + 295  ;
+  frmcompare.left := oriWheelColorForm.X + 167;
+  frmcompare.top := oriWheelColorForm.y + 295;
   frmcompare.UpdateWindowPosition;
-  
+
   // link the two components
   ColorWheel1.ValueBar := ValueBar1;
   UpdateHSVComponents;
   if not FViaRGB then
     UpdateRGBComponents;
-    FColorPicking := False;
+  FColorPicking := False;
 end;
 
 
