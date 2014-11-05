@@ -703,6 +703,7 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(414, 161, 780, 92);
@@ -1190,6 +1191,8 @@ procedure   TfrmMainDesigner.onmultiselect(Sender: TObject);
 var
   TheParent : Tfpgwidget;
    begin
+    if frmProperties.edName.Text <> '' then
+    begin
    TheParent := frmProperties.lstProps.Props.Widget ;
 
    while TheParent.HasParent do
@@ -1199,6 +1202,7 @@ var
    frmMultiSelect.Show;
   frmMultiSelect.Getwidgetlist(TheParent);
   frmMultiSelect.Show;
+end;
 end;
 
 procedure TfrmMainDesigner.OnAlwaysToFront(Sender: TObject);

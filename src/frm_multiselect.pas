@@ -739,6 +739,9 @@ begin
           if wg is TfpgPanel then
             TfpgPanel(wg).Text := TfpgPanel(theWidget).Text;
 
+          if wg is TfpgButton then
+            TfpgButton(wg).Text := TfpgButton(theWidget).Text;
+
           if wg is TfpgStringGrid then
           begin
             TfpgStringGrid(wg).ColumnCount:= TfpgStringGrid(theWidget).ColumnCount;
@@ -753,7 +756,6 @@ begin
             TfpgStringGrid(wg).ColumnTitle[z]:= TfpgStringGrid(theWidget).ColumnTitle[z];
             inc(z);
             end;
-
             TfpgStringGrid(wg).RowCount:= TfpgStringGrid(theWidget).RowCount;
             TfpgStringGrid(wg).DefaultColWidth:= TfpgStringGrid(theWidget).DefaultColWidth;
             TfpgStringGrid(wg).DefaultRowHeight:= TfpgStringGrid(theWidget).DefaultRowHeight;
@@ -770,15 +772,13 @@ begin
             TfpgStringGrid(wg).BorderStyle:= TfpgStringGrid(theWidget).BorderStyle;
             TfpgStringGrid(wg).TextColor:= TfpgStringGrid(theWidget).TextColor;
            end;
-         //     }
-          wg.UpdateWindowPosition;
+         wg.UpdateWindowPosition;
         end;
         Inc(y);
       end;
     end;
     Inc(x);
   end;
-  // fpgapplication.ProcessMessages;
   Getwidgetlist(TheSelectedForm);
 end;
 
@@ -1022,10 +1022,7 @@ var
   x: integer;
 begin
   grid1.rowCount := 0;
- // fpgapplication.ProcessMessages;
   x := 0;
-  //TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
-
   while x < Theobj.ComponentCount do
   begin
     if Tfpgwidget(Theobj.Components[x]).Name <> '' then
