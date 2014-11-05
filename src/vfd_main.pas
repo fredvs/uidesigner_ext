@@ -407,8 +407,8 @@ var
   FFileUndo: TVFDFile;
 begin
 
-//if fileexists(ArrayUndo[undoindex].FileName) then
-//begin
+if fileexists(ArrayUndo[undoindex].FileName) then
+begin
   ifundo := True;
   FFileUndo := TVFDFile.Create;
 
@@ -488,6 +488,8 @@ begin
     end;
     Inc(x);
   end;
+end;
+
 end;
 
 procedure TMainDesigner.SaveUndo(Sender: TObject; typeundo: integer);
@@ -605,7 +607,9 @@ begin
       5: tempform := 'Init Root.';
       6: tempform := selectedform.Form.Name + ' => was saved.';
       7: tempform := selectedform.Form.Name + ' => new form.';
-      8: tempform := selectedform.Form.Name + ' => Properties changed by Multi-Selector.'
+      8: tempform := selectedform.Form.Name + ' => properties changed by Multi-Selector.';
+      9: tempform := selectedform.Form.Name + ' => Copy/Paste widgets by Multi-Selector.';
+     10: tempform := selectedform.Form.Name + ' => Delete widgets by Multi-Selector.'
     end;
 
   if dd = 0 then
@@ -642,9 +646,9 @@ var
      fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 0);
-     TheParent := frmProperties.lstProps.Props.Widget ;
+     TheParent := (frmProperties.lstProps.Props.Widget)  ;
      while TheParent.HasParent do
-     TheParent := frmProperties.lstProps.Props.Widget.Parent ;
+     TheParent := ( frmProperties.lstProps.Props.Widget.Parent) ;
 
    frmMultiSelect.Getwidgetlist(TheParent);
   fpgapplication.ProcessMessages;

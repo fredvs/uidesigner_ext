@@ -91,7 +91,7 @@ type
   private
     procedure   edPosKeyPressed(Sender: TObject; var KeyCode: word; var ShiftState: TShiftState; var Consumed: boolean);
   protected
-    procedure   SetupCaptions; override;
+   procedure   SetupCaptions; override;
   public
     lbPos: TfpgLabel;
     edPos: TfpgEdit;
@@ -277,20 +277,28 @@ begin
     btnOK.Click;
 end;
 
+//{
 procedure TEditPositionForm.SetupCaptions;
 begin
   inherited SetupCaptions;
   WindowTitle := rsDlgEditFormPosition;
-  lbPos.Text := fpgAddColon(rsPosition);
-end;
+ // lbPos.Text := fpgAddColon(rsPosition);
+  Left:= frmProperties.Left - width -10 ;
+  top:= frmProperties.top + (frmProperties.height div 2 );
+
+  UpdateWindowPosition;
+  end;
+ // }
 
 procedure TEditPositionForm.AfterCreate;
 begin
-  inherited AfterCreate;
-  WindowPosition := wpScreenCenter;
+ // inherited AfterCreate;
+  // WindowType:=wtPopup;
+  WindowPosition := wpUser;
   Width := 186;
   Height := 66;
-  WindowTitle := 'TEditPositionForm';
+
+  // WindowTitle := 'TEditPositionForm';
   Sizeable := False;
 
   lbPos           := CreateLabel(self, 8, 8, 'Pos:');
@@ -298,6 +306,11 @@ begin
   edPos.OnKeyPress := @edPosKeyPressed;
   btnOK           := CreateButton(self, 98, 8, 80, rsOK, @OnButtonClick);
   btnCancel       := CreateButton(self, 98, 36, 80, rsCancel, @OnButtonClick);
+
+  // WindowTitle := rsDlgEditFormPosition;
+ // lbPos.Text := fpgAddColon(rsPosition);
+   UpdateWindowPosition;
+
 end;
 
 procedure TEditPositionForm.OnButtonClick(Sender: TObject);

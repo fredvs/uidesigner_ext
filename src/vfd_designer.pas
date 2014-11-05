@@ -46,6 +46,7 @@ uses
   vfd_editors,
   vfd_widgetclass,
   vfd_widgets,
+  frm_multiselect,
   frm_main_designer;
 
 type
@@ -135,6 +136,7 @@ type
     procedure SelectNextWidget(fw: boolean);
     procedure MoveResizeWidgets(dx, dy, dw, dh: integer);
     procedure DeleteWidgets;
+    procedure DeleteSelectedWidget(x : integer);
     procedure EditWidgetOrTabOrder(AMode: TfpgEditMode);
     procedure InsertWidget(pwg: TfpgWidget; x, y: integer; wgc: TVFDWidgetClass);
     procedure UpdatePropWin;
@@ -178,6 +180,7 @@ procedure TWidgetDesigner.SetSelected(const AValue: boolean);
 var
   n: integer;
 begin
+
   if FSelected = AValue then
     Exit;
   FSelected := AValue;
@@ -203,6 +206,11 @@ begin
   if FSelected and Widget.Parent.HasHandle then
     for n := 1 to 8 do
       resizer[n].Show;
+
+     fpgapplication.ProcessMessages;
+
+  if widget is Tfpgform then else frmMultiSelect.SelectedFromDesigner(Widget);
+
 end;
 
 constructor TWidgetDesigner.Create(AFormDesigner: TFormDesigner;
@@ -641,6 +649,18 @@ begin
   end;
   UpdatePropWin;
 end;
+
+procedure TFormDesigner.DeleteSelectedWidget(x : integer);
+var
+   cd: TWidgetDesigner;
+begin
+    cd := TWidgetDesigner(FWidgets.Items[x]);
+    cd.Widget.Free;
+     cd.Free;
+     FWidgets.Delete(x);
+     UpdatePropWin;
+end;
+
 
 procedure TFormDesigner.DeleteWidgets;
 var
@@ -1311,6 +1331,7 @@ var
   s: string;
 begin
   //  writeln('namechange');
+  fpgapplication.ProcessMessages;
   s := frmProperties.edName.Text;
   wg := nil;
   for n := 0 to FWidgets.Count - 1 do
@@ -1363,7 +1384,7 @@ var
       awg.Height := pval;
   end;
 
-begin
+ begin
   wg := nil;
   for n := 0 to FWidgets.Count - 1 do
   begin
@@ -1380,31 +1401,35 @@ begin
 
   frm := TEditPositionForm.Create(nil);
 
-  if Sender = frmProperties.btnLeft then
+   if Sender = frmProperties.btnLeft then
   begin
-    frm.lbPos.Text := rsLeft + ':';
+    frm.lbPos.Text :=  'Left :=';
     frm.edPos.Text := IntToStr(wg.Left);
   end
   else if Sender = frmProperties.btnTop then
   begin
-    frm.lbPos.Text := rsTop + ':';
+    frm.lbPos.Text := 'Top :=';
     frm.edPos.Text := IntToStr(wg.Top);
   end
   else if Sender = frmProperties.btnWidth then
   begin
-    frm.lbPos.Text := rsWidth + ':';
+    frm.lbPos.Text :='Width :='  ;
     frm.edPos.Text := IntToStr(wg.Width);
   end
   else if Sender = frmProperties.btnHeight then
   begin
-    frm.lbPos.Text := rsHeight + ':';
+    frm.lbPos.Text := 'Height :='   ;
     frm.edPos.Text := IntToStr(wg.Height);
   end;
 
+
   posval := -9999;
-  if frm.ShowModal = mrOk then
-    posval := StrToIntDef(frm.edPos.Text, -9999);
-  frm.Free;
+
+if frm.Showmodal = mrOk then
+
+posval := StrToIntDef(frm.edPos.Text, -9999);
+
+ frm.Free;
 
   if posval > -999 then
   begin
@@ -1429,7 +1454,8 @@ begin
   end; { if }
 
   UpdatePropWin;
-end;
+
+  end;
 
 procedure TFormDesigner.OnOtherChange(Sender: TObject);
 var

@@ -73,7 +73,7 @@ resourcestring
   rsDlgSetup = 'General Settings';
   rsDlgInsertCustomWidget = 'Insert Custom Widget';
   rsDlgNewForm = 'New Form';
-  rsDlgEditFormPosition = 'Form Position';
+  rsDlgEditFormPosition = 'Edit Value';
   rsDlgWidgetOrder = 'Widget Order';
   rsDlgTabOrder = 'Tab Order';
 

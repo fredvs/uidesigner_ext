@@ -13,17 +13,25 @@ unit frm_multiselect;
 interface
 
 uses
-  SysUtils, Classes, fpg_base, fpg_Grid, fpg_button, fpg_Edit, fpg_main,
-  fpg_label, fpg_panel,
-  fpg_checkbox, fpg_widget, fpg_constants, fpg_ListView, fpg_spinedit, fpg_form;
+  SysUtils, Classes, fpg_base, fpg_Grid, fpg_button, fpg_main,
+  fpg_panel, fpg_label, fpg_edit, fpg_memo,vfd_widgetclass, vfd_widgets, fpg_scrollbar,
+  fpg_checkbox, fpg_widget, fpg_spinedit, fpg_form;
 
 type
 
   Tfrm_multiselect = class(TfpgForm)
   private
     {@VFD_HEAD_BEGIN: frm_multiselect}
+    lbleft: Tfpglabel;
+    lbtop: Tfpglabel;
+    lbheight: Tfpglabel;
+    lbwidth: Tfpglabel;
     Grid1: TfpgStringGrid;
+    scroll1: Tfpgscrollbar;
     Panel1: TfpgPanel;
+    PanelMain: TfpgPanel;
+    PanelScroll: TfpgPanel;
+    PanelCopyPaste: TfpgPanel;
     cbleft: TfpgCheckBox;
     edleft: TfpgSpinEdit;
     cbwidth: TfpgCheckBox;
@@ -55,19 +63,25 @@ type
     btApply3: TfpgButton;
     btSelectAll: TfpgButton;
     btUnSelectAll: TfpgButton;
+    btApplyCopyPaste: TfpgButton;
+    btApplyDelete: TfpgButton;
     {@VFD_HEAD_END: frm_multiselect}
   public
     cbSelected: array of Tfpgcheckbox;
     procedure AfterCreate; override;
+    procedure onDestroyFrm(Sender: TObject);
     procedure btnApply1Clicked(Sender: TObject);
     procedure btnApply2Clicked(Sender: TObject);
     procedure btnApply3Clicked(Sender: TObject);
-    procedure btnQuitClicked(Sender: TObject);
     procedure btnunselectall(Sender: TObject);
     procedure btnselectall(Sender: TObject);
+    procedure btnCopyPasteClicked(Sender: TObject);
+    procedure btnDeleteClicked(Sender: TObject);
     procedure Getwidgetlist(Theobj: TfpgWidget);
     procedure ProcGetwidgetlist(Theobj: TfpgWidget);
-    procedure Procupdategrid(Theobj: TfpgWidget);
+    procedure ProcUpdateGrid(Theobj: TfpgWidget);
+    procedure SelectedFromDesigner(TheSelected: TfpgWidget);
+    procedure onScrollChange(Sender: TObject; position: integer);
   end;
 
 {@VFD_NEWFORM_DECL}
@@ -80,7 +94,7 @@ var
 implementation
 
 uses
-  frm_main_designer, vfd_main;
+  vfd_main, vfd_designer, frm_main_designer;
 
 
 
@@ -91,24 +105,138 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
   {@VFD_BODY_BEGIN: frm_multiselect}
-  Name := 'frm_multiselect';
-  SetPosition(95, 212, 464, 117);
+  Name := 'frmmultiselect';
+  SetPosition(95, 212, 466, 117);
   WindowTitle := 'Multi-Selector';
   Hint := '';
   BackGroundColor := $E8E8E8;
   Visible := False;
   WindowPosition := wpUser;
 
-  Grid1 := TfpgStringGrid.Create(self);
+  OnDestroy := @onDestroyFrm;
+
+  btSelectAll := TfpgButton.Create(self);
+  with btSelectAll do
+  begin
+    Name := 'btSelectAll';
+    SetPosition(7, 1, 72, 18);
+    FontDesc := '#Label1';
+    Hint := '';
+    ImageName := '';
+    TabOrder := 5;
+    Text := 'Select all';
+    OnClick := @btnselectall;
+  end;
+
+  btUnSelectAll := TfpgButton.Create(self);
+  with btUnSelectAll do
+  begin
+    Name := 'btUnSelectAll';
+    SetPosition(80, 1, 77, 18);
+    FontDesc := '#Label1';
+    Hint := '';
+    ImageName := '';
+    TabOrder := 6;
+    Text := 'Select none';
+    OnClick := @btnunselectall;
+  end;
+
+  lbleft := TfpgLabel.Create(self);
+  with lbleft do
+  begin
+    Name := 'lbleft';
+    SetPosition(161, 1, 72, 18);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Left';
+    Alignment := taCenter;
+    BackGroundColor := clgray;
+    TextColor := clwhite;
+  end;
+
+  lbtop := TfpgLabel.Create(self);
+  with lbtop do
+  begin
+    Name := 'lbtop';
+    SetPosition(235, 1, 72, 18);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Top';
+    Alignment := taCenter;
+    BackGroundColor := clgray;
+    TextColor := clwhite;
+  end;
+
+  lbwidth := TfpgLabel.Create(self);
+  with lbwidth do
+  begin
+    Name := 'lbwidth';
+    SetPosition(309, 1, 72, 18);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Width';
+    BackGroundColor := clgray;
+    TextColor := clwhite;
+    Alignment := taCenter;
+  end;
+
+  lbheight := TfpgLabel.Create(self);
+  with lbheight do
+  begin
+    Name := 'lbheight';
+    SetPosition(383, 1, 74, 18);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Height';
+    BackGroundColor := clgray;
+    TextColor := clwhite;
+    Alignment := taCenter;
+  end;
+
+  Panelmain := TfpgPanel.Create(self);
+  with Panelmain do
+  begin
+    Name := 'Panelmain';
+    SetPosition(0, 20, 466, 70);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := '';
+    BackGroundColor := $E8E8E8;
+    Style := bsFlat;
+  end;
+
+  scroll1 := Tfpgscrollbar.Create(Panelmain);
+  with scroll1 do
+  begin
+    Name := 'scroll1';
+    SetPosition(448, 0, 16, 70);
+    scroll1.OnScroll := @onScrollChange;
+  end;
+
+  Panelscroll := TfpgPanel.Create(Panelmain);
+  with Panelscroll do
+  begin
+    Name := 'Panelscroll';
+    SetPosition(0, 0, 445, 300);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := '';
+    BackGroundColor := $E8E8E8;
+    Style := bsFlat;
+  end;
+
+
+  Grid1 := TfpgStringGrid.Create(Panelscroll);
   with Grid1 do
   begin
     Name := 'Grid1';
-    SetPosition(172, 2, 284, 36);
+    SetPosition(160, 0, 244, 100);
     BackgroundColor := TfpgColor($80000002);
-    AddColumn('Left', 70, taLeftJustify);
-    AddColumn('Top', 70, taLeftJustify);
-    AddColumn('Width', 70, taLeftJustify);
-    AddColumn('Height', 70, taLeftJustify);
+    AddColumn('Left', 74, taLeftJustify);
+    AddColumn('Top', 74, taLeftJustify);
+    AddColumn('Width', 74, taLeftJustify);
+    AddColumn('Height', 74, taLeftJustify);
+    Grid1.ShowHeader := False;
     FontDesc := '#Grid';
     HeaderFontDesc := '#GridHeader';
     Hint := '';
@@ -117,13 +245,49 @@ begin
     TabOrder := 2;
     Visible := False;
     DefaultRowHeight := 19;
+
+  end;
+
+  PanelCopyPaste := TfpgPanel.Create(self);
+  with PanelCopyPaste do
+  begin
+    Name := 'PanelCopyPaste';
+    SetPosition(6, 44, 114, 55);
+    FontDesc := '#Label1';
+    BackgroundColor := clgray;
+    Hint := '';
+    Text := '';
+  end;
+
+  btApplyCopyPaste := TfpgButton.Create(PanelCopyPaste);
+  with btApplyCopyPaste do
+  begin
+    Name := 'btApplyCopyPaste';
+    SetPosition(15, 6, 84, 20);
+    FontDesc := '#Label1';
+    Hint := '';
+    TabOrder := 6;
+    Text := 'Copy/Paste';
+    OnClick := @btnCopyPasteClicked;
+  end;
+
+  btApplyDelete := TfpgButton.Create(PanelCopyPaste);
+  with btApplyDelete do
+  begin
+    Name := 'btApplyDelete';
+    SetPosition(15, 30, 84, 20);
+    FontDesc := '#Label1';
+    Hint := '';
+    TabOrder := 6;
+    Text := 'Delete';
+    OnClick := @btnDeleteClicked;
   end;
 
   Panel1 := TfpgPanel.Create(self);
   with Panel1 do
   begin
     Name := 'Panel1';
-    SetPosition(9, 42, 447, 70);
+    SetPosition(122, 42, 337, 70);
     FontDesc := '#Label1';
     Hint := '';
     Text := '';
@@ -133,7 +297,7 @@ begin
   with cbleft do
   begin
     Name := 'cbleft';
-    SetPosition(15, 6, 80, 18);
+    SetPosition(5, 6, 80, 18);
     BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
@@ -145,7 +309,7 @@ begin
   with edleft do
   begin
     Name := 'edleft';
-    SetPosition(80, 4, 50, 22);
+    SetPosition(70, 4, 50, 22);
     FontDesc := '#Edit1';
     Hint := '';
     TabOrder := 3;
@@ -156,7 +320,7 @@ begin
   with cbwidth do
   begin
     Name := 'cbwidth';
-    SetPosition(164, 6, 80, 18);
+    SetPosition(124, 6, 80, 18);
     BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
@@ -168,7 +332,7 @@ begin
   with edwidth do
   begin
     Name := 'edwidth';
-    SetPosition(244, 4, 50, 22);
+    SetPosition(204, 4, 50, 22);
     FontDesc := '#Edit1';
     Hint := '';
     TabOrder := 5;
@@ -179,7 +343,7 @@ begin
   with cbtop do
   begin
     Name := 'cbtop';
-    SetPosition(15, 30, 78, 18);
+    SetPosition(5, 30, 78, 18);
     BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
@@ -191,7 +355,7 @@ begin
   with edtop do
   begin
     Name := 'edtop';
-    SetPosition(80, 28, 50, 22);
+    SetPosition(70, 28, 50, 22);
     FontDesc := '#Edit1';
     Hint := '';
     TabOrder := 8;
@@ -202,7 +366,7 @@ begin
   with cbHeight do
   begin
     Name := 'cbHeight';
-    SetPosition(164, 30, 80, 18);
+    SetPosition(124, 30, 80, 18);
     BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
@@ -214,7 +378,7 @@ begin
   with edheight do
   begin
     Name := 'edheight';
-    SetPosition(244, 28, 50, 22);
+    SetPosition(204, 28, 50, 22);
     FontDesc := '#Edit1';
     Hint := '';
     TabOrder := 10;
@@ -238,7 +402,7 @@ begin
   with Panel2 do
   begin
     Name := 'Panel2';
-    SetPosition(9, 42, 447, 70);
+    SetPosition(6, 42, 453, 70);
     FontDesc := '#Label1';
     Hint := '';
     Text := '';
@@ -353,7 +517,7 @@ begin
   with Panel3 do
   begin
     Name := 'Panel3';
-    SetPosition(9, 42, 447, 70);
+    SetPosition(6, 42, 453, 70);
     FontDesc := '#Label1';
     Hint := '';
     Text := '';
@@ -464,64 +628,209 @@ begin
     OnClick := @btnApply3Clicked;
   end;
 
-  btSelectAll := TfpgButton.Create(self);
-  with btSelectAll do
-  begin
-    Name := 'btSelectAll';
-    SetPosition(10, 1, 75, 18);
-    FontDesc := '#Label1';
-    Hint := '';
-    ImageName := '';
-    TabOrder := 5;
-    Text := 'Select all';
-    OnClick := @btnselectall;
-  end;
-
-  btUnSelectAll := TfpgButton.Create(self);
-  with btUnSelectAll do
-  begin
-    Name := 'btUnSelectAll';
-    SetPosition(86, 1, 85, 18);
-    FontDesc := '#Label1';
-    Hint := '';
-    ImageName := '';
-    TabOrder := 6;
-    Text := 'Unselect all';
-    OnClick := @btnunselectall;
-  end;
 
   {@VFD_BODY_END: frm_multiselect}
   {%endregion}
   panel1.Height := 55;
-
   btApply.Width := 65;
   btApply.Height := 30;
-  btApply.Left := panel1.Width - btApply.Width - 5;
+  btApply.Left := panel1.Width - btApply.Width - 3;
   btApply.Top := panel1.Height - btApply.Height - 10;
 
-  panel2.Height := panel1.Height;
+  panelcopypaste.Height := panel1.Height;
 
+  panel2.Height := panel1.Height;
   btApply2.Width := btApply.Width;
+  btApply2.Left := panel2.Width - btApply2.Width - 5;
   btApply2.Height := btApply.Height;
-  btApply2.Left := btApply.Left;
   btApply2.Top := btApply.top;
 
   panel3.Height := panel1.Height;
-  btApply3.Width := btApply.Width;
+  btApply3.Width := btApply2.Width;
   btApply3.Height := btApply.Height;
-  btApply3.Left := btApply.Left;
+  btApply3.Left := btApply2.Left;
   btApply3.Top := btApply.top;
 
+end;
+
+procedure Tfrm_multiselect.btnCopyPasteClicked(Sender: TObject);
+var
+  x, y, z, n, n2: integer;
+  compname: string;
+  wd: TWidgetDesigner;
+  wgc: TVFDWidgetClass;
+  wg, theWidget: TfpgWidget;
+  okname: boolean;
+begin
+    fpgapplication.ProcessMessages;
+
+  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+
+   maindsgn.SaveUndo(Sender, 9);
+
+  x := 0;
+  while x < length(cbSelected) do
+  begin
+    if cbSelected[x].Checked = True then
+    begin
+      y := 0;
+      while y < TheSelectedForm.ComponentCount do
+      begin
+        if Tfpgwidget(TheSelectedForm.Components[y]).Name = cbSelected[x].Text then
+        begin
+
+          theWidget := Tfpgwidget(TheSelectedForm.Components[y]);
+          wg := nil;
+          wgc := nil;
+
+          for n := 0 to VFDWidgetCount - 1 do
+          begin
+            wgc := VFDWidget(n);
+            if UpperCase(TheSelectedForm.Components[y].ClassName) =
+              UpperCase(wgc.WidgetClass.ClassName) then
+            begin
+              wg := wgc.CreateWidget(TheSelectedForm);
+              break;
+            end;
+          end;
+
+          compname := TheSelectedForm.Components[y].Name + '1';
+          okname := False;
+          n2 := 1;
+
+          while okname = False do
+          begin
+            for n := 0 to TheSelectedForm.ComponentCount - 1 do
+            begin
+              if compname = TheSelectedForm.Components[n].Name then
+              begin
+                compname := TheSelectedForm.Components[n].Name + IntToStr(n2);
+                // break;
+              end
+              else
+                okname := True;
+            end;
+            Inc(n2);
+          end;
+
+          wg.Name := compname;
+          wg.FormDesigner := TheSelectedForm;
+          wd := TformDesigner(TheSelectedForm.FormDesigner).AddWidget(wg, nil);
+          wd.FVFDClass := wgc;
+
+          wg.Left := Tfpgwidget(theWidget).left + 10;
+          wg.top := Tfpgwidget(theWidget).top + 10;
+          wg.Width := Tfpgwidget(theWidget).Width;
+          wg.Height := Tfpgwidget(theWidget).Height;
+          wg.BackgroundColor := Tfpgwidget(theWidget).BackgroundColor;
+          wg.Enabled := Tfpgwidget(theWidget).Enabled;
+          wg.Align := Tfpgwidget(theWidget).Align;
+          wg.Anchors := Tfpgwidget(theWidget).Anchors;
+          wg.Hint := Tfpgwidget(theWidget).Hint;
+          wg.ShowHint := Tfpgwidget(theWidget).ShowHint;
+          wg.TextColor := Tfpgwidget(theWidget).TextColor;
+
+          if wg is Tfpglabel then
+            Tfpglabel(wg).Text := Tfpglabel(theWidget).Text;
+
+          if wg is Tfpgedit then
+          Tfpgedit(wg).Text := Tfpgedit(theWidget).Text;
+
+          if wg is TfpgPanel then
+            TfpgPanel(wg).Text := TfpgPanel(theWidget).Text;
+
+          if wg is TfpgStringGrid then
+          begin
+            TfpgStringGrid(wg).ColumnCount:= TfpgStringGrid(theWidget).ColumnCount;
+
+            z := 0;
+           if TfpgStringGrid(theWidget).ColumnCount > 0 then while z < TfpgStringGrid(theWidget).ColumnCount do
+            begin
+            TfpgStringGrid(wg).ColumnWidth[z]:= TfpgStringGrid(theWidget).ColumnWidth[z];
+            TfpgStringGrid(wg).ColumnTextColor[z]:= TfpgStringGrid(theWidget).ColumnTextColor[z];
+            TfpgStringGrid(wg).ColumnBackgroundColor[z]:= TfpgStringGrid(theWidget).ColumnBackgroundColor[z];
+            TfpgStringGrid(wg).ColumnAlignment[z]:= TfpgStringGrid(theWidget).ColumnAlignment[z];
+            TfpgStringGrid(wg).ColumnTitle[z]:= TfpgStringGrid(theWidget).ColumnTitle[z];
+            inc(z);
+            end;
+
+            TfpgStringGrid(wg).RowCount:= TfpgStringGrid(theWidget).RowCount;
+            TfpgStringGrid(wg).DefaultColWidth:= TfpgStringGrid(theWidget).DefaultColWidth;
+            TfpgStringGrid(wg).DefaultRowHeight:= TfpgStringGrid(theWidget).DefaultRowHeight;
+            TfpgStringGrid(wg).HeaderStyle:= TfpgStringGrid(theWidget).HeaderStyle;
+            TfpgStringGrid(wg).AlternateBGColor:= TfpgStringGrid(theWidget).AlternateBGColor;
+            TfpgStringGrid(wg).HeaderHeight:= TfpgStringGrid(theWidget).HeaderHeight;
+            TfpgStringGrid(wg).FontDesc:= TfpgStringGrid(theWidget).FontDesc;
+            TfpgStringGrid(wg).HeaderFontDesc:= TfpgStringGrid(theWidget).HeaderFontDesc;
+            TfpgStringGrid(wg).RowCount:= TfpgStringGrid(theWidget).RowCount;
+            TfpgStringGrid(wg).ScrollBarStyle:= TfpgStringGrid(theWidget).ScrollBarStyle;
+            TfpgStringGrid(wg).Options:= TfpgStringGrid(theWidget).Options;
+            TfpgStringGrid(wg).ShowGrid:= TfpgStringGrid(theWidget).ShowGrid;
+            TfpgStringGrid(wg).ShowHeader:= TfpgStringGrid(theWidget).ShowHeader;
+            TfpgStringGrid(wg).BorderStyle:= TfpgStringGrid(theWidget).BorderStyle;
+            TfpgStringGrid(wg).TextColor:= TfpgStringGrid(theWidget).TextColor;
+           end;
+         //     }
+          wg.UpdateWindowPosition;
+        end;
+        Inc(y);
+      end;
+    end;
+    Inc(x);
+  end;
+  // fpgapplication.ProcessMessages;
+  Getwidgetlist(TheSelectedForm);
+end;
+
+procedure Tfrm_multiselect.btnDeleteClicked(Sender: TObject);
+var
+  x, y: integer;
+  wd: TWidgetDesigner;
+  theWidget: TfpgWidget;
+begin
+  fpgapplication.ProcessMessages;
+  x := 0;
+   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+   maindsgn.SaveUndo(Sender, 10);
+
+   while x < length(cbSelected) do
+      begin
+        if cbSelected[x].Checked = True then
+        begin
+          y := 0;
+          while y < TheSelectedForm.ComponentCount do
+          begin
+            if Tfpgwidget(TheSelectedForm.Components[y]).Name = cbSelected[x].Text then
+            begin
+              theWidget := Tfpgwidget(TheSelectedForm.Components[y]);
+              TformDesigner(TheSelectedForm.FormDesigner).DeleteSelectedWidget(y);
+             end;
+            Inc(y);
+          end;
+        end;
+        Inc(x);
+      end;
+  fpgapplication.ProcessMessages;
+
+  Getwidgetlist(TheSelectedForm);
+end;
+
+procedure Tfrm_multiselect.onScrollChange(Sender: TObject; position: integer);
+begin
+  PanelScroll.Top := -1 * scroll1.Position;
+  PanelScroll.UpdateWindowPosition;
 end;
 
 procedure Tfrm_multiselect.btnApply1Clicked(Sender: TObject);
 var
   x, y: integer;
-
 begin
   x := 0;
-  maindsgn.SaveUndo(Sender, 8);
   fpgapplication.ProcessMessages;
+  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+
+   maindsgn.SaveUndo(Sender, 8);
+
   while x < length(cbSelected) do
   begin
     if cbSelected[x].Checked = True then
@@ -539,31 +848,29 @@ begin
             Tfpgwidget(TheSelectedForm.Components[y]).Width := edwidth.Value;
           if cbheight.Checked then
             Tfpgwidget(TheSelectedForm.Components[y]).Height := edheight.Value;
-
-          Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
         end;
         Inc(y);
       end;
     end;
     Inc(x);
   end;
-  fpgapplication.ProcessMessages;
-
+  // fpgapplication.ProcessMessages;
   Procupdategrid(TheSelectedForm);
-
 end;
 
 procedure Tfrm_multiselect.btnApply2Clicked(Sender: TObject);
 var
   x, y, widcheck, firsttop, firstleft, firstwidth, firstheight: integer;
   firstupwidget: boolean;
-
 begin
   x := 0;
   firstupwidget := True;
   widcheck := 0;
   fpgapplication.ProcessMessages;
   maindsgn.SaveUndo(Sender, 8);
+
+  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+
   while x < length(cbSelected) do
   begin
     if cbSelected[x].Checked = True then
@@ -595,8 +902,7 @@ begin
                 firstwidth + (widcheck * edwidth2.Value);
             if cbheight2.Checked then
               Tfpgwidget(TheSelectedForm.Components[y]).Height :=
-                firstleft + (widcheck * edheight2.Value);
-
+                firstheight + (widcheck * edheight2.Value);
             Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
           end;
         end;
@@ -606,10 +912,8 @@ begin
     end;
     Inc(x);
   end;
-
-  fpgapplication.ProcessMessages;
+  // fpgapplication.ProcessMessages;
   Procupdategrid(TheSelectedForm);
-
 end;
 
 procedure Tfrm_multiselect.btnApply3Clicked(Sender: TObject);
@@ -617,11 +921,11 @@ var
   x, y: integer;
 
 begin
-  x := 0;
-
-  maindsgn.SaveUndo(Sender, 8);
-
   fpgapplication.ProcessMessages;
+  x := 0;
+  maindsgn.SaveUndo(Sender, 8);
+  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+
   while x < length(cbSelected) do
   begin
     if cbSelected[x].Checked = True then
@@ -651,10 +955,7 @@ begin
     end;
     Inc(x);
   end;
-  fpgapplication.ProcessMessages;
-
   Procupdategrid(TheSelectedForm);
-
 end;
 
 procedure Tfrm_multiselect.btnunselectall(Sender: TObject);
@@ -669,10 +970,30 @@ begin
   end;
 end;
 
+procedure Tfrm_multiselect.SelectedFromDesigner(TheSelected: TfpgWidget);
+var
+  x: integer;
+begin
+  if visible = true then begin
+  x := 0;
+   while x < length(cbSelected) do
+  begin
+    if TheSelected.Name = cbSelected[x].Text then
+    begin
+      cbSelected[x].Checked := True;
+      Exit;
+    end;
+    Inc(x);
+  end;
+end;
+
+end;
+
 procedure Tfrm_multiselect.btnselectall(Sender: TObject);
 var
   x: integer;
 begin
+
   x := 0;
   while x < length(cbSelected) do
   begin
@@ -683,79 +1004,78 @@ end;
 
 procedure Tfrm_multiselect.Getwidgetlist(Theobj: TfpgWidget);
 begin
-  if (TheSelectedForm <> Theobj) or (Theobj.ComponentCount <> oricount) then
+  if visible = true then begin
+  fpgapplication.ProcessMessages;
+
+  if (Tfpgwidget(TheSelectedForm) <> Tfpgwidget(Theobj)) or
+    (Theobj.ComponentCount <> oricount) then
   begin
     oricount := Theobj.ComponentCount;
     TheSelectedForm := Theobj;
-    fpgapplication.ProcessMessages;
     ProcGetwidgetlist(TheSelectedForm);
+  end;
   end;
 end;
 
 procedure Tfrm_multiselect.Procupdategrid(Theobj: TfpgWidget);
 var
-  x, y: integer;
+  x: integer;
 begin
-
   grid1.rowCount := 0;
-  fpgapplication.ProcessMessages;
-
+ // fpgapplication.ProcessMessages;
   x := 0;
-
+  //TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
   while x < Theobj.ComponentCount do
   begin
     if Tfpgwidget(Theobj.Components[x]).Name <> '' then
     begin
       grid1.rowCount := x + 1;
-
       grid1.Cells[0, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).left);
       grid1.Cells[1, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).top);
       grid1.Cells[2, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).Width);
       grid1.Cells[3, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).Height);
-
     end;
     Inc(x);
   end;
   grid1.UpdateWindowPosition;
-  fpgapplication.ProcessMessages;
 end;
 
 procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);
 var
-  x, y: integer;
+  x: integer;
 begin
-  x := 0;
+  fpgapplication.ProcessMessages;
+   x := 0;
+   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
   while x < length(cbSelected) do
   begin
-    cbSelected[x].Visible := False;
-    cbSelected[x] := nil;
-    cbSelected[x].Free;
-    Inc(x);
+  cbSelected[x].Visible := False;
+  cbSelected[x] := nil;
+   cbSelected[x].Free;
+   Inc(x);
   end;
 
   setlength(cbSelected, 0);
   grid1.rowCount := 0;
-  fpgapplication.ProcessMessages;
-
   x := 0;
-
-
+  panelscroll.Visible := False;
+ ;
   while x < Theobj.ComponentCount do
   begin
     if Tfpgwidget(Theobj.Components[x]).Name <> '' then
     begin
       setlength(cbSelected, length(cbSelected) + 1);
-      cbSelected[x] := Tfpgcheckbox.Create(self);
+      cbSelected[x] := Tfpgcheckbox.Create(Panelscroll);
+      cbSelected[x].Visible := True;
       cbSelected[x].BackgroundColor := $7D7D7D;
       cbSelected[x].Text := Tfpgwidget(Theobj.Components[x]).Name;
       cbSelected[x].TextColor := clwhite;
-      cbSelected[x].Left := 10;
-      cbSelected[x].Width := 160;
-      cbSelected[x].Top := (x * 19) + 19;
+      cbSelected[x].Left := 8;
+      cbSelected[x].Width := 150;
+      cbSelected[x].Top := (x * 19) + 2;
       cbSelected[x].Height := 18;
-      cbSelected[x].Visible := True;
       cbSelected[x].Checked := False;
       cbSelected[x].UpdateWindowPosition;
 
@@ -769,32 +1089,108 @@ begin
     end;
     Inc(x);
   end;
-  windowtitle := 'Selected components of form ' + Theobj.Name;
-  grid1.Height := (length(cbSelected) * 19) + 21;
-  Height := (length(cbSelected) * 19) + (3 * panel1.Height) + 26;
-  panel1.top := Height - (3 * panel1.Height) - 6;
-  panel2.top := Height - (2 * panel1.Height) - 6;
-  panel3.top := Height - panel2.Height - 5;
-  grid1.Visible := True;
+
+  if Theobj.ComponentCount = 0 then
+    windowtitle := 'Form ' + Theobj.Name
+  else
+  if Theobj.ComponentCount > 1 then
+    windowtitle := 'The ' + IntToStr(Theobj.ComponentCount) + ' Widgets of ' + Theobj.Name
+  else
+    windowtitle := 'The only Widget of ' + Theobj.Name;
+
+  if (length(cbSelected) * 19) + (3 * panel1.Height) + 22 < frmProperties.Height then
+  begin
+    Height := (length(cbSelected) * 19) + (3 * panel1.Height) + 26;
+    panelscroll.Width := Width;
+    Grid1.ColumnWidth[0] := 74;
+    Grid1.ColumnWidth[1] := Grid1.ColumnWidth[0];
+    Grid1.ColumnWidth[2] := Grid1.ColumnWidth[0];
+    Grid1.ColumnWidth[3] := Grid1.ColumnWidth[0];
+
+    lbleft.SetPosition(161, 1, 72, 18);
+    lbtop.SetPosition(235, 1, 72, 18);
+    lbwidth.SetPosition(309, 1, 72, 18);
+    lbheight.SetPosition(383, 1, 74, 18);
+    grid1.Width := 300;
+    scroll1.Visible := False;
+  end
+  else
+  begin
+    Height := frmProperties.Height;
+    panelscroll.Width := Width - 26;
+    Grid1.ColumnWidth[0] := 69;
+    Grid1.ColumnWidth[1] := Grid1.ColumnWidth[0];
+    Grid1.ColumnWidth[2] := Grid1.ColumnWidth[0];
+    Grid1.ColumnWidth[3] := Grid1.ColumnWidth[0];
+
+    lbleft.SetPosition(161, 1, 67, 18);
+    lbtop.SetPosition(230, 1, 67, 18);
+    lbwidth.SetPosition(299, 1, 67, 18);
+    lbheight.SetPosition(368, 1, 69, 18);
+
+    grid1.Width := 280;
+    scroll1.Visible := True;
+    scroll1.top := 0;
+    scroll1.Height := panelmain.Height - 10;
+    scroll1.Width := 16;
+    scroll1.left := grid1.Right + 1;
+    scroll1.Position := 0;
+  end;
+
+  panelscroll.Height := (length(cbSelected) * 19) + 10;
+  panelmain.Height := Height - (3 * panel1.Height) - 20;
+
+  if scroll1.Visible = True then
+  begin
+    scroll1.Height := panelmain.Height - 4;
+    scroll1.PageSize := 19 * (panelmain.Height div 19);
+    scroll1.ScrollStep := 19;
+    scroll1.max := (panelscroll.Height - panelmain.Height - 2);
+    scroll1.min := 0;
+  end;
+
+  grid1.Height := (length(cbSelected) * 19) + 4;
+
+  grid1.top := 0;
+  grid1.left := 159;
+
+  panelscroll.Top := 0;
+
+  panel1.top := Height - (3 * panel1.Height) - 3;
+  panelcopypaste.Top := panel1.top;
+  panel2.top := Height - (2 * panel1.Height) - 3;
+  panel3.top := Height - panel2.Height - 2;
+
   panel1.UpdateWindowPosition;
   panel2.UpdateWindowPosition;
   panel3.UpdateWindowPosition;
+  panelcopypaste.UpdateWindowPosition;
   grid1.UpdateWindowPosition;
+  panelscroll.UpdateWindowPosition;
+  scroll1.UpdateWindowPosition;
+  panelmain.UpdateWindowPosition;
+
+  lbleft.UpdateWindowPosition;
+  lbtop.UpdateWindowPosition;
+  lbwidth.UpdateWindowPosition;
+  lbheight.UpdateWindowPosition;
   UpdateWindowPosition;
-  fpgapplication.ProcessMessages;
+  grid1.Visible := True;
+  panelscroll.Visible := True;
+
 end;
 
-procedure Tfrm_multiselect.btnQuitClicked(Sender: TObject);
+procedure Tfrm_multiselect.onDestroyFrm(Sender: TObject);
 var
   x: integer;
 begin
+  x := 0;
   while x < length(cbSelected) do
   begin
     cbSelected[x].Free;
     Inc(x);
   end;
   setlength(cbSelected, 0);
-  hide;
 end;
 
 end.

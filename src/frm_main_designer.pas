@@ -1196,6 +1196,7 @@ var
      TheParent := frmProperties.lstProps.Props.Widget.Parent ;
 
   //  frmselected := TheParent ;
+   frmMultiSelect.Show;
   frmMultiSelect.Getwidgetlist(TheParent);
   frmMultiSelect.Show;
 end;

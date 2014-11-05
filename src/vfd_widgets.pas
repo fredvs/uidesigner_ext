@@ -619,6 +619,7 @@ begin
   wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
   wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
   wc.AddProperty('RowCount', TPropertyInteger, 'Default number of rows in the grid');
+  wc.AddProperty('ColumnCount', TPropertyInteger, 'Default number of column in the grid');
   wc.AddProperty('RowSelect', TPropertyBoolean, 'If enabled, a whole row is selected, not just a cell');
   wc.AddProperty('ScrollbarStyle', TPropertyEnum, '');
   wc.AddProperty('ShowGrid', TPropertyBoolean, 'Must the grid lines be shown');
