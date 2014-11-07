@@ -13,8 +13,8 @@ unit frm_multiselect;
 interface
 
 uses
-  SysUtils, Classes, fpg_base, fpg_Grid, fpg_button, fpg_main,
-  fpg_panel, fpg_label, fpg_edit, fpg_memo,vfd_widgetclass, vfd_widgets, fpg_scrollbar,
+  SysUtils, Classes, fpg_base, fpg_Grid, fpg_button, fpg_editbtn, fpg_main, fpg_hyperlink, fpg_tab,
+  fpg_panel, fpg_label, fpg_edit, fpg_memo,vfd_widgetclass, vfd_widgets, fpg_scrollbar, fpg_radiobutton,
   fpg_checkbox, fpg_widget, fpg_spinedit, fpg_form;
 
 type
@@ -263,9 +263,10 @@ begin
   with btApplyCopyPaste do
   begin
     Name := 'btApplyCopyPaste';
-    SetPosition(15, 6, 84, 20);
+    SetPosition(6, 6, 104, 20);
     FontDesc := '#Label1';
     Hint := '';
+    ImageName := 'stdimg.paste';
     TabOrder := 6;
     Text := 'Copy/Paste';
     OnClick := @btnCopyPasteClicked;
@@ -275,9 +276,10 @@ begin
   with btApplyDelete do
   begin
     Name := 'btApplyDelete';
-    SetPosition(15, 30, 84, 20);
+    SetPosition(6, 30,104, 20);
     FontDesc := '#Label1';
     Hint := '';
+    ImageName := 'stdimg.delete';
     TabOrder := 6;
     Text := 'Delete';
     OnClick := @btnDeleteClicked;
@@ -634,7 +636,7 @@ begin
   panel1.Height := 55;
   btApply.Width := 65;
   btApply.Height := 30;
-  btApply.Left := panel1.Width - btApply.Width - 3;
+  btApply.Left := panel1.Width - btApply.Width - 5;
   btApply.Top := panel1.Height - btApply.Height - 10;
 
   panelcopypaste.Height := panel1.Height;
@@ -731,16 +733,34 @@ begin
           wg.TextColor := Tfpgwidget(theWidget).TextColor;
 
           if wg is Tfpglabel then
-            Tfpglabel(wg).Text := Tfpglabel(theWidget).Text;
+            Tfpglabel(wg).Text := Tfpglabel(theWidget).Text else
 
           if wg is Tfpgedit then
-          Tfpgedit(wg).Text := Tfpgedit(theWidget).Text;
+          Tfpgedit(wg).Text := Tfpgedit(theWidget).Text else
 
           if wg is TfpgPanel then
-            TfpgPanel(wg).Text := TfpgPanel(theWidget).Text;
+            TfpgPanel(wg).Text := TfpgPanel(theWidget).Text else
 
           if wg is TfpgButton then
-            TfpgButton(wg).Text := TfpgButton(theWidget).Text;
+            TfpgButton(wg).Text := TfpgButton(theWidget).Text else
+
+          if wg is TfpgCheckBox then
+            TfpgCheckBox(wg).Text := TfpgCheckBox(theWidget).Text else
+
+          if wg is TfpgRadioButton then
+            TfpgRadioButton(wg).Text := TfpgRadioButton(theWidget).Text else
+
+           if wg is TfpgEditButton then
+            TfpgEditButton(wg).Text := TfpgEditButton(theWidget).Text else
+
+           if wg is TfpgGroupBox then
+            TfpgGroupBox(wg).Text := TfpgGroupBox(theWidget).Text else
+
+           if wg is TfpgTabSheet then
+            TfpgTabSheet(wg).Text := TfpgTabSheet(theWidget).Text else
+
+            if wg is TfpgHyperlink then
+            TfpgHyperlink(wg).Text := TfpgHyperlink(theWidget).Text else
 
           if wg is TfpgStringGrid then
           begin
@@ -772,6 +792,7 @@ begin
             TfpgStringGrid(wg).BorderStyle:= TfpgStringGrid(theWidget).BorderStyle;
             TfpgStringGrid(wg).TextColor:= TfpgStringGrid(theWidget).TextColor;
            end;
+
          wg.UpdateWindowPosition;
         end;
         Inc(y);
