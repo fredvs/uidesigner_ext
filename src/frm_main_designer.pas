@@ -180,6 +180,8 @@ type
     edName: TfpgEdit;
     edOther: TfpgMemo;
 
+    cbOwners: Tfpgcombobox;
+
     btnTop, btnLeft, btnWidth, btnHeight: TfpgButton;
     btnAnLeft, btnAnTop, btnAnRight, btnAnBottom: TfpgButton;
     lstProps: TwgPropertyList;
@@ -1193,14 +1195,16 @@ var
    begin
     if frmProperties.edName.Text <> '' then
     begin
-   TheParent := frmProperties.lstProps.Props.Widget ;
 
-   while TheParent.HasParent do
+     TheParent := frmProperties.lstProps.Props.Widget ;
+
+      if TheParent.HasParent then
      TheParent := frmProperties.lstProps.Props.Widget.Parent ;
 
-  //  frmselected := TheParent ;
-   frmMultiSelect.Show;
+    frmMultiSelect.show;
   frmMultiSelect.Getwidgetlist(TheParent);
+   frmMultiSelect.hide;                     //// this to give focus
+   fpgapplication.ProcessMessages;
   frmMultiSelect.Show;
 end;
 end;
@@ -1934,7 +1938,7 @@ begin
   TheWidget := lstProps.Props.Widget ;
 
   TheParent := TheWidget ;
-  while TheParent.HasParent = true do
+  if TheParent.HasParent = true then
   TheParent :=  TheParent.Parent;
 
   // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));

@@ -12,6 +12,7 @@
       <MainUnit Value="0"/>
       <Title Value="designer_ext"/>
       <UseAppBundle Value="False"/>
+      <ActiveWindowIndexAtStart Value="-1"/>
     </General>
     <VersionInfo>
       <StringTable ProductVersion=""/>

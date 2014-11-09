@@ -128,7 +128,7 @@ type
     procedure ClearForm;
     procedure DefaultHandler(var msg); override;
     procedure Show;
-    function AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass): TWidgetDesigner;
+    function AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent : TFormDesigner): TWidgetDesigner;
     function WidgetDesigner(wg: TfpgWidget): TWidgetDesigner;
     function FindWidgetByName(const wgname: string): TfpgWidget;
     procedure DeSelectAll;
@@ -537,15 +537,15 @@ begin
   UpdatePropWin;
 end;
 
-function TFormDesigner.AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass): TWidgetDesigner;
+function TFormDesigner.AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent : Tformdesigner): TWidgetDesigner;
 var
   cd: TWidgetDesigner;
 begin
   //  writeln('TFormDesigner.AddWidget');
-  cd := TWidgetDesigner.Create(self, wg, wgc);
+  cd := TWidgetDesigner.Create(theParent, wg, wgc);
   FWidgets.Add(cd);
   if wg is TfpgForm then
-    wg.FormDesigner := self;
+    wg.FormDesigner := theParent;
   Result := cd;
 end;
 
@@ -650,15 +650,55 @@ begin
   UpdatePropWin;
 end;
 
+
 procedure TFormDesigner.DeleteSelectedWidget(x : integer);
 var
-   cd: TWidgetDesigner;
+  n: integer;
+  cd, cdSelected : TWidgetDesigner;
+  WidgetOwner: TfpgWidget;
 begin
-    cd := TWidgetDesigner(FWidgets.Items[x]);
+   WidgetOwner := nil;
+
+   cdselected := TWidgetDesigner(FWidgets.Items[x]);
+   if (cdSelected.Widget.IsContainer) then
+      WidgetOwner := cdselected.Widget;
+
+    n := 0;
+  if WidgetOwner <> nil then
+  begin
+    while n < FWidgets.Count do
+    begin
+      cd := TWidgetDesigner(FWidgets.Items[n]);
+      if (cd.Widget.Parent = WidgetOwner) then
+      begin
+        cd.Widget.Free;
+        cd.Free;
+        FWidgets.Delete(n);
+      end else
+        Inc(n);
+    end;
+     n := 0;
+  while n < FWidgets.Count do
+  begin
+    cd := TWidgetDesigner(FWidgets.Items[n]);
+    if cd.Widget = cdselected.Widget then
+    begin
+      cd.Widget.Free;
+      cd.Free;
+      FWidgets.Delete(n);
+    end else
+      Inc(n);
+  end;
+  end else
+
+  begin
+     cd := TWidgetDesigner(FWidgets.Items[x]);
     cd.Widget.Free;
      cd.Free;
      FWidgets.Delete(x);
-     UpdatePropWin;
+   end;
+
+   UpdatePropWin;
 end;
 
 
@@ -666,12 +706,42 @@ procedure TFormDesigner.DeleteWidgets;
 var
   n: integer;
   cd: TWidgetDesigner;
+  WidgetOwner: TfpgWidget;
 begin
+
+  WidgetOwner := nil;
+
   n := 0;
   while n < FWidgets.Count do
   begin
     cd := TWidgetDesigner(FWidgets.Items[n]);
-    if cd.Selected then
+    if (cd.Selected) and (cd.Widget.IsContainer) then
+      WidgetOwner := cd.Widget;
+    Inc(n);
+  end;
+
+  n := 0;
+  if WidgetOwner <> nil then
+  begin
+    while n < FWidgets.Count do
+    begin
+      cd := TWidgetDesigner(FWidgets.Items[n]);
+      if (cd.Widget.Parent = WidgetOwner) then
+      begin
+        cd.Widget.Free;
+        cd.Free;
+        FWidgets.Delete(n);
+      end
+      else
+        Inc(n);
+    end;
+  end;
+
+  n := 0;
+  while n < FWidgets.Count do
+  begin
+    cd := TWidgetDesigner(FWidgets.Items[n]);
+    if (cd.Selected) then
     begin
       cd.Widget.Free;
       cd.Free;
@@ -680,8 +750,10 @@ begin
     else
       Inc(n);
   end;
+
   UpdatePropWin;
 end;
+
 
 
 procedure TFormDesigner.EditWidgetOrTabOrder(AMode: TfpgEditMode);
@@ -1130,7 +1202,7 @@ begin
         while i < TDesignedForm(TheParent).Virtualprop.Count do
         begin
           if pos(TheParent.Name + '.' + (TheWidget).Name + '.' +
-            'foc=False', TDesignedForm(TheWidget.Parent).Virtualprop.Strings[i]) > 0 then
+            'foc=False', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
           begin
             frmProperties.cbfocusable.Text := 'False';
             frmProperties.cbfocusable.FocusItem := 1;
@@ -1193,7 +1265,7 @@ var
   wg: TfpgWidget;
 
   wgcnt: integer;
-  ok: boolean;
+ // ok: boolean;
   //bedit : boolean;
 
   lastpropname: string;
@@ -1705,9 +1777,8 @@ var
   wgclass, pwgname: string;
 
   t: TfpgString;
-  strtemp, strtemp2: string;
-  i, x: integer;
-  ok: boolean;
+  i: integer;
+ // ok: boolean;
   PropInfo: PPropInfo;
 begin
   s := '';
@@ -1772,8 +1843,13 @@ begin
     if wg.Parent = FForm then
       pwgname := 'self'
     else
-      pwgname := wg.Parent.Name;
-    if wg is TOtherWidget then
+    begin
+    if  wg.HasParent  then
+      pwgname := wg.Parent.Name else  pwgname := '';
+        end;
+
+    if pwgname <>  '' then begin
+      if wg is TOtherWidget then
       wgclass := TOtherWidget(wg).wgClassName
     else
       wgclass := wg.ClassName;
@@ -1782,6 +1858,8 @@ begin
       ');' + LineEnding + Ind(1) + 'with ' + wg.Name + ' do' + LineEnding +
       Ind(1) + 'begin' + LineEnding + GetWidgetSourceImpl(wd, Ind(2)) +
       Ind(1) + 'end;' + LineEnding + LineEnding;
+  end;
+
   end;
 
   Result := s;
@@ -2052,7 +2130,7 @@ begin
     wg.Name := newname;
     if wgc.WidgetClass = TOtherWidget then
       TOtherWidget(wg).wgClassName := newclassname;
-    wgd := AddWidget(wg, wgc);
+    wgd := AddWidget(wg, wgc, TFormdesigner(wg.FormDesigner));
     wg.SetPosition(x, y, wg.Width, wg.Height);
     wg.Visible := True;
     DeSelectAll;

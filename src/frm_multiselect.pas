@@ -13,8 +13,10 @@ unit frm_multiselect;
 interface
 
 uses
-  SysUtils, Classes, fpg_base, fpg_Grid, fpg_button, fpg_editbtn, fpg_main, fpg_hyperlink, fpg_tab,
-  fpg_panel, fpg_label, fpg_edit, fpg_memo,vfd_widgetclass, vfd_widgets, fpg_scrollbar, fpg_radiobutton,
+  SysUtils, Classes, fpg_base, fpg_Grid, fpg_button, fpg_editbtn,
+  fpg_main, fpg_hyperlink, fpg_tab,
+  fpg_panel, fpg_label, fpg_edit, vfd_widgetclass, vfd_widgets,
+  fpg_scrollbar, fpg_radiobutton,
   fpg_checkbox, fpg_widget, fpg_spinedit, fpg_form;
 
 type
@@ -276,7 +278,7 @@ begin
   with btApplyDelete do
   begin
     Name := 'btApplyDelete';
-    SetPosition(6, 30,104, 20);
+    SetPosition(6, 30, 104, 20);
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.delete';
@@ -663,12 +665,16 @@ var
   wgc: TVFDWidgetClass;
   wg, theWidget: TfpgWidget;
   okname: boolean;
+  WidgetIsContainer: boolean;
+  WidgetOwner: TfpgWidget;
+  oriformdesigner: Tformdesigner;
 begin
-    fpgapplication.ProcessMessages;
+  fpgapplication.ProcessMessages;
 
+  oriformdesigner := TformDesigner(TheSelectedForm.FormDesigner);
   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
-   maindsgn.SaveUndo(Sender, 9);
+  maindsgn.SaveUndo(Sender, 9);
 
   x := 0;
   while x < length(cbSelected) do
@@ -682,6 +688,11 @@ begin
         begin
 
           theWidget := Tfpgwidget(TheSelectedForm.Components[y]);
+
+          if theWidget.IsContainer = True then
+            WidgetIsContainer := True
+          else
+            WidgetIsContainer := False;
           wg := nil;
           wgc := nil;
 
@@ -717,7 +728,149 @@ begin
 
           wg.Name := compname;
           wg.FormDesigner := TheSelectedForm;
-          wd := TformDesigner(TheSelectedForm.FormDesigner).AddWidget(wg, nil);
+          wd := TformDesigner(TheSelectedForm.FormDesigner).AddWidget(wg,
+            nil, oriformdesigner);
+          wd.FVFDClass := wgc;
+
+          wg.Left := Tfpgwidget(theWidget).left + 10;
+          wg.top := Tfpgwidget(theWidget).top + 10;
+          wg.Width := Tfpgwidget(theWidget).Width;
+          wg.Height := Tfpgwidget(theWidget).Height;
+          wg.BackgroundColor := Tfpgwidget(theWidget).BackgroundColor;
+          wg.Enabled := Tfpgwidget(theWidget).Enabled;
+          wg.Align := Tfpgwidget(theWidget).Align;
+          wg.Anchors := Tfpgwidget(theWidget).Anchors;
+          wg.Hint := Tfpgwidget(theWidget).Hint;
+          wg.ShowHint := Tfpgwidget(theWidget).ShowHint;
+          wg.TextColor := Tfpgwidget(theWidget).TextColor;
+
+          if wg is Tfpglabel then
+            Tfpglabel(wg).Text := Tfpglabel(theWidget).Text
+          else
+
+          if wg is Tfpgedit then
+            Tfpgedit(wg).Text := Tfpgedit(theWidget).Text
+          else
+
+          if wg is TfpgPanel then
+            TfpgPanel(wg).Text := TfpgPanel(theWidget).Text
+          else
+
+          if wg is TfpgButton then
+            TfpgButton(wg).Text := TfpgButton(theWidget).Text
+          else
+
+          if wg is TfpgCheckBox then
+            TfpgCheckBox(wg).Text := TfpgCheckBox(theWidget).Text
+          else
+
+          if wg is TfpgRadioButton then
+            TfpgRadioButton(wg).Text := TfpgRadioButton(theWidget).Text
+          else
+
+          if wg is TfpgEditButton then
+            TfpgEditButton(wg).Text := TfpgEditButton(theWidget).Text
+          else
+
+          if wg is TfpgGroupBox then
+            TfpgGroupBox(wg).Text := TfpgGroupBox(theWidget).Text
+          else
+
+          if wg is TfpgTabSheet then
+            TfpgTabSheet(wg).Text := TfpgTabSheet(theWidget).Text
+          else
+
+          if wg is TfpgHyperlink then
+            TfpgHyperlink(wg).Text := TfpgHyperlink(theWidget).Text
+          else
+
+          if wg is TfpgStringGrid then
+          begin
+            TfpgStringGrid(wg).ColumnCount := TfpgStringGrid(theWidget).ColumnCount;
+
+            z := 0;
+            if TfpgStringGrid(theWidget).ColumnCount > 0 then
+              while z < TfpgStringGrid(theWidget).ColumnCount do
+              begin
+                TfpgStringGrid(wg).ColumnWidth[z] := TfpgStringGrid(theWidget).ColumnWidth[z];
+                TfpgStringGrid(wg).ColumnTextColor[z] :=
+                  TfpgStringGrid(theWidget).ColumnTextColor[z];
+                TfpgStringGrid(wg).ColumnBackgroundColor[z] :=
+                  TfpgStringGrid(theWidget).ColumnBackgroundColor[z];
+                TfpgStringGrid(wg).ColumnAlignment[z] :=
+                  TfpgStringGrid(theWidget).ColumnAlignment[z];
+                TfpgStringGrid(wg).ColumnTitle[z] := TfpgStringGrid(theWidget).ColumnTitle[z];
+                Inc(z);
+              end;
+            TfpgStringGrid(wg).RowCount := TfpgStringGrid(theWidget).RowCount;
+            TfpgStringGrid(wg).DefaultColWidth :=
+              TfpgStringGrid(theWidget).DefaultColWidth;
+            TfpgStringGrid(wg).DefaultRowHeight :=
+              TfpgStringGrid(theWidget).DefaultRowHeight;
+            TfpgStringGrid(wg).HeaderStyle := TfpgStringGrid(theWidget).HeaderStyle;
+            TfpgStringGrid(wg).AlternateBGColor :=
+              TfpgStringGrid(theWidget).AlternateBGColor;
+            TfpgStringGrid(wg).HeaderHeight := TfpgStringGrid(theWidget).HeaderHeight;
+            TfpgStringGrid(wg).FontDesc := TfpgStringGrid(theWidget).FontDesc;
+            TfpgStringGrid(wg).HeaderFontDesc := TfpgStringGrid(theWidget).HeaderFontDesc;
+            TfpgStringGrid(wg).RowCount := TfpgStringGrid(theWidget).RowCount;
+            TfpgStringGrid(wg).ScrollBarStyle := TfpgStringGrid(theWidget).ScrollBarStyle;
+            TfpgStringGrid(wg).Options := TfpgStringGrid(theWidget).Options;
+            TfpgStringGrid(wg).ShowGrid := TfpgStringGrid(theWidget).ShowGrid;
+            TfpgStringGrid(wg).ShowHeader := TfpgStringGrid(theWidget).ShowHeader;
+            TfpgStringGrid(wg).BorderStyle := TfpgStringGrid(theWidget).BorderStyle;
+            TfpgStringGrid(wg).TextColor := TfpgStringGrid(theWidget).TextColor;
+          end;
+
+          wg.UpdateWindowPosition;
+
+         {  TODO
+
+          if WidgetIsContainer = true then
+          begin
+          WidgetOwner := wg;
+          z := 0 ;
+           while z < WidgetOwner.ComponentCount do
+    begin
+
+          theWidget := Tfpgwidget(WidgetOwner.Components[z]);
+
+          wg := nil;
+          wgc := nil;
+
+          for n := 0 to VFDWidgetCount - 1 do
+          begin
+            wgc := VFDWidget(n);
+            if UpperCase(WidgetOwner.Components[z].ClassName) =
+              UpperCase(wgc.WidgetClass.ClassName) then
+            begin
+              wg := wgc.CreateWidget(WidgetOwner);
+              break;
+            end;
+          end;
+
+          compname := WidgetOwner.Components[z].Name + '1';
+          okname := False;
+          n2 := 1;
+
+          while okname = False do
+          begin
+            for n := 0 to WidgetOwner.ComponentCount - 1 do
+            begin
+              if compname = WidgetOwner.Components[n].Name then
+              begin
+                compname := WidgetOwner.Components[n].Name + IntToStr(n2);
+                // break;
+              end
+              else
+                okname := True;
+            end;
+            Inc(n2);
+          end;
+
+          wg.Name := compname;
+          wg.FormDesigner := WidgetOwner.FormDesigner;
+          wd := TformDesigner(WidgetOwner.FormDesigner).AddWidget(wg, nil, tformdesigner(WidgetOwner.FormDesigner));
           wd.FVFDClass := wgc;
 
           wg.Left := Tfpgwidget(theWidget).left + 10;
@@ -766,15 +919,16 @@ begin
           begin
             TfpgStringGrid(wg).ColumnCount:= TfpgStringGrid(theWidget).ColumnCount;
 
-            z := 0;
-           if TfpgStringGrid(theWidget).ColumnCount > 0 then while z < TfpgStringGrid(theWidget).ColumnCount do
+            n := 0;
+           if TfpgStringGrid(theWidget).ColumnCount > 0 then
+           while n < TfpgStringGrid(theWidget).ColumnCount do
             begin
-            TfpgStringGrid(wg).ColumnWidth[z]:= TfpgStringGrid(theWidget).ColumnWidth[z];
-            TfpgStringGrid(wg).ColumnTextColor[z]:= TfpgStringGrid(theWidget).ColumnTextColor[z];
-            TfpgStringGrid(wg).ColumnBackgroundColor[z]:= TfpgStringGrid(theWidget).ColumnBackgroundColor[z];
-            TfpgStringGrid(wg).ColumnAlignment[z]:= TfpgStringGrid(theWidget).ColumnAlignment[z];
-            TfpgStringGrid(wg).ColumnTitle[z]:= TfpgStringGrid(theWidget).ColumnTitle[z];
-            inc(z);
+            TfpgStringGrid(wg).ColumnWidth[n]:= TfpgStringGrid(theWidget).ColumnWidth[n];
+            TfpgStringGrid(wg).ColumnTextColor[n]:= TfpgStringGrid(theWidget).ColumnTextColor[n];
+            TfpgStringGrid(wg).ColumnBackgroundColor[n]:= TfpgStringGrid(theWidget).ColumnBackgroundColor[n];
+            TfpgStringGrid(wg).ColumnAlignment[n]:= TfpgStringGrid(theWidget).ColumnAlignment[n];
+            TfpgStringGrid(wg).ColumnTitle[n]:= TfpgStringGrid(theWidget).ColumnTitle[n];
+            inc(n);
             end;
             TfpgStringGrid(wg).RowCount:= TfpgStringGrid(theWidget).RowCount;
             TfpgStringGrid(wg).DefaultColWidth:= TfpgStringGrid(theWidget).DefaultColWidth;
@@ -792,8 +946,13 @@ begin
             TfpgStringGrid(wg).BorderStyle:= TfpgStringGrid(theWidget).BorderStyle;
             TfpgStringGrid(wg).TextColor:= TfpgStringGrid(theWidget).TextColor;
            end;
+            wg.UpdateWindowPosition;
+           inc(z);
+       end;
+         end;
 
-         wg.UpdateWindowPosition;
+          } /// end TODO
+
         end;
         Inc(y);
       end;
@@ -806,32 +965,29 @@ end;
 procedure Tfrm_multiselect.btnDeleteClicked(Sender: TObject);
 var
   x, y: integer;
-  wd: TWidgetDesigner;
-  theWidget: TfpgWidget;
+
 begin
   fpgapplication.ProcessMessages;
   x := 0;
-   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
-   maindsgn.SaveUndo(Sender, 10);
+  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+  maindsgn.SaveUndo(Sender, 10);
 
-   while x < length(cbSelected) do
+  while x < length(cbSelected) do
+  begin
+    if cbSelected[x].Checked = True then
+    begin
+      y := 0;
+      while y < TheSelectedForm.ComponentCount do
       begin
-        if cbSelected[x].Checked = True then
+        if Tfpgwidget(TheSelectedForm.Components[y]).Name = cbSelected[x].Text then
         begin
-          y := 0;
-          while y < TheSelectedForm.ComponentCount do
-          begin
-            if Tfpgwidget(TheSelectedForm.Components[y]).Name = cbSelected[x].Text then
-            begin
-              theWidget := Tfpgwidget(TheSelectedForm.Components[y]);
-              TformDesigner(TheSelectedForm.FormDesigner).DeleteSelectedWidget(y);
-             end;
-            Inc(y);
-          end;
+          TFormDesigner(TheSelectedForm.FormDesigner).DeleteSelectedWidget(y);
         end;
-        Inc(x);
+        Inc(y);
       end;
-  fpgapplication.ProcessMessages;
+    end;
+    Inc(x);
+  end;
 
   Getwidgetlist(TheSelectedForm);
 end;
@@ -850,7 +1006,7 @@ begin
   fpgapplication.ProcessMessages;
   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
-   maindsgn.SaveUndo(Sender, 8);
+  maindsgn.SaveUndo(Sender, 8);
 
   while x < length(cbSelected) do
   begin
@@ -995,18 +1151,21 @@ procedure Tfrm_multiselect.SelectedFromDesigner(TheSelected: TfpgWidget);
 var
   x: integer;
 begin
-  if visible = true then begin
-  x := 0;
-   while x < length(cbSelected) do
+
+  if Visible = True then
   begin
-    if TheSelected.Name = cbSelected[x].Text then
+    fpgapplication.ProcessMessages;
+    x := 0;
+    while x < length(cbSelected) do
     begin
-      cbSelected[x].Checked := True;
-      Exit;
+      if TheSelected.Name = cbSelected[x].Text then
+      begin
+        cbSelected[x].Checked := True;
+        Exit;
+      end;
+      Inc(x);
     end;
-    Inc(x);
   end;
-end;
 
 end;
 
@@ -1025,16 +1184,17 @@ end;
 
 procedure Tfrm_multiselect.Getwidgetlist(Theobj: TfpgWidget);
 begin
-  if visible = true then begin
-  fpgapplication.ProcessMessages;
-
-  if (Tfpgwidget(TheSelectedForm) <> Tfpgwidget(Theobj)) or
-    (Theobj.ComponentCount <> oricount) then
+  if Visible = True then
   begin
-    oricount := Theobj.ComponentCount;
-    TheSelectedForm := Theobj;
-    ProcGetwidgetlist(TheSelectedForm);
-  end;
+    fpgapplication.ProcessMessages;
+
+    if (Tfpgwidget(TheSelectedForm) <> Tfpgwidget(Theobj)) or
+      (Theobj.ComponentCount <> oricount) then
+    begin
+      oricount := Theobj.ComponentCount;
+      TheSelectedForm := Theobj;
+      ProcGetwidgetlist(TheSelectedForm);
+    end;
   end;
 end;
 
@@ -1064,22 +1224,22 @@ var
   x: integer;
 begin
   fpgapplication.ProcessMessages;
-   x := 0;
-   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+  x := 0;
+  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
   while x < length(cbSelected) do
   begin
-  cbSelected[x].Visible := False;
-  cbSelected[x] := nil;
-   cbSelected[x].Free;
-   Inc(x);
+    cbSelected[x].Visible := False;
+    cbSelected[x] := nil;
+    cbSelected[x].Free;
+    Inc(x);
   end;
 
   setlength(cbSelected, 0);
   grid1.rowCount := 0;
   x := 0;
   panelscroll.Visible := False;
- ;
+  ;
   while x < Theobj.ComponentCount do
   begin
     if Tfpgwidget(Theobj.Components[x]).Name <> '' then
@@ -1112,7 +1272,8 @@ begin
     windowtitle := 'Form ' + Theobj.Name
   else
   if Theobj.ComponentCount > 1 then
-    windowtitle := 'The ' + IntToStr(Theobj.ComponentCount) + ' Widgets of ' + Theobj.Name
+    windowtitle := 'The ' + IntToStr(Theobj.ComponentCount) +
+      ' Widgets of ' + Theobj.Name
   else
     windowtitle := 'The only Widget of ' + Theobj.Name;
 

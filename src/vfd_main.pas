@@ -647,7 +647,7 @@ var
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 0);
      TheParent := (frmProperties.lstProps.Props.Widget)  ;
-     while TheParent.HasParent do
+  if TheParent.HasParent then
      TheParent := ( frmProperties.lstProps.Props.Widget.Parent) ;
 
    frmMultiSelect.Getwidgetlist(TheParent);
@@ -665,12 +665,12 @@ begin
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 1);
+    TheParent := (frmProperties.lstProps.Props.Widget)  ;
+  if TheParent.HasParent then
+     TheParent := ( frmProperties.lstProps.Props.Widget.Parent) ;
 
-   TheParent := frmProperties.lstProps.Props.Widget ;
-     while TheParent.HasParent do
-     TheParent := frmProperties.lstProps.Props.Widget.Parent ;
-
-   frmMultiSelect.Procupdategrid(TheParent);
+   frmMultiSelect.Getwidgetlist(TheParent);
+  fpgapplication.ProcessMessages;
   end;
 end;
 
@@ -694,6 +694,8 @@ begin
 end;
 
 procedure TMainDesigner.OnOtherChange(Sender: TObject);
+var
+  TheParent : Tfpgwidget;
 begin
   if SelectedForm <> nil then
   begin
@@ -701,8 +703,15 @@ begin
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 4);
+
+       TheParent := (frmProperties.lstProps.Props.Widget)  ;
+  if TheParent.HasParent then
+     TheParent := ( frmProperties.lstProps.Props.Widget.Parent) ;
+
+   frmMultiSelect.Getwidgetlist(TheParent);
+  fpgapplication.ProcessMessages;
   end;
-     frmmultiselect.Procupdategrid(Tfpgwidget(SelectedForm)) ;
+
 end;
 
 procedure TMainDesigner.OnNewForm(Sender: TObject);

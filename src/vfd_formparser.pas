@@ -405,7 +405,7 @@ begin
 
       end;
 
-      wd           := ffd.AddWidget(wg, nil);
+      wd           := ffd.AddWidget(wg, nil,TFormDesigner(wg.FormDesigner));
       wd.FVFDClass := wgc;
       wd.other.Text := wgother;
 
@@ -421,13 +421,13 @@ end;
 
 function  TVFDFormParser.ReadWGVirtualProperty(s: String; s2: String; ident: String; wg: TfpgWidget) : boolean;
 var
-  sval: string;
+
   ival: longint;
   bval: boolean;
    TheParent : TfpgWidget ;
   Begin
     TheParent := wg ;
-  while TheParent.HasParent = true do
+  if TheParent.HasParent = true then
   TheParent :=  TheParent.Parent;
 
     result := false ;
@@ -726,7 +726,7 @@ var
   lok: boolean;
   sval: string;
   ival: longint;
-  bval: boolean;
+ // bval: boolean;
   wga: TAnchors;
 begin
   s := propline;
