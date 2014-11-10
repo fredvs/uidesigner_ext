@@ -663,11 +663,9 @@ var
   compname: string;
   wd: TWidgetDesigner;
   wgc: TVFDWidgetClass;
-  wg, theWidget: TfpgWidget;
-  okname: boolean;
-  WidgetIsContainer: boolean;
-  WidgetOwner: TfpgWidget;
-  oriformdesigner: Tformdesigner;
+  wg, WidgetOwner, newWidgetOwner, theWidget: TfpgWidget;
+  WidgetIsContainer, okname: boolean;
+  oriformdesigner, newformdesigner: Tformdesigner;
 begin
   fpgapplication.ProcessMessages;
 
@@ -824,34 +822,54 @@ begin
 
           wg.UpdateWindowPosition;
 
-         {  TODO
+       {  TODO
 
-          if WidgetIsContainer = true then
+          if (WidgetIsContainer = true) and (theWidget.ComponentCount > 0) then
           begin
-          WidgetOwner := wg;
+          WidgetOwner := theWidget;
+
+          newWidgetOwner := wg;
+
+
+       //   newWidgetOwner.FormDesigner:= TformDesigner.Create;
+
+
+      //  newWidgetOwner.FormDesigner:= theWidget.FormDesigner;
+
+         // TFormDesigner(newWidgetOwner.FormDesigner).Form.Name := wg.name;
+
           z := 0 ;
+
+          writeln('WidgetOwner.ComponentCount = ' + inttostr(WidgetOwner.ComponentCount));
+            writeln('WidgetOwner.name = ' + (WidgetOwner.Name));
            while z < WidgetOwner.ComponentCount do
     begin
 
           theWidget := Tfpgwidget(WidgetOwner.Components[z]);
 
+           writeln('Widget name = ' + theWidget.Name);
+
           wg := nil;
           wgc := nil;
+
+          fpgapplication.ProcessMessages;
 
           for n := 0 to VFDWidgetCount - 1 do
           begin
             wgc := VFDWidget(n);
-            if UpperCase(WidgetOwner.Components[z].ClassName) =
+            if UpperCase(theWidget.ClassName) =
               UpperCase(wgc.WidgetClass.ClassName) then
             begin
-              wg := wgc.CreateWidget(WidgetOwner);
+              wg := wgc.CreateWidget(newWidgetOwner);
+              writeln('Widget Class name = ' + theWidget.ClassName);
               break;
             end;
           end;
 
-          compname := WidgetOwner.Components[z].Name + '1';
+          compname := WidgetOwner.Components[z].Name + '2';
+           writeln('new Widget name = ' + compname);
           okname := False;
-          n2 := 1;
+          n2 := 2;
 
           while okname = False do
           begin
@@ -869,12 +887,20 @@ begin
           end;
 
           wg.Name := compname;
-          wg.FormDesigner := WidgetOwner.FormDesigner;
-          wd := TformDesigner(WidgetOwner.FormDesigner).AddWidget(wg, nil, tformdesigner(WidgetOwner.FormDesigner));
-          wd.FVFDClass := wgc;
+           writeln('brand new Widget name = ' +  wg.Name);
 
-          wg.Left := Tfpgwidget(theWidget).left + 10;
-          wg.top := Tfpgwidget(theWidget).top + 10;
+     wg.FormDesigner := TheSelectedForm.FormDesigner ;
+
+     wd := TformDesigner(wg.FormDesigner).AddWidget(wg, wgc, tformdesigner(wg.FormDesigner));
+
+     //   wd := TformDesigner(newWidgetOwner.FormDesigner).AddWidget(wg, wgc, tformdesigner(newWidgetOwner.FormDesigner));
+
+        //     wd := TformDesigner(TheSelectedForm.FormDesigner).AddWidget(wg, nil, oriformdesigner);
+
+         wd.FVFDClass := wgc;
+
+            wg.Left := Tfpgwidget(theWidget).left;
+          wg.top := Tfpgwidget(theWidget).top ;
           wg.Width := Tfpgwidget(theWidget).Width;
           wg.Height := Tfpgwidget(theWidget).Height;
           wg.BackgroundColor := Tfpgwidget(theWidget).BackgroundColor;
@@ -946,12 +972,15 @@ begin
             TfpgStringGrid(wg).BorderStyle:= TfpgStringGrid(theWidget).BorderStyle;
             TfpgStringGrid(wg).TextColor:= TfpgStringGrid(theWidget).TextColor;
            end;
+
             wg.UpdateWindowPosition;
+
+
            inc(z);
        end;
          end;
 
-          } /// end TODO
+     //   } /// end TODO
 
         end;
         Inc(y);
