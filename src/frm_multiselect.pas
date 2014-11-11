@@ -1054,6 +1054,7 @@ begin
             Tfpgwidget(TheSelectedForm.Components[y]).Width := edwidth.Value;
           if cbheight.Checked then
             Tfpgwidget(TheSelectedForm.Components[y]).Height := edheight.Value;
+            Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
         end;
         Inc(y);
       end;
