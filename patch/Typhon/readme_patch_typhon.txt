@@ -3,7 +3,7 @@ This patch enable complete integration of fpGUI into Typhon.
 If you have already a compiled designer_ext, load it and disable "Integration into IDE Typhon" and 
 close designer_ext.
 
-1)- Compile uidesinger_ext.pas
+1)- Compile desinger_ext.pas
   - Close designer_ext
 
 2)- Depending of your Typhon version, unzip sourcefilemanager_xxx in ~/designer_ext/patch/typhon/

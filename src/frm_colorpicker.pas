@@ -1271,7 +1271,7 @@ begin
   with ColorWheel1 do
   begin
     Name := 'ColorWheel1';
-    Border := True;
+   // Border := True;
     SetPosition(20, 20 + y, 272, 250);
   end;
 

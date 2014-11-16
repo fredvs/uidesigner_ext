@@ -490,6 +490,10 @@ begin
 {$IFDEF Windows}
  dataf := copy(GetAppConfigDir(false),1,pos('Local\designer_ext',GetAppConfigDir(false))-1)
            +  'Roaming\typhon64\environmentoptions.xml';
+  if fileexists(PChar(dataf)) then
+      else
+   dataf := copy(GetAppConfigDir(False), 1, pos('Local Settings\Application Data\',
+     GetAppConfigDir(False)) - 1) + 'Application Data\typhon64\environmentoptions.xml';
   {$ENDIF}
 {$IFDEF unix}
 dataf := GetUserDir +'.typhon64/environmentoptions.xml' ;
@@ -499,6 +503,10 @@ dataf := GetUserDir +'.typhon64/environmentoptions.xml' ;
 {$IFDEF Windows}
 dataf := copy(GetAppConfigDir(false),1,pos('Local\designer_ext',GetAppConfigDir(false))-1)
            +  'Roaming\typhon32\environmentoptions.xml';
+  if fileexists(PChar(dataf)) then
+      else
+   dataf := copy(GetAppConfigDir(False), 1, pos('Local Settings\Application Data\',
+     GetAppConfigDir(False)) - 1) + 'Application Data\typhon32\environmentoptions.xml';
   {$ENDIF}
 {$IFDEF unix}
 dataf := GetUserDir +'.typhon32/environmentoptions.xml' ;

@@ -1097,8 +1097,13 @@ with edtGridX do
    {$if defined(cpu64)}
  {$IFDEF Windows}
 
-  dataf := copy(GetAppConfigDir(False), 1, pos('Local\uidesigner',
+  dataf := copy(GetAppConfigDir(False), 1, pos('Local\designer_ext',
     GetAppConfigDir(False)) - 1) + 'Roaming\typhon64\environmentoptions.xml';
+
+  if fileexists(PChar(dataf)) then
+     else
+  dataf := copy(GetAppConfigDir(False), 1, pos('Local Settings\Application Data\',
+    GetAppConfigDir(False)) - 1) + 'Application Data\typhon64\environmentoptions.xml';
 
      {$ENDIF}
   {$IFDEF Linux}
@@ -1107,8 +1112,13 @@ with edtGridX do
 
 {$else}
 {$IFDEF Windows}
-  dataf := copy(GetAppConfigDir(False), 1, pos('Local\uidesigner',
+  dataf := copy(GetAppConfigDir(False), 1, pos('Local\designer_ext',
     GetAppConfigDir(False)) - 1) + 'Roaming\typhon32\environmentoptions.xml';
+
+  if fileexists(PChar(dataf)) then
+     else
+  dataf := copy(GetAppConfigDir(False), 1, pos('Local Settings\Application Data\',
+    GetAppConfigDir(False)) - 1) + 'Application Data\typhon32\environmentoptions.xml';
     {$ENDIF}
   {$IFDEF Linux}
   dataf := GetUserDir + '.typhon32/environmentoptions.xml';
@@ -1122,7 +1132,7 @@ with edtGridX do
 
 
 {$IFDEF Windows}
-  dataf := copy(GetAppConfigDir(False), 1, pos('uidesigner', GetAppConfigDir(False)) -
+  dataf := copy(GetAppConfigDir(False), 1, pos('designer_ext', GetAppConfigDir(False)) -
     1) + 'lazarus\environmentoptions.xml';
    {$ENDIF}
  {$IFDEF Linux}
