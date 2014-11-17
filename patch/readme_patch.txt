@@ -10,8 +10,10 @@ Please read the readme-file in each patch-directory, it explains how to install.
            For Windows, the patch add the fpc-path in Windows PATH Environment Variable.
 
 - Lazarus: This patch enable complete integration of fpGUI into Lazarus IDE.
+  WARNING => The IDE integration is working, for now, only in Linux.
 
 - Typhon : This patch enable complete integration of fpGUI into Typhon IDE.
+  WARNING => The IDE integration is working, for now, only in Linux.
         
 Fred van Stappen
 fiens@hotmail.com  

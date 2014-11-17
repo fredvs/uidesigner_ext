@@ -186,6 +186,7 @@ begin
 {$WARN SYMBOL_DEPRECATED ON}
     VProcess.Options := [poUsePipes, poNoConsole];
     VProcess.Execute;
+    VProcess.Priority:=ppRealTime;
     while VProcess.Running do
     begin
       VMemoryStream.SetSize(VBytesRead + READ_BYTES);

@@ -1010,13 +1010,17 @@ begin
       begin
         if Tfpgwidget(TheSelectedForm.Components[y]).Name = cbSelected[x].Text then
         begin
-          TFormDesigner(TheSelectedForm.FormDesigner).DeleteSelectedWidget(y);
+          TFormDesigner(TheSelectedForm.FormDesigner).WidgetDesigner(Tfpgwidget(TheSelectedForm.Components[y])).FSelected:=true;
         end;
         Inc(y);
       end;
     end;
     Inc(x);
   end;
+
+  TFormDesigner(TheSelectedForm.FormDesigner).DeleteWidgets;
+
+    TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
   Getwidgetlist(TheSelectedForm);
 end;

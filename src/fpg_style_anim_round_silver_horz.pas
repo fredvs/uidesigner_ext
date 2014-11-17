@@ -10,8 +10,7 @@ unit fpg_style_anim_round_silver_horz;
 interface
 
 uses
-  fpg_combobox,
-  Classes, fpg_main, fpg_base;
+   Classes, fpg_main, fpg_base;
 
 type
 
@@ -49,7 +48,6 @@ implementation
 
 uses
   fpg_stylemanager,
-  fpg_button,
   fpg_widget;
 
 { TExtStyle }
@@ -360,13 +358,8 @@ end;
 
 procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
   ABackgroundColor: TfpgColor);
-var
-  FLightColor: TfpgColor;
-  FDarkColor: TfpgColor;
-begin
 
-  FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
-  FDarkColor := TfpgColor($beb8a4);  // color at bottom of menu bar
+begin
   ACanvas.GradientFill(r, cllightgray, clwindowbackground, gdVertical);
  // ACanvas.SetColor(cllightgray);
  // ACanvas.FillRectangle(r);

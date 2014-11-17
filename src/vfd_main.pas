@@ -396,8 +396,7 @@ begin
       raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' +
         #13 + E.Message);
   end;
-  if (enableundo = True) then
-    SaveUndo(Sender, 6);
+//  if (enableundo = True) then SaveUndo(Sender, 6);
 end;
 
 procedure TMainDesigner.LoadUndo(undoindex: integer);
