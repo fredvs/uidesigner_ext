@@ -82,6 +82,7 @@ type
     procedure Getwidgetlist(Theobj: TfpgWidget);
     procedure ProcGetwidgetlist(Theobj: TfpgWidget);
     procedure ProcUpdateGrid(Theobj: TfpgWidget);
+    procedure ProcClearAll;
     procedure SelectedFromDesigner(TheSelected: TfpgWidget);
     procedure onScrollChange(Sender: TObject; position: integer);
   end;
@@ -1251,6 +1252,26 @@ begin
     Inc(x);
   end;
   grid1.UpdateWindowPosition;
+end;
+
+procedure Tfrm_multiselect.ProcClearAll;
+var
+  x: integer;
+begin
+  fpgapplication.ProcessMessages;
+  x := 0;
+
+  while x < length(cbSelected) do
+  begin
+    cbSelected[x].Visible := False;
+    cbSelected[x] := nil;
+    cbSelected[x].Free;
+    Inc(x);
+  end;
+
+  setlength(cbSelected, 0);
+  grid1.rowCount := 0;
+
 end;
 
 procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);

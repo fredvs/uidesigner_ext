@@ -1337,6 +1337,7 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
+
   inherited;
   Name := 'frmProperties';
   WindowTitle := 'Properties';
@@ -2217,11 +2218,13 @@ TfpgMenuItem(Sender).Checked:= true;
   ArrayFormDesign[x-2].Form.hide ;
   ArrayFormDesign[x-2].Form.Show ;
   end;
-
+   if frmProperties.Visible = true then begin
    frmProperties.hide;
    fpgapplication.ProcessMessages;
    frmProperties.Show;
      end;
+
+   end;
  end;
 end;
 

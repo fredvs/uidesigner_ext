@@ -113,6 +113,8 @@ var
   ArrayFormDesign: array of TFormDesigner;
   ArrayUndo: array of TUndo;
   dob: string;
+  isfpguifile : boolean = false;
+
 
 implementation
 
@@ -179,7 +181,56 @@ var
   afiledialog: TfpgFileDialog;
 
 begin
-  fname := EditedFileName;
+
+  isfpguifile := false;
+     frmProperties.Hide;
+   frmproperties.edName.Text := '';
+
+   frmmultiselect.ProcClearAll;
+
+   frmmultiselect.Hide;
+
+
+   frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' => no fpGUI form-file' ;
+
+
+  if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(6).Text :=
+      'fpGUI Designer_ext v' + ext_version + ' => no fpGUI form-file' ;
+
+  frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
+   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
+  for n := 0 to 9 do
+  begin
+    frmMainDesigner.windowmenu.MenuItem(n + 2).Visible := False;
+    frmMainDesigner.windowmenu.MenuItem(n + 2).Text := '';
+  end;
+
+  for n := 0 to 99 do
+  begin
+    frmMainDesigner.listundomenu.MenuItem(n).Visible := False;
+    frmMainDesigner.listundomenu.MenuItem(n).Text := '';
+  end;
+
+  for n := 0 to FDesigners.Count - 1 do
+  begin
+    selectedform := nil;
+    TFormDesigner(FDesigners[n]).Free;
+  end;
+  FDesigners.Clear;
+
+  if Length(ArrayUndo) > 0 then
+  begin
+    for n := 0 to length(ArrayUndo) - 1 do
+      deletefile(ArrayUndo[n].FileName);
+  end;
+
+  indexundo := 0;
+  SetLength(ArrayFormDesign, 0);
+  SetLength(ArrayUndo, 0);
+  x := 0;
+
+    fname := EditedFileName;
   ifundo := False;
   if Sender <> maindsgn then
   begin
@@ -208,25 +259,6 @@ begin
     Exit;
   end;
 
-  for n := 0 to 9 do
-  begin
-    frmMainDesigner.windowmenu.MenuItem(n + 2).Visible := False;
-    frmMainDesigner.windowmenu.MenuItem(n + 2).Text := '';
-  end;
-
-  for n := 0 to 99 do
-  begin
-    frmMainDesigner.listundomenu.MenuItem(n).Visible := False;
-    frmMainDesigner.listundomenu.MenuItem(n).Text := '';
-  end;
-
-  for n := 0 to FDesigners.Count - 1 do
-  begin
-    selectedform := nil;
-    TFormDesigner(FDesigners[n]).Free;
-  end;
-  FDesigners.Clear;
-
   if not fpgFileExists(fname) then
   begin
     //  ShowMessage('File does not exists.', 'Error loading form');
@@ -239,11 +271,14 @@ begin
   end;
 
   if FFile.LoadFile(fname) = False then
+  begin
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
     end;
+   Exit;
+  end;
 
   if FFile.GetBlocks = 0 then
   begin
@@ -252,26 +287,27 @@ begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
     end;
+     Exit;
   end
   else
   begin
+     isfpguifile := true;
+     frmMainDesigner.windowmenu.MenuItem(0).Visible := true;
+     frmMainDesigner.windowmenu.MenuItem(1).Visible := true;
+      frmProperties.show;
+
+       frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' - ' + fname;
+
+  if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(6).Text :=
+      'Current file : ' + fname + '     fpGUI Designer_ext v' + ext_version;
+
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Show;
-      frmProperties.Show;
-    end;
+     end;
   end;
 
-  if Length(ArrayUndo) > 0 then
-  begin
-    for n := 0 to length(ArrayUndo) - 1 do
-      deletefile(ArrayUndo[n].FileName);
-  end;
-
-  indexundo := 0;
-  SetLength(ArrayFormDesign, 0);
-  SetLength(ArrayUndo, 0);
-  x := 0;
 
   for n := 0 to FFile.BlockCount - 1 do
   begin
@@ -312,8 +348,6 @@ begin
 
   frmMainDesigner.mru.AddItem(fname);
 
-  if (enableundo = True) then
-    SaveUndo(Sender, 5);
   frmMainDesigner.undomenu.MenuItem(0).Enabled := False;
   frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
   frmMainDesigner.undomenu.MenuItem(3).Enabled := False;
@@ -639,10 +673,11 @@ procedure TMainDesigner.OnPropNameChange(Sender: TObject);
 var
   TheParent : Tfpgwidget;
    begin
-    if SelectedForm <> nil then
+    if (SelectedForm <> nil) and (isfpguifile = true) then
   begin
      SelectedForm.OnPropNameChange(Sender);
      fpgapplication.ProcessMessages;
+      if frmMultiSelect.Visible = true then  begin
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 0);
      TheParent := (frmProperties.lstProps.Props.Widget)  ;
@@ -650,7 +685,7 @@ var
      TheParent := ( frmProperties.lstProps.Props.Widget.Parent) ;
 
    frmMultiSelect.Getwidgetlist(TheParent);
-  fpgapplication.ProcessMessages;
+   end;
   end;
 end;
 
@@ -941,11 +976,6 @@ begin
   p := ExtractFilePath(FEditedFileName);
   if s = '' then
   s := '[' + rsNewUnnamedForm + ']';
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' - ' + p + s;
-
-  if frmMainDesigner.btnToFront.Tag = 1 then
-    frmMainDesigner.MainMenu.MenuItem(6).Text :=
-      'Current file : ' + p + s + '     fpGUI Designer_ext v' + ext_version;
 
    {$IFDEF Linux}
   if (fileexists(PChar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0) > 1) then

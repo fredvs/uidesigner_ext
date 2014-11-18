@@ -12,6 +12,7 @@
       <MainUnit Value="0"/>
       <Title Value="designer_ext"/>
       <UseAppBundle Value="False"/>
+      <ActiveWindowIndexAtStart Value="-1"/>
     </General>
     <VersionInfo>
       <StringTable ProductVersion=""/>
@@ -257,19 +258,13 @@ install:
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="frm_colorpicker.pas"/>
-        <Line Value="449"/>
-      </Item1>
-    </BreakPoints>
-    <Exceptions Count="1">
+    <Exceptions Count="2">
       <Item1>
         <Name Value="EComponentError"/>
       </Item1>
+      <Item2>
+        <Name Value="EPropertyError"/>
+      </Item2>
     </Exceptions>
   </Debugging>
 </CONFIG>

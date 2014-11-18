@@ -134,7 +134,6 @@ type
     procedure SelectNextWidget(fw: boolean);
     procedure MoveResizeWidgets(dx, dy, dw, dh: integer);
     procedure DeleteWidgets;
-    procedure DeleteSelectedWidget(x : integer);
     procedure EditWidgetOrTabOrder(AMode: TfpgEditMode);
     procedure InsertWidget(pwg: TfpgWidget; x, y: integer; wgc: TVFDWidgetClass);
     procedure UpdatePropWin;
@@ -649,57 +648,6 @@ begin
 end;
 
 
-procedure TFormDesigner.DeleteSelectedWidget(x : integer);
-var
-  n: integer;
-  cd, cdSelected : TWidgetDesigner;
-  WidgetOwner: TfpgWidget;
-begin
-   WidgetOwner := nil;
-
-   cdselected := TWidgetDesigner(FWidgets.Items[x]);
-   if (cdSelected.Widget.IsContainer) then
-      WidgetOwner := cdselected.Widget;
-
-    n := 0;
-  if WidgetOwner <> nil then
-  begin
-    while n < FWidgets.Count do
-    begin
-      cd := TWidgetDesigner(FWidgets.Items[n]);
-      if (cd.Widget.Parent = WidgetOwner) then
-      begin
-        cd.Widget.Free;
-        cd.Free;
-        FWidgets.Delete(n);
-      end else
-        Inc(n);
-    end;
-     n := 0;
-  while n < FWidgets.Count do
-  begin
-    cd := TWidgetDesigner(FWidgets.Items[n]);
-    if cd.Widget = cdselected.Widget then
-    begin
-      cd.Widget.Free;
-      cd.Free;
-      FWidgets.Delete(n);
-    end else
-      Inc(n);
-  end;
-  end else
-
-  begin
-     cd := TWidgetDesigner(FWidgets.Items[x]);
-    cd.Widget.Free;
-     cd.Free;
-     FWidgets.Delete(x);
-   end;
-
-   UpdatePropWin;
-end;
-
-
 procedure TFormDesigner.DeleteWidgets;
 var
   n: integer;
@@ -858,8 +806,12 @@ begin
 
     keyF11:
     begin
+       if frmProperties.edName.Text <> '' then
+  begin
       frmProperties.SetFocus;
       frmProperties.ActivateWindow;
+    end;
+
     end;
     else
       consumed := False;
@@ -878,6 +830,8 @@ var
   ok: boolean;
   TheParent: TfpgWidget;
 begin
+if  maindsgn.selectedform <> nil then
+  begin
   if (TheWidget is TfpgForm) then
   begin
     if TDesignedForm(TheWidget).Virtualprop.Count > 0 then
@@ -1246,6 +1200,9 @@ begin
     frmproperties.lstProps.UpdateWindowPosition;
     frmproperties.virtualpanel.Visible := True;
   end;
+
+
+  end;
 end;
 
 procedure TFormDesigner.UpdatePropWin;
@@ -1262,6 +1219,9 @@ var
 
   wgc: TVFDWidgetClass;
 begin
+
+ if   maindsgn.selectedform <> nil then
+  begin
   wgcnt := 0;
   wg := FForm;
   wgc := VFDFormWidget;
@@ -1344,6 +1304,10 @@ begin
 
   UpdateVirtualPropWin(wg);
 
+
+
+  end;
+
 end;
 
 procedure TFormDesigner.OnPropTextChange(Sender: TObject);
@@ -1394,6 +1358,8 @@ var
 begin
   //  writeln('namechange');
   fpgapplication.ProcessMessages;
+ if  isfpguifile = true then
+  begin
   s := frmProperties.edName.Text;
   wg := nil;
   for n := 0 to FWidgets.Count - 1 do
@@ -1424,6 +1390,9 @@ begin
   except
     // invalid name...
   end;
+
+   end;
+
 end;
 
 procedure TFormDesigner.OnPropPosEdit(Sender: TObject);
