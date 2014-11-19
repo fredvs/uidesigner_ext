@@ -1217,7 +1217,6 @@ var
 
        calculwidget := false ;
 
-
   frmMultiSelect.hide;    //// this to give focus
   fpgapplication.ProcessMessages;
   frmMultiSelect.Show;

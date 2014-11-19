@@ -108,14 +108,12 @@ type
     property ShowGrid: boolean read FShowGrid write SetShowGrid;
   end;
 
-
 var
   maindsgn: TMainDesigner;
   ArrayFormDesign: array of TFormDesigner;
   ArrayUndo: array of TUndo;
   dob: string;
   isfpguifile : boolean = false;
-
 
 implementation
 

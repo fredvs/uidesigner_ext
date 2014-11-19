@@ -62,9 +62,7 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
-
   TFormDesigner = class;    // forward declaration
-
 
   TDesignedForm = class(TfpgForm)
   private

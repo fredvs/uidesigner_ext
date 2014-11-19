@@ -100,8 +100,6 @@ implementation
 uses
   vfd_main, vfd_designer, frm_main_designer;
 
-
-
 {@VFD_NEWFORM_IMPL}
 
 procedure Tfrm_multiselect.AfterCreate;
