@@ -72,6 +72,7 @@ type
     cbSelected: array of Tfpgcheckbox;
     procedure AfterCreate; override;
     procedure onDestroyFrm(Sender: TObject);
+    procedure ClearAll;
     procedure btnApply1Clicked(Sender: TObject);
     procedure btnApply2Clicked(Sender: TObject);
     procedure btnApply3Clicked(Sender: TObject);
@@ -82,7 +83,6 @@ type
     procedure Getwidgetlist(Theobj: TfpgWidget);
     procedure ProcGetwidgetlist(Theobj: TfpgWidget);
     procedure ProcUpdateGrid(Theobj: TfpgWidget);
-    procedure ProcClearAll;
     procedure SelectedFromDesigner(TheSelected: TfpgWidget);
     procedure onScrollChange(Sender: TObject; position: integer);
   end;
@@ -664,9 +664,9 @@ var
   compname: string;
   wd: TWidgetDesigner;
   wgc: TVFDWidgetClass;
-  wg, WidgetOwner, newWidgetOwner, theWidget: TfpgWidget;
-  WidgetIsContainer, okname: boolean;
-  oriformdesigner, newformdesigner: Tformdesigner;
+  wg, theWidget: TfpgWidget;
+  okname: boolean;
+  oriformdesigner : Tformdesigner;
 begin
   fpgapplication.ProcessMessages;
 
@@ -688,10 +688,6 @@ begin
 
           theWidget := Tfpgwidget(TheSelectedForm.Components[y]);
 
-          if theWidget.IsContainer = True then
-            WidgetIsContainer := True
-          else
-            WidgetIsContainer := False;
           wg := nil;
           wgc := nil;
 
@@ -1219,7 +1215,7 @@ end;
 
 procedure Tfrm_multiselect.Getwidgetlist(Theobj: TfpgWidget);
 begin
-  if Visible = True then
+  if (Visible = True) then
   begin
     fpgapplication.ProcessMessages;
 
@@ -1254,29 +1250,12 @@ begin
   grid1.UpdateWindowPosition;
 end;
 
-procedure Tfrm_multiselect.ProcClearAll;
+procedure  Tfrm_multiselect.ClearAll;
 var
   x: integer;
 begin
-  fpgapplication.ProcessMessages;
-  x := 0;
-
-  while x < length(cbSelected) do
-  begin
-    cbSelected[x].Visible := False;
-    cbSelected[x] := nil;
-    cbSelected[x].Free;
-    Inc(x);
-  end;
-
-  setlength(cbSelected, 0);
-  grid1.rowCount := 0;
-
-end;
-
-procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);
-var
-  x: integer;
+ hide;
+if (maindsgn.selectedform <> nil) then
 begin
   fpgapplication.ProcessMessages;
   x := 0;
@@ -1285,8 +1264,35 @@ begin
   while x < length(cbSelected) do
   begin
     cbSelected[x].Visible := False;
-    cbSelected[x] := nil;
-    cbSelected[x].Free;
+   Inc(x);
+  end;
+
+ // setlength(cbSelected, 0);
+  grid1.rowCount := 0;
+  panelscroll.Visible := False;
+  windowtitle := '' ;
+ height := 2 ;
+UpdateWindowPosition;
+end;
+end;
+
+
+procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);
+var
+  x: integer;
+begin
+
+if (maindsgn.selectedform <> nil) then
+begin
+  fpgapplication.ProcessMessages;
+  x := 0;
+  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+
+  while x < length(cbSelected) do
+  begin
+    cbSelected[x].Visible := False;
+   // cbSelected[x] := nil;
+   // cbSelected[x].Free;
     Inc(x);
   end;
 
@@ -1408,9 +1414,10 @@ begin
   lbtop.UpdateWindowPosition;
   lbwidth.UpdateWindowPosition;
   lbheight.UpdateWindowPosition;
-  UpdateWindowPosition;
   grid1.Visible := True;
   panelscroll.Visible := True;
+  UpdateWindowPosition;
+end;
 
 end;
 

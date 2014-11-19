@@ -1,7 +1,5 @@
 This patch enable complete integration of fpGUI into Lazarus.
 
-WARNING => The IDE integration is working, for now, only in Linux.
-
 If you have already a compiled designer_ext, load it as stand-alone and disable "Integration into IDE Lazarus" then 
 close designer_ext.
 

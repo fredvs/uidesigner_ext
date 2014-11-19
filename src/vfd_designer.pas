@@ -177,12 +177,13 @@ procedure TWidgetDesigner.SetSelected(const AValue: boolean);
 var
   n: integer;
 begin
+  if (isfileloaded = true)  then begin
 
   if FSelected = AValue then
     Exit;
   FSelected := AValue;
 
-  if FSelected then
+   if FSelected then
     Widget.MouseCursor := mcMove
   else
     Widget.MouseCursor := mcDefault;
@@ -204,9 +205,12 @@ begin
     for n := 1 to 8 do
       resizer[n].Show;
 
-     fpgapplication.ProcessMessages;
+  frmproperties.Show;
 
-  if widget is Tfpgform then else frmMultiSelect.SelectedFromDesigner(Widget);
+   if (widget is Tfpgform) then else
+   if (frmMultiSelect.Visible = true) then frmMultiSelect.SelectedFromDesigner(Widget);
+
+  end;
 
 end;
 
@@ -568,7 +572,7 @@ var
   n: integer;
   cd: TWidgetDesigner;
 begin
-  for n := 0 to FWidgets.Count - 1 do
+ for n := 0 to FWidgets.Count - 1 do
   begin
     cd := TWidgetDesigner(FWidgets.Items[n]);
     cd.Selected := False;
@@ -806,7 +810,7 @@ begin
 
     keyF11:
     begin
-       if frmProperties.edName.Text <> '' then
+       if (maindsgn.selectedform <> nil) and (frmProperties.edName.Text <> '') then
   begin
       frmProperties.SetFocus;
       frmProperties.ActivateWindow;
@@ -1109,10 +1113,11 @@ if  maindsgn.selectedform <> nil then
   else
   begin       ////// other widget
 
-    TheParent := TheWidget;
-    while TheParent.HasParent = True do
-      TheParent := TheParent.Parent;
-    // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));
+ TheParent := TheWidget;
+while  TheParent.HasParent = True do
+   TheParent := TheParent.Parent;
+    // Is it better ? =>
+  //  TheParent := WidgetParentForm(TfpgWidget(TheWidget));
 
     // visible
     i := 0;
@@ -1220,7 +1225,7 @@ var
   wgc: TVFDWidgetClass;
 begin
 
- if   maindsgn.selectedform <> nil then
+ if  maindsgn.selectedform <> nil then
   begin
   wgcnt := 0;
   wg := FForm;
@@ -1357,9 +1362,10 @@ var
   s: string;
 begin
   //  writeln('namechange');
+ if  (isfpguifile = true) and (maindsgn.selectedform <> nil) then
+   begin
+
   fpgapplication.ProcessMessages;
- if  isfpguifile = true then
-  begin
   s := frmProperties.edName.Text;
   wg := nil;
   for n := 0 to FWidgets.Count - 1 do
@@ -1495,6 +1501,8 @@ var
   s: string;
   sc: integer;
 begin
+ if  (isfpguifile = true) and (maindsgn.selectedform <> nil) then
+   begin
   sc := 0;
   s := frmProperties.edOther.Text;
   for n := 0 to FWidgets.Count - 1 do
@@ -1509,6 +1517,8 @@ begin
 
   if sc < 1 then
     FFormOther := s;
+end;
+
 end;
 
 procedure TFormDesigner.OnAnchorChange(Sender: TObject);
@@ -1833,9 +1843,10 @@ begin
   s := '';
 
   TheParent := TheWidget;
-  while TheParent.HasParent = True do
-    TheParent := TheParent.Parent;
-  // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));
+while TheParent.HasParent = True do
+   TheParent := TheParent.Parent;
+  // Is it better ? =>
+ // TheParent := WidgetParentForm(TfpgWidget(TheWidget));
 
   if TDesignedForm(TheParent).Virtualprop.Count > 0 then
   begin

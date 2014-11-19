@@ -714,6 +714,7 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
+
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(414, 161, 780, 92);
@@ -1337,7 +1338,6 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
-
   inherited;
   Name := 'frmProperties';
   WindowTitle := 'Properties';
@@ -1348,6 +1348,7 @@ begin
  // MinWidth := 268;
  // MinHeight := 448;
   OnResize:= @frmPropertiesPaint;
+  visible := false;
 
     if  gINI.ReadBool('frmPropertiesState', 'FirstLoad', true) = false  then
   begin

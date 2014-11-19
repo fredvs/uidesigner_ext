@@ -10,7 +10,6 @@ unit fpg_style_anim_round_silver_flat_horz;
 interface
 
 uses
-  fpg_combobox,
   Classes, fpg_main, fpg_base;
 
 type
@@ -49,7 +48,6 @@ implementation
 
 uses
   fpg_stylemanager,
-  fpg_button,
   fpg_widget;
 
 { TExtStyle }

@@ -12,7 +12,6 @@
       <MainUnit Value="0"/>
       <Title Value="designer_ext"/>
       <UseAppBundle Value="False"/>
-      <ActiveWindowIndexAtStart Value="-1"/>
     </General>
     <VersionInfo>
       <StringTable ProductVersion=""/>
@@ -138,9 +137,11 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="25"/>
-        <CursorPos X="18" Y="26"/>
+        <UnitName Value="designer_ext"/>
+        <TopLine Value="53"/>
+        <CursorPos X="32" Y="62"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="vfdmain.pas"/>
