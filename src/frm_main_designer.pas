@@ -45,6 +45,7 @@ uses
   fpg_button,
   fpg_edit,
   fpg_listbox,
+  fpg_dialogs,
   fpg_panel,
   fpg_memo,
   fpg_combobox,
@@ -237,7 +238,6 @@ implementation
 
 uses
   fpg_iniutils,
-  fpg_dialogs,
   fpg_constants,
   fpg_stylemanager,
   vfd_main,
@@ -1202,7 +1202,8 @@ procedure   TfrmMainDesigner.onmultiselect(Sender: TObject);
 var
   TheParent : Tfpgwidget;
    begin
-    if frmProperties.edName.Text <> '' then
+
+    if (frmProperties.edName.Text <> '') and (frmProperties.lstProps.Props.Widget <> nil) and  (maindsgn.selectedform <> nil) then
     begin
 
      TheParent := frmProperties.lstProps.Props.Widget ;
@@ -1210,12 +1211,19 @@ var
       if TheParent.HasParent then
      TheParent := frmProperties.lstProps.Props.Widget.Parent ;
 
-    frmMultiSelect.show;
-  frmMultiSelect.Getwidgetlist(TheParent);
-   frmMultiSelect.hide;                     //// this to give focus
-   fpgapplication.ProcessMessages;
+      calculwidget := true ;
+
+       frmMultiSelect.Getwidgetlist(TheParent);
+
+       calculwidget := false ;
+
+
+  frmMultiSelect.hide;    //// this to give focus
+  fpgapplication.ProcessMessages;
   frmMultiSelect.Show;
-end;
+
+end else ShowMessage('Nothing loaded or no form selected...', 'Warning', true) ;
+
 end;
 
 procedure TfrmMainDesigner.OnAlwaysToFront(Sender: TObject);

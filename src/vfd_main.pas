@@ -187,7 +187,7 @@ begin
      isfpguifile := false;
      frmProperties.Hide;
      frmmultiselect.Hide;
-
+     frmmultiselect.ClearAll;
    // sleep(200);
    // fpgapplication.ProcessMessages;
 

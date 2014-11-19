@@ -28,12 +28,6 @@ type
     lbtop: Tfpglabel;
     lbheight: Tfpglabel;
     lbwidth: Tfpglabel;
-    Grid1: TfpgStringGrid;
-    scroll1: Tfpgscrollbar;
-    Panel1: TfpgPanel;
-    PanelMain: TfpgPanel;
-    PanelScroll: TfpgPanel;
-    PanelCopyPaste: TfpgPanel;
     cbleft: TfpgCheckBox;
     edleft: TfpgSpinEdit;
     cbwidth: TfpgCheckBox;
@@ -42,7 +36,6 @@ type
     edtop: TfpgSpinEdit;
     cbHeight: TfpgCheckBox;
     edheight: TfpgSpinEdit;
-    btApply: TfpgButton;
     Panel2: TfpgPanel;
     cbleft2: TfpgCheckBox;
     edleft2: TfpgSpinEdit;
@@ -52,7 +45,6 @@ type
     edtop2: TfpgSpinEdit;
     cbHeight2: TfpgCheckBox;
     edheight2: TfpgSpinEdit;
-    btApply2: TfpgButton;
     Panel3: TfpgPanel;
     cbleft3: TfpgCheckBox;
     edleft3: TfpgSpinEdit;
@@ -62,13 +54,21 @@ type
     edtop3: TfpgSpinEdit;
     cbHeight3: TfpgCheckBox;
     edheight3: TfpgSpinEdit;
+    {@VFD_HEAD_END: frm_multiselect}
+    public
+    Grid1: TfpgStringGrid;
+    Panel1: TfpgPanel;
+    PanelMain: TfpgPanel;
+    PanelScroll: TfpgPanel;
+    PanelCopyPaste: TfpgPanel;
+    scroll1: Tfpgscrollbar;
+    btApply: TfpgButton;
+    btApply2: TfpgButton;
     btApply3: TfpgButton;
     btSelectAll: TfpgButton;
     btUnSelectAll: TfpgButton;
     btApplyCopyPaste: TfpgButton;
     btApplyDelete: TfpgButton;
-    {@VFD_HEAD_END: frm_multiselect}
-  public
     cbSelected: array of Tfpgcheckbox;
     procedure AfterCreate; override;
     procedure onDestroyFrm(Sender: TObject);
@@ -92,6 +92,7 @@ type
 var
   TheSelectedForm: Tfpgwidget;
   oricount: integer;
+  calculwidget : boolean = false;
   frmMultiSelect: Tfrm_multiselect;
 
 implementation
@@ -1215,7 +1216,7 @@ end;
 
 procedure Tfrm_multiselect.Getwidgetlist(Theobj: TfpgWidget);
 begin
-  if (Visible = True) then
+  if ((Visible = True) and  (maindsgn.selectedform <> nil)) or (calculwidget = true)  then
   begin
     fpgapplication.ProcessMessages;
 
@@ -1257,20 +1258,19 @@ begin
  hide;
 if (maindsgn.selectedform <> nil) then
 begin
-  fpgapplication.ProcessMessages;
+
   x := 0;
-  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
   while x < length(cbSelected) do
   begin
     cbSelected[x].Visible := False;
    Inc(x);
   end;
-
- // setlength(cbSelected, 0);
   grid1.rowCount := 0;
+  grid1.Height:= 1;
+  grid1.UpdateWindowPosition;
   panelscroll.Visible := False;
-  windowtitle := '' ;
+  windowtitle := 'Click on one widget to load Multi-Selector' ;
  height := 2 ;
 UpdateWindowPosition;
 end;
@@ -1291,8 +1291,8 @@ begin
   while x < length(cbSelected) do
   begin
     cbSelected[x].Visible := False;
-   // cbSelected[x] := nil;
-   // cbSelected[x].Free;
+    cbSelected[x] := nil;
+    cbSelected[x].Free;
     Inc(x);
   end;
 
