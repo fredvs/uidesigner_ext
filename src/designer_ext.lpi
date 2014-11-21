@@ -137,6 +137,7 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="designer_ext"/>
         <TopLine Value="23"/>
         <CursorPos X="53" Y="40"/>
         <UsageCount Value="200"/>

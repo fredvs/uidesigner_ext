@@ -226,8 +226,6 @@ begin
   frmProperties.Hide;
   frmmultiselect.Hide;
   frmmultiselect.ClearAll;
-  // sleep(200);
-  // fpgapplication.ProcessMessages;
 
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -237,8 +235,6 @@ begin
   FDesigners.Clear;
 
   frmproperties.edName.Text := '';
-  // sleep(200);
-  // fpgapplication.ProcessMessages;
 
   frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' => no fpGUI form-file';
 
@@ -270,9 +266,6 @@ begin
   SetLength(ArrayFormDesign, 0);
   SetLength(ArrayUndo, 0);
   x := 0;
-
-  // sleep(200);
-  // fpgapplication.ProcessMessages;
 
   fname := EditedFileName;
   ifundo := False;
@@ -670,7 +663,7 @@ begin
     on E: Exception do
       raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' + #13 + E.Message);
   end;
-  //  if (enableundo = True) then SaveUndo(Sender, 6);
+ // if (enableundo = True) then SaveUndo(Sender, 6);
 end;
 
 procedure TMainDesigner.LoadUndo(undoindex: integer);
@@ -679,6 +672,27 @@ var
   bl, bl2: TVFDFileBlock;
   FFileUndo: TVFDFile;
 begin
+
+   isfileloaded := False;
+  fpgapplication.ProcessMessages;
+
+  isfpguifile := False;
+  frmProperties.Hide;
+  frmmultiselect.Hide;
+  frmmultiselect.ClearAll;
+
+
+   for n := 0 to FDesigners.Count - 1 do
+  begin
+    TFormDesigner(FDesigners[n]).DeSelectAll;
+    TFormDesigner(FDesigners[n]).Free;
+  end;
+  FDesigners.Clear;
+
+    frmproperties.edName.Text := '' ;
+
+      SetLength(ArrayFormDesign, 0);
+    x := 0;
 
   if fileexists(ArrayUndo[undoindex].FileName) then
   begin
@@ -705,17 +719,7 @@ begin
       frmMainDesigner.windowmenu.MenuItem(n + 2).Text := '';
     end;
 
-    for n := 0 to FDesigners.Count - 1 do
-    begin
-      selectedform := nil;
-      TFormDesigner(FDesigners[n]).Free;
-    end;
-    FDesigners.Clear;
-
-    SetLength(ArrayFormDesign, 0);
-    x := 0;
-
-    for n := 0 to FFileUndo.BlockCount - 1 do
+     for n := 0 to FFileUndo.BlockCount - 1 do
     begin
       bl := FFileUndo.Block(n);
       if bl.BlockID = 'VFD_HEAD_BEGIN' then
@@ -744,23 +748,21 @@ begin
           end;
         end;
     end;
-    ifundo := False;
+
+     ifundo := False;
     frmMainDesigner.undomenu.MenuItem(1).Enabled := True;
 
-    x := 0;
-    while x < length(ArrayFormDesign) do
-    begin
-      if ArrayUndo[undoindex].ActiveForm = ArrayFormDesign[x].Form.Name then
-      begin
-        frmProperties.hide;
-        frmProperties.Show;
-        ArrayFormDesign[x].Form.Hide;
-        ArrayFormDesign[x].Form.Show;
+     for n := 0 to FDesigners.Count - 1 do
+  begin
+    selectedform := nil;
+    TFormDesigner(FDesigners[n]).Form.ShowGrid := FShowGrid;
+  end;
 
-        exit;
-      end;
-      Inc(x);
-    end;
+      isfpguifile := True ;
+      isfileloaded := True;
+
+   frmProperties.show;
+
   end;
 
 end;
@@ -878,7 +880,10 @@ begin
       7: tempform := selectedform.Form.Name + ' => new form.';
       8: tempform := selectedform.Form.Name + ' => properties changed by Multi-Selector.';
       9: tempform := selectedform.Form.Name + ' => Copy/Paste widgets by Multi-Selector.';
-      10: tempform := selectedform.Form.Name + ' => Delete widgets by Multi-Selector.'
+      10: tempform := selectedform.Form.Name + ' => Delete widgets by Multi-Selector.';
+      11: tempform := selectedform.Form.Name + ' => Other Change.';
+      12: tempform := selectedform.Form.Name + ' => Properies Changed.' ;
+      13: tempform := selectedform.Form.Name + ' => Anchor Changed.'
     end;
 
   if dd = 0 then
@@ -912,19 +917,19 @@ begin
   if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True) then
   begin
     SelectedForm.OnPropNameChange(Sender);
-    fpgapplication.ProcessMessages;
-    if frmMultiSelect.Visible = True then
-    begin
-      if (ifundo = False) and (enableundo = True) then
+         if (ifundo = False) and (enableundo = True) then
         SaveUndo(Sender, 0);
-      if frmMultiSelect.Visible = True then
+
+          fpgapplication.ProcessMessages;
+
+        if frmMultiSelect.Visible = True then
       begin
         TheParent := (frmProperties.lstProps.Props.Widget);
         if TheParent.HasParent then
           TheParent := (frmProperties.lstProps.Props.Widget.Parent);
         frmMultiSelect.Getwidgetlist(TheParent);
       end;
-    end;
+
   end;
 end;
 
@@ -954,6 +959,8 @@ begin
   if (SelectedForm <> nil) and (isfileloaded = True) then
   begin
     SelectedForm.OnPropTextChange(Sender);
+     if (ifundo = False) and (enableundo = True) then
+      SaveUndo(Sender, 12);
   end;
 end;
 
@@ -964,7 +971,7 @@ begin
     SelectedForm.OnAnchorChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
-      SaveUndo(Sender, 3);
+      SaveUndo(Sender, 13);
   end;
 end;
 
@@ -988,6 +995,8 @@ begin
 
     end;
     fpgapplication.ProcessMessages;
+     if (ifundo = False) and (enableundo = True) then
+      SaveUndo(Sender, 11);
   end;
 
 end;
@@ -1045,8 +1054,7 @@ begin
         frmMainDesigner.windowmenu.MenuItem(x + 1).Visible := True;
         frmMainDesigner.windowmenu.MenuItem(x + 1).Text := fd.Form.Name;
       end;
-      if (enableundo = True) then
-        SaveUndo(Sender, 7);
+
     end;
 
   finally
