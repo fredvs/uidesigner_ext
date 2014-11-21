@@ -30,6 +30,9 @@ unit frm_main_designer;
 interface
 
 uses
+{%units 'Auto-generated GUI code'}
+ fpg_button, fpg_panel, fpg_label,
+{%endunits}
   RunOnce_PostIt,
   frm_colorpicker,
   frm_imageconvert,
@@ -40,12 +43,9 @@ uses
   fpg_main,
   fpg_widget,
   fpg_form,
-  fpg_label,
-  fpg_button,
   fpg_edit,
   fpg_listbox,
   fpg_dialogs,
-  fpg_panel,
   fpg_memo,
   fpg_combobox,
   fpg_menu,
@@ -82,7 +82,7 @@ type
 
   public
     {@VFD_HEAD_BEGIN: frmMainDesigner}
-     MainMenu: TfpgMenuBar;
+    MainMenu: TfpgMenuBar;
     filemenu: TfpgPopupMenu;
     formmenu: TfpgPopupMenu;
     miOpenRecentMenu: TfpgPopupMenu;
@@ -98,10 +98,10 @@ type
     btnSave: TfpgButton;
     btnGrid: TfpgButton;
     btnToFront: TfpgButton;
+    btnSelected: TfpgButton;
     wgpalette: TwgPalette;
     chlPalette: TfpgComboBox;
     PanelMove: TfpgPanel;
-    btnSelected: TfpgButton;
     {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
@@ -221,7 +221,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
- ext_version : string = '1.4' ;
+ ext_version : string = '1.5' ;
 
 var
   frmProperties: TfrmProperties;
@@ -231,6 +231,7 @@ var
   oriMousePos: TPoint;
   idetemp, maxundo, indexundo : integer;
   enableundo : boolean;
+  enableautounits : boolean ;
   numstyle : integer;
 
 implementation
@@ -712,11 +713,9 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
-
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(414, 161, 780, 92);
+  SetPosition(414, 172, 780, 92);
   WindowTitle := 'frmMainDesigner';
   Hint := '';
   ShowHint := True;
@@ -814,13 +813,6 @@ begin
   begin
     Name := 'listundomenu';
     SetPosition(328, 52, 120, 20);
-    for x:=0 to 99 do
-    begin
-    AddMenuItem('', '',@OnLoadUndo);
-    MenuItem(x).Visible:=false;
-    MenuItem(x).Tag:=x;
-  end;
-
   end;
 
   windowmenu := TfpgPopupMenu.Create(self);
@@ -960,13 +952,13 @@ begin
     SetPosition(152, 33, 25, 24);
     FontDesc := '#Label1';
     Hint := 'Multi-Selector => Select objects and apply changes';
-     ImageMargin := -1;
-     ImageSpacing := 0;
-     ImageName := 'vfd.select';
+    ImageMargin := -1;
+    ImageName := 'vfd.select';
+    ImageSpacing := 0;
     TabOrder := 20;
     Text := '';
     Focusable := False;
-     OnClick := @onmultiselect;
+    OnClick := @onmultiselect;
   end;
 
   wgpalette := TwgPalette.Create(self);
@@ -1015,6 +1007,12 @@ begin
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
 
+  for x:=0 to 99 do
+    begin
+    listundomenu.AddMenuItem('', '',@OnLoadUndo);
+    listundomenu.MenuItem(x).Visible:=false;
+    listundomenu.MenuItem(x).Tag:=x;
+    end;
 
   { Build component palette }
 
@@ -1024,7 +1022,8 @@ begin
   OnCloseQuery:= @MainCloseQueryEvent;
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
- 
+  enableautounits :=gINI.ReadBool('Options', 'EnableAutoUnits', True);
+
   for n := 0 to VFDWidgetCount-1 do
   begin
     wgc           := VFDWidget(n);
@@ -1121,6 +1120,7 @@ indexundo := 0 ;
  end;
  PaletteBarResized(self);
  frmMultiSelect := Tfrm_multiselect.Create(nil);
+
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);

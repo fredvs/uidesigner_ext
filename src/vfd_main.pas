@@ -647,6 +647,7 @@ begin
 
   fdata := FFile.MergeBlocks;
 
+  if enableautounits then
   fdata := AddUnits(fdata);
 
 

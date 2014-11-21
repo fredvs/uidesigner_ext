@@ -30,15 +30,15 @@ unit frm_vfdforms;
 interface
 
 uses
+{%units 'Auto-generated GUI code'}
+ fpg_label, fpg_button, fpg_combobox,
+{%endunits}
   Classes,
   SysUtils,
   fpg_base,
   fpg_form,
-  fpg_label,
   fpg_edit,
-  fpg_button,
   fpg_Editbtn,
-  fpg_combobox,
   fpg_RadioButton,
   fpg_dialogs,
   fpg_trackbar,
@@ -137,8 +137,8 @@ type
   public
     {@VFD_HEAD_BEGIN: frmVFDSetup}
     lb1: TfpgLabel;
-    btnOK: TfpgButton;
     edtGridX: TfpgEditInteger;
+    btnOK: TfpgButton;
     lblRecentFiles: TfpgLabel;
     tbMRUFileCount: TfpgTrackBar;
     chkFullPath: TfpgCheckBox;
@@ -148,8 +148,6 @@ type
     lblName3: TfpgLabel;
     chkUndoOnExit: TfpgCheckBox;
     chkOneClick: TfpgCheckBox;
-     Labelonlyonce: TfpgLabel;
-     chkonlyonce: TfpgCheckBox;
     Label1: TfpgLabel;
     chkCodeRegions: TfpgCheckBox;
     cbIndentationType: TfpgComboBox;
@@ -170,6 +168,9 @@ type
     CheckBox1: TfpgCheckBox;
     Label4: TfpgLabel;
     TrackBarUndo: TfpgTrackBar;
+    Labelonlyonce: TfpgLabel;
+    chkonlyonce: TfpgCheckBox;
+    chkautounits: TfpgCheckBox;
     {@VFD_HEAD_END: frmVFDSetup}
     procedure AfterCreate; override;
     // procedure BeforeDestruction; override;
@@ -191,7 +192,6 @@ uses
 
 var
   changeide: integer;
-
 
 { TInsertCustomForm }
 
@@ -363,6 +363,7 @@ begin
   SetPosition(534, 173, 426, 398);
   WindowTitle := 'TWidgetOrderForm';
   Hint := '';
+  BackGroundColor := $80000001;
   WindowPosition := wpScreenCenter;
 
   lblTitle := TfpgLabel.Create(self);
@@ -381,12 +382,12 @@ begin
     Name := 'btnOK';
     SetPosition(346, 24, 75, 24);
     Anchors := [anRight,anTop];
-    Text := 'OK';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.ok';
     ModalResult := mrOK;
     TabOrder := 2;
+    Text := 'OK';
   end;
 
   btnCancel := TfpgButton.Create(self);
@@ -395,12 +396,12 @@ begin
     Name := 'btnCancel';
     SetPosition(346, 52, 75, 24);
     Anchors := [anRight,anTop];
-    Text := 'Cancel';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.cancel';
     ModalResult := mrCancel;
     TabOrder := 3;
+    Text := 'Cancel';
   end;
 
   btnUp := TfpgButton.Create(self);
@@ -409,11 +410,11 @@ begin
     Name := 'btnUp';
     SetPosition(346, 108, 75, 24);
     Anchors := [anRight,anTop];
-    Text := 'Up';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := '';
     TabOrder := 4;
+    Text := 'Up';
     OnClick := @OnButtonClick;
   end;
 
@@ -423,11 +424,11 @@ begin
     Name := 'btnDown';
     SetPosition(346, 136, 75, 24);
     Anchors := [anRight,anTop];
-    Text := 'Down';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := '';
     TabOrder := 5;
+    Text := 'Down';
     OnClick := @OnButtonClick;
   end;
 
@@ -569,6 +570,8 @@ begin
 
   TrackBarUndo.Position := gINI.ReadInteger('Options', 'MaxUndo', 10);
   CheckBox1.Checked := gINI.ReadBool('Options', 'EnableUndo', True);
+  chkautounits.Checked := gINI.ReadBool('Options', 'EnableAutoUnits', True);
+  enableautounits :=  chkautounits.Checked ;
   maxundo := TrackBarUndo.Position;
   FINIVersion := gINI.ReadInteger('Designer', 'Version', 0);
   edtGridX.Value := gINI.ReadInteger('Options', 'GridResolution', 4);
@@ -605,6 +608,10 @@ begin
   gINI.WriteBool('Options', 'ShowFullPath', chkFullPath.Checked);
 
   gINI.WriteBool('Options', 'RunOnlyOnce', chkonlyonce.Checked);
+
+  gINI.WriteBool('Options', 'EnableAutoUnits', chkautounits.Checked);
+
+  enableautounits :=  chkautounits.Checked ;
 
   gINI.WriteString('Options', 'DefaultFileExt', edtDefaultExt.Text);
   gINI.WriteBool('Options', 'UndoOnExit', chkUndoOnExit.Checked);
@@ -679,14 +686,14 @@ var
 begin
   {@VFD_BODY_BEGIN: frmVFDSetup}
   Name := 'frmVFDSetup';
-  SetPosition(257, 140, 549, 350);
+  SetPosition(283, 192, 549, 365);
   WindowTitle := 'General settings';
   Hint := '';
   ShowHint := True;
-  WindowPosition := wpScreenCenter;
-  MinHeight := 350;
+  BackGroundColor := $80000001;
   MinWidth := 549;
-  Tag := 0;
+  MinHeight := 350;
+  WindowPosition := wpScreenCenter;
 
   lb1 := TfpgLabel.Create(self);
   with lb1 do
@@ -698,30 +705,30 @@ begin
     Text := 'Grid resolution:';
   end;
 
-   edtGridX := TfpgEditInteger.Create(self);
-with edtGridX do
- begin
- Name := 'edtGridX';
- SetPosition(130, 20, 35, 24);
- FontDesc := '#Edit1';
- Hint := '';
- MaxValue := 10;
- MinValue := 1;
- TabOrder := 18;
- Value := 4;
- end;
+  edtGridX := TfpgEditInteger.Create(self);
+  with edtGridX do
+  begin
+    Name := 'edtGridX';
+    SetPosition(130, 20, 35, 24);
+    FontDesc := '#Edit1';
+    Hint := '';
+    TabOrder := 18;
+    Value := 4;
+    MaxValue := 10;
+    MinValue := 1;
+  end;
 
   btnOK := TfpgButton.Create(self);
   with btnOK do
   begin
     Name := 'btnOK';
-    SetPosition(233, 319, 75, 24);
-    Anchors := [anRight, anBottom];
-    Text := 'OK';
+    SetPosition(233, 334, 75, 24);
+    Anchors := [anRight,anBottom];
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.ok';
     TabOrder := 6;
+    Text := 'OK';
     OnClick := @btnOKClick;
   end;
 
@@ -887,13 +894,13 @@ with edtGridX do
   with pathini do
   begin
     Name := 'pathini';
-    SetPosition(14, 290, 524, 20);
+    SetPosition(16, 312, 524, 20);
     Alignment := taCenter;
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Label';
     Text := 'Location of ini file : ' + GetAppConfigDir(False) +
-      applicationname + '.ini';
+    applicationname + '.ini';
   end;
 
   Label2 := TfpgLabel.Create(self);
@@ -1061,9 +1068,9 @@ with edtGridX do
     ShowPosition := True;
     TabOrder := 32;
     Style :=  StGradient ;
-    end;
+  end;
 
-   Labelonlyonce := TfpgLabel.Create(self);
+  Labelonlyonce := TfpgLabel.Create(self);
   with Labelonlyonce do
   begin
     Name := 'Labelonlyonce';
@@ -1081,7 +1088,20 @@ with edtGridX do
     Checked := True;
     FontDesc := '#Label1';
     Hint := 'If checked, only one instance will be loaded.';
+    TabOrder := 34;
     Text := 'Only Once';
+  end;
+
+  chkautounits := TfpgCheckBox.Create(self);
+  with chkautounits do
+  begin
+    Name := 'chkautounits';
+    SetPosition(88, 284, 224, 19);
+    Checked := True;
+    FontDesc := '#Label1';
+    Hint := '';
+    TabOrder := 36;
+    Text := 'Auto Add Units in uses section';
   end;
 
   {@VFD_BODY_END: frmVFDSetup}
