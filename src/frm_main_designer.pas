@@ -20,8 +20,7 @@ fiens@hotmail.com
 
     Description:
       Essential classes used by the fpGUI Designer
-
-}
+ }
 
 
 unit frm_main_designer;

@@ -2,7 +2,10 @@ program fpGUIDirectTemplate;
 
 {$mode objfpc}{$H+}
   
-uses 
+uses
+{%units 'Auto-generated GUI code'}
+
+{%endunits} 
   fpg_main,
   fpg_form;
 
@@ -24,9 +27,11 @@ begin
 
   {@VFD_BODY_BEGIN: form1}
   Name := 'form1';
-  SetPosition(346, 240, 502, 385);
+  SetPosition(498, 199, 502, 385);
   WindowTitle := 'form1';
   Hint := '';
+  BackGroundColor := $80000001;
+
   {@VFD_BODY_END: form1}
   {%endregion}
 end;
