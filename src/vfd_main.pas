@@ -37,15 +37,30 @@ uses
   fpg_main,
   fpg_label,
   fpg_button,
+  fpg_editbtn,
+  fpg_radiobutton,
   fpg_edit,
   fpg_listbox,
   fpg_dialogs,
   fpg_panel,
+  fpg_grid,
+  fpg_progressbar,
+  fpg_trackbar,
+  fpg_tab,
+  fpg_listview,
+  fpg_tree,
+  fpg_splitter,
+  fpg_hyperlink,
+  fpg_toggle,
   fpg_memo,
   fpg_gauge,
   fpg_combobox,
   fpg_checkbox,
+  fpg_colorwheel,
+  fpg_nicegrid,
+  u_editgrid,
   fpg_menu,
+  fpg_popupcalendar,
   fpg_constants,
   vfd_props,
   frm_vfdforms,
@@ -404,8 +419,10 @@ function TMainDesigner.AddUnits(filedata: string): string;
 var
   n, n2, posuses: integer;
   funit, fdata1, fdata11, fdata2, fdata3, fdata31, fdata32, fdata4, datatmp: string;
-  cns_label, cns_edit, cns_combobox, cns_checkbox, cns_gauge, cns_button, cns_listbox, cns_panel, cns_memo,
-    cns_menu : boolean;
+  cns_label, cns_edit, cns_combobox, cns_checkbox, cns_gauge, cns_button, cns_radiobutton, cns_listbox, cns_panel, cns_memo,
+   cns_menu, cns_calendar, cns_grid, cns_progressbar, cns_trackbar, cns_listview,
+   cns_tree, cns_tab, cns_editbtn, cns_colorwheel, cns_splitter, cns_hyperlink, cns_toggle,
+   cns_nicegrid, cns_editgrid : boolean;
 begin
 
   /// search for uses section
@@ -445,68 +462,127 @@ begin
       datatmp := LineEnding + datatmp ;
 
     /// looking for existing declared units
-    if pos('fpg_label', fdata3) > 0 then
+    if pos('FPG_LABEL', uppercase(fdata3)) > 0 then
       cns_label := True
     else
       cns_label := False;
 
-    if pos('fpg_button', fdata3) > 0 then
+    if pos('FPG_BUTTON', uppercase(fdata3)) > 0 then
       cns_button := True
     else
       cns_button := False;
 
-    if pos('fpg_combobox', fdata3) > 0 then
-      cns_combobox := True
+   if pos('FPG_RADIOBUTTON', uppercase(fdata3)) > 0 then
+       cns_radiobutton := True
     else
-       cns_combobox := False;
+      cns_radiobutton := False;
 
-    if pos('fpg_edit', fdata3) > 0 then
-      cns_edit := True
+     if pos('FPG_EDIT', uppercase(fdata3)) > 0 then
+        cns_edit := True
     else
       cns_edit := False;
 
-    if pos('fpg_checkbox', fdata3) > 0 then
-      cns_checkbox := True
+     if pos('FPG_CHECKBOX', uppercase(fdata3)) > 0 then
+        cns_checkbox := True
     else
       cns_checkbox := False;
 
-    if pos('fpg_combobox', fdata3) > 0 then
+    if pos('FPG_COMBOBOX', uppercase(fdata3)) > 0 then
       cns_combobox := True
     else
       cns_combobox := False;
 
-    if pos('fpg_gauge', fdata3) > 0 then
+    if pos('FPG_GAUGE', uppercase(fdata3)) > 0 then
       cns_gauge := True
     else
       cns_gauge := False;
 
-    if pos('fpg_listbox', fdata3) > 0 then
+    if pos('FPG_LISTBOX', uppercase(fdata3)) > 0 then
       cns_listbox := True
     else
       cns_listbox := False;
 
-    if pos('fpg_panel', fdata3) > 0 then
-      cns_panel := True
-    else
-      cns_panel := False;
-
-     if pos('fpg_memo', fdata3) > 0 then
+    if pos('FPG_MEMO', uppercase(fdata3)) > 0 then
       cns_memo := True
     else
       cns_memo := False;
 
-    if pos('fpg_menu', fdata3) > 0 then
+    if pos('FPG_MENU', uppercase(fdata3)) > 0 then
       cns_menu := True
     else
       cns_menu := False;
 
-    if pos('fpg_panel', fdata3) > 0 then
+    if pos('FPG_PANEL', uppercase(fdata3)) > 0 then
       cns_panel := True
     else
       cns_panel := False;
 
+   if pos('FPG_POPUPCALENDAR', uppercase(fdata3)) > 0 then
+      cns_calendar := True
+    else
+      cns_calendar := False;
 
-    funit := '';
+   if pos('FPG_GRID', uppercase(fdata3)) > 0 then
+      cns_grid := True
+    else
+      cns_grid := False;
+
+     if pos('FPG_PROGRESSBAR', uppercase(fdata3)) > 0 then
+      cns_progressbar := True
+    else
+      cns_progressbar := False;
+
+      if pos('FPG_TRACKBAR', uppercase(fdata3)) > 0 then
+      cns_trackbar := True
+    else
+      cns_trackbar := False;
+
+       if pos('FPG_LISTVIEW', uppercase(fdata3)) > 0 then
+      cns_listview := True
+    else
+      cns_listview := False;
+
+        if pos('FPG_TREE', uppercase(fdata3)) > 0 then
+      cns_tree := True
+    else
+      cns_tree := False;
+
+         if pos('FPG_TAB', uppercase(fdata3)) > 0 then
+      cns_tab := True
+    else
+       cns_tab := False;
+
+      if pos('FPG_EDITBTN', uppercase(fdata3)) > 0 then
+      cns_editbtn := True
+    else
+      cns_editbtn := False;
+
+     if pos('FPG_COLORWHEEL', uppercase(fdata3)) > 0 then
+      cns_colorwheel := True
+    else
+      cns_colorwheel := False;
+
+    if pos('FPG_SPLITTER', uppercase(fdata3)) > 0 then
+      cns_splitter := True
+    else
+      cns_splitter := False;
+
+     if pos('FPG_HYPERLINK', uppercase(fdata3)) > 0 then
+      cns_hyperlink := True
+    else
+      cns_hyperlink := False;
+
+     if pos('FPG_NICEGRID', uppercase(fdata3)) > 0 then
+      cns_nicegrid := True
+    else
+      cns_nicegrid := False;
+
+     if pos('U_EDITGRID', uppercase(fdata3)) > 0 then
+      cns_editgrid := True
+    else
+      cns_editgrid := False;
+
+      funit := '';
 
     for n := 0 to FDesigners.Count - 1 do
     begin
@@ -524,16 +600,34 @@ begin
           cns_button := True;
         end
         else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgRadioButton) and (cns_radiobutton = False) then
+        begin
+          funit := funit + ' fpg_radiobutton,';
+          cns_radiobutton := True;
+        end
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgComboBox) and (cns_combobox = False) then
         begin
           funit := funit + ' fpg_combobox,';
           cns_combobox := True;
         end
          else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgedit) and (cns_edit = False) then
+        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgedit) or
+        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditInteger) or
+        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditFloat) or
+        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditCurrency) ) and (cns_edit = False) then
         begin
           funit := funit + ' fpg_edit,';
           cns_edit := True;
+        end
+           else
+        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFileNameEdit) or
+        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgDirectoryEdit) or
+        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFontEdit) or
+        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditButton) ) and (cns_editbtn = False) then
+        begin
+          funit := funit + ' fpg_editbtn,';
+          cns_editbtn := True;
         end
         else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgcheckbox) and (cns_checkbox = False) then
@@ -542,19 +636,31 @@ begin
           cns_checkbox := True;
         end
         else
+        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgColorWheel) or
+         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgValueBar) ) and (cns_colorwheel = False) then
+        begin
+          funit := funit + ' fpg_colorwheel,';
+          cns_colorwheel := True;
+        end
+        else
          if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpggauge) and (cns_gauge = False) then
         begin
           funit := funit + ' fpg_gauge,';
           cns_gauge := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpglistbox) and (cns_listbox = False) then
+        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpglistbox) or
+         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgColorListBox))
+        and (cns_listbox = False) then
         begin
           funit := funit + ' fpg_listbox,';
           cns_listbox := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgpanel) and (cns_panel = False) then
+        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgpanel) or
+         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgBevel) or
+         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgGroupBox))
+        and (cns_panel = False) then
         begin
           funit := funit + ' fpg_panel,';
           cns_panel := True;
@@ -565,6 +671,66 @@ begin
           funit := funit + ' fpg_memo,';
           cns_memo := True;
         end
+         else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgStringGrid) and (cns_grid = False) then
+        begin
+          funit := funit + ' fpg_grid,';
+          cns_grid := True;
+        end
+          else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgListView) and (cns_listview = False) then
+        begin
+          funit := funit + ' fpg_listview,';
+          cns_listview := True;
+        end
+           else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgTreeView) and (cns_tree = False) then
+        begin
+          funit := funit + ' fpg_tree,';
+          cns_tree := True;
+        end
+          else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgProgressBar) and (cns_progressbar = False) then
+        begin
+          funit := funit + ' fpg_progressbar,';
+          cns_progressbar := True;
+        end
+           else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgPageControl) and (cns_tab = False) then
+        begin
+          funit := funit + ' fpg_tab,';
+          cns_tab := True;
+        end
+        else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgSplitter) and (cns_splitter = False) then
+        begin
+          funit := funit + ' fpg_splitter,';
+          cns_splitter := True;
+        end
+         else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgNiceGrid) and (cns_nicegrid = False) then
+        begin
+          funit := funit + ' fpg_nicegrid,';
+          cns_nicegrid := True;
+        end
+          else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditGrid) and (cns_editgrid = False) then
+        begin
+          funit := funit + ' u_editgrid,';
+          cns_editgrid := True;
+        end
+        else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgHyperlink) and (cns_hyperlink = False) then
+        begin
+          funit := funit + ' fpg_hyperlink,';
+          cns_hyperlink := True;
+        end
+        else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgToggle) and (cns_toggle = False) then
+        begin
+          funit := funit + ' fpg_toggle,';
+          cns_toggle := True;
+        end
         else
         if ( (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgMenuItem) or
          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgMenuBar) or
@@ -573,6 +739,13 @@ begin
         begin
           funit := funit + ' fpg_menu,';
           cns_menu := True;
+        end  else
+        if ( (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgCalendarCombo) or
+         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgCalendarCheckCombo) )
+        and (cns_calendar = False) then
+        begin
+          funit := funit + ' fpg_popupcalendar,';
+          cns_calendar := True;
         end;
 
       end;

@@ -50,7 +50,7 @@ uses
   fpg_main,
   vfd_designer,
   u_editgrid,
-  fpg_nicegrid,
+ // fpg_nicegrid,
   fpg_widget,
   fpg_form,
   fpg_label,
@@ -230,10 +230,12 @@ begin
     sizeof(stdimg_vfd_stringgrid),
     0, 0);
 
+ { TODO
   fpgImages.AddMaskedBMP(
     'vfd.nicegrid', @stdimg_vfd_nicegrid,
     sizeof(stdimg_vfd_nicegrid),
     0, 0);
+ }
 
   fpgImages.AddMaskedBMP(
     'vfd.editgrid', @stdimg_vfd_editgrid,
@@ -629,12 +631,12 @@ begin
   wc.WidgetIconName := 'vfd.stringgrid';
   RegisterVFDWidget(wc);
 
+{ TODO
  // NiceGrid
   wc := TVFDWidgetClass.Create(TfpgNiceGrid);
   wc.NameBase := 'NiceGrid';
   wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
   wc.AddProperty('AlternateColor', TPropertyColor, 'The color of every alternative row. Dependent on grid Options property.');
-  
   wc.AddProperty('BackgroundColor', TPropertyColor, '');
   wc.AddProperty('BorderStyle', TPropertyEnum, '');
   wc.AddProperty('ColCount', TPropertyInteger, 'Defines the various columns for a grid. At least one column must exist.');
@@ -651,6 +653,8 @@ begin
 
   wc.WidgetIconName := 'vfd.nicegrid';
   RegisterVFDWidget(wc);
+ //}
+
 
 // EditGrid
   wc := TVFDWidgetClass.Create(TfpgEditGrid);
@@ -873,29 +877,28 @@ begin
   RegisterVFDWidget(wc);
 
   // Float Edit
-  wc          := TVFDWidgetClass.Create(TfpgEditFloat);
-  wc.NameBase := 'EditFloat';
-  wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
-  wc.Addproperty('Decimals', TPropertyInteger, '');
-  wc.AddProperty('Enabled', TPropertyBoolean, '');
-  wc.AddProperty('FixedDecimals', TPropertyBoolean, '');
-  wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the text');
-  wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
-  wc.AddProperty('MaxValue', TPropertyInteger, '');
-  wc.AddProperty('MinValue', TPropertyInteger, '');
-
-  wc.AddProperty('NegativeColor', TPropertyColor, 'Color used for negative values');
-  wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
-  wc.AddProperty('ReadOnly', TPropertyBoolean, '');
-  wc.AddProperty('ShowHint', TPropertyBoolean, '');
-  wc.AddProperty('ShowThousand', TPropertyBoolean, 'Show thousand separator');
-  wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
-  wc.AddProperty('TextColor', TPropertyColor, '');
-  wc.AddProperty('Value', TPropertyFloat, 'Initial value');
-//  wc.AddProperty('CustomDecimalSeparator', TPropertyString, 'Decimal separator character');
-//  wc.AddProperty('CustomThousandSeparator', TPropertyString, 'Thousand separator character');
-  wc.WidgetIconName := 'vfd.editfloat';
-  RegisterVFDWidget(wc);
+    wc          := TVFDWidgetClass.Create(TfpgEditFloat);
+    wc.NameBase := 'EditFloat';
+    wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
+    wc.Addproperty('Decimals', TPropertyInteger, '');
+    wc.AddProperty('Enabled', TPropertyBoolean, '');
+    wc.AddProperty('FixedDecimals', TPropertyBoolean, '');
+    wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the text');
+    wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
+    wc.AddProperty('MaxValue', TPropertyFloat, '');
+    wc.AddProperty('MinValue', TPropertyFloat, '');
+    wc.AddProperty('NegativeColor', TPropertyColor, 'Color used for negative values');
+    wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
+    wc.AddProperty('ReadOnly', TPropertyBoolean, '');
+    wc.AddProperty('ShowHint', TPropertyBoolean, '');
+    wc.AddProperty('ShowThousand', TPropertyBoolean, 'Show thousand separator');
+    wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
+    wc.AddProperty('TextColor', TPropertyColor, '');
+    wc.AddProperty('Value', TPropertyFloat, 'Initial value');
+  //  wc.AddProperty('CustomDecimalSeparator', TPropertyString, 'Decimal separator character');
+  //  wc.AddProperty('CustomThousandSeparator', TPropertyString, 'Thousand separator character');
+    wc.WidgetIconName := 'vfd.editfloat';
+    RegisterVFDWidget(wc);
 
   // Currency Edit
   wc          := TVFDWidgetClass.Create(TfpgEditCurrency);
