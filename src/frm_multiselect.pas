@@ -990,10 +990,11 @@ var
   x, y: integer;
 
 begin
-  fpgapplication.ProcessMessages;
   x := 0;
   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
   maindsgn.SaveUndo(Sender, 10);
+
+  fpgapplication.ProcessMessages;
 
   while x < length(cbSelected) do
   begin

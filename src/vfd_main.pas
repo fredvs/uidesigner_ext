@@ -632,8 +632,9 @@ begin
         else
         if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFileNameEdit) or
           (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgDirectoryEdit) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFontEdit) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is
-          TfpgEditButton)) and (cns_editbtn = False) then
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFontEdit) or
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditButton))
+          and (cns_editbtn = False) then
         begin
           funit := funit + ' fpg_editbtn,';
           cns_editbtn := True;

@@ -36,6 +36,8 @@ uses
   fpg_base,
   fpg_main,
   fpg_widget,
+  fpg_editbtn,
+  fpg_tab,
   fpg_form,
   fpg_dialogs,
   fpg_listbox,
@@ -661,8 +663,15 @@ var
   begin
     if not Assigned(ADesignWidget.Widget) then  // safety check
       Exit;
-    if ADesignWidget.Widget.IsContainer and (ADesignWidget.Widget.ComponentCount > 0) then
-    begin
+
+    if (ADesignWidget.Widget is TfpgFileNameEdit) or
+       (ADesignWidget.Widget is TfpgDirectoryEdit) or
+       (ADesignWidget.Widget is TfpgFontEdit) or
+       (ADesignWidget.Widget is TfpgEditButton) or
+       (ADesignWidget.Widget is TfpgPageControl) then
+       else
+   if (ADesignWidget.Widget.IsContainer) and (ADesignWidget.Widget.ComponentCount > 0) then
+  begin
       for i := ADesignWidget.Widget.ComponentCount - 1 downto 0 do
         DeleteChildWidget(WidgetDesigner(TfpgWidget(ADesignWidget.Widget.Components[i])));
     end;
