@@ -33,6 +33,7 @@ uses
   Classes,
   Process,
   SysUtils,
+  fpg_dialogs,
   fpg_base,
   fpg_main,
   fpg_label,
@@ -41,7 +42,6 @@ uses
   fpg_radiobutton,
   fpg_edit,
   fpg_listbox,
-  fpg_dialogs,
   fpg_panel,
   fpg_grid,
   fpg_progressbar,
@@ -160,7 +160,7 @@ var
 begin
   ifundo := False;
   EditedFileName := '';
- isfileloaded := False;
+  isfileloaded := False;
   fpgapplication.ProcessMessages;
 
   isfpguifile := False;
@@ -179,11 +179,11 @@ begin
 
   frmproperties.edName.Text := '';
 
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version ;
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version;
 
   if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(6).Text :=
-      'fpGUI Designer_ext v' + ext_version ;
+      'fpGUI Designer_ext v' + ext_version;
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
@@ -209,7 +209,7 @@ begin
   SetLength(ArrayFormDesign, 0);
   SetLength(ArrayUndo, 0);
 
-   ifundo := False;
+  ifundo := False;
 
   frmMainDesigner.undomenu.MenuItem(0).Enabled := False;
   frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
@@ -223,7 +223,7 @@ begin
 
   OnNewForm(Sender);
 
-  frmProperties.show;
+  frmProperties.Show;
 end;
 
 
@@ -411,29 +411,34 @@ begin
 
   isfileloaded := True;
 
-  frmProperties.show;
+  frmProperties.Show;
 
 end;
 
 function TMainDesigner.AddUnits(filedata: string): string;
 var
-  n, n2, posuses: integer;
-  funit, fdata1, fdata11, fdata2, fdata3, fdata31, fdata32, fdata4, datatmp: string;
-  cns_label, cns_edit, cns_combobox, cns_checkbox, cns_gauge, cns_button, cns_radiobutton, cns_listbox, cns_panel, cns_memo,
-   cns_menu, cns_calendar, cns_grid, cns_progressbar, cns_trackbar, cns_listview,
-   cns_tree, cns_tab, cns_editbtn, cns_colorwheel, cns_splitter, cns_hyperlink, cns_toggle,
-   cns_nicegrid, cns_editgrid : boolean;
+  n, n2: integer;
+  funit, fdata1, fdata2, fdata3, fdata31, fdata32, fdata4, datatmp: string;
+  cns_label, cns_edit, cns_combobox, cns_checkbox, cns_gauge, cns_button, cns_radiobutton, cns_listbox, cns_panel,
+  cns_memo, cns_menu, cns_calendar, cns_grid, cns_progressbar, cns_trackbar, cns_listview, cns_tree, cns_tab,
+  cns_editbtn, cns_colorwheel, cns_splitter, cns_hyperlink, cns_toggle, cns_nicegrid, cns_editgrid: boolean;
 begin
 
   /// search for uses section
-   if (pos(LineEnding + 'USES' + LineEnding, uppercase(filedata)) > 0)
-   then datatmp := LineEnding + 'USES' + LineEnding else
-   if (pos(LineEnding + 'USES ' , uppercase(filedata)) > 0)
-   then datatmp := LineEnding + 'USES ' else
-   if (pos(' USES' + LineEnding, uppercase(filedata)) > 0)
-   then datatmp := ' USES' + LineEnding else
-   if (pos( ' USES ' , uppercase(filedata)) > 0) /// TODO => check if not inside comment {...}
-   then  datatmp := ' USES ' else datatmp := '' ;
+  if (pos(LineEnding + 'USES' + LineEnding, uppercase(filedata)) > 0) then
+    datatmp := LineEnding + 'USES' + LineEnding
+  else
+  if (pos(LineEnding + 'USES ', uppercase(filedata)) > 0) then
+    datatmp := LineEnding + 'USES '
+  else
+  if (pos(' USES' + LineEnding, uppercase(filedata)) > 0) then
+    datatmp := ' USES' + LineEnding
+  else
+  if (pos(' USES ', uppercase(filedata)) > 0) /// TODO => check if not inside comment {...}
+  then
+    datatmp := ' USES '
+  else
+    datatmp := '';
 
   if datatmp <> '' then
   begin
@@ -446,20 +451,20 @@ begin
 
     if pos(datatmp, fdata3) > 0 then
     begin
-       fdata31 :=  copy(fdata3, 1, pos(datatmp, fdata3)-1 );   /// all units before auto-generated
-     end;
+      fdata31 := copy(fdata3, 1, pos(datatmp, fdata3) - 1);   /// all units before auto-generated
+    end;
 
-    fdata2 :=  LineEnding + datatmp + LineEnding;
+    fdata2 := LineEnding + datatmp + LineEnding;
 
-     datatmp := '{%endunits}';
+    datatmp := '{%endunits}';
 
     if pos(datatmp, fdata3) > 0 then /// all units after auto-generated
     begin
-      fdata32 := copy(fdata3, pos(datatmp, fdata3) + length(datatmp)+ 1, pos(';', fdata3) - pos(datatmp, fdata3) - length(datatmp) + 1);
-      fdata3 := fdata31 + fdata32 ;
+      fdata32 := copy(fdata3, pos(datatmp, fdata3) + length(datatmp) + 1, pos(';', fdata3) - pos(datatmp, fdata3) - length(datatmp) + 1);
+      fdata3 := fdata31 + fdata32;
     end;
 
-      datatmp := LineEnding + datatmp ;
+    datatmp := LineEnding + datatmp;
 
     /// looking for existing declared units
     if pos('FPG_LABEL', uppercase(fdata3)) > 0 then
@@ -472,18 +477,18 @@ begin
     else
       cns_button := False;
 
-   if pos('FPG_RADIOBUTTON', uppercase(fdata3)) > 0 then
-       cns_radiobutton := True
+    if pos('FPG_RADIOBUTTON', uppercase(fdata3)) > 0 then
+      cns_radiobutton := True
     else
       cns_radiobutton := False;
 
-     if pos('FPG_EDIT', uppercase(fdata3)) > 0 then
-        cns_edit := True
+    if pos('FPG_EDIT', uppercase(fdata3)) > 0 then
+      cns_edit := True
     else
       cns_edit := False;
 
-     if pos('FPG_CHECKBOX', uppercase(fdata3)) > 0 then
-        cns_checkbox := True
+    if pos('FPG_CHECKBOX', uppercase(fdata3)) > 0 then
+      cns_checkbox := True
     else
       cns_checkbox := False;
 
@@ -517,47 +522,47 @@ begin
     else
       cns_panel := False;
 
-   if pos('FPG_POPUPCALENDAR', uppercase(fdata3)) > 0 then
+    if pos('FPG_POPUPCALENDAR', uppercase(fdata3)) > 0 then
       cns_calendar := True
     else
       cns_calendar := False;
 
-   if pos('FPG_GRID', uppercase(fdata3)) > 0 then
+    if pos('FPG_GRID', uppercase(fdata3)) > 0 then
       cns_grid := True
     else
       cns_grid := False;
 
-     if pos('FPG_PROGRESSBAR', uppercase(fdata3)) > 0 then
+    if pos('FPG_PROGRESSBAR', uppercase(fdata3)) > 0 then
       cns_progressbar := True
     else
       cns_progressbar := False;
 
-      if pos('FPG_TRACKBAR', uppercase(fdata3)) > 0 then
+    if pos('FPG_TRACKBAR', uppercase(fdata3)) > 0 then
       cns_trackbar := True
     else
       cns_trackbar := False;
 
-       if pos('FPG_LISTVIEW', uppercase(fdata3)) > 0 then
+    if pos('FPG_LISTVIEW', uppercase(fdata3)) > 0 then
       cns_listview := True
     else
       cns_listview := False;
 
-        if pos('FPG_TREE', uppercase(fdata3)) > 0 then
+    if pos('FPG_TREE', uppercase(fdata3)) > 0 then
       cns_tree := True
     else
       cns_tree := False;
 
-         if pos('FPG_TAB', uppercase(fdata3)) > 0 then
+    if pos('FPG_TAB', uppercase(fdata3)) > 0 then
       cns_tab := True
     else
-       cns_tab := False;
+      cns_tab := False;
 
-      if pos('FPG_EDITBTN', uppercase(fdata3)) > 0 then
+    if pos('FPG_EDITBTN', uppercase(fdata3)) > 0 then
       cns_editbtn := True
     else
       cns_editbtn := False;
 
-     if pos('FPG_COLORWHEEL', uppercase(fdata3)) > 0 then
+    if pos('FPG_COLORWHEEL', uppercase(fdata3)) > 0 then
       cns_colorwheel := True
     else
       cns_colorwheel := False;
@@ -567,22 +572,27 @@ begin
     else
       cns_splitter := False;
 
-     if pos('FPG_HYPERLINK', uppercase(fdata3)) > 0 then
+    if pos('FPG_TOGGLE', uppercase(fdata3)) > 0 then
+      cns_toggle := True
+    else
+      cns_toggle := False;
+
+    if pos('FPG_HYPERLINK', uppercase(fdata3)) > 0 then
       cns_hyperlink := True
     else
       cns_hyperlink := False;
 
-     if pos('FPG_NICEGRID', uppercase(fdata3)) > 0 then
+    if pos('FPG_NICEGRID', uppercase(fdata3)) > 0 then
       cns_nicegrid := True
     else
       cns_nicegrid := False;
 
-     if pos('U_EDITGRID', uppercase(fdata3)) > 0 then
+    if pos('U_EDITGRID', uppercase(fdata3)) > 0 then
       cns_editgrid := True
     else
       cns_editgrid := False;
 
-      funit := '';
+    funit := '';
 
     for n := 0 to FDesigners.Count - 1 do
     begin
@@ -611,20 +621,19 @@ begin
           funit := funit + ' fpg_combobox,';
           cns_combobox := True;
         end
-         else
-        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgedit) or
-        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditInteger) or
-        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditFloat) or
-        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditCurrency) ) and (cns_edit = False) then
+        else
+        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgedit) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is
+          TfpgEditInteger) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditFloat) or
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditCurrency)) and (cns_edit = False) then
         begin
           funit := funit + ' fpg_edit,';
           cns_edit := True;
         end
-           else
+        else
         if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFileNameEdit) or
-        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgDirectoryEdit) or
-        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFontEdit) or
-        (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditButton) ) and (cns_editbtn = False) then
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgDirectoryEdit) or
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFontEdit) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is
+          TfpgEditButton)) and (cns_editbtn = False) then
         begin
           funit := funit + ' fpg_editbtn,';
           cns_editbtn := True;
@@ -637,65 +646,69 @@ begin
         end
         else
         if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgColorWheel) or
-         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgValueBar) ) and (cns_colorwheel = False) then
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgValueBar)) and (cns_colorwheel = False) then
         begin
           funit := funit + ' fpg_colorwheel,';
           cns_colorwheel := True;
         end
         else
-         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpggauge) and (cns_gauge = False) then
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpggauge) and (cns_gauge = False) then
         begin
           funit := funit + ' fpg_gauge,';
           cns_gauge := True;
         end
         else
         if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpglistbox) or
-         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgColorListBox))
-        and (cns_listbox = False) then
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgColorListBox)) and (cns_listbox = False) then
         begin
           funit := funit + ' fpg_listbox,';
           cns_listbox := True;
         end
         else
         if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgpanel) or
-         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgBevel) or
-         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgGroupBox))
-        and (cns_panel = False) then
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgBevel) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is
+          TfpgGroupBox)) and (cns_panel = False) then
         begin
           funit := funit + ' fpg_panel,';
           cns_panel := True;
         end
-         else
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgmemo) and (cns_memo = False) then
         begin
           funit := funit + ' fpg_memo,';
           cns_memo := True;
         end
-         else
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgStringGrid) and (cns_grid = False) then
         begin
           funit := funit + ' fpg_grid,';
           cns_grid := True;
         end
-          else
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgListView) and (cns_listview = False) then
         begin
           funit := funit + ' fpg_listview,';
           cns_listview := True;
         end
-           else
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgTreeView) and (cns_tree = False) then
         begin
           funit := funit + ' fpg_tree,';
           cns_tree := True;
         end
-          else
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgProgressBar) and (cns_progressbar = False) then
         begin
           funit := funit + ' fpg_progressbar,';
           cns_progressbar := True;
         end
-           else
+        else
+        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgTrackBar) and (cns_trackbar = False) then
+        begin
+          funit := funit + ' fpg_trackbar,';
+          cns_trackbar := True;
+        end
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgPageControl) and (cns_tab = False) then
         begin
           funit := funit + ' fpg_tab,';
@@ -707,13 +720,13 @@ begin
           funit := funit + ' fpg_splitter,';
           cns_splitter := True;
         end
-         else
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgNiceGrid) and (cns_nicegrid = False) then
         begin
           funit := funit + ' fpg_nicegrid,';
           cns_nicegrid := True;
         end
-          else
+        else
         if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditGrid) and (cns_editgrid = False) then
         begin
           funit := funit + ' u_editgrid,';
@@ -732,17 +745,16 @@ begin
           cns_toggle := True;
         end
         else
-        if ( (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgMenuItem) or
-         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgMenuBar) or
-         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgPopupMenu))
-        and (cns_menu = False) then
+        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgMenuItem) or
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgMenuBar) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is
+          TfpgPopupMenu)) and (cns_menu = False) then
         begin
           funit := funit + ' fpg_menu,';
           cns_menu := True;
-        end  else
-        if ( (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgCalendarCombo) or
-         (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgCalendarCheckCombo) )
-        and (cns_calendar = False) then
+        end
+        else
+        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgCalendarCombo) or
+          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgCalendarCheckCombo)) and (cns_calendar = False) then
         begin
           funit := funit + ' fpg_popupcalendar,';
           cns_calendar := True;
@@ -760,7 +772,7 @@ end;
 
 procedure TMainDesigner.OnSaveFile(Sender: TObject);
 var
-  n, i, x: integer;
+  n, i: integer;
   fd: TFormDesigner;
   fdata: string;
   ff: file;
@@ -821,7 +833,7 @@ begin
   fdata := FFile.MergeBlocks;
 
   if enableautounits then
-  fdata := AddUnits(fdata);
+    fdata := AddUnits(fdata);
 
 
   AssignFile(ff, fpgToOSEncoding(fname));
@@ -837,7 +849,7 @@ begin
     on E: Exception do
       raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' + #13 + E.Message);
   end;
- // if (enableundo = True) then SaveUndo(Sender, 6);
+  // if (enableundo = True) then SaveUndo(Sender, 6);
 end;
 
 procedure TMainDesigner.LoadUndo(undoindex: integer);
@@ -847,7 +859,7 @@ var
   FFileUndo: TVFDFile;
 begin
 
-   isfileloaded := False;
+  isfileloaded := False;
   fpgapplication.ProcessMessages;
 
   isfpguifile := False;
@@ -856,17 +868,17 @@ begin
   frmmultiselect.ClearAll;
 
 
-   for n := 0 to FDesigners.Count - 1 do
+  for n := 0 to FDesigners.Count - 1 do
   begin
     TFormDesigner(FDesigners[n]).DeSelectAll;
     TFormDesigner(FDesigners[n]).Free;
   end;
   FDesigners.Clear;
 
-    frmproperties.edName.Text := '' ;
+  frmproperties.edName.Text := '';
 
-      SetLength(ArrayFormDesign, 0);
-    x := 0;
+  SetLength(ArrayFormDesign, 0);
+  x := 0;
 
   if fileexists(ArrayUndo[undoindex].FileName) then
   begin
@@ -893,7 +905,7 @@ begin
       frmMainDesigner.windowmenu.MenuItem(n + 2).Text := '';
     end;
 
-     for n := 0 to FFileUndo.BlockCount - 1 do
+    for n := 0 to FFileUndo.BlockCount - 1 do
     begin
       bl := FFileUndo.Block(n);
       if bl.BlockID = 'VFD_HEAD_BEGIN' then
@@ -923,19 +935,19 @@ begin
         end;
     end;
 
-     ifundo := False;
+    ifundo := False;
     frmMainDesigner.undomenu.MenuItem(1).Enabled := True;
 
-     for n := 0 to FDesigners.Count - 1 do
-  begin
-    selectedform := nil;
-    TFormDesigner(FDesigners[n]).Form.ShowGrid := FShowGrid;
-  end;
+    for n := 0 to FDesigners.Count - 1 do
+    begin
+      selectedform := nil;
+      TFormDesigner(FDesigners[n]).Form.ShowGrid := FShowGrid;
+    end;
 
-      isfpguifile := True ;
-      isfileloaded := True;
+    isfpguifile := True;
+    isfileloaded := True;
 
-   frmProperties.show;
+    frmProperties.Show;
 
   end;
 
@@ -1056,7 +1068,7 @@ begin
       9: tempform := selectedform.Form.Name + ' => Copy/Paste widgets by Multi-Selector.';
       10: tempform := selectedform.Form.Name + ' => Delete widgets by Multi-Selector.';
       11: tempform := selectedform.Form.Name + ' => Other Change.';
-      12: tempform := selectedform.Form.Name + ' => Properies Changed.' ;
+      12: tempform := selectedform.Form.Name + ' => Properies Changed.';
       13: tempform := selectedform.Form.Name + ' => Anchor Changed.'
     end;
 
@@ -1091,18 +1103,18 @@ begin
   if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True) then
   begin
     SelectedForm.OnPropNameChange(Sender);
-         if (ifundo = False) and (enableundo = True) then
-        SaveUndo(Sender, 0);
+    if (ifundo = False) and (enableundo = True) then
+      SaveUndo(Sender, 0);
 
-          fpgapplication.ProcessMessages;
+    fpgapplication.ProcessMessages;
 
-        if frmMultiSelect.Visible = True then
-      begin
-        TheParent := (frmProperties.lstProps.Props.Widget);
-        if TheParent.HasParent then
-          TheParent := (frmProperties.lstProps.Props.Widget.Parent);
-        frmMultiSelect.Getwidgetlist(TheParent);
-      end;
+    if frmMultiSelect.Visible = True then
+    begin
+      TheParent := (frmProperties.lstProps.Props.Widget);
+      if TheParent.HasParent then
+        TheParent := (frmProperties.lstProps.Props.Widget.Parent);
+      frmMultiSelect.Getwidgetlist(TheParent);
+    end;
 
   end;
 end;
@@ -1133,7 +1145,7 @@ begin
   if (SelectedForm <> nil) and (isfileloaded = True) then
   begin
     SelectedForm.OnPropTextChange(Sender);
-     if (ifundo = False) and (enableundo = True) then
+    if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 12);
   end;
 end;
@@ -1169,7 +1181,7 @@ begin
 
     end;
     fpgapplication.ProcessMessages;
-     if (ifundo = False) and (enableundo = True) then
+    if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 11);
   end;
 
@@ -1407,12 +1419,14 @@ begin
    {$IFDEF Linux}
   if (fileexists(PChar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0) > 1) then
   begin
+    {$WARN SYMBOL_DEPRECATED OFF}
     case gINI.ReadInteger('Options', 'Editor', 0) of
       2: AProcess.CommandLine := 'gedit ' + p + s;
       3: AProcess.CommandLine := 'geany ' + p + s;
       4: AProcess.CommandLine :=
           gINI.ReadString('Options', 'CustomEditor', '') + ' ' + p + s;
     end;
+     {$WARN SYMBOL_DEPRECATED ON}
     AProcess.Options := AProcess.Options + [poNoConsole];
     AProcess.Priority := ppNormal;
     AProcess.showwindow := swoShowNoActivate;
@@ -1424,12 +1438,14 @@ begin
      {$IFDEF windows}
   if (fileexists(PChar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0) > 1) then
   begin
+     {$WARN SYMBOL_DEPRECATED OFF}
     case gINI.ReadInteger('Options', 'Editor', 0) of
       2: AProcess.CommandLine := 'notepad ' + p + s;
       3: AProcess.CommandLine := 'write ' + p + s;
       4: AProcess.CommandLine :=
           gINI.ReadString('Options', 'CustomEditor', '') + ' ' + p + s;
     end;
+      {$WARN SYMBOL_DEPRECATED ON}
     AProcess.Options := AProcess.Options + [poNoConsole];
     AProcess.Priority := ppHigh;
     // AProcess.showwindow :=  swonone ;

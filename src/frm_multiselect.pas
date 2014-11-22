@@ -55,7 +55,7 @@ type
     cbHeight3: TfpgCheckBox;
     edheight3: TfpgSpinEdit;
     {@VFD_HEAD_END: frm_multiselect}
-    public
+  public
     Grid1: TfpgStringGrid;
     Panel1: TfpgPanel;
     PanelMain: TfpgPanel;
@@ -92,7 +92,7 @@ type
 var
   TheSelectedForm: Tfpgwidget;
   oricount: integer;
-  calculwidget : boolean = false;
+  calculwidget: boolean = False;
   frmMultiSelect: Tfrm_multiselect;
 
 implementation
@@ -665,7 +665,7 @@ var
   wgc: TVFDWidgetClass;
   wg, theWidget: TfpgWidget;
   okname: boolean;
-  oriformdesigner : Tformdesigner;
+  oriformdesigner: Tformdesigner;
 begin
   fpgapplication.ProcessMessages;
 
@@ -693,8 +693,7 @@ begin
           for n := 0 to VFDWidgetCount - 1 do
           begin
             wgc := VFDWidget(n);
-            if UpperCase(TheSelectedForm.Components[y].ClassName) =
-              UpperCase(wgc.WidgetClass.ClassName) then
+            if UpperCase(TheSelectedForm.Components[y].ClassName) = UpperCase(wgc.WidgetClass.ClassName) then
             begin
               wg := wgc.CreateWidget(TheSelectedForm);
               break;
@@ -722,8 +721,7 @@ begin
 
           wg.Name := compname;
           wg.FormDesigner := TheSelectedForm;
-          wd := TformDesigner(TheSelectedForm.FormDesigner).AddWidget(wg,
-            nil, oriformdesigner);
+          wd := TformDesigner(TheSelectedForm.FormDesigner).AddWidget(wg, nil, oriformdesigner);
           wd.FVFDClass := wgc;
 
           wg.Left := Tfpgwidget(theWidget).left + 10;
@@ -1006,7 +1004,7 @@ begin
       begin
         if Tfpgwidget(TheSelectedForm.Components[y]).Name = cbSelected[x].Text then
         begin
-          TFormDesigner(TheSelectedForm.FormDesigner).WidgetDesigner(Tfpgwidget(TheSelectedForm.Components[y])).FSelected:=true;
+          TFormDesigner(TheSelectedForm.FormDesigner).WidgetDesigner(Tfpgwidget(TheSelectedForm.Components[y])).FSelected := True;
         end;
         Inc(y);
       end;
@@ -1016,7 +1014,7 @@ begin
 
   TFormDesigner(TheSelectedForm.FormDesigner).DeleteWidgets;
 
-    TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
+  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
   Getwidgetlist(TheSelectedForm);
 end;
@@ -1054,7 +1052,7 @@ begin
             Tfpgwidget(TheSelectedForm.Components[y]).Width := edwidth.Value;
           if cbheight.Checked then
             Tfpgwidget(TheSelectedForm.Components[y]).Height := edheight.Value;
-            Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
+          Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
         end;
         Inc(y);
       end;
@@ -1214,12 +1212,11 @@ end;
 
 procedure Tfrm_multiselect.Getwidgetlist(Theobj: TfpgWidget);
 begin
-  if ((Visible = True) and  (maindsgn.selectedform <> nil)) or (calculwidget = true)  then
+  if ((Visible = True) and (maindsgn.selectedform <> nil)) or (calculwidget = True) then
   begin
     fpgapplication.ProcessMessages;
 
-    if (Tfpgwidget(TheSelectedForm) <> Tfpgwidget(Theobj)) or
-      (Theobj.ComponentCount <> oricount) then
+    if (Tfpgwidget(TheSelectedForm) <> Tfpgwidget(Theobj)) or (Theobj.ComponentCount <> oricount) then
     begin
       oricount := Theobj.ComponentCount;
       TheSelectedForm := Theobj;
@@ -1249,29 +1246,29 @@ begin
   grid1.UpdateWindowPosition;
 end;
 
-procedure  Tfrm_multiselect.ClearAll;
+procedure Tfrm_multiselect.ClearAll;
 var
   x: integer;
 begin
- hide;
-if (maindsgn.selectedform <> nil) then
-begin
-
-  x := 0;
-
-  while x < length(cbSelected) do
+  hide;
+  if (maindsgn.selectedform <> nil) then
   begin
-    cbSelected[x].Visible := False;
-   Inc(x);
+
+    x := 0;
+
+    while x < length(cbSelected) do
+    begin
+      cbSelected[x].Visible := False;
+      Inc(x);
+    end;
+    grid1.rowCount := 0;
+    grid1.Height := 1;
+    grid1.UpdateWindowPosition;
+    panelscroll.Visible := False;
+    windowtitle := 'Click on one widget to load Multi-Selector';
+    Height := 2;
+    UpdateWindowPosition;
   end;
-  grid1.rowCount := 0;
-  grid1.Height:= 1;
-  grid1.UpdateWindowPosition;
-  panelscroll.Visible := False;
-  windowtitle := 'Click on one widget to load Multi-Selector' ;
- height := 2 ;
-UpdateWindowPosition;
-end;
 end;
 
 
@@ -1280,142 +1277,145 @@ var
   x: integer;
 begin
 
-if (maindsgn.selectedform <> nil) then
-begin
-  fpgapplication.ProcessMessages;
-  x := 0;
-  TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
-
-  while x < length(cbSelected) do
+  if (maindsgn.selectedform <> nil) then
   begin
-    cbSelected[x].Visible := False;
-    cbSelected[x] := nil;
-    cbSelected[x].Free;
-    Inc(x);
-  end;
+    fpgapplication.ProcessMessages;
+    x := 0;
+    TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
-  setlength(cbSelected, 0);
-  grid1.rowCount := 0;
-  x := 0;
-  panelscroll.Visible := False;
-  ;
-  while x < Theobj.ComponentCount do
-  begin
-    if Tfpgwidget(Theobj.Components[x]).Name <> '' then
+    while x < length(cbSelected) do
     begin
-      setlength(cbSelected, length(cbSelected) + 1);
-      cbSelected[x] := Tfpgcheckbox.Create(Panelscroll);
-      cbSelected[x].Visible := True;
-      cbSelected[x].BackgroundColor := $7D7D7D;
-      cbSelected[x].Text := Tfpgwidget(Theobj.Components[x]).Name;
-      cbSelected[x].TextColor := clwhite;
-      cbSelected[x].Left := 8;
-      cbSelected[x].Width := 150;
-      cbSelected[x].Top := (x * 19) + 2;
-      cbSelected[x].Height := 18;
-      cbSelected[x].Checked := False;
-      cbSelected[x].UpdateWindowPosition;
-
-      grid1.rowCount := x + 1;
-
-      grid1.Cells[0, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).left);
-      grid1.Cells[1, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).top);
-      grid1.Cells[2, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).Width);
-      grid1.Cells[3, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).Height);
-
+      cbSelected[x].Visible := False;
+      cbSelected[x] := nil;
+      cbSelected[x].Free;
+      Inc(x);
     end;
-    Inc(x);
+
+    setlength(cbSelected, 0);
+    grid1.rowCount := 0;
+    x := 0;
+    panelscroll.Visible := False;
+    ;
+    while x < Theobj.ComponentCount do
+    begin
+      if Tfpgwidget(Theobj.Components[x]).Name <> '' then
+      begin
+        setlength(cbSelected, length(cbSelected) + 1);
+        cbSelected[x] := Tfpgcheckbox.Create(Panelscroll);
+        cbSelected[x].Visible := True;
+        cbSelected[x].BackgroundColor := $7D7D7D;
+        cbSelected[x].Text := Tfpgwidget(Theobj.Components[x]).Name;
+        cbSelected[x].TextColor := clwhite;
+        cbSelected[x].Left := 8;
+        cbSelected[x].Width := 150;
+        cbSelected[x].Top := (x * 19) + 2;
+        cbSelected[x].Height := 18;
+        cbSelected[x].Checked := False;
+        cbSelected[x].UpdateWindowPosition;
+
+        grid1.rowCount := x + 1;
+
+        grid1.Cells[0, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).left);
+        grid1.Cells[1, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).top);
+        grid1.Cells[2, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).Width);
+        grid1.Cells[3, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).Height);
+
+      end;
+      Inc(x);
+    end;
+
+    if Theobj.ComponentCount = 0 then
+      windowtitle := 'Form ' + Theobj.Name
+    else
+    if Theobj.ComponentCount > 1 then
+      windowtitle := 'The ' + IntToStr(Theobj.ComponentCount) + ' Widgets of ' + Theobj.Name
+    else
+      windowtitle := 'The only Widget of ' + Theobj.Name;
+
+    if (length(cbSelected) * 19) + (3 * panel1.Height) + 22 < frmProperties.Height then
+    begin
+      Height := (length(cbSelected) * 19) + (3 * panel1.Height) + 26;
+      panelscroll.Width := Width;
+      Grid1.ColumnWidth[0] := 74;
+      Grid1.ColumnWidth[1] := Grid1.ColumnWidth[0];
+      Grid1.ColumnWidth[2] := Grid1.ColumnWidth[0];
+      Grid1.ColumnWidth[3] := Grid1.ColumnWidth[0];
+
+      lbleft.SetPosition(161, 1, 72, 18);
+      lbtop.SetPosition(235, 1, 72, 18);
+      lbwidth.SetPosition(309, 1, 72, 18);
+      lbheight.SetPosition(383, 1, 74, 18);
+      grid1.Width := 300;
+      scroll1.Visible := False;
+    end
+    else
+    begin
+      Height := frmProperties.Height;
+      panelscroll.Width := Width - 26;
+      Grid1.ColumnWidth[0] := 69;
+      Grid1.ColumnWidth[1] := Grid1.ColumnWidth[0];
+      Grid1.ColumnWidth[2] := Grid1.ColumnWidth[0];
+      Grid1.ColumnWidth[3] := Grid1.ColumnWidth[0];
+
+      lbleft.SetPosition(161, 1, 67, 18);
+      lbtop.SetPosition(230, 1, 67, 18);
+      lbwidth.SetPosition(299, 1, 67, 18);
+      lbheight.SetPosition(368, 1, 69, 18);
+
+      grid1.Width := 280;
+      scroll1.Visible := True;
+      scroll1.top := 0;
+      scroll1.Height := panelmain.Height - 10;
+      scroll1.Width := 16;
+      scroll1.left := grid1.Right + 1;
+      scroll1.Position := 0;
+    end;
+
+    panelscroll.Height := (length(cbSelected) * 19) + 10;
+    panelmain.Height := Height - (3 * panel1.Height) - 20;
+
+    if scroll1.Visible = True then
+    begin
+      scroll1.Height := panelmain.Height - 4;
+      scroll1.PageSize := 19 * (panelmain.Height div 19);
+      scroll1.ScrollStep := 19;
+      scroll1.max := (panelscroll.Height - panelmain.Height - 2);
+      scroll1.min := 0;
+    end;
+
+    grid1.Height := (length(cbSelected) * 19) + 4;
+
+    grid1.top := 0;
+    grid1.left := 159;
+
+    panelscroll.Top := 0;
+
+    panel1.top := Height - (3 * panel1.Height) - 3;
+    panelcopypaste.Top := panel1.top;
+    panel2.top := Height - (2 * panel1.Height) - 3;
+    panel3.top := Height - panel2.Height - 2;
+
+    panel1.UpdateWindowPosition;
+    panel2.UpdateWindowPosition;
+    panel3.UpdateWindowPosition;
+    panelcopypaste.UpdateWindowPosition;
+    grid1.UpdateWindowPosition;
+    panelscroll.UpdateWindowPosition;
+    scroll1.UpdateWindowPosition;
+    panelmain.UpdateWindowPosition;
+
+    lbleft.UpdateWindowPosition;
+    lbtop.UpdateWindowPosition;
+    lbwidth.UpdateWindowPosition;
+    lbheight.UpdateWindowPosition;
+    grid1.Visible := True;
+    panelscroll.Visible := True;
+    UpdateWindowPosition;
   end;
 
-  if Theobj.ComponentCount = 0 then
-    windowtitle := 'Form ' + Theobj.Name
-  else
-  if Theobj.ComponentCount > 1 then
-    windowtitle := 'The ' + IntToStr(Theobj.ComponentCount) +
-      ' Widgets of ' + Theobj.Name
-  else
-    windowtitle := 'The only Widget of ' + Theobj.Name;
 
-  if (length(cbSelected) * 19) + (3 * panel1.Height) + 22 < frmProperties.Height then
-  begin
-    Height := (length(cbSelected) * 19) + (3 * panel1.Height) + 26;
-    panelscroll.Width := Width;
-    Grid1.ColumnWidth[0] := 74;
-    Grid1.ColumnWidth[1] := Grid1.ColumnWidth[0];
-    Grid1.ColumnWidth[2] := Grid1.ColumnWidth[0];
-    Grid1.ColumnWidth[3] := Grid1.ColumnWidth[0];
 
-    lbleft.SetPosition(161, 1, 72, 18);
-    lbtop.SetPosition(235, 1, 72, 18);
-    lbwidth.SetPosition(309, 1, 72, 18);
-    lbheight.SetPosition(383, 1, 74, 18);
-    grid1.Width := 300;
-    scroll1.Visible := False;
-  end
-  else
-  begin
-    Height := frmProperties.Height;
-    panelscroll.Width := Width - 26;
-    Grid1.ColumnWidth[0] := 69;
-    Grid1.ColumnWidth[1] := Grid1.ColumnWidth[0];
-    Grid1.ColumnWidth[2] := Grid1.ColumnWidth[0];
-    Grid1.ColumnWidth[3] := Grid1.ColumnWidth[0];
 
-    lbleft.SetPosition(161, 1, 67, 18);
-    lbtop.SetPosition(230, 1, 67, 18);
-    lbwidth.SetPosition(299, 1, 67, 18);
-    lbheight.SetPosition(368, 1, 69, 18);
-
-    grid1.Width := 280;
-    scroll1.Visible := True;
-    scroll1.top := 0;
-    scroll1.Height := panelmain.Height - 10;
-    scroll1.Width := 16;
-    scroll1.left := grid1.Right + 1;
-    scroll1.Position := 0;
-  end;
-
-  panelscroll.Height := (length(cbSelected) * 19) + 10;
-  panelmain.Height := Height - (3 * panel1.Height) - 20;
-
-  if scroll1.Visible = True then
-  begin
-    scroll1.Height := panelmain.Height - 4;
-    scroll1.PageSize := 19 * (panelmain.Height div 19);
-    scroll1.ScrollStep := 19;
-    scroll1.max := (panelscroll.Height - panelmain.Height - 2);
-    scroll1.min := 0;
-  end;
-
-  grid1.Height := (length(cbSelected) * 19) + 4;
-
-  grid1.top := 0;
-  grid1.left := 159;
-
-  panelscroll.Top := 0;
-
-  panel1.top := Height - (3 * panel1.Height) - 3;
-  panelcopypaste.Top := panel1.top;
-  panel2.top := Height - (2 * panel1.Height) - 3;
-  panel3.top := Height - panel2.Height - 2;
-
-  panel1.UpdateWindowPosition;
-  panel2.UpdateWindowPosition;
-  panel3.UpdateWindowPosition;
-  panelcopypaste.UpdateWindowPosition;
-  grid1.UpdateWindowPosition;
-  panelscroll.UpdateWindowPosition;
-  scroll1.UpdateWindowPosition;
-  panelmain.UpdateWindowPosition;
-
-  lbleft.UpdateWindowPosition;
-  lbtop.UpdateWindowPosition;
-  lbwidth.UpdateWindowPosition;
-  lbheight.UpdateWindowPosition;
-  grid1.Visible := True;
-  panelscroll.Visible := True;
-  UpdateWindowPosition;
-end;
 
 end;
 
