@@ -720,6 +720,7 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(414, 172, 780, 92);

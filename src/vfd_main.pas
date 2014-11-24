@@ -48,10 +48,6 @@ uses
 const
   program_version = FPGUI_VERSION;
 
-var
-  s, p: string;
-  isfileloaded: boolean = False;
-
 type
   TProc = procedure(Sender: TObject) of object;
 
@@ -76,6 +72,7 @@ type
     FEditedFileName: string;
   public
     ifundo: boolean;
+    isFileNew: boolean;
     GridResolution: integer;
     SaveComponentNames: boolean;
     selectedform: TFormDesigner;
@@ -114,6 +111,8 @@ var
   ArrayUndo: array of TUndo;
   dob: string;
   isfpguifile: boolean = False;
+  isFileLoaded: boolean;
+  s, p: string;
 
 implementation
 
@@ -197,7 +196,7 @@ begin
   frmMainDesigner.windowmenu.MenuItem(1).Visible := True;
 
   isfileloaded := True;
-
+  isFileNew := True;
   OnNewForm(Sender);
 
   frmProperties.Show;
@@ -771,6 +770,7 @@ var
   ff: file;
   fname, uname: string;
   aFileDialog: TfpgFileDialog;
+  aDialog :TfpgMessageDialog;
 begin
   fname := EditedFileName;
 
@@ -800,7 +800,14 @@ begin
 
   EditedFileName := fname;
 
-  if fpgFileExists(fname) then
+if (isFileNew = true) and (fpgFileExists(fname)) then
+  begin
+    if  TfpgMessageDialog.Warning('', trim(fname) + ' already exists...' + #10#13 +
+   'Do you want to overwrite it ?...', mbYesNo, mbNo) = mbYes then
+    else exit;
+   end;
+
+  if (fpgFileExists(fname)) and (isFileNew = false) then
   begin
     FFile.LoadFile(fname);
     FFile.GetBlocks;
@@ -823,11 +830,11 @@ begin
     FFile.SetFormData(fd.Form.Name, fd.GetFormSourceDecl, fd.GetFormSourceImpl);
   end;
 
+  isfilenew := false;
   fdata := FFile.MergeBlocks;
 
   if enableautounits then
     fdata := AddUnits(fdata);
-
 
   AssignFile(ff, fpgToOSEncoding(fname));
   try
@@ -1093,8 +1100,9 @@ procedure TMainDesigner.OnPropNameChange(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True) and (calculwidget = true) then
   begin
+      calculwidget := false;
     SelectedForm.OnPropNameChange(Sender);
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 0);
@@ -1108,7 +1116,7 @@ begin
         TheParent := (frmProperties.lstProps.Props.Widget.Parent);
       frmMultiSelect.Getwidgetlist(TheParent);
     end;
-
+    calculwidget := true;
   end;
 end;
 
@@ -1116,8 +1124,9 @@ procedure TMainDesigner.OnPropPosEdit(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = true) then
   begin
+     calculwidget := false;
     SelectedForm.OnPropPosEdit(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
@@ -1129,28 +1138,32 @@ begin
         TheParent := (frmProperties.lstProps.Props.Widget.Parent);
       frmMultiSelect.Getwidgetlist(TheParent);
     end;
-    fpgapplication.ProcessMessages;
+    calculwidget := true;
   end;
 end;
 
 procedure TMainDesigner.OnPropTextChange(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = true) then
   begin
+     calculwidget := false;
     SelectedForm.OnPropTextChange(Sender);
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 12);
+    calculwidget := true;
   end;
 end;
 
 procedure TMainDesigner.OnAnchorChange(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = true) then
   begin
+     calculwidget := false;
     SelectedForm.OnAnchorChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 13);
+     calculwidget := true;
   end;
 end;
 
@@ -1158,8 +1171,9 @@ procedure TMainDesigner.OnOtherChange(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = true) then
   begin
+      calculwidget := false;
     SelectedForm.OnOtherChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
@@ -1176,6 +1190,7 @@ begin
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 11);
+      calculwidget := true;
   end;
 
 end;
@@ -1202,6 +1217,7 @@ var
   end;
 
 begin
+  calculwidget := false;
   nfrm := TNewFormForm.Create(nil);
   try
     if nfrm.ShowModal = mrOk then
@@ -1256,7 +1272,7 @@ begin
   FDesigners := TList.Create;
   SelectedForm := nil;
   FFile := TVFDFile.Create;
-
+  isFileNew := false;
   // options
   SaveComponentNames := True;
   LoadDefaults;
@@ -1387,7 +1403,7 @@ end;
 procedure TMainDesigner.SetEditedFileName(const Value: string);
 var
   aprocess: tprocess;
-  e: string;
+  e : string;
 begin
   AProcess := TProcess.Create(nil);
 
