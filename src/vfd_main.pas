@@ -112,6 +112,7 @@ var
   dob: string;
   isfpguifile: boolean = False;
   isFileLoaded: boolean;
+  SelectedWidget: TfpgWidget;
   s, p: string;
 
 implementation
@@ -1100,14 +1101,14 @@ procedure TMainDesigner.OnPropNameChange(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True) and (calculwidget = true) then
+  if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True)  then
   begin
       calculwidget := false;
     SelectedForm.OnPropNameChange(Sender);
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 0);
 
-    fpgapplication.ProcessMessages;
+    calculwidget := true;
 
     if frmMultiSelect.Visible = True then
     begin
@@ -1116,7 +1117,7 @@ begin
         TheParent := (frmProperties.lstProps.Props.Widget.Parent);
       frmMultiSelect.Getwidgetlist(TheParent);
     end;
-    calculwidget := true;
+
   end;
 end;
 

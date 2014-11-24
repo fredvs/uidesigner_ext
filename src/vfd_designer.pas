@@ -1,5 +1,5 @@
 {
-This is the extended version of fpGUI uidesigner => Designer_ext.
+This is the extended version of fpGUI uidesigner => designer_ext.
 With window list, undo feature, integration into IDE, editor launcher, extra-properties editor,...
 
 Fred van Stappen
@@ -176,7 +176,10 @@ var
 begin
   if (isfileloaded = true)  then begin
 
-  if FSelected = AValue then
+    if Widget.HasParent then SelectedWidget :=  Widget else
+  SelectedWidget :=   Widget.Parent ;
+
+   if FSelected = AValue then
     Exit;
   FSelected := AValue;
 
@@ -204,7 +207,11 @@ begin
 
   frmproperties.Show;
 
-   if (widget is Tfpgform) then else
+   if (widget is Tfpgform) then
+   begin
+    if (frmMultiSelect.Visible = true) then  frmMultiSelect.Getwidgetlist(widget);
+     end
+   else
    if (frmMultiSelect.Visible = true) then frmMultiSelect.SelectedFromDesigner(Widget);
 
   end;
@@ -1366,8 +1373,6 @@ var
   s: string;
 begin
   //  writeln('namechange');
- if  (isfpguifile = true) and (maindsgn.selectedform <> nil) then
-   begin
 
   fpgapplication.ProcessMessages;
   s := frmProperties.edName.Text;
@@ -1377,33 +1382,20 @@ begin
     cd := TWidgetDesigner(FWidgets.Items[n]);
     if cd.Selected then
       wg := cd.Widget;
-{
-      if GetWidgetText(wg,s) and (wg.Name = str16to8(s)) then
-      begin
-        PropertyForm.edText.Text8 := s8;
-        OnPropTextChange(sender);
-      end;
-}
+
   end;
 
   if wg = nil then
-    wg := FForm{
-    if FForm.Name = FForm.WindowTitle8 then
-    begin
-      FForm.WindowTitle8 := s8;
-      PropertyForm.edText.Text8 := s8;
-    end;
-};
+    wg := FForm;
 
   try
-    wg.Name := s;
+ if SelectedWidget =  wg then
+       wg.Name := s else SelectedWidget :=  wg ;
   except
     // invalid name...
   end;
 
-   end;
-
-end;
+ end;
 
 procedure TFormDesigner.OnPropPosEdit(Sender: TObject);
 var

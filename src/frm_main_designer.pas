@@ -129,7 +129,8 @@ type
     procedure   onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure   onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure   onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
-   end;
+    procedure   OnSaveNewFile(Sender: TObject);
+  end;
 
   TPropertyList = class(TObject)
   private
@@ -751,7 +752,7 @@ begin
     AddMenuItem('-', '', nil);
     mi := AddMenuItem('Save', 'Ctrl+S', @(maindsgn.OnSaveFile));
     mi.Tag := 10;
-    AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @(maindsgn.OnSaveFile));
+    AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @OnSaveNewFile);
     AddMenuItem('-', '', nil);
     AddMenuItem('Add New Form to Unit...', '', @(maindsgn.OnNewForm));
     AddMenuItem('-', '', nil);
@@ -1184,6 +1185,12 @@ begin
   chlPalette.FocusItem := i;
 end;
 
+procedure TfrmMainDesigner.OnSaveNewFile(Sender: TObject);
+begin
+maindsgn.isFileNew := true ;
+maindsgn.OnSaveFile(sender);
+end;
+
 procedure TfrmMainDesigner.onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
  begin
  oriMousePos := AMousePos;
@@ -1357,7 +1364,6 @@ var
   x, x2, w, y, gap: integer;
 begin
   {%region 'Auto-generated GUI code' -fold}
-
 
   inherited;
   Name := 'frmProperties';

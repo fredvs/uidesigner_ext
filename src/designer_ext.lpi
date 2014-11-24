@@ -139,7 +139,7 @@ install:
         <IsPartOfProject Value="True"/>
         <UnitName Value="designer_ext"/>
         <TopLine Value="20"/>
-        <CursorPos X="32" Y="28"/>
+        <CursorPos X="38" Y="23"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
