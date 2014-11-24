@@ -34,7 +34,9 @@ uses {$IFDEF UNIX}
   fpg_style_round_silver_flat_horz,
   fpg_style_anim_round_silver_flat_horz,
   fpg_style_anim_chrome_silver_vert,
+  fpg_style_anim_chrome_silver_vert_flatmenu,
   fpg_style_anim_chrome_silver_horz,
+  fpg_style_anim_chrome_silver_horz_flatmenu,
   fpg_style_anim_ellipse_silver_vert,
   fpg_style_anim_ellipse_silver_horz,
   fpg_style_hoover_system_flat,
@@ -50,6 +52,7 @@ uses {$IFDEF UNIX}
   fpg_style_chrome_gray,
   fpg_style_chrome_blue,
   fpg_style_chrome_silver,
+  fpg_style_chrome_silver_flatmenu,
   fpg_style_chrome_system,
   fpg_style_chrome_green,
   fpg_style_chrome_red,
@@ -105,7 +108,7 @@ uses {$IFDEF UNIX}
       RegisterWidgets;
       if not gCommandLineParams.IsParam('style') then
       begin
-            if fpgStyleManager.SetStyle('Hoover Silver Flat') then
+            if fpgStyleManager.SetStyle('Chrome silver flat menu') then
           fpgStyle := fpgStyleManager.Style;
       end;
 

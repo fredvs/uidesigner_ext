@@ -138,8 +138,8 @@ install:
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="designer_ext"/>
-        <TopLine Value="87"/>
-        <CursorPos X="75" Y="8"/>
+        <TopLine Value="20"/>
+        <CursorPos X="32" Y="28"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -259,13 +259,16 @@ install:
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="2">
+    <Exceptions Count="3">
       <Item1>
         <Name Value="EComponentError"/>
       </Item1>
       <Item2>
         <Name Value="EPropertyError"/>
       </Item2>
+      <Item3>
+        <Name Value="EListError"/>
+      </Item3>
     </Exceptions>
   </Debugging>
 </CONFIG>

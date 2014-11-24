@@ -235,7 +235,7 @@ begin
     'vfd.nicegrid', @stdimg_vfd_nicegrid,
     sizeof(stdimg_vfd_nicegrid),
     0, 0);
- }
+ // }
 
   fpgImages.AddMaskedBMP(
     'vfd.editgrid', @stdimg_vfd_editgrid,
@@ -631,7 +631,7 @@ begin
   wc.WidgetIconName := 'vfd.stringgrid';
   RegisterVFDWidget(wc);
 
-{ TODO
+ { TODO
  // NiceGrid
   wc := TVFDWidgetClass.Create(TfpgNiceGrid);
   wc.NameBase := 'NiceGrid';
@@ -654,7 +654,6 @@ begin
   wc.WidgetIconName := 'vfd.nicegrid';
   RegisterVFDWidget(wc);
  //}
-
 
 // EditGrid
   wc := TVFDWidgetClass.Create(TfpgEditGrid);

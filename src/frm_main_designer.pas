@@ -30,9 +30,11 @@ unit frm_main_designer;
 interface
 
 uses
-{%units 'Auto-generated GUI code'}
- fpg_button, fpg_panel, fpg_label,
-{%endunits}
+  {%units 'Auto-generated GUI code'}
+  fpg_button, fpg_label, fpg_hyperlink,
+  {%endunits}
+  fpg_panel,
+  fpg_menu,
   RunOnce_PostIt,
   frm_colorpicker,
   frm_imageconvert,
@@ -48,9 +50,7 @@ uses
   fpg_dialogs,
   fpg_memo,
   fpg_combobox,
-  fpg_menu,
   fpg_mru,
-  fpg_hyperlink,
   vfd_widgetclass,
   vfd_widgets;
 
@@ -233,6 +233,7 @@ var
   enableundo : boolean;
   enableautounits : boolean ;
   numstyle : integer;
+  bitcpu : integer;
 
 implementation
 
@@ -267,7 +268,8 @@ end;
 
 procedure TfrmAbout.SetupCaptions;
 begin
-  lblVersion.Text := 'Version: ' +  ext_version ;
+  lblVersion.Text := 'Version: ' +  ext_version  + ' '
++ inttostr(bitcpu) + ' bit' ;
   lblURL.URL := fpGUIWebsite;
   lblURL.Text := fpGUIWebsite;
   lblCompiled.Text := Format(rsCompiledOn, [{$I %date%} + ' ' + {$I %time%}]);
@@ -290,9 +292,11 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
+
      {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
-  SetPosition(971, 311, 278, 195);
+  SetPosition(694, 311, 278, 195);
   WindowTitle := 'About Designer_ext';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
@@ -317,7 +321,7 @@ begin
   with lblVersion do
   begin
     Name := 'lblVersion';
-    SetPosition(158, 44, 107, 24);
+    SetPosition(114, 46, 153, 24);
     Alignment := taRightJustify;
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := '#Label2';
@@ -410,7 +414,10 @@ begin
     'fpgui_logo1', @extimg_fpgui_logo1,
     sizeof(extimg_fpgui_logo1));
 
-   RePaint;
+ WindowTitle := WindowTitle + ' '
++ inttostr(bitcpu) + ' bit' ;
+
+    RePaint;
 end;
 
 class procedure TfrmAbout.Execute;
@@ -1007,6 +1014,13 @@ begin
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
 
+    {$if defined(cpu64)}
+   bitcpu := 64 ;
+{$else}
+   bitcpu := 32 ;
+   {$endif}
+
+
   for x:=0 to 99 do
     begin
     listundomenu.AddMenuItem('', '',@OnLoadUndo);
@@ -1230,7 +1244,7 @@ begin
    fpgapplication.ProcessMessages;
     WindowType := wtpopup ;
     MainMenu.MenuItem(8).Visible:=true;
-   MainMenu.MenuItem(8).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' +  ext_version;    ;
+   MainMenu.MenuItem(8).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' +  ext_version + ' ' + inttostr(bitcpu) + ' bit';
    // btnToFront.Text:='toN';
    btnToFront.tag:=1;
  if idetemp = 1 then
@@ -1307,7 +1321,7 @@ procedure TfrmMainDesigner.OnHideClick(Sender: TObject);
 begin
   hide;
  WindowAttributes := [waBorderless];
- MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     Designer_ext'  ;
+ MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     Designer_ext' + ' ' + inttostr(bitcpu) + ' bit';
  show;
 end;
 
@@ -2253,7 +2267,7 @@ begin
   end;
 
    for i := 0 to numstyle-1 do
-   if previewmenu.MenuItem(i).Text = 'Flat-Hoover silver' then
+   if previewmenu.MenuItem(i).Text = 'Chrome silver flat menu' then
  previewmenu.MenuItem(i).Checked:=true;
 
   sl.Free;

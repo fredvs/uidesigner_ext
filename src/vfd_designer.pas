@@ -36,8 +36,6 @@ uses
   fpg_base,
   fpg_main,
   fpg_widget,
-  fpg_editbtn,
-  fpg_tab,
   fpg_form,
   fpg_dialogs,
   fpg_listbox,
@@ -164,7 +162,6 @@ uses
   TypInfo,
   vfd_main,
   vfd_utils,
-  fpg_Label,
   vfd_constants,
   fpg_tree;
 
@@ -664,13 +661,13 @@ var
     if not Assigned(ADesignWidget.Widget) then  // safety check
       Exit;
 
-    if (ADesignWidget.Widget is TfpgFileNameEdit) or
-       (ADesignWidget.Widget is TfpgDirectoryEdit) or
-       (ADesignWidget.Widget is TfpgFontEdit) or
-       (ADesignWidget.Widget is TfpgEditButton) or
-       (ADesignWidget.Widget is TfpgPageControl) then
-       else
-   if (ADesignWidget.Widget.IsContainer) and (ADesignWidget.Widget.ComponentCount > 0) then
+    if (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFILENAMEEDIT') and
+       (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGDIRECTORYEDIT') and
+       (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFONTEDIT') and
+       (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGEDITBUTTON') and
+       (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGPAGECONTROL') and
+       (ADesignWidget.Widget.IsContainer) and
+       (ADesignWidget.Widget.ComponentCount > 0) then
   begin
       for i := ADesignWidget.Widget.ComponentCount - 1 downto 0 do
         DeleteChildWidget(WidgetDesigner(TfpgWidget(ADesignWidget.Widget.Components[i])));

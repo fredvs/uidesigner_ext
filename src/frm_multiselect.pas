@@ -1280,8 +1280,10 @@ begin
 
   if (maindsgn.selectedform <> nil) then
   begin
-    fpgapplication.ProcessMessages;
+     fpgapplication.ProcessMessages;
+    // hide;
     x := 0;
+    Panelscroll.Visible:=false;
     TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
     while x < length(cbSelected) do
@@ -1295,15 +1297,13 @@ begin
     setlength(cbSelected, 0);
     grid1.rowCount := 0;
     x := 0;
-    panelscroll.Visible := False;
-    ;
+
     while x < Theobj.ComponentCount do
     begin
       if Tfpgwidget(Theobj.Components[x]).Name <> '' then
       begin
         setlength(cbSelected, length(cbSelected) + 1);
         cbSelected[x] := Tfpgcheckbox.Create(Panelscroll);
-        cbSelected[x].Visible := True;
         cbSelected[x].BackgroundColor := $7D7D7D;
         cbSelected[x].Text := Tfpgwidget(Theobj.Components[x]).Name;
         cbSelected[x].TextColor := clwhite;
@@ -1313,6 +1313,7 @@ begin
         cbSelected[x].Height := 18;
         cbSelected[x].Checked := False;
         cbSelected[x].UpdateWindowPosition;
+        cbSelected[x].Visible := True;
 
         grid1.rowCount := x + 1;
 
@@ -1412,6 +1413,7 @@ begin
     grid1.Visible := True;
     panelscroll.Visible := True;
     UpdateWindowPosition;
+    show;
   end;
 
 

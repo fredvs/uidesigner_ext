@@ -477,8 +477,8 @@ constructor TfpgNiceGrid.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FisContainer:=true;
-  Width := 200;
-  Height := 200;
+  Width := 100;
+  Height := 100;
   BorderStyle := bsSingle;
   Text:='';
   FFlat := True;
@@ -510,8 +510,8 @@ begin
   FSmallChange := FDefRowHeight;
   FLargeChange := FDefRowHeight * 5;
   ForcedColumn := -1;
-  AllWidth := 200;
-  AllHeight := 200;
+  AllWidth := 100;
+  AllHeight := 100;
   ClientWidth:=Width -2;
   ClientHeight:=Height -2;
   
@@ -537,7 +537,7 @@ begin
   
   FGutterStrings := TStringList.Create;
   Mergeds := TList.Create;
-  Sync:=nil;  
+  Sync:=nil;
 // ************************
   FVScrollBar := TfpgScrollBar.Create(self);
   FVScrollBar.Orientation := orVertical;
@@ -551,7 +551,6 @@ begin
   FHScrollBar.ScrollStep  := 5;
   FHScrollBar.OnScroll:=@HScrollBarMove;
 //*******************************
-
 end;
 
 destructor TfpgNiceGrid.Destroy;

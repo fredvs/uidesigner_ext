@@ -36,31 +36,6 @@ uses
   fpg_dialogs,
   fpg_base,
   fpg_main,
-  fpg_label,
-  fpg_button,
-  fpg_editbtn,
-  fpg_radiobutton,
-  fpg_edit,
-  fpg_listbox,
-  fpg_panel,
-  fpg_grid,
-  fpg_progressbar,
-  fpg_trackbar,
-  fpg_tab,
-  fpg_listview,
-  fpg_tree,
-  fpg_splitter,
-  fpg_hyperlink,
-  fpg_toggle,
-  fpg_memo,
-  fpg_gauge,
-  fpg_combobox,
-  fpg_checkbox,
-  fpg_colorwheel,
-  fpg_nicegrid,
-  u_editgrid,
-  fpg_menu,
-  fpg_popupcalendar,
   fpg_constants,
   vfd_props,
   frm_vfdforms,
@@ -179,11 +154,13 @@ begin
 
   frmproperties.edName.Text := '';
 
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version;
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version +
+  ' ' + inttostr(bitcpu) + ' bit' ;
 
   if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(6).Text :=
-      'fpGUI Designer_ext v' + ext_version;
+      'fpGUI Designer_ext v' + ext_version +
+  ' ' + inttostr(bitcpu) + ' bit' ;
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
@@ -251,11 +228,13 @@ begin
 
   frmproperties.edName.Text := '';
 
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' => no fpGUI form-file';
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version  +
+  ' ' + inttostr(bitcpu) + ' bit  => no fpGUI form-file';
 
   if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(6).Text :=
-      'fpGUI Designer_ext v' + ext_version + ' => no fpGUI form-file';
+      'fpGUI Designer_ext v' + ext_version +
+  ' ' + inttostr(bitcpu) + ' bit  => no fpGUI form-file';
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
@@ -344,11 +323,13 @@ begin
   end
   else
   begin
-    frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' - ' + fname;
+    frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version   +
+  ' ' + inttostr(bitcpu) + ' bit  => ' + fname;
 
     if frmMainDesigner.btnToFront.Tag = 1 then
       frmMainDesigner.MainMenu.MenuItem(6).Text :=
-        'Current file : ' + fname + '     fpGUI Designer_ext v' + ext_version;
+        'Current file : ' + fname + '    fpGUI Designer_ext v' + ext_version +
+  ' ' + inttostr(bitcpu) + ' bit' ;
 
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
@@ -424,7 +405,9 @@ var
   cns_editbtn, cns_colorwheel, cns_splitter, cns_hyperlink, cns_toggle, cns_nicegrid, cns_editgrid: boolean;
 begin
 
-  /// search for uses section
+    filedata :=   AdjustLineBreaks(filedata);
+
+   /// search for uses section  /// TODO => check if not inside comment {...}
   if (pos(LineEnding + 'USES' + LineEnding, uppercase(filedata)) > 0) then
     datatmp := LineEnding + 'USES' + LineEnding
   else
@@ -434,39 +417,46 @@ begin
   if (pos(' USES' + LineEnding, uppercase(filedata)) > 0) then
     datatmp := ' USES' + LineEnding
   else
-  if (pos(' USES ', uppercase(filedata)) > 0) /// TODO => check if not inside comment {...}
+    if (pos(' USES ', uppercase(filedata)) > 0)
   then
     datatmp := ' USES '
   else
-    datatmp := '';
+   if (pos('USES', uppercase(filedata)) > 0) then /// TODO => better check
+  datatmp := 'USES'
+  else
+     datatmp := '';
 
   if datatmp <> '' then
   begin
-    fdata1 := copy(filedata, 1, pos(datatmp, uppercase(filedata)) + 4); /// all before "uses"
-    fdata2 := copy(filedata, pos(datatmp, uppercase(filedata)) + 5, length(filedata) - pos(datatmp, uppercase(filedata))); /// all after "uses"
-    fdata3 := copy(fdata2, 1, pos(';', fdata2));  /// only "uses" section
-    fdata4 := copy(fdata2, pos(';', fdata2) + 1, length(fdata2) - pos(';', fdata2));  // all after "uses" section
+    fdata1 := copy(filedata, 1, pos(datatmp, uppercase(filedata)) + length(datatmp)); /// all before "uses"
+    fdata2 := copy(filedata, pos(datatmp, uppercase(filedata))  + length(datatmp) ,1+ length(filedata) - pos(datatmp, uppercase(filedata))); /// all after "uses"
+    fdata3 := copy(fdata2, 1, pos(';', fdata2)+ length(datatmp)-4);  /// only "uses" section
+    fdata4 := copy(fdata2, pos(';', fdata2) + 1, length(fdata2) - pos(';', fdata2));  // all after ";" of uses section
+
+    fdata1 := TrimRight(fdata1);
+
+    fdata3 := trim(fdata3);
+    fdata31 := '' ;
 
     datatmp := '{%units ''Auto-generated GUI code''}';
 
-    if pos(datatmp, fdata3) > 0 then
+    if pos(datatmp, fdata3) > 0 then  /// all units before auto-generated code
+    fdata31 := trim(copy(fdata3, 1, pos(datatmp, fdata3) - 1))  ;
+
+    fdata2 :=  LineEnding + '  ' + datatmp + LineEnding ;  /// comment => begin
+
+     datatmp := '{%endunits}';
+
+   if pos(datatmp, fdata3) > 0 then /// all units after auto-generated code
     begin
-      fdata31 := copy(fdata3, 1, pos(datatmp, fdata3) - 1);   /// all units before auto-generated
-    end;
+      fdata32 := copy(fdata3, pos(datatmp, fdata3) + length(datatmp)+1 ,
+      pos(';', fdata3) -  pos(datatmp, fdata3) - length(datatmp) + 1);
+      fdata3 := trim(fdata31) + fdata32;  /// add all before + all after generated code
+     end;
 
-    fdata2 := LineEnding + datatmp + LineEnding;
+   datatmp := LineEnding + '  ' + datatmp + LineEnding ; ;  /// comment => end
 
-    datatmp := '{%endunits}';
-
-    if pos(datatmp, fdata3) > 0 then /// all units after auto-generated
-    begin
-      fdata32 := copy(fdata3, pos(datatmp, fdata3) + length(datatmp) + 1, pos(';', fdata3) - pos(datatmp, fdata3) - length(datatmp) + 1);
-      fdata3 := fdata31 + fdata32;
-    end;
-
-    datatmp := LineEnding + datatmp;
-
-    /// looking for existing declared units
+    /// looking for already declared units in add all before + all after generated code
     if pos('FPG_LABEL', uppercase(fdata3)) > 0 then
       cns_label := True
     else
@@ -592,170 +582,172 @@ begin
     else
       cns_editgrid := False;
 
-    funit := '';
+    funit := ' ';
 
+    //////////// get the classname of each object and add his unit.
     for n := 0 to FDesigners.Count - 1 do
     begin
       for n2 := 0 to TFormDesigner(FDesigners[n]).Form.ComponentCount - 1 do
       begin
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpglabel) and (cns_label = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGLABEL') and (cns_label = False) then
         begin
           funit := funit + ' fpg_label,';
           cns_label := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgButton) and (cns_button = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGBUTTON') and (cns_button = False) then
         begin
           funit := funit + ' fpg_button,';
           cns_button := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgRadioButton) and (cns_radiobutton = False) then
+         if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGRADIOBUTTON') and (cns_radiobutton = False) then
         begin
           funit := funit + ' fpg_radiobutton,';
           cns_radiobutton := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgComboBox) and (cns_combobox = False) then
+         if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCOMBOBOX') and (cns_combobox = False) then
         begin
           funit := funit + ' fpg_combobox,';
           cns_combobox := True;
         end
         else
-        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgedit) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is
-          TfpgEditInteger) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditFloat) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditCurrency)) and (cns_edit = False) then
+         if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDIT') or
+           (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITINTEGER') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITFLOAT') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITCURRENCY')) and (cns_edit = False) then
         begin
           funit := funit + ' fpg_edit,';
           cns_edit := True;
         end
         else
-        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFileNameEdit) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgDirectoryEdit) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgFontEdit) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditButton))
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGFILENAMEEDIT') or
+         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGDIRECTORYEDIT') or
+         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGFONTEDIT') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITBUTTON'))
           and (cns_editbtn = False) then
         begin
           funit := funit + ' fpg_editbtn,';
           cns_editbtn := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgcheckbox) and (cns_checkbox = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCHECKBOX') and (cns_checkbox = False) then
         begin
           funit := funit + ' fpg_checkbox,';
           cns_checkbox := True;
         end
         else
-        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgColorWheel) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgValueBar)) and (cns_colorwheel = False) then
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCOLORWHEEL')or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGVALUEBAR')) and (cns_colorwheel = False) then
         begin
           funit := funit + ' fpg_colorwheel,';
           cns_colorwheel := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpggauge) and (cns_gauge = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGGAUGE') and (cns_gauge = False) then
         begin
           funit := funit + ' fpg_gauge,';
           cns_gauge := True;
         end
         else
-        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpglistbox) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgColorListBox)) and (cns_listbox = False) then
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGLISTBOX') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCOLORLISTBOX')) and (cns_listbox = False) then
         begin
           funit := funit + ' fpg_listbox,';
           cns_listbox := True;
         end
         else
-        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgpanel) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgBevel) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is
-          TfpgGroupBox)) and (cns_panel = False) then
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPANET') or
+         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGBEVEL') or
+        (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGGROUPBOX')) and (cns_panel = False) then
         begin
           funit := funit + ' fpg_panel,';
           cns_panel := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is Tfpgmemo) and (cns_memo = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGMEMO') and (cns_memo = False) then
         begin
           funit := funit + ' fpg_memo,';
           cns_memo := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgStringGrid) and (cns_grid = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGSTRINGGRID') and (cns_grid = False) then
         begin
           funit := funit + ' fpg_grid,';
           cns_grid := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgListView) and (cns_listview = False) then
+        if(uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGLISTVIEW')and (cns_listview = False) then
         begin
           funit := funit + ' fpg_listview,';
           cns_listview := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgTreeView) and (cns_tree = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGTREEVIEW') and (cns_tree = False) then
         begin
           funit := funit + ' fpg_tree,';
           cns_tree := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgProgressBar) and (cns_progressbar = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPROGRESSBAR') and (cns_progressbar = False) then
         begin
           funit := funit + ' fpg_progressbar,';
           cns_progressbar := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgTrackBar) and (cns_trackbar = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGTRACKBAR') and (cns_trackbar = False) then
         begin
           funit := funit + ' fpg_trackbar,';
           cns_trackbar := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgPageControl) and (cns_tab = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPAGECONTROL') and (cns_tab = False) then
         begin
           funit := funit + ' fpg_tab,';
           cns_tab := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgSplitter) and (cns_splitter = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGSPLITTER') and (cns_splitter = False) then
         begin
           funit := funit + ' fpg_splitter,';
           cns_splitter := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgNiceGrid) and (cns_nicegrid = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGNICEGRID') and (cns_nicegrid = False) then
         begin
           funit := funit + ' fpg_nicegrid,';
           cns_nicegrid := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgEditGrid) and (cns_editgrid = False) then
+        if(uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITGRID') and (cns_editgrid = False) then
         begin
           funit := funit + ' u_editgrid,';
           cns_editgrid := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgHyperlink) and (cns_hyperlink = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGHYPERLINK') and (cns_hyperlink = False) then
         begin
           funit := funit + ' fpg_hyperlink,';
           cns_hyperlink := True;
         end
         else
-        if (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgToggle) and (cns_toggle = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGTOGGLE') and (cns_toggle = False) then
         begin
           funit := funit + ' fpg_toggle,';
           cns_toggle := True;
         end
         else
-        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgMenuItem) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgMenuBar) or (TFormDesigner(FDesigners[n]).Form.Components[n2] is
-          TfpgPopupMenu)) and (cns_menu = False) then
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGMENUITEM') or
+         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGMENUBAR') or
+         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPOPUPMENU')) and (cns_menu = False) then
         begin
           funit := funit + ' fpg_menu,';
           cns_menu := True;
         end
         else
-        if ((TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgCalendarCombo) or
-          (TFormDesigner(FDesigners[n]).Form.Components[n2] is TfpgCalendarCheckCombo)) and (cns_calendar = False) then
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCALENDARCOMBO') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCALENDARCHECKCOMBO')) and (cns_calendar = False) then
         begin
           funit := funit + ' fpg_popupcalendar,';
           cns_calendar := True;
@@ -763,12 +755,12 @@ begin
 
       end;
     end;
-
-    Result := fdata1 + fdata2 + funit + datatmp + fdata3 + fdata4;
+     if trim(funit) <> '' then
+    Result := fdata1 + fdata2 + funit + datatmp + '  ' + trim(fdata3) + fdata4 else  /// some units added
+    Result := fdata1 +  LineEnding + '  ' + fdata3 + fdata4;    /// nothing added
   end
   else
-    Result := filedata;
-
+    Result := filedata; /// no uses section finded
 end;
 
 procedure TMainDesigner.OnSaveFile(Sender: TObject);
@@ -1252,7 +1244,7 @@ end;
 procedure TMainDesigner.CreateWindows;
 begin
   frmMainDesigner := TfrmMainDesigner.Create(nil);
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version;
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + inttostr(bitcpu) + ' bit';
   frmMainDesigner.Show;
 
   frmProperties := TfrmProperties.Create(nil);
