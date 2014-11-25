@@ -211,8 +211,7 @@ procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
 var
   r, r21, r22: TfpgRect;
   ib : integer;
-  FwindowBase : TfpgWindowBase ;
-begin
+ begin
 
   FTimer.Enabled := False;
   r.SetRect(x, y, w, h);

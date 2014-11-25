@@ -130,6 +130,8 @@ type
     procedure   onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure   onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
     procedure   OnSaveNewFile(Sender: TObject);
+    procedure   OnCloseAll(Sender: TObject);
+    procedure   OnSaveAs(Sender: TObject);
   end;
 
   TPropertyList = class(TObject)
@@ -303,6 +305,7 @@ begin
   WindowPosition := wpScreenCenter;
   OnShow := @FormShow;
   OnPaint := @FormPaint;
+
   lblAppName := TfpgLabel.Create(self);
   with lblAppName do
   begin
@@ -485,7 +488,7 @@ begin
   btnSave.Left:= btnOpen.Left ;
   btnSave.UpdateWindowPosition;
 
- filemenu.MenuItem(0).Visible:=false;
+ filemenu.MenuItem(0).Visible:=true;
  filemenu.MenuItem(1).Visible:=false;
  filemenu.MenuItem(2).Visible:=false;
  
@@ -749,8 +752,11 @@ begin
     AddMenuItem('-', '', nil);
     mi := AddMenuItem('Save', 'Ctrl+S', @(maindsgn.OnSaveFile));
     mi.Tag := 10;
-    AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @OnSaveNewFile);
+    AddMenuItem('Save As...', '', @OnSaveAs);
+    AddMenuItem('Close', 'Ctrl+C', @OnCloseAll);
     AddMenuItem('-', '', nil);
+    AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @OnSaveNewFile);
+     AddMenuItem('-', '', nil);
     AddMenuItem('Add New Form to Unit...', '', @(maindsgn.OnNewForm));
     AddMenuItem('-', '', nil);
     AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
@@ -1185,6 +1191,19 @@ end;
 procedure TfrmMainDesigner.OnSaveNewFile(Sender: TObject);
 begin
 maindsgn.isFileNew := true ;
+maindsgn.OnSaveFile(sender);
+end;
+
+procedure TfrmMainDesigner.OnCloseAll(Sender: TObject);
+begin
+maindsgn.FFileLoaded :=  'closeall' ;
+maindsgn.OnLoadFile(sender);
+end;
+
+procedure TfrmMainDesigner.OnSaveAs(Sender: TObject);
+begin
+maindsgn.isFileNew := true ;
+maindsgn.FFileLoaded := maindsgn.EditedFilename;
 maindsgn.OnSaveFile(sender);
 end;
 

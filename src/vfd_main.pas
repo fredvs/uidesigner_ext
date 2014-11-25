@@ -30,6 +30,9 @@ unit vfd_main;
 interface
 
 uses
+  {%units 'Auto-generated GUI code'}
+  fpg_label, fpg_button,
+  {%endunits}
   Classes,
   Process,
   SysUtils,
@@ -37,8 +40,6 @@ uses
   fpg_base,
   fpg_main,
   fpg_form,
-  fpg_button,
-  fpg_label,
   fpg_constants,
   vfd_props,
   frm_vfdforms,
@@ -67,8 +68,8 @@ type
     {@VFD_HEAD_BEGIN: TfrmAlreadyExists}
     lbl1: TfpgLabel;
     lbl2: TfpgLabel;
-    btnNo: TfpgButton;
     btnYes: TfpgButton;
+    btnNo: TfpgButton;
     {@VFD_HEAD_END: TfrmAlreadyExists}
   public
     procedure AfterCreate; override;
@@ -90,6 +91,7 @@ type
   public
     ifundo: boolean;
     isFileNew: boolean;
+    FFileLoaded : string;
     GridResolution: integer;
     SaveComponentNames: boolean;
     selectedform: TFormDesigner;
@@ -151,8 +153,9 @@ var
   n: integer;
 begin
   ifundo := False;
+  FFileLoaded := '' ;
   EditedFileName := '';
-  isfileloaded := False;
+  isFileLoaded := False;
   fpgapplication.ProcessMessages;
 
   isfpguifile := False;
@@ -211,7 +214,7 @@ begin
   frmMainDesigner.windowmenu.MenuItem(0).Visible := True;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := True;
 
-  isfileloaded := True;
+  isFileLoaded := True;
   isFileNew := True;
   OnNewForm(Sender);
 
@@ -226,9 +229,8 @@ var
   fname: string;
   afiledialog: TfpgFileDialog;
 begin
-  isfileloaded := False;
+  isFileLoaded := False;
   fpgapplication.ProcessMessages;
-
   isfpguifile := False;
   frmProperties.Hide;
   frmmultiselect.Hide;
@@ -274,6 +276,10 @@ begin
   SetLength(ArrayUndo, 0);
   x := 0;
 
+
+  if maindsgn.FFileLoaded <>  'closeall' then
+  begin
+
   fname := EditedFileName;
   ifundo := False;
 
@@ -294,6 +300,10 @@ begin
     FreeAndNil(aFileDialog);
   end;
 
+  end else fname := '' ;
+
+   FFileLoaded := '' ;
+
   if fname = '' then
   begin
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
@@ -306,6 +316,7 @@ begin
 
   if not fpgFileExists(fname) then
   begin
+     FFileLoaded := '' ;
     //  ShowMessage('File does not exists.', 'Error loading form');
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
@@ -317,6 +328,7 @@ begin
 
   if FFile.LoadFile(fname) = False then
   begin
+     FFileLoaded := '' ;
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
@@ -327,6 +339,7 @@ begin
 
   if FFile.GetBlocks = 0 then
   begin
+     FFileLoaded := '' ;
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
@@ -401,7 +414,7 @@ begin
   frmMainDesigner.windowmenu.MenuItem(0).Visible := True;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := True;
 
-  isfileloaded := True;
+  isFileLoaded := True;
 
   frmProperties.Show;
 
@@ -464,8 +477,7 @@ begin
       fdata3 := trim(fdata31) + fdata32;  /// add all before + all after generated code
     end;
 
-    datatmp := LineEnding + '  ' + datatmp + LineEnding;
-    ;  /// comment => end
+    datatmp := LineEnding + '  ' + datatmp + LineEnding;  /// comment => end
 
     /// looking for already declared units in add all before + all after generated code
     if pos('FPG_LABEL', uppercase(fdata3)) > 0 then
@@ -786,6 +798,9 @@ var
   frm: TfrmAlreadyExists;
   modaresult: boolean;
 begin
+
+ if isFileLoaded = false then exit else
+  begin
   fname := EditedFileName;
 
   if ((Sender as TComponent).Tag = 10) and (EditedFileName <> '') then
@@ -794,7 +809,10 @@ begin
   begin
     afiledialog := TfpgFileDialog.Create(nil);
     afiledialog.Filename := EditedFilename;
-    afiledialog.WindowTitle := 'Save form source';
+    if FFileLoaded = '' then
+    afiledialog.WindowTitle := 'Save form source'
+    else
+    afiledialog.WindowTitle := 'Save as...';
     afiledialog.Filter :=
       'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
     if afiledialog.RunSaveFile then
@@ -831,10 +849,17 @@ begin
       exit;
   end;
 
-  if (fpgFileExists(fname)) and (isFileNew = False) then
+  if (fpgFileExists(fname)) and (isFileNew = False) and (FFileLoaded = '') then
   begin
     FFile.LoadFile(fname);
     FFile.GetBlocks;
+  end
+  else
+  if (fpgFileExists(FFileLoaded)) and (isFileNew = True) then
+  begin
+    FFile.LoadFile(FFileLoaded);
+    FFile.GetBlocks;
+    FFileLoaded := '' ;
   end
   else
   begin
@@ -876,6 +901,8 @@ begin
   // if (enableundo = True) then SaveUndo(Sender, 6);
 end;
 
+end;
+
 procedure TMainDesigner.LoadUndo(undoindex: integer);
 var
   n, m, x: integer;
@@ -883,7 +910,7 @@ var
   FFileUndo: TVFDFile;
 begin
 
-  isfileloaded := False;
+  isFileLoaded := False;
   fpgapplication.ProcessMessages;
 
   isfpguifile := False;
@@ -969,7 +996,7 @@ begin
     end;
 
     isfpguifile := True;
-    isfileloaded := True;
+    isFileLoaded := True;
 
     frmProperties.Show;
 
@@ -1124,7 +1151,7 @@ procedure TMainDesigner.OnPropNameChange(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isfpguifile = True) and (isFileLoaded = True) then
   begin
     calculwidget := False;
     SelectedForm.OnPropNameChange(Sender);
@@ -1148,7 +1175,7 @@ procedure TMainDesigner.OnPropPosEdit(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = True) then
+  if (SelectedForm <> nil) and (isFileLoaded = True) and (calculwidget = True) then
   begin
     calculwidget := False;
     SelectedForm.OnPropPosEdit(Sender);
@@ -1168,7 +1195,7 @@ end;
 
 procedure TMainDesigner.OnPropTextChange(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = True) then
+  if (SelectedForm <> nil) and (isFileLoaded = True) and (calculwidget = True) then
   begin
     calculwidget := False;
     SelectedForm.OnPropTextChange(Sender);
@@ -1180,7 +1207,7 @@ end;
 
 procedure TMainDesigner.OnAnchorChange(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = True) then
+  if (SelectedForm <> nil) and (isFileLoaded = True) and (calculwidget = True) then
   begin
     calculwidget := False;
     SelectedForm.OnAnchorChange(Sender);
@@ -1195,7 +1222,7 @@ procedure TMainDesigner.OnOtherChange(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = True) then
+  if (SelectedForm <> nil) and (isFileLoaded = True) and (calculwidget = True) then
   begin
     calculwidget := False;
     SelectedForm.OnOtherChange(Sender);
@@ -1297,12 +1324,13 @@ begin
   SelectedForm := nil;
   FFile := TVFDFile.Create;
   isFileNew := False;
+  isFileLoaded := False;
+  FEditedFileName := '';
+  FFileLoaded  := '';
   // options
   SaveComponentNames := True;
   LoadDefaults;
-
-  FEditedFileName := '';
-end;
+ end;
 
 destructor TMainDesigner.Destroy;
 var
@@ -1326,7 +1354,7 @@ end;
 
 procedure TMainDesigner.SelectForm(aform: TFormDesigner);
 begin
-  if (SelectedForm <> nil) and (SelectedForm <> aform) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (SelectedForm <> aform) and (isFileLoaded = True) then
     SelectedForm.DeSelectAll;
   SelectedForm := aform;
 end;
@@ -1382,19 +1410,19 @@ end;
 
 procedure TMainDesigner.OnEditWidget(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isFileLoaded = True) then
     SelectedForm.OnEditWidget(Sender);
 end;
 
 procedure TMainDesigner.OnEditWidgetOrder(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isFileLoaded = True) then
     SelectedForm.EditWidgetOrTabOrder(emWidgetOrder);
 end;
 
 procedure TMainDesigner.OnEditTabOrder(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) then
+  if (SelectedForm <> nil) and (isFileLoaded = True) then
     SelectedForm.EditWidgetOrTabOrder(emTabOrder);
 end;
 
@@ -1505,7 +1533,7 @@ procedure TMainDesigner.SetShowGrid(AValue: boolean);
 var
   i: integer;
 begin
-  if (isfileloaded = True) then
+  if (isFileLoaded = True) then
   begin
     if FShowGrid = AValue then
       Exit;
@@ -1521,13 +1549,13 @@ begin
 
   {@VFD_BODY_BEGIN: TfrmAlreadyExists}
   Name := 'TfrmAlreadyExists';
-  SetPosition(694, 311, 350, 90);
-  Hint := '';
-  BackGroundColor := cllightgray;
-  Sizeable := False;
-  WindowType:= wtModalForm;
-  WindowPosition := wpScreenCenter;
+  SetPosition(500, 319, 350, 90);
   WindowTitle := 'Warning => Existing File !';
+  Hint := '';
+  BackGroundColor := $80000001;
+  Sizeable := False;
+  WindowPosition := wpScreenCenter;
+  WindowType:= wtModalForm;
 
   lbl1 := TfpgLabel.Create(self);
   with lbl1 do
@@ -1535,10 +1563,10 @@ begin
     Name := 'lbl1';
     SetPosition(0, 7, 350, 25);
     Alignment := taCenter;
-    BackgroundColor := cllightgray;
     FontDesc := '#Label2';
     Hint := '';
     Text := '/usr/me/thedirectory/';
+    TextColor := TfpgColor($FFFFFFFF);
   end;
 
   lbl2 := TfpgLabel.Create(self);
@@ -1547,7 +1575,6 @@ begin
     Name := 'lbl2';
     SetPosition(0, 30, 350, 35);
     Alignment := taCenter;
-    BackgroundColor := cllightgray;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Already exists... Do you want to overwrite it ?';
