@@ -211,7 +211,9 @@ procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
 var
   r, r21, r22: TfpgRect;
   ib : integer;
+  FwindowBase : TfpgWindowBase ;
 begin
+
   FTimer.Enabled := False;
   r.SetRect(x, y, w, h);
 
@@ -321,7 +323,6 @@ begin
 
   if (waspressed = False) and (btfHover in AFlags) then
     FTimer.Enabled := True;
-
 end;
 
 procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;

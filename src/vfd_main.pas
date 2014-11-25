@@ -36,6 +36,9 @@ uses
   fpg_dialogs,
   fpg_base,
   fpg_main,
+  fpg_form,
+  fpg_button,
+  fpg_label,
   fpg_constants,
   vfd_props,
   frm_vfdforms,
@@ -57,6 +60,20 @@ type
     ActiveForm: string;
     Comment: string;
   end;
+
+type
+  TfrmAlreadyExists = class(TfpgForm)
+  private
+    {@VFD_HEAD_BEGIN: TfrmAlreadyExists}
+    lbl1: TfpgLabel;
+    lbl2: TfpgLabel;
+    btnNo: TfpgButton;
+    btnYes: TfpgButton;
+    {@VFD_HEAD_END: TfrmAlreadyExists}
+  public
+    procedure AfterCreate; override;
+  end;
+
 
 type
 
@@ -154,13 +171,11 @@ begin
 
   frmproperties.edName.Text := '';
 
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version +
-  ' ' + inttostr(bitcpu) + ' bit' ;
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
   if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(6).Text :=
-      'fpGUI Designer_ext v' + ext_version +
-  ' ' + inttostr(bitcpu) + ' bit' ;
+      'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
@@ -228,13 +243,11 @@ begin
 
   frmproperties.edName.Text := '';
 
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version  +
-  ' ' + inttostr(bitcpu) + ' bit  => no fpGUI form-file';
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => no fpGUI form-file';
 
   if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(6).Text :=
-      'fpGUI Designer_ext v' + ext_version +
-  ' ' + inttostr(bitcpu) + ' bit  => no fpGUI form-file';
+      'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => no fpGUI form-file';
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
@@ -323,13 +336,11 @@ begin
   end
   else
   begin
-    frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version   +
-  ' ' + inttostr(bitcpu) + ' bit  => ' + fname;
+    frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
 
     if frmMainDesigner.btnToFront.Tag = 1 then
       frmMainDesigner.MainMenu.MenuItem(6).Text :=
-        'Current file : ' + fname + '    fpGUI Designer_ext v' + ext_version +
-  ' ' + inttostr(bitcpu) + ' bit' ;
+        'Current file : ' + fname + '    fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
@@ -405,9 +416,9 @@ var
   cns_editbtn, cns_colorwheel, cns_splitter, cns_hyperlink, cns_toggle, cns_nicegrid, cns_editgrid: boolean;
 begin
 
-    filedata :=   AdjustLineBreaks(filedata);
+  filedata := AdjustLineBreaks(filedata);
 
-   /// search for uses section  /// TODO => check if not inside comment {...}
+  /// search for uses section  /// TODO => check if not inside comment {...}
   if (pos(LineEnding + 'USES' + LineEnding, uppercase(filedata)) > 0) then
     datatmp := LineEnding + 'USES' + LineEnding
   else
@@ -417,44 +428,44 @@ begin
   if (pos(' USES' + LineEnding, uppercase(filedata)) > 0) then
     datatmp := ' USES' + LineEnding
   else
-    if (pos(' USES ', uppercase(filedata)) > 0)
-  then
+  if (pos(' USES ', uppercase(filedata)) > 0) then
     datatmp := ' USES '
   else
-   if (pos('USES', uppercase(filedata)) > 0) then /// TODO => better check
-  datatmp := 'USES'
+  if (pos('USES', uppercase(filedata)) > 0) then /// TODO => better check
+    datatmp := 'USES'
   else
-     datatmp := '';
+    datatmp := '';
 
   if datatmp <> '' then
   begin
     fdata1 := copy(filedata, 1, pos(datatmp, uppercase(filedata)) + length(datatmp)); /// all before "uses"
-    fdata2 := copy(filedata, pos(datatmp, uppercase(filedata))  + length(datatmp) ,1+ length(filedata) - pos(datatmp, uppercase(filedata))); /// all after "uses"
-    fdata3 := copy(fdata2, 1, pos(';', fdata2)+ length(datatmp)-4);  /// only "uses" section
+    fdata2 := copy(filedata, pos(datatmp, uppercase(filedata)) + length(datatmp), 1 + length(filedata) - pos(datatmp, uppercase(filedata)));
+    /// all after "uses"
+    fdata3 := copy(fdata2, 1, pos(';', fdata2) + length(datatmp) - 4);  /// only "uses" section
     fdata4 := copy(fdata2, pos(';', fdata2) + 1, length(fdata2) - pos(';', fdata2));  // all after ";" of uses section
 
     fdata1 := TrimRight(fdata1);
 
     fdata3 := trim(fdata3);
-    fdata31 := '' ;
+    fdata31 := '';
 
     datatmp := '{%units ''Auto-generated GUI code''}';
 
     if pos(datatmp, fdata3) > 0 then  /// all units before auto-generated code
-    fdata31 := trim(copy(fdata3, 1, pos(datatmp, fdata3) - 1))  ;
+      fdata31 := trim(copy(fdata3, 1, pos(datatmp, fdata3) - 1));
 
-    fdata2 :=  LineEnding + '  ' + datatmp + LineEnding ;  /// comment => begin
+    fdata2 := LineEnding + '  ' + datatmp + LineEnding;  /// comment => begin
 
-     datatmp := '{%endunits}';
+    datatmp := '{%endunits}';
 
-   if pos(datatmp, fdata3) > 0 then /// all units after auto-generated code
+    if pos(datatmp, fdata3) > 0 then /// all units after auto-generated code
     begin
-      fdata32 := copy(fdata3, pos(datatmp, fdata3) + length(datatmp)+1 ,
-      pos(';', fdata3) -  pos(datatmp, fdata3) - length(datatmp) + 1);
+      fdata32 := copy(fdata3, pos(datatmp, fdata3) + length(datatmp) + 1, pos(';', fdata3) - pos(datatmp, fdata3) - length(datatmp) + 1);
       fdata3 := trim(fdata31) + fdata32;  /// add all before + all after generated code
-     end;
+    end;
 
-   datatmp := LineEnding + '  ' + datatmp + LineEnding ; ;  /// comment => end
+    datatmp := LineEnding + '  ' + datatmp + LineEnding;
+    ;  /// comment => end
 
     /// looking for already declared units in add all before + all after generated code
     if pos('FPG_LABEL', uppercase(fdata3)) > 0 then
@@ -601,20 +612,20 @@ begin
           cns_button := True;
         end
         else
-         if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGRADIOBUTTON') and (cns_radiobutton = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGRADIOBUTTON') and (cns_radiobutton = False) then
         begin
           funit := funit + ' fpg_radiobutton,';
           cns_radiobutton := True;
         end
         else
-         if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCOMBOBOX') and (cns_combobox = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCOMBOBOX') and (cns_combobox = False) then
         begin
           funit := funit + ' fpg_combobox,';
           cns_combobox := True;
         end
         else
-         if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDIT') or
-           (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITINTEGER') or
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDIT') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITINTEGER') or
           (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITFLOAT') or
           (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITCURRENCY')) and (cns_edit = False) then
         begin
@@ -623,10 +634,9 @@ begin
         end
         else
         if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGFILENAMEEDIT') or
-         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGDIRECTORYEDIT') or
-         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGFONTEDIT') or
-          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITBUTTON'))
-          and (cns_editbtn = False) then
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGDIRECTORYEDIT') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGFONTEDIT') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITBUTTON')) and (cns_editbtn = False) then
         begin
           funit := funit + ' fpg_editbtn,';
           cns_editbtn := True;
@@ -638,7 +648,7 @@ begin
           cns_checkbox := True;
         end
         else
-        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCOLORWHEEL')or
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGCOLORWHEEL') or
           (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGVALUEBAR')) and (cns_colorwheel = False) then
         begin
           funit := funit + ' fpg_colorwheel,';
@@ -659,8 +669,8 @@ begin
         end
         else
         if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPANET') or
-         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGBEVEL') or
-        (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGGROUPBOX')) and (cns_panel = False) then
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGBEVEL') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGGROUPBOX')) and (cns_panel = False) then
         begin
           funit := funit + ' fpg_panel,';
           cns_panel := True;
@@ -678,7 +688,7 @@ begin
           cns_grid := True;
         end
         else
-        if(uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGLISTVIEW')and (cns_listview = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGLISTVIEW') and (cns_listview = False) then
         begin
           funit := funit + ' fpg_listview,';
           cns_listview := True;
@@ -720,7 +730,7 @@ begin
           cns_nicegrid := True;
         end
         else
-        if(uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITGRID') and (cns_editgrid = False) then
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGEDITGRID') and (cns_editgrid = False) then
         begin
           funit := funit + ' u_editgrid,';
           cns_editgrid := True;
@@ -739,8 +749,8 @@ begin
         end
         else
         if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGMENUITEM') or
-         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGMENUBAR') or
-         (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPOPUPMENU')) and (cns_menu = False) then
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGMENUBAR') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPOPUPMENU')) and (cns_menu = False) then
         begin
           funit := funit + ' fpg_menu,';
           cns_menu := True;
@@ -755,9 +765,10 @@ begin
 
       end;
     end;
-     if trim(funit) <> '' then
-    Result := fdata1 + fdata2 + funit + datatmp + '  ' + trim(fdata3) + fdata4 else  /// some units added
-    Result := fdata1 +  LineEnding + '  ' + fdata3 + fdata4;    /// nothing added
+    if trim(funit) <> '' then
+      Result := fdata1 + fdata2 + funit + datatmp + '  ' + trim(fdata3) + fdata4
+    else  /// some units added
+      Result := fdata1 + LineEnding + '  ' + fdata3 + fdata4;    /// nothing added
   end
   else
     Result := filedata; /// no uses section finded
@@ -771,7 +782,9 @@ var
   ff: file;
   fname, uname: string;
   aFileDialog: TfpgFileDialog;
-  aDialog :TfpgMessageDialog;
+  aDialog: TfpgMessageDialog;
+  frm: TfrmAlreadyExists;
+  modaresult: boolean;
 begin
   fname := EditedFileName;
 
@@ -801,14 +814,24 @@ begin
 
   EditedFileName := fname;
 
-if (isFileNew = true) and (fpgFileExists(fname)) then
+  if (isFileNew = True) and (fpgFileExists(fname)) then
   begin
-    if  TfpgMessageDialog.Warning('', trim(fname) + ' already exists...' + #10#13 +
-   'Do you want to overwrite it ?...', mbYesNo, mbNo) = mbYes then
-    else exit;
-   end;
+    frm := TfrmAlreadyExists.Create(nil);
+    frm.lbl1.Text := trim(fname);
+    try
+      frm.ShowModal;
+    finally
+      if frm.ModalResult = mrYes then
+        modaresult := True
+      else
+        modaresult := False;
+      frm.Free;
+    end;
+    if modaresult = False then
+      exit;
+  end;
 
-  if (fpgFileExists(fname)) and (isFileNew = false) then
+  if (fpgFileExists(fname)) and (isFileNew = False) then
   begin
     FFile.LoadFile(fname);
     FFile.GetBlocks;
@@ -831,7 +854,7 @@ if (isFileNew = true) and (fpgFileExists(fname)) then
     FFile.SetFormData(fd.Form.Name, fd.GetFormSourceDecl, fd.GetFormSourceImpl);
   end;
 
-  isfilenew := false;
+  isfilenew := False;
   fdata := FFile.MergeBlocks;
 
   if enableautounits then
@@ -1101,14 +1124,14 @@ procedure TMainDesigner.OnPropNameChange(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True)  then
+  if (SelectedForm <> nil) and (isfpguifile = True) and (isfileloaded = True) then
   begin
-      calculwidget := false;
+    calculwidget := False;
     SelectedForm.OnPropNameChange(Sender);
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 0);
 
-    calculwidget := true;
+    calculwidget := True;
 
     if frmMultiSelect.Visible = True then
     begin
@@ -1125,9 +1148,9 @@ procedure TMainDesigner.OnPropPosEdit(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = true) then
+  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = True) then
   begin
-     calculwidget := false;
+    calculwidget := False;
     SelectedForm.OnPropPosEdit(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
@@ -1139,32 +1162,32 @@ begin
         TheParent := (frmProperties.lstProps.Props.Widget.Parent);
       frmMultiSelect.Getwidgetlist(TheParent);
     end;
-    calculwidget := true;
+    calculwidget := True;
   end;
 end;
 
 procedure TMainDesigner.OnPropTextChange(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = true) then
+  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = True) then
   begin
-     calculwidget := false;
+    calculwidget := False;
     SelectedForm.OnPropTextChange(Sender);
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 12);
-    calculwidget := true;
+    calculwidget := True;
   end;
 end;
 
 procedure TMainDesigner.OnAnchorChange(Sender: TObject);
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = true) then
+  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = True) then
   begin
-     calculwidget := false;
+    calculwidget := False;
     SelectedForm.OnAnchorChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 13);
-     calculwidget := true;
+    calculwidget := True;
   end;
 end;
 
@@ -1172,9 +1195,9 @@ procedure TMainDesigner.OnOtherChange(Sender: TObject);
 var
   TheParent: Tfpgwidget;
 begin
-  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = true) then
+  if (SelectedForm <> nil) and (isfileloaded = True) and (calculwidget = True) then
   begin
-      calculwidget := false;
+    calculwidget := False;
     SelectedForm.OnOtherChange(Sender);
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
@@ -1191,7 +1214,7 @@ begin
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 11);
-      calculwidget := true;
+    calculwidget := True;
   end;
 
 end;
@@ -1218,7 +1241,7 @@ var
   end;
 
 begin
-  calculwidget := false;
+  calculwidget := False;
   nfrm := TNewFormForm.Create(nil);
   try
     if nfrm.ShowModal = mrOk then
@@ -1261,7 +1284,7 @@ end;
 procedure TMainDesigner.CreateWindows;
 begin
   frmMainDesigner := TfrmMainDesigner.Create(nil);
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + inttostr(bitcpu) + ' bit';
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
   frmMainDesigner.Show;
 
   frmProperties := TfrmProperties.Create(nil);
@@ -1273,7 +1296,7 @@ begin
   FDesigners := TList.Create;
   SelectedForm := nil;
   FFile := TVFDFile.Create;
-  isFileNew := false;
+  isFileNew := False;
   // options
   SaveComponentNames := True;
   LoadDefaults;
@@ -1404,7 +1427,7 @@ end;
 procedure TMainDesigner.SetEditedFileName(const Value: string);
 var
   aprocess: tprocess;
-  e : string;
+  e: string;
 begin
   AProcess := TProcess.Create(nil);
 
@@ -1491,5 +1514,74 @@ begin
       TFormDesigner(FDesigners[i]).Form.ShowGrid := AValue;
   end;
 end;
+
+procedure TfrmAlreadyExists.AfterCreate;
+begin
+  {%region 'Auto-generated GUI code' -fold}
+
+  {@VFD_BODY_BEGIN: TfrmAlreadyExists}
+  Name := 'TfrmAlreadyExists';
+  SetPosition(694, 311, 350, 90);
+  Hint := '';
+  BackGroundColor := cllightgray;
+  Sizeable := False;
+  WindowType:= wtModalForm;
+  WindowPosition := wpScreenCenter;
+  WindowTitle := 'Warning => Existing File !';
+
+  lbl1 := TfpgLabel.Create(self);
+  with lbl1 do
+  begin
+    Name := 'lbl1';
+    SetPosition(0, 7, 350, 25);
+    Alignment := taCenter;
+    BackgroundColor := cllightgray;
+    FontDesc := '#Label2';
+    Hint := '';
+    Text := '/usr/me/thedirectory/';
+  end;
+
+  lbl2 := TfpgLabel.Create(self);
+  with lbl2 do
+  begin
+    Name := 'lbl2';
+    SetPosition(0, 30, 350, 35);
+    Alignment := taCenter;
+    BackgroundColor := cllightgray;
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Already exists... Do you want to overwrite it ?';
+  end;
+
+  btnYes := TfpgButton.Create(self);
+  with btnYes do
+  begin
+    Name := 'btnYes';
+    SetPosition(85, 60, 70, 24);
+    FontDesc := '#Label1';
+    Hint := '';
+    ImageName := 'stdimg.ok';
+    ModalResult := mrYes;
+    TabOrder := 1;
+    Text := 'Yes';
+  end;
+
+  btnNo := TfpgButton.Create(self);
+  with btnNo do
+  begin
+    Name := 'btnNo';
+    SetPosition(195, 60, 70, 24);
+    FontDesc := '#Label1';
+    Hint := '';
+    ImageName := 'stdimg.cancel';
+    ModalResult := mrNo;
+    TabOrder := 2;
+    Text := 'No';
+  end;
+
+  {@VFD_BODY_END: TfrmAlreadyExists}
+  {%endregion}
+
+ end;
 
 end.

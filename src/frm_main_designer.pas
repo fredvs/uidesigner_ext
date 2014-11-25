@@ -293,8 +293,6 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
-
      {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(694, 311, 278, 195);
@@ -305,7 +303,6 @@ begin
   WindowPosition := wpScreenCenter;
   OnShow := @FormShow;
   OnPaint := @FormPaint;
-
   lblAppName := TfpgLabel.Create(self);
   with lblAppName do
   begin

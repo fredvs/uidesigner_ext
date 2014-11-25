@@ -137,11 +137,10 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="designer_ext"/>
-        <TopLine Value="20"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="103"/>
         <CursorPos X="38" Y="23"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="vfdmain.pas"/>
