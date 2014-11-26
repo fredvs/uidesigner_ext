@@ -1251,7 +1251,7 @@ procedure Tfrm_multiselect.ClearAll;
 var
   x: integer;
 begin
-  calculwidget := false;
+  calculwidget := False;
   hide;
   if (maindsgn.selectedform <> nil) then
   begin
@@ -1271,7 +1271,7 @@ begin
     Height := 2;
     UpdateWindowPosition;
   end;
-  calculwidget := true;
+  calculwidget := True;
 end;
 
 
@@ -1279,13 +1279,13 @@ procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);
 var
   x: integer;
 begin
-    calculwidget := false;
+  calculwidget := False;
   if (maindsgn.selectedform <> nil) then
   begin
-     fpgapplication.ProcessMessages;
+    fpgapplication.ProcessMessages;
     // hide;
     x := 0;
-    Panelscroll.Visible:=false;
+    Panelscroll.Visible := False;
     TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
     while x < length(cbSelected) do
@@ -1415,9 +1415,9 @@ begin
     grid1.Visible := True;
     panelscroll.Visible := True;
     UpdateWindowPosition;
-    show;
+    Show;
   end;
-   calculwidget := true;
+  calculwidget := True;
 end;
 
 procedure Tfrm_multiselect.onDestroyFrm(Sender: TObject);

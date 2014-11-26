@@ -22,7 +22,6 @@ fiens@hotmail.com
       Essential classes used by the fpGUI Designer
  }
 
-
 unit frm_main_designer;
 
 {$mode objfpc}{$H+}
@@ -60,25 +59,25 @@ type
   public
     VFDWidget: TVFDWidgetClass;
   end;
- 
+
   TwgPalette = class(TfpgWidget)
   protected
     procedure HandlePaint; override;
   end;
- 
+
   TfrmMainDesigner = class(TfpgForm)
   private
     FFileOpenRecent: TfpgMenuItem;
     FlistUndo: TfpgMenuItem;
-    procedure   FormShow(Sender: TObject);
-    procedure   PaletteBarResized(Sender: TObject);
-    procedure   miHelpAboutClick(Sender: TObject);
-    procedure   miHelpAboutGUI(Sender: TObject);
-    procedure   micolorwheel(Sender: TObject);
-    procedure   miimageconv(Sender: TObject);
-    procedure   miMRUClick(Sender: TObject; const FileName: string);
-    procedure   BuildThemePreviewMenu;
-    procedure   ToggleDesignerGrid(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure PaletteBarResized(Sender: TObject);
+    procedure miHelpAboutClick(Sender: TObject);
+    procedure miHelpAboutGUI(Sender: TObject);
+    procedure micolorwheel(Sender: TObject);
+    procedure miimageconv(Sender: TObject);
+    procedure miMRUClick(Sender: TObject; const FileName: string);
+    procedure BuildThemePreviewMenu;
+    procedure ToggleDesignerGrid(Sender: TObject);
 
   public
     {@VFD_HEAD_BEGIN: frmMainDesigner}
@@ -105,62 +104,60 @@ type
     {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
-    procedure   MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
-    function    GetSelectedWidget: TVFDWidgetClass;
-    procedure   SetSelectedWidget(wgc: TVFDWidgetClass);
-    procedure   AfterCreate; override;
-    procedure   BeforeDestruction; override;
-    procedure   OnPaletteClick(Sender: TObject);
-    property    SelectedWidget: TVFDWidgetClass read GetSelectedWidget write SetSelectedWidget;
-    procedure   onhideclick(Sender: TObject);
-    procedure   onshowclick(Sender: TObject);
-    procedure   onalwaystofront(Sender: TObject);
-    procedure   OnNevertoFront(Sender: TObject);
-    procedure   OnLoadUndo(Sender: TObject);
-    procedure   OnIndexUndo(Sender: TObject);
-    procedure   OnIndexRedo(Sender: TObject);
-    procedure   OnObjInspect(Sender: TObject);
-    procedure   ToFrontClick(Sender: TObject);
-    procedure   OnFormDesignShow(Sender: TObject);
-    procedure   onMultiSelect(Sender: TObject);
-    procedure   LoadIDEparameters(ide :integer) ;
-    procedure   onMessagePost;
-    procedure   OnStyleChange(Sender: TObject);
-    procedure   onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
-    procedure   onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
-    procedure   onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
-    procedure   OnSaveNewFile(Sender: TObject);
-    procedure   OnCloseAll(Sender: TObject);
-    procedure   OnSaveAs(Sender: TObject);
-    procedure   OnNewForm(Sender: TObject);
-   end;
+    procedure MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
+    function GetSelectedWidget: TVFDWidgetClass;
+    procedure SetSelectedWidget(wgc: TVFDWidgetClass);
+    procedure AfterCreate; override;
+    procedure BeforeDestruction; override;
+    procedure OnPaletteClick(Sender: TObject);
+    property SelectedWidget: TVFDWidgetClass read GetSelectedWidget write SetSelectedWidget;
+    procedure onalwaystofront(Sender: TObject);
+    procedure OnNevertoFront(Sender: TObject);
+    procedure OnLoadUndo(Sender: TObject);
+    procedure OnIndexUndo(Sender: TObject);
+    procedure OnIndexRedo(Sender: TObject);
+    procedure OnObjInspect(Sender: TObject);
+    procedure ToFrontClick(Sender: TObject);
+    procedure OnFormDesignShow(Sender: TObject);
+    procedure onMultiSelect(Sender: TObject);
+    procedure LoadIDEparameters(ide: integer);
+    procedure onMessagePost;
+    procedure OnStyleChange(Sender: TObject);
+    procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
+    procedure onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
+    procedure onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
+    procedure OnSaveNewFile(Sender: TObject);
+    procedure OnCloseAll(Sender: TObject);
+    procedure OnSaveAs(Sender: TObject);
+    procedure OnNewForm(Sender: TObject);
+  end;
 
   TPropertyList = class(TObject)
   private
     FList: TList;
-    function    GetCount: integer;
+    function GetCount: integer;
   public
     Widget: TfpgWidget;
     constructor Create;
-    destructor  Destroy; override;
-    procedure   Clear;
-    property    Count: integer read GetCount;
-    procedure   AddItem(aProp: TVFDWidgetProperty);
-    function    GetItem(index: integer): TVFDWidgetProperty;
+    destructor Destroy; override;
+    procedure Clear;
+    property Count: integer read GetCount;
+    procedure AddItem(aProp: TVFDWidgetProperty);
+    function GetItem(index: integer): TVFDWidgetProperty;
   end;
 
   TwgPropertyList = class(TfpgListBox)
   protected
-    procedure   DrawItem(num: integer; rect: TfpgRect; flags: integer); override;
-    procedure   HandleMouseMove(x, y: integer; btnstate: word; shiftstate: TShiftState); override;
-    procedure   HandleLMouseDown(x, y: integer; shiftstate: TShiftState); override;
-    procedure   HandleLMouseUp(x, y: integer; shiftstate: TShiftState); override;
-    procedure   HandleMouseScroll(x, y: integer; shiftstate: TShiftState; delta: smallint); override;
-    procedure   HandleSetFocus; override;
-    procedure   HandleKillFocus; override;
-    procedure   OnRowChange(Sender: TObject);
-    procedure   OnScrolling(Sender: TObject);
-    procedure   OnUpdateProperty(Sender: TObject);
+    procedure DrawItem(num: integer; rect: TfpgRect; flags: integer); override;
+    procedure HandleMouseMove(x, y: integer; btnstate: word; shiftstate: TShiftState); override;
+    procedure HandleLMouseDown(x, y: integer; shiftstate: TShiftState); override;
+    procedure HandleLMouseUp(x, y: integer; shiftstate: TShiftState); override;
+    procedure HandleMouseScroll(x, y: integer; shiftstate: TShiftState; delta: smallint); override;
+    procedure HandleSetFocus; override;
+    procedure HandleKillFocus; override;
+    procedure OnRowChange(Sender: TObject);
+    procedure OnScrolling(Sender: TObject);
+    procedure OnUpdateProperty(Sender: TObject);
   public
     Props: TPropertyList;
     NameWidth: integer;
@@ -168,11 +165,11 @@ type
     NameDrag: boolean;
     NameDragPos: integer;
     constructor Create(AOwner: TComponent); override;
-    procedure   ReleaseEditor;
-    procedure   AllocateEditor;
-    function    ItemCount: integer; override;
-    function    RowHeight: integer; override;
-    procedure   RealignEditor;
+    procedure ReleaseEditor;
+    procedure AllocateEditor;
+    function ItemCount: integer; override;
+    function RowHeight: integer; override;
+    procedure RealignEditor;
   end;
 
   TfrmProperties = class(TfpgForm)
@@ -189,21 +186,21 @@ type
     btnTop, btnLeft, btnWidth, btnHeight: TfpgButton;
     btnAnLeft, btnAnTop, btnAnRight, btnAnBottom: TfpgButton;
     lstProps: TwgPropertyList;
-    virtualpanel : Tfpgpanel;
-    cbsizeable, cbfullscreen, cbvisible,cbenabled, cbWindowPosition, cbFocusable : TfpgCombobox;
-    edmaxheight, edminheight, edmaxwidth, edminwidth, edTag : Tfpgedit;
+    virtualpanel: Tfpgpanel;
+    cbsizeable, cbfullscreen, cbvisible, cbenabled, cbWindowPosition, cbFocusable: TfpgCombobox;
+    edmaxheight, edminheight, edmaxwidth, edminwidth, edTag: Tfpgedit;
 
-    procedure   AfterCreate; override;
-    procedure   BeforeDestruction; override;
-    procedure   Vpanelpaint(Sender: TObject);
-    procedure   frmPropertiesPaint(Sender: TObject);
-    procedure   VirtualPropertiesUpdate(Sender: TObject);
+    procedure AfterCreate; override;
+    procedure BeforeDestruction; override;
+    procedure Vpanelpaint(Sender: TObject);
+    procedure frmPropertiesPaint(Sender: TObject);
+    procedure VirtualPropertiesUpdate(Sender: TObject);
 
   end;
 
   TfrmAbout = class(TfpgForm)
-   private
-     {@VFD_HEAD_BEGIN: frmAbout}
+  private
+    {@VFD_HEAD_BEGIN: frmAbout}
     lblAppName: TfpgLabel;
     lblVersion: TfpgLabel;
     btnClose: TfpgButton;
@@ -213,31 +210,31 @@ type
     lblExtBy: TfpgLabel;
     lblExtMail: TfpgLabel;
     {@VFD_HEAD_END: frmAbout}
-     Fimage : Tfpgimage;
-     procedure   SetupCaptions;
-     procedure   FormShow(Sender: TObject);
-     procedure FormPaint(Sender: TObject);
-   public
-     procedure   AfterCreate; override;
-     class procedure Execute;
-   end;
+    Fimage: Tfpgimage;
+    procedure SetupCaptions;
+    procedure FormShow(Sender: TObject);
+    procedure FormPaint(Sender: TObject);
+  public
+    procedure AfterCreate; override;
+    class procedure Execute;
+  end;
 
 {@VFD_NEWFORM_DECL}
 
 const
- ext_version : string = '1.5' ;
+  ext_version: string = '1.5';
 
 var
   frmProperties: TfrmProperties;
   frmMainDesigner: TfrmMainDesigner;
-  ifonlyone : boolean;
+  ifonlyone: boolean;
   PropList: TPropertyList;
   oriMousePos: TPoint;
-  idetemp, maxundo, indexundo : integer;
-  enableundo : boolean;
-  enableautounits : boolean ;
-  numstyle : integer;
-  bitcpu : integer;
+  idetemp, maxundo, indexundo: integer;
+  enableundo: boolean;
+  enableautounits: boolean;
+  numstyle: integer;
+  bitcpu: integer;
 
 implementation
 
@@ -258,6 +255,7 @@ uses
 // logo images
 {$I fpgui_logo.inc}
 
+
 {@VFD_NEWFORM_IMPL}
 
 function IsStrANumber(const S: string): boolean;
@@ -272,11 +270,13 @@ end;
 
 procedure TfrmAbout.SetupCaptions;
 begin
-  lblVersion.Text := 'Version: ' +  ext_version  + ' '
-+ inttostr(bitcpu) + ' bit' ;
+  lblVersion.Text := 'Version: ' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
   lblURL.URL := fpGUIWebsite;
   lblURL.Text := fpGUIWebsite;
+
+  /// => This code gives problem to JEDI code-formater
   lblCompiled.Text := Format(rsCompiledOn, [{$I %date%} + ' ' + {$I %time%}]);
+  //
   btnClose.Text := rsClose;
 end;
 
@@ -296,7 +296,7 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-     {@VFD_BODY_BEGIN: frmAbout}
+  {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(694, 311, 278, 195);
   WindowTitle := 'About Designer_ext';
@@ -337,11 +337,11 @@ begin
   begin
     Name := 'btnClose';
     SetPosition(196, 163, 75, 24);
-    Anchors := [anRight,anBottom];
+    Anchors := [anRight, anBottom];
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.close';
-    ModalResult := mrOK;
+    ModalResult := mrOk;
     TabOrder := 2;
     Text := 'Close';
     TextColor := TfpgColor($FF000000);
@@ -412,14 +412,11 @@ begin
 
   {@VFD_BODY_END: frmAbout}
   {%endregion}
- FImage :=  fpgImages.AddBMP(
-    'fpgui_logo1', @extimg_fpgui_logo1,
-    sizeof(extimg_fpgui_logo1));
+  FImage := fpgImages.AddBMP('fpgui_logo1', @extimg_fpgui_logo1, sizeof(extimg_fpgui_logo1));
 
- WindowTitle := WindowTitle + ' '
-+ inttostr(bitcpu) + ' bit' ;
+  WindowTitle := WindowTitle + ' ' + IntToStr(bitcpu) + ' bit';
 
-    RePaint;
+  RePaint;
 end;
 
 class procedure TfrmAbout.Execute;
@@ -428,70 +425,75 @@ var
 begin
   frm := TfrmAbout.Create(nil);
   try
-     frm.ShowModal;
+    frm.ShowModal;
   finally
     frm.Free;
   end;
 end;
 
-procedure   TfrmMainDesigner.MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
-  var
-  x : integer;
-  begin
-    if (IsRunningIDE('typhon') = false) and (IsRunningIDE('lazarus') = false)
-   then
-   begin
-     x := 0 ;
-   if assigned(frmmultiselect.cbSelected) then while x < length(frmmultiselect.cbSelected) do
-begin
-  frmmultiselect.cbSelected[x].Free;
-inc(x);
-end;
-     CanClose := true;
-     end else
-   begin
-      CanClose := false;
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0
-     then begin
-   x := 0 ;
-   while x < length(ArrayFormDesign)  do
-    begin
-    ArrayFormDesign[x].Form.close;
-     inc(x);
-     end;
-    frmProperties.close;
-     frmMainDesigner.hide;
-     frmmultiselect.hide;
-
-    end else
-    begin
-     x := 0 ;
-   if assigned(frmmultiselect.cbSelected) then while x < length(frmmultiselect.cbSelected) do
-begin
-  frmmultiselect.cbSelected[x].Free;
-inc(x);
-end;
-    CanClose := true;
-    end;
-    end;
-    end;
-
-procedure TfrmMainDesigner.LoadIDEparameters(ide :integer) ;
+procedure TfrmMainDesigner.MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
 var
-f : textfile ;
-dataf, dataf2 : string ;
-fmbegin, fmend : integer ;
+  x: integer;
 begin
-   fpgapplication.ProcessMessages;
-////////
+  if (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) then
+  begin
+    x := 0;
+    if assigned(frmmultiselect.cbSelected) then
+      while x < length(frmmultiselect.cbSelected) do
+      begin
+        frmmultiselect.cbSelected[x].Free;
+        Inc(x);
+      end;
+    CanClose := True;
+  end
+  else
+  begin
+    CanClose := False;
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+    begin
+      x := 0;
+      while x < length(ArrayFormDesign) do
+      begin
+        ArrayFormDesign[x].Form.Close;
+        Inc(x);
+      end;
+      frmProperties.Close;
+      frmMainDesigner.hide;
+      frmmultiselect.hide;
 
-  btnOpen.Visible:=false;
-  btnSave.Left:= btnOpen.Left ;
+    end
+    else
+    begin
+      x := 0;
+      if assigned(frmmultiselect.cbSelected) then
+        while x < length(frmmultiselect.cbSelected) do
+        begin
+          frmmultiselect.cbSelected[x].Free;
+          Inc(x);
+        end;
+      CanClose := True;
+    end;
+  end;
+end;
+
+procedure TfrmMainDesigner.LoadIDEparameters(ide: integer);
+var
+  f: textfile;
+  dataf, dataf2: string;
+  fmbegin, fmend: integer;
+begin
+  fpgapplication.ProcessMessages;
+  ////////
+
+  btnOpen.Visible := False;
+  btnSave.Left := btnOpen.Left;
   btnSave.UpdateWindowPosition;
 
- filemenu.MenuItem(0).Visible:=true;
- filemenu.MenuItem(1).Visible:=false;
- filemenu.MenuItem(2).Visible:=false;
+  filemenu.MenuItem(0).Visible := True;
+  filemenu.MenuItem(1).Visible := False;
+  filemenu.MenuItem(2).Visible := False;
+
+  /// => This code gives problem to JEDI code-formater
 
  if ide = 2 then
   begin
@@ -670,51 +672,57 @@ if fileexists(pchar(dataf)) then
       CloseFile(f);
        UpdateWindowPosition;
          end;
- end;
+  ////
+end;
 
 procedure TfrmMainDesigner.onMessagePost;
 begin
-if theMessage = 'quit' then
- close else
-if (FileExists(theMessage)) or (theMessage = 'closeall') then
+  if theMessage = 'quit' then
+    Close
+  else
+  if (FileExists(theMessage)) or (theMessage = 'closeall') then
   begin
-  maindsgn.EditedFileName := theMessage;
-  maindsgn.OnLoadFile(maindsgn);
-   end;
-BringToFront;
+    maindsgn.EditedFileName := theMessage;
+    maindsgn.OnLoadFile(maindsgn);
+  end;
+  BringToFront;
 end;
 
 procedure TfrmMainDesigner.OnLoadUndo(Sender: TObject);
- begin
-    if Sender is TfpgMenuItem then begin
- maindsgn.loadundo(TfpgMenuItem(Sender).Tag) ;
-      end;
+begin
+  if Sender is TfpgMenuItem then
+  begin
+    maindsgn.loadundo(TfpgMenuItem(Sender).Tag);
   end;
+end;
 
 procedure TfrmMainDesigner.OnIndexUndo(Sender: TObject);
- begin
- frmMainDesigner.undomenu.MenuItem(1).Enabled := true;
-if indexundo < length(ArrayUndo) -1  then
 begin
-inc(indexundo);
-maindsgn.loadundo(indexundo) ;
-end else
-frmMainDesigner.undomenu.MenuItem(0).Enabled := false;
- end;
+  frmMainDesigner.undomenu.MenuItem(1).Enabled := True;
+  if indexundo < length(ArrayUndo) - 1 then
+  begin
+    Inc(indexundo);
+    maindsgn.loadundo(indexundo);
+  end
+  else
+    frmMainDesigner.undomenu.MenuItem(0).Enabled := False;
+end;
 
 procedure TfrmMainDesigner.OnIndexRedo(Sender: TObject);
- begin
-  frmMainDesigner.undomenu.MenuItem(0).Enabled := true;
-if indexundo > 0 then
 begin
-dec(indexundo);
-maindsgn.loadundo(indexundo) ;
-end else  frmMainDesigner.undomenu.MenuItem(1).Enabled := false;
- end;
+  frmMainDesigner.undomenu.MenuItem(0).Enabled := True;
+  if indexundo > 0 then
+  begin
+    Dec(indexundo);
+    maindsgn.loadundo(indexundo);
+  end
+  else
+    frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
+end;
 
 procedure TfrmMainDesigner.AfterCreate;
 var
-  n, x, y : integer;
+  n, x, y: integer;
   wgc: TVFDWidgetClass;
   btn: TwgPaletteButton;
   mi: TfpgMenuItem;
@@ -757,7 +765,7 @@ begin
     AddMenuItem('Close', '', @OnCloseAll);
     AddMenuItem('-', '', nil);
     AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @OnSaveNewFile);
-     AddMenuItem('-', '', nil);
+    AddMenuItem('-', '', nil);
     AddMenuItem('Add New Form to Unit...', '', @OnNewForm);
     AddMenuItem('-', '', nil);
     AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
@@ -794,13 +802,13 @@ begin
   begin
     Name := 'undomenu';
     SetPosition(464, 48, 120, 20);
-    AddMenuItem('Undo', 'Ctrl+Z',@OnIndexUndo);
-    AddMenuItem('ReDo', 'Ctrl+Maj+Z',@OnIndexRedo);
+    AddMenuItem('Undo', 'Ctrl+Z', @OnIndexUndo);
+    AddMenuItem('ReDo', 'Ctrl+Maj+Z', @OnIndexRedo);
     AddMenuItem('-', '', nil);
-    FlistUndo := AddMenuItem('Undo List...', '',nil);
-    MenuItem(0).Enabled:=false;
-    MenuItem(1).Enabled:=false;
-    MenuItem(3).Enabled:=false;
+    FlistUndo := AddMenuItem('Undo List...', '', nil);
+    MenuItem(0).Enabled := False;
+    MenuItem(1).Enabled := False;
+    MenuItem(3).Enabled := False;
   end;
 
   toolsmenu := TfpgPopupMenu.Create(self);
@@ -834,38 +842,38 @@ begin
     Name := 'windowmenu';
     SetPosition(328, 52, 120, 20);
     AddMenuItem('Object Inspector', '', @OnObjInspect);
-    AddMenuItem('-', '', nil) ;
-    MenuItem(1).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(2).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(3).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(4).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(5).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(6).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(7).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(8).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(9).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(10).Visible:=false;
-    AddMenuItem('', '',@frmMainDesigner.OnFormDesignShow);
-    MenuItem(11).Visible:=false;
-    MenuItem(2).Tag:=0;
-    MenuItem(3).Tag:=1;
-    MenuItem(4).Tag:=2;
-    MenuItem(5).Tag:=3;
-    MenuItem(6).Tag:=4;
-    MenuItem(7).Tag:=5;
-    MenuItem(8).Tag:=6;
-    MenuItem(9).Tag:=7;
-    MenuItem(10).Tag:=8;
-    MenuItem(11).Tag:=9;
+    AddMenuItem('-', '', nil);
+    MenuItem(1).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(2).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(3).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(4).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(5).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(6).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(7).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(8).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(9).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(10).Visible := False;
+    AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
+    MenuItem(11).Visible := False;
+    MenuItem(2).Tag := 0;
+    MenuItem(3).Tag := 1;
+    MenuItem(4).Tag := 2;
+    MenuItem(5).Tag := 3;
+    MenuItem(6).Tag := 4;
+    MenuItem(7).Tag := 5;
+    MenuItem(8).Tag := 6;
+    MenuItem(9).Tag := 7;
+    MenuItem(10).Tag := 8;
+    MenuItem(11).Tag := 9;
   end;
 
   previewmenu := TfpgPopupMenu.Create(self);
@@ -887,9 +895,9 @@ begin
     ImageSpacing := 0;
     TabOrder := 1;
     Text := '';
-    Visible := false;
+    Visible := False;
     Focusable := False;
-    OnClick   := @(OnNewForm);
+    OnClick := @(OnNewForm);
   end;
 
   btnOpen := TfpgButton.Create(self);
@@ -905,7 +913,7 @@ begin
     TabOrder := 2;
     Text := '';
     Focusable := False;
-    OnClick   := @(maindsgn.OnLoadFile);
+    OnClick := @(maindsgn.OnLoadFile);
   end;
 
   btnSave := TfpgButton.Create(self);
@@ -914,16 +922,16 @@ begin
     Name := 'btnSave';
     SetPosition(68, 33, 25, 24);
     FontDesc := '#Label1';
-    Hint := 'Save the current form design';
+    Hint := 'Save the loaded forms';
     ImageMargin := -1;
     ImageName := 'stdimg.save';
     ImageSpacing := 0;
     TabOrder := 3;
-    Tag := 10 ;
+    Tag := 10;
     Text := '';
-    Visible := false;
+    Visible := False;
     Focusable := False;
-    OnClick   := @(maindsgn.OnSaveFile);
+    OnClick := @(maindsgn.OnSaveFile);
   end;
 
   btnGrid := TfpgButton.Create(self);
@@ -957,7 +965,7 @@ begin
     TabOrder := 3;
     Text := '';
     Focusable := False;
-    onClick   := @ToFrontClick;
+    onClick := @ToFrontClick;
     hide;
   end;
 
@@ -982,7 +990,7 @@ begin
   begin
     Name := 'wgpalette';
     SetPosition(180, 28, 606, 62);
-    Anchors := [anLeft,anRight,anTop,anBottom];
+    Anchors := [anLeft, anRight, anTop, anBottom];
     Focusable := False;
     Width := self.Width - 150;
     OnResize := @PaletteBarResized;
@@ -993,7 +1001,7 @@ begin
   begin
     Name := 'chlPalette';
     SetPosition(16, 64, 156, 22);
-    Anchors := [anLeft,anBottom];
+    Anchors := [anLeft, anBottom];
     ExtraHint := '';
     FontDesc := '#List';
     Hint := '';
@@ -1015,56 +1023,56 @@ begin
     Style := bsFlat;
     Text := '';
     Visible := False;
-    OnMouseMove:= @onMovemovepanel ;
-    OnMouseDown := @onClickDownPanel ;
-    OnMouseUp := @onClickUpPanel ;
+    OnMouseMove := @onMovemovepanel;
+    OnMouseDown := @onClickDownPanel;
+    OnMouseUp := @onClickUpPanel;
   end;
 
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
 
     {$if defined(cpu64)}
-   bitcpu := 64 ;
+  bitcpu := 64;
 {$else}
-   bitcpu := 32 ;
+  bitcpu := 32;
    {$endif}
 
 
-  for x:=0 to 99 do
-    begin
-    listundomenu.AddMenuItem('', '',@OnLoadUndo);
-    listundomenu.MenuItem(x).Visible:=false;
-    listundomenu.MenuItem(x).Tag:=x;
-    end;
+  for x := 0 to 99 do
+  begin
+    listundomenu.AddMenuItem('', '', @OnLoadUndo);
+    listundomenu.MenuItem(x).Visible := False;
+    listundomenu.MenuItem(x).Tag := x;
+  end;
 
   { Build component palette }
 
   x := 0;
   y := 0;
 
-  OnCloseQuery:= @MainCloseQueryEvent;
+  OnCloseQuery := @MainCloseQueryEvent;
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
-  enableautounits :=gINI.ReadBool('Options', 'EnableAutoUnits', True);
+  enableautounits := gINI.ReadBool('Options', 'EnableAutoUnits', True);
 
-  for n := 0 to VFDWidgetCount-1 do
+  for n := 0 to VFDWidgetCount - 1 do
   begin
-    wgc           := VFDWidget(n);
-    btn           := TwgPaletteButton.Create(wgpalette);
+    wgc := VFDWidget(n);
+    btn := TwgPaletteButton.Create(wgpalette);
     btn.VFDWidget := wgc;
     btn.SetPosition(x, y, 30, 28);
     btn.ImageName := wgc.WidgetIconName;
     btn.ImageMargin := -1;
-    btn.Text      := '';
-    btn.Hint      := wgc.WidgetClass.ClassName;
+    btn.Text := '';
+    btn.Hint := wgc.WidgetClass.ClassName;
     btn.Focusable := False;
-    btn.OnClick   := @OnPaletteClick;
+    btn.OnClick := @OnPaletteClick;
     btn.AllowDown := True;
     btn.AllowAllUp := True;
     chlPalette.Items.AddObject(wgc.WidgetClass.ClassName, wgc);
 
     Inc(x, 32);
-    if (x+30) >= wgpalette.Width  then
+    if (x + 30) >= wgpalette.Width then
     begin
       x := 0;
       Inc(y, 30);
@@ -1072,116 +1080,119 @@ begin
   end;
 
 
- BuildThemePreviewMenu;
+  BuildThemePreviewMenu;
 
   chlPalette.Items.Sort;
- 
-  MainMenu.AddMenuItem('&File', nil).SubMenu     := filemenu;
-    MainMenu.AddMenuItem('&Undo', nil).SubMenu     := undomenu;
-  MainMenu.AddMenuItem('Selected Fo&rm', nil).SubMenu     := formmenu;
-  MainMenu.AddMenuItem('&Settings', nil).SubMenu := setmenu;
-   MainMenu.AddMenuItem('&Preview', nil).SubMenu  := previewmenu;
-   MainMenu.AddMenuItem('&Window', nil).SubMenu  := windowmenu;
-   MainMenu.AddMenuItem('&Tools', nil).SubMenu     := toolsmenu;
-   MainMenu.AddMenuItem('&Help', nil).SubMenu     := helpmenu;
-  MainMenu.AddMenuItem('', nil) ;
 
-    if enableundo = true then MainMenu.MenuItem(1).Visible:= true else
-    MainMenu.MenuItem(1).Visible:= false ;
+  MainMenu.AddMenuItem('&File', nil).SubMenu := filemenu;
+  MainMenu.AddMenuItem('&Undo', nil).SubMenu := undomenu;
+  MainMenu.AddMenuItem('Selected Fo&rm', nil).SubMenu := formmenu;
+  MainMenu.AddMenuItem('&Settings', nil).SubMenu := setmenu;
+  MainMenu.AddMenuItem('&Preview', nil).SubMenu := previewmenu;
+  MainMenu.AddMenuItem('&Window', nil).SubMenu := windowmenu;
+  MainMenu.AddMenuItem('&Tools', nil).SubMenu := toolsmenu;
+  MainMenu.AddMenuItem('&Help', nil).SubMenu := helpmenu;
+  MainMenu.AddMenuItem('', nil);
+
+  if enableundo = True then
+    MainMenu.MenuItem(1).Visible := True
+  else
+    MainMenu.MenuItem(1).Visible := False;
 
   FFileOpenRecent.SubMenu := miOpenRecentMenu;
   FlistUndo.SubMenu := listundomenu;
 
   mru := TfpgMRU.Create(self);
-  mru.ParentMenuItem  := miOpenRecentMenu;
-  mru.OnClick         := @miMRUClick;
-  mru.MaxItems        := gINI.ReadInteger('Options', 'MRUFileCount', 4);
-  mru.ShowFullPath    := gINI.ReadBool('Options', 'ShowFullPath', True);
+  mru.ParentMenuItem := miOpenRecentMenu;
+  mru.OnClick := @miMRUClick;
+  mru.MaxItems := gINI.ReadInteger('Options', 'MRUFileCount', 4);
+  mru.ShowFullPath := gINI.ReadBool('Options', 'ShowFullPath', True);
   mru.LoadMRU;
 
-        if  gINI.ReadBool('Options', 'AlwaysToFront', false) = FALSE then
-      begin
-     windowType := wtwindow ;
-     MainMenu.MenuItem(8).Visible:=false;
-    // btnToFront.Text:= 'toF' ;
-   btnToFront.tag:=0;
-      end
-      else
-       begin
-     MainMenu.MenuItem(8).Visible:=true;
-    MainMenu.MenuItem(8).Text:= WindowTitle;
-    //btnToFront.Text:='toN';
-   btnToFront.tag:=1;
-     windowType := wtpopup ;
-       end;
+  MainMenu.MenuItem(8).Visible := False;
 
- filemenu.MenuItem(0).Visible:=true;
+  if gINI.ReadBool('Options', 'AlwaysToFront', False) = False then
+  begin
+    windowType := wtwindow;
+    btnToFront.tag := 0;
+  end
+  else
+  begin
+    MainMenu.MenuItem(8).Visible := True;
+    MainMenu.MenuItem(8).Text := WindowTitle;
+    btnToFront.tag := 1;
+    windowType := wtpopup;
+  end;
 
- filemenu.MenuItem(4).Visible:=false;
- filemenu.MenuItem(5).Visible:=false;
- filemenu.MenuItem(6).Visible:=false;
- filemenu.MenuItem(7).Visible:=false;
- filemenu.MenuItem(8).Visible:=false;
- filemenu.MenuItem(9).Visible:=false;
- filemenu.MenuItem(10).Visible:=false;
- filemenu.MenuItem(11).Visible:=false;
+  filemenu.MenuItem(0).Visible := True;
 
- filemenu.MenuItem(1).Visible:=false;
- filemenu.MenuItem(2).Visible:=false;
- filemenu.MenuItem(12).Visible:=false;
+  filemenu.MenuItem(4).Visible := False;
+  filemenu.MenuItem(5).Visible := False;
+  filemenu.MenuItem(6).Visible := False;
+  filemenu.MenuItem(7).Visible := False;
+  filemenu.MenuItem(8).Visible := False;
+  filemenu.MenuItem(9).Visible := False;
+  filemenu.MenuItem(10).Visible := False;
+  filemenu.MenuItem(11).Visible := False;
 
-    x := gINI.ReadInteger('Options', 'IDE', 0);
-   idetemp := x ;
-if x = 0 then
-begin
+  filemenu.MenuItem(1).Visible := False;
+  filemenu.MenuItem(2).Visible := False;
+  filemenu.MenuItem(12).Visible := False;
 
-  btnOpen.Visible:=true;
-  btnSave.Left:= 69 ;
-  btnSave.UpdateWindowPosition;
+  x := gINI.ReadInteger('Options', 'IDE', 0);
+  idetemp := x;
+  if x = 0 then
+  begin
 
- filemenu.MenuItem(1).Visible:=true;
- filemenu.MenuItem(2).Visible:=true;
- filemenu.MenuItem(12).Visible:=true;
+    btnOpen.Visible := True;
+    btnSave.Left := 69;
+    btnSave.UpdateWindowPosition;
 
-indexundo := 0 ;
+    filemenu.MenuItem(1).Visible := True;
+    filemenu.MenuItem(2).Visible := True;
+    filemenu.MenuItem(12).Visible := True;
 
-   if  gINI.ReadBool('frmMainState', 'FirstLoad', true) = false  then
-          gINI.ReadFormState(self)
-         else
-         gINI.WriteBool('frmMainState', 'FirstLoad', false);
-  end else  LoadIDEparameters(x) ;
+    indexundo := 0;
 
- if ifonlyone = true then
- begin
-  InitMessage ;
-  StartMessage(@onMessagePost, 1000);
- end;
- PaletteBarResized(self);
- frmMultiSelect := Tfrm_multiselect.Create(nil);
+    if gINI.ReadBool('frmMainState', 'FirstLoad', True) = False then
+      gINI.ReadFormState(self)
+    else
+      gINI.WriteBool('frmMainState', 'FirstLoad', False);
+  end
+  else
+    LoadIDEparameters(x);
+
+  if ifonlyone = True then
+  begin
+    InitMessage;
+    StartMessage(@onMessagePost, 1000);
+  end;
+  PaletteBarResized(self);
+  frmMultiSelect := Tfrm_multiselect.Create(nil);
 
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
 begin
- maindsgn.ShowGrid := btnGrid.Down;
+  maindsgn.ShowGrid := btnGrid.Down;
 end;
 
 procedure TfrmMainDesigner.FormShow(Sender: TObject);
 begin
-gINI.ReadFormState(self);
-UpdateWindowPosition;
+  gINI.ReadFormState(self);
+  UpdateWindowPosition;
 end;
 
 constructor TfrmMainDesigner.Create(AOwner: TComponent);
 begin
-inherited Create(AOwner);
-fpgImages.AddMaskedBMP( 'vfd.grid', @vfd_grid,
-sizeof(vfd_grid), 0, 0);
-fpgImages.AddMaskedBMP('vfd.tofront', @vfd_tofront,
-sizeof(vfd_tofront), 0, 0);
-fpgImages.AddMaskedBMP('vfd.select', @vfd_select,
-sizeof(vfd_select), 0, 0);
-OnShow := @FormShow;
+  inherited Create(AOwner);
+  fpgImages.AddMaskedBMP('vfd.grid', @vfd_grid,
+    sizeof(vfd_grid), 0, 0);
+  fpgImages.AddMaskedBMP('vfd.tofront', @vfd_tofront,
+    sizeof(vfd_tofront), 0, 0);
+  fpgImages.AddMaskedBMP('vfd.select', @vfd_select,
+    sizeof(vfd_select), 0, 0);
+  OnShow := @FormShow;
 end;
 
 procedure TfrmMainDesigner.BeforeDestruction;
@@ -1209,191 +1220,203 @@ end;
 
 procedure TfrmMainDesigner.OnSaveNewFile(Sender: TObject);
 begin
-maindsgn.isFileNew := true ;
-maindsgn.OnSaveFile(sender);
+  maindsgn.isFileNew := True;
+  maindsgn.OnSaveFile(Sender);
 end;
 
 procedure TfrmMainDesigner.OnCloseAll(Sender: TObject);
 begin
-maindsgn.FFileLoaded :=  'closeall' ;
-maindsgn.OnLoadFile(sender);
+  maindsgn.FFileLoaded := 'closeall';
+  maindsgn.OnLoadFile(Sender);
 end;
 
 procedure TfrmMainDesigner.OnNewForm(Sender: TObject);
 begin
-maindsgn.OnNewForm(sender);
+  maindsgn.OnNewForm(Sender);
 end;
 
 procedure TfrmMainDesigner.OnSaveAs(Sender: TObject);
 begin
-maindsgn.isFileNew := true ;
-maindsgn.FFileLoaded := maindsgn.EditedFilename;
-maindsgn.OnSaveFile(sender);
+  maindsgn.isFileNew := True;
+  maindsgn.FFileLoaded := maindsgn.EditedFilename;
+  maindsgn.OnSaveFile(Sender);
 end;
 
 procedure TfrmMainDesigner.onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
- begin
- oriMousePos := AMousePos;
- PanelMove.Tag:=1;
-  end;
+begin
+  oriMousePos := AMousePos;
+  PanelMove.Tag := 1;
+end;
 
 procedure TfrmMainDesigner.onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
- begin
-  PanelMove.Tag:=0;
-  end;
+begin
+  PanelMove.Tag := 0;
+end;
 
-procedure TfrmMainDesigner.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint) ;
- begin
+procedure TfrmMainDesigner.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
+begin
   if PanelMove.Tag = 1 then
   begin
-  fpgapplication.ProcessMessages;
-  top := top + ( AMousePos.Y- oriMousePos.y);
-  left := left + (AMousePos.x-oriMousePos.X );
-  UpdateWindowPosition;
+    fpgapplication.ProcessMessages;
+    top := top + (AMousePos.Y - oriMousePos.y);
+    left := left + (AMousePos.x - oriMousePos.X);
+    UpdateWindowPosition;
   end;
- end;
+end;
 
-procedure  TfrmMainDesigner.ToFrontClick(Sender: TObject);
- begin
-   if  btnToFront.Tag = 0 then Onalwaystofront(sender)
-   else OnNevertofront(sender) ;
- end;
+procedure TfrmMainDesigner.ToFrontClick(Sender: TObject);
+begin
+  if btnToFront.Tag = 0 then
+    Onalwaystofront(Sender)
+  else
+    OnNevertofront(Sender);
+end;
 
-procedure   TfrmMainDesigner.onmultiselect(Sender: TObject);
+procedure TfrmMainDesigner.onmultiselect(Sender: TObject);
 var
-  TheParent : Tfpgwidget;
-   begin
+  TheParent: Tfpgwidget;
+begin
 
-    if (frmProperties.edName.Text <> '') and (frmProperties.lstProps.Props.Widget <> nil) and  (maindsgn.selectedform <> nil) then
-    begin
+  if (frmProperties.edName.Text <> '') and (frmProperties.lstProps.Props.Widget <> nil) and (maindsgn.selectedform <> nil) then
+  begin
 
-     TheParent := frmProperties.lstProps.Props.Widget ;
+    TheParent := frmProperties.lstProps.Props.Widget;
 
-      if TheParent.HasParent then
-     TheParent := frmProperties.lstProps.Props.Widget.Parent ;
+    if TheParent.HasParent then
+      TheParent := frmProperties.lstProps.Props.Widget.Parent;
 
-      calculwidget := true ;
+    calculwidget := True;
 
-       frmMultiSelect.Getwidgetlist(TheParent);
+    frmMultiSelect.Getwidgetlist(TheParent);
 
-       calculwidget := false ;
+    calculwidget := False;
 
-  frmMultiSelect.hide;    //// this to give focus
-  fpgapplication.ProcessMessages;
-  frmMultiSelect.Show;
+    frmMultiSelect.hide;    //// this to give focus
+    fpgapplication.ProcessMessages;
+    frmMultiSelect.Show;
 
-end else ShowMessage('Nothing loaded or no form selected...', 'Warning', true) ;
+  end
+  else
+    ShowMessage('Nothing loaded or no form selected...', 'Warning', True);
 
 end;
 
 procedure TfrmMainDesigner.OnAlwaysToFront(Sender: TObject);
-begin
-   hide;
-   fpgapplication.ProcessMessages;
-    WindowType := wtpopup ;
-    MainMenu.MenuItem(8).Visible:=true;
-   MainMenu.MenuItem(8).Text:=  '=> ' + p + s + '   Designer_ext v' +  ext_version + ' ' + inttostr(bitcpu) + ' bit';
-   // btnToFront.Text:='toN';
-   btnToFront.tag:=1;
- if idetemp = 1 then
-  begin
-    {$IFDEF Windows}
-      // left := left - 5 ;
-     width := width + 8 ;
-       {$ENDIF}
-    {$IFDEF unix}
-      left := left + 1 ;
-    {$ENDIF}
-   end;
-
-  if  idetemp = 2 then
-  begin
-    {$IFDEF unix}
-      left := left + 2 ;
-    {$ENDIF}
-    {$IFDEF windows}
-   left := left + 8 ;
-     {$ENDIF}
-     end;
-
-UpdateWindowPosition;
-PanelMove.visible := true;
-show;
-    frmProperties.hide;
-   fpgapplication.ProcessMessages;
-   frmProperties.Show;
-   end;
-
-procedure TfrmMainDesigner.OnNeverToFront(Sender: TObject);
-begin
-   hide;
-   PanelMove.visible := false;
-     fpgapplication.ProcessMessages;
-      MainMenu.MenuItem(8).Text:= '';
-      MainMenu.MenuItem(8).Visible:=false;
-     //   btnToFront.Text:='toF';
-   btnToFront.tag:=0;
-  WindowType := wtwindow ;  // with borders, not on front.
-  WindowAttributes := [];
-
-     if idetemp = 1 then
-  begin
-   {$IFDEF Windows}
-     //  left := left + 5 ;
-     width := width - 8 ;
-      {$ENDIF}
- {$IFDEF unix}
-      left := left - 1 ;
-  {$ENDIF}
-   end;
-
-  if  idetemp = 2 then
-  begin
-   {$IFDEF unix}
-      left := left - 2 ;
-    {$ENDIF}
-   {$IFDEF windows}
-   left := left - 8 ;
-     {$ENDIF}
-     end;
-   UpdateWindowPosition;
-
-   show;
-   frmProperties.hide;
-   fpgapplication.ProcessMessages;
-   frmProperties.Show;
-  end;
-
-procedure TfrmMainDesigner.OnHideClick(Sender: TObject);
-
+var
+  frmisvisible: boolean;
 begin
   hide;
- WindowAttributes := [waBorderless];
- MainMenu.MenuItem(7).Text:= '=> ' + p + s + '   Designer_ext' + ' ' + inttostr(bitcpu) + ' bit';
- show;
+  fpgapplication.ProcessMessages;
+  if frmProperties.Visible = True then
+    frmisvisible := True
+  else
+    frmisvisible := False;
+
+  WindowType := wtpopup;
+
+  MainMenu.MenuItem(8).Visible := False;
+
+  if trim(maindsgn.p + maindsgn.s) <> '' then
+  begin
+    MainMenu.MenuItem(8).Text := '=> ' + maindsgn.p + maindsgn.s;
+    MainMenu.MenuItem(8).Visible := True;
+  end;
+  btnToFront.tag := 1;
+  if idetemp = 1 then
+  begin
+    {$IFDEF Windows}
+    // left := left - 5 ;
+    Width := Width + 8;
+       {$ENDIF}
+    {$IFDEF unix}
+    left := left + 1;
+    {$ENDIF}
+  end;
+
+  if idetemp = 2 then
+  begin
+    {$IFDEF unix}
+    left := left + 2;
+    {$ENDIF}
+    {$IFDEF windows}
+    left := left + 8;
+     {$ENDIF}
+  end;
+
+  UpdateWindowPosition;
+  PanelMove.Visible := True;
+  Show;
+  if frmisvisible = True then
+  begin
+    frmProperties.hide;
+    fpgapplication.ProcessMessages;
+    frmProperties.Show;
+  end;
 end;
 
-procedure TfrmMainDesigner.OnShowClick(Sender: TObject);
-
+procedure TfrmMainDesigner.OnNeverToFront(Sender: TObject);
+var
+  frmisvisible: boolean;
 begin
-    hide;
-  MainMenu.MenuItem(7).Text:= '';
+  hide;
+  PanelMove.Visible := False;
+  fpgapplication.ProcessMessages;
+
+  if frmProperties.Visible = True then
+    frmisvisible := True
+  else
+    frmisvisible := False;
+
+  MainMenu.MenuItem(8).Text := '';
+  MainMenu.MenuItem(8).Visible := False;
+  btnToFront.tag := 0;
+  WindowType := wtwindow;  // with borders, not on front.
   WindowAttributes := [];
-   Show;
+
+  if idetemp = 1 then
+  begin
+   {$IFDEF Windows}
+    //  left := left + 5 ;
+    Width := Width - 8;
+      {$ENDIF}
+ {$IFDEF unix}
+    left := left - 1;
+  {$ENDIF}
+  end;
+
+  if idetemp = 2 then
+  begin
+   {$IFDEF unix}
+    left := left - 2;
+    {$ENDIF}
+   {$IFDEF windows}
+    left := left - 8;
+     {$ENDIF}
+  end;
+  UpdateWindowPosition;
+
+  Show;
+  if frmisvisible = True then
+  begin
+    frmProperties.hide;
+    fpgapplication.ProcessMessages;
+    frmProperties.Show;
+  end;
 end;
 
 procedure TfrmMainDesigner.OnObjInspect(Sender: TObject);
 begin
-   frmProperties.hide;
-   fpgapplication.ProcessMessages;
-   frmProperties.Show;
- end;
+  frmProperties.hide;
+  fpgapplication.ProcessMessages;
+  frmProperties.Show;
+end;
 
 procedure TfrmMainDesigner.OnFormDesignShow(Sender: TObject);
 begin
-  if Sender is TfpgMenuItem then begin
-  ArrayFormDesign[TfpgMenuItem(Sender).Tag].Form.Hide;
- ArrayFormDesign[TfpgMenuItem(Sender).Tag].Form.show;
+  if Sender is TfpgMenuItem then
+  begin
+    ArrayFormDesign[TfpgMenuItem(Sender).Tag].Form.Hide;
+    ArrayFormDesign[TfpgMenuItem(Sender).Tag].Form.Show;
   end;
 end;
 
@@ -1410,21 +1433,22 @@ begin
   WindowTitle := 'Properties';
   left := 200;
   top := 240;
-  width := 270;
-  height := 450 ;
- // MinWidth := 268;
- // MinHeight := 448;
-  OnResize:= @frmPropertiesPaint;
-  visible := false;
+  Width := 270;
+  Height := 450;
+  // MinWidth := 268;
+  // MinHeight := 448;
+  OnResize := @frmPropertiesPaint;
+  Visible := False;
 
-    if  gINI.ReadBool('frmPropertiesState', 'FirstLoad', true) = false  then
+  if gINI.ReadBool('frmPropertiesState', 'FirstLoad', True) = False then
   begin
-                    gINI.ReadFormState(self) ;
-                    UpdateWindowPosition;
-                      end else
-    gINI.WriteBool('frmPropertiesState', 'FirstLoad', false);
+    gINI.ReadFormState(self);
+    UpdateWindowPosition;
+  end
+  else
+    gINI.WriteBool('frmPropertiesState', 'FirstLoad', False);
 
-    fpgImages.AddMaskedBMP(
+  fpgImages.AddMaskedBMP(
     'vfd.anchorleft', @vfd_anchorleft,
     sizeof(vfd_anchorleft), 0, 0);
 
@@ -1440,279 +1464,285 @@ begin
     'vfd.anchorbottom', @vfd_anchorbottom,
     sizeof(vfd_anchorbottom), 0, 0);
 
-  x     := 3;
-  x2    := x + 50;
-  gap   := 20;
-  w     := Width - x2;
-  y     := 3;
+  x := 3;
+  x2 := x + 50;
+  gap := 20;
+  w := Width - x2;
+  y := 3;
 
   l1 := TfpgLabel.Create(self);
-  l1.Text := 'Class:' ;
-  l1.Top:= y-1;
-  l1.left:=5;
+  l1.Text := 'Class:';
+  l1.Top := y - 1;
+  l1.left := 5;
 
   lbClass := TfpgLabel.Create(self);
-  lbClass.Text := '' ;
-  lbClass.Top:= y-1;
-  lbClass.left:= x2;
+  lbClass.Text := '';
+  lbClass.Top := y - 1;
+  lbClass.left := x2;
   lbClass.Width := w;
-  lbClass.height := 22;
+  lbClass.Height := 22;
   lbClass.FontDesc := '#Label2';
   lbClass.Anchors := [anLeft, anRight, anTop];
   Inc(y, gap);
 
-  l2  := TfpgLabel.Create(self);
-  l2.Text := 'Name:' ;
-  l2.Top:= y+1;
-  l2.left:=5;
+  l2 := TfpgLabel.Create(self);
+  l2.Text := 'Name:';
+  l2.Top := y + 1;
+  l2.left := 5;
 
   edName := TfpgEdit.Create(self);
-  edName.Text := '' ;
-  edName.width := width - l2.Right + 28 ;
-  edName.Top:= y-2;
-  edName.left:= x2;
+  edName.Text := '';
+  edName.Width := Width - l2.Right + 28;
+  edName.Top := y - 2;
+  edName.left := x2;
   edName.Anchors := [anLeft, anRight, anTop];
   edName.OnChange := @(maindsgn.OnPropNameChange);
 
   Inc(y, gap + 5);
 
-  lstProps         := TwgPropertyList.Create(self);
-  lstProps.SetPosition(0, y, Width, (self.Height - y - 150)div 2);
+  lstProps := TwgPropertyList.Create(self);
+  lstProps.SetPosition(0, y, Width, (self.Height - y - 150) div 2);
   lstProps.Anchors := AllAnchors;
-  lstProps.Props   := PropList;
+  lstProps.Props := PropList;
   lstProps.Props.Widget := edName;
 
-  y := lstProps.Bottom ;
+  y := lstProps.Bottom;
 
-   virtualpanel := Tfpgpanel.Create(self);
-   virtualpanel.SetPosition(0, y, Width, 110);
-   virtualpanel.Anchors := [anLeft, anRight];
-   virtualpanel.BackgroundColor := $CCCCCC ;
-   virtualpanel.Style := bsFlat;
-   virtualpanel.Visible:=false;
-   virtualpanel.Text:='';
-   virtualpanel.OnPaint:= @vpanelpaint;
+  virtualpanel := Tfpgpanel.Create(self);
+  virtualpanel.SetPosition(0, y, Width, 110);
+  virtualpanel.Anchors := [anLeft, anRight];
+  virtualpanel.BackgroundColor := $CCCCCC;
+  virtualpanel.Style := bsFlat;
+  virtualpanel.Visible := False;
+  virtualpanel.Text := '';
+  virtualpanel.OnPaint := @vpanelpaint;
 
-   cbfocusable := TfpgCombobox.Create(virtualpanel);
-   cbfocusable.Items.Add('True');
-   cbfocusable.Items.Add('False');
-   cbfocusable.FocusItem:=0;
-   cbfocusable.Text:='True';
-   cbfocusable.BackgroundColor := $E0E0E0;
-   cbfocusable.height:= 21;
-   cbfocusable.OnExit:=  @VirtualPropertiesUpdate;
+  cbfocusable := TfpgCombobox.Create(virtualpanel);
+  cbfocusable.Items.Add('True');
+  cbfocusable.Items.Add('False');
+  cbfocusable.FocusItem := 0;
+  cbfocusable.Text := 'True';
+  cbfocusable.BackgroundColor := $E0E0E0;
+  cbfocusable.Height := 21;
+  cbfocusable.OnExit := @VirtualPropertiesUpdate;
 
-   cbsizeable := TfpgCombobox.Create(virtualpanel);
-   cbsizeable.Items.Add('True');
-   cbsizeable.Items.Add('False');
-   cbsizeable.FocusItem:=0;
-   cbsizeable.Text:='True';
-   cbsizeable.BackgroundColor := $E0E0E0;
-   cbsizeable.height:= 21;
-   cbsizeable.OnExit:=  @VirtualPropertiesUpdate;
+  cbsizeable := TfpgCombobox.Create(virtualpanel);
+  cbsizeable.Items.Add('True');
+  cbsizeable.Items.Add('False');
+  cbsizeable.FocusItem := 0;
+  cbsizeable.Text := 'True';
+  cbsizeable.BackgroundColor := $E0E0E0;
+  cbsizeable.Height := 21;
+  cbsizeable.OnExit := @VirtualPropertiesUpdate;
 
-   cbvisible := TfpgCombobox.Create(virtualpanel);
-   cbvisible.Items.Add('True');
-   cbvisible.Items.Add('False');
-   cbvisible.FocusItem:=0;
-   cbvisible.Text:='True';
-   cbvisible.BackgroundColor := $E0E0E0;
-   cbvisible.height:= 21;
-   cbvisible.OnExit:=  @VirtualPropertiesUpdate;   ;
+  cbvisible := TfpgCombobox.Create(virtualpanel);
+  cbvisible.Items.Add('True');
+  cbvisible.Items.Add('False');
+  cbvisible.FocusItem := 0;
+  cbvisible.Text := 'True';
+  cbvisible.BackgroundColor := $E0E0E0;
+  cbvisible.Height := 21;
+  cbvisible.OnExit := @VirtualPropertiesUpdate;
+  ;
 
-   cbfullscreen := TfpgCombobox.Create(virtualpanel);
-   cbfullscreen.Items.Add('False');
-   cbfullscreen.Items.Add('True');
-   cbfullscreen.FocusItem:=0;
-   cbfullscreen.Text:='False';
-   cbfullscreen.BackgroundColor := $E0E0E0;
-   cbfullscreen.height:= 21;
-   cbfullscreen.OnExit:=  @VirtualPropertiesUpdate;   ;
+  cbfullscreen := TfpgCombobox.Create(virtualpanel);
+  cbfullscreen.Items.Add('False');
+  cbfullscreen.Items.Add('True');
+  cbfullscreen.FocusItem := 0;
+  cbfullscreen.Text := 'False';
+  cbfullscreen.BackgroundColor := $E0E0E0;
+  cbfullscreen.Height := 21;
+  cbfullscreen.OnExit := @VirtualPropertiesUpdate;
+  ;
 
-   cbenabled := TfpgCombobox.Create(virtualpanel);
-   cbenabled.Items.Add('True');
-   cbenabled.Items.Add('False');
-   cbenabled.FocusItem:=0;
-   cbenabled.Text:='True';
-   cbenabled.BackgroundColor := $E0E0E0;
-   cbenabled.height:= 21;
-   cbenabled.OnExit:=  @VirtualPropertiesUpdate;   ;
+  cbenabled := TfpgCombobox.Create(virtualpanel);
+  cbenabled.Items.Add('True');
+  cbenabled.Items.Add('False');
+  cbenabled.FocusItem := 0;
+  cbenabled.Text := 'True';
+  cbenabled.BackgroundColor := $E0E0E0;
+  cbenabled.Height := 21;
+  cbenabled.OnExit := @VirtualPropertiesUpdate;
+  ;
 
-   edminwidth := TfpgEdit.Create(virtualpanel);
-   edminwidth.Text := '0';
-   edminwidth.BackgroundColor := $E0E0E0;
-   edminwidth.height:= 21;
-   edminwidth.OnExit:=  @VirtualPropertiesUpdate;   ;
+  edminwidth := TfpgEdit.Create(virtualpanel);
+  edminwidth.Text := '0';
+  edminwidth.BackgroundColor := $E0E0E0;
+  edminwidth.Height := 21;
+  edminwidth.OnExit := @VirtualPropertiesUpdate;
+  ;
 
 
-   edminheight := TfpgEdit.Create(virtualpanel);
-   edminheight.Text := '0';
-   edminheight.BackgroundColor := $E0E0E0;
-   edminheight.height:= 21;
-   edminheight.OnExit:=  @VirtualPropertiesUpdate;   ;
+  edminheight := TfpgEdit.Create(virtualpanel);
+  edminheight.Text := '0';
+  edminheight.BackgroundColor := $E0E0E0;
+  edminheight.Height := 21;
+  edminheight.OnExit := @VirtualPropertiesUpdate;
+  ;
 
-   edmaxwidth := TfpgEdit.Create(virtualpanel);
-   edmaxwidth.Text := '0';
-   edmaxwidth.BackgroundColor := $E0E0E0;
-   edmaxwidth.height:= 21;
-   edmaxwidth.OnExit:=  @VirtualPropertiesUpdate;   ;
+  edmaxwidth := TfpgEdit.Create(virtualpanel);
+  edmaxwidth.Text := '0';
+  edmaxwidth.BackgroundColor := $E0E0E0;
+  edmaxwidth.Height := 21;
+  edmaxwidth.OnExit := @VirtualPropertiesUpdate;
+  ;
 
-   edmaxheight := TfpgEdit.Create(virtualpanel);
-   edmaxheight.Text := '0';
-   edmaxheight.BackgroundColor := $E0E0E0;
-   edmaxheight.height:= 21;
-   edmaxheight.OnExit:=  @VirtualPropertiesUpdate;
+  edmaxheight := TfpgEdit.Create(virtualpanel);
+  edmaxheight.Text := '0';
+  edmaxheight.BackgroundColor := $E0E0E0;
+  edmaxheight.Height := 21;
+  edmaxheight.OnExit := @VirtualPropertiesUpdate;
 
-   cbWindowPosition := TfpgCombobox.Create(virtualpanel);
-   cbWindowPosition.Items.Add('wpUser');
-   cbWindowPosition.Items.Add('wpAuto');
-   cbWindowPosition.Items.Add('wpScreenCenter');
-   cbWindowPosition.Items.Add('wpOneThirdDown');
-   cbWindowPosition.FocusItem:=0;
-   cbWindowPosition.Text:='wpUser';
-   cbWindowPosition.BackgroundColor := $E0E0E0;
-   cbWindowPosition.height:= 21;
-   cbWindowPosition.OnExit :=  @VirtualPropertiesUpdate;
+  cbWindowPosition := TfpgCombobox.Create(virtualpanel);
+  cbWindowPosition.Items.Add('wpUser');
+  cbWindowPosition.Items.Add('wpAuto');
+  cbWindowPosition.Items.Add('wpScreenCenter');
+  cbWindowPosition.Items.Add('wpOneThirdDown');
+  cbWindowPosition.FocusItem := 0;
+  cbWindowPosition.Text := 'wpUser';
+  cbWindowPosition.BackgroundColor := $E0E0E0;
+  cbWindowPosition.Height := 21;
+  cbWindowPosition.OnExit := @VirtualPropertiesUpdate;
 
-   edTag := TfpgEdit.Create(virtualpanel);
-   edTag.Text := '0';
-   edTag.BackgroundColor := $E0E0E0;
-   edTag.height:= 21;
-   edTag.OnExit := @VirtualPropertiesUpdate;
+  edTag := TfpgEdit.Create(virtualpanel);
+  edTag.Text := '0';
+  edTag.BackgroundColor := $E0E0E0;
+  edTag.Height := 21;
+  edTag.OnExit := @VirtualPropertiesUpdate;
 
   y := virtualpanel.Bottom + 5;
 
-  l3         := CreateLabel(self, 5, y + 1, 'Left:');
+  l3 := CreateLabel(self, 5, y + 1, 'Left:');
   l3.Anchors := [anLeft, anBottom];
 
-    l6 := TfpgLabel.Create(self);
-  l6.Text := 'Height:' ;
-  l6.Top:= y + gap + 5;
- // l6.left:=110;
-  l6.height:=22;
+  l6 := TfpgLabel.Create(self);
+  l6.Text := 'Height:';
+  l6.Top := y + gap + 5;
+  // l6.left:=110;
+  l6.Height := 22;
   l6.Anchors := [anright, anBottom];
 
-   l6.Left:= width - (48 * 2)- 10 ;
+  l6.Left := Width - (48 * 2) - 10;
 
-    l4 := CreateLabel(self, 110, y, 'Top:');
+  l4 := CreateLabel(self, 110, y, 'Top:');
   l4.Anchors := [anright, anBottom];
 
-   l4.Left:= width - (48 * 2 )- 10 ;
+  l4.Left := Width - (48 * 2) - 10;
 
 
-  btnLeft    := CreateButton(self, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnLeft := CreateButton(self, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnLeft do
   begin
-    Height        := 22;
-    Anchors       := [anLeft, anBottom];
-    Focusable     := False;
+    Height := 22;
+    Anchors := [anLeft, anBottom];
+    Focusable := False;
   end;
 
-  btnTop     := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnTop := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
 
   with btnTop do
   begin
-    Height        := 22;
-    Anchors       := [anright, anBottom];
-    Focusable     := False;
+    Height := 22;
+    Anchors := [anright, anBottom];
+    Focusable := False;
   end;
 
-   btnTop.Left:= width - (btnTop.Width )- 5 ;
+  btnTop.Left := Width - (btnTop.Width) - 5;
 
   Inc(y, gap + 5);
-  l5         := CreateLabel(self, 5, y + 1, 'Width:');
+  l5 := CreateLabel(self, 5, y + 1, 'Width:');
   l5.Anchors := [anleft, anBottom];
 
-  btnWidth   := CreateButton(self, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnWidth := CreateButton(self, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnWidth do
   begin
-    Height        := 22;
-    Anchors       := [anleft, anBottom];
-    Focusable     := False;
+    Height := 22;
+    Anchors := [anleft, anBottom];
+    Focusable := False;
   end;
 
-  btnHeight  := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnHeight := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnHeight do
   begin
-    Height        := 22;
-    Anchors       := [anright, anBottom];
-    Focusable     := False;
+    Height := 22;
+    Anchors := [anright, anBottom];
+    Focusable := False;
   end;
   Inc(y, gap + 5);
 
-  l8         := CreateLabel(self, 5, y + 1, 'Anchors:');
+  l8 := CreateLabel(self, 5, y + 1, 'Anchors:');
   l8.Anchors := [anLeft, anBottom];
 
-   btnHeight.Left:= width - (btnHeight.Width )- 5 ;
+  btnHeight.Left := Width - (btnHeight.Width) - 5;
 
   x := 64;
 
   btnAnLeft := CreateButton(self, x, y - 2, 26, '', nil);
   with btnAnLeft do
   begin
-    ImageName  := 'vfd.anchorleft';
-    ShowImage  := True;
+    ImageName := 'vfd.anchorleft';
+    ShowImage := True;
     AllowAllUp := True;
     GroupIndex := 1;
-    Focusable  := False;
-    Anchors    := [anright, anBottom];
-    OnClick    := @(maindsgn.OnAnchorChange);
+    Focusable := False;
+    Anchors := [anright, anBottom];
+    OnClick := @(maindsgn.OnAnchorChange);
   end;
-    btnAnLeft.Left:= width - (btnAnLeft.Width * 4)- 50 ;
+  btnAnLeft.Left := Width - (btnAnLeft.Width * 4) - 50;
 
   Inc(x, 30);
   btnAnTop := CreateButton(self, x, y - 2, 26, '', nil);
   with btnAnTop do
   begin
-    ImageName  := 'vfd.anchortop';
-    ShowImage  := True;
+    ImageName := 'vfd.anchortop';
+    ShowImage := True;
     AllowAllUp := True;
     GroupIndex := 2;
-    Focusable  := False;
-    Anchors    := [anright, anBottom];
-    OnClick    := @(maindsgn.OnAnchorChange);
+    Focusable := False;
+    Anchors := [anright, anBottom];
+    OnClick := @(maindsgn.OnAnchorChange);
   end;
-   btnAnTop.Left:= width - (btnAnTop.Width * 3)- 35 ;
+  btnAnTop.Left := Width - (btnAnTop.Width * 3) - 35;
 
   Inc(x, 30);
   btnAnBottom := CreateButton(self, x, y - 2, 26, '', nil);
   with btnAnBottom do
   begin
-    ImageName  := 'vfd.anchorbottom';
-    ShowImage  := True;
+    ImageName := 'vfd.anchorbottom';
+    ShowImage := True;
     AllowAllUp := True;
     GroupIndex := 3;
-    Focusable  := False;
-    Anchors    := [ anBottom, anright];
-    OnClick    := @(maindsgn.OnAnchorChange);
+    Focusable := False;
+    Anchors := [anBottom, anright];
+    OnClick := @(maindsgn.OnAnchorChange);
   end;
-   btnAnBottom.Left:= width - (btnAnBottom.Width * 2)- 20 ;
+  btnAnBottom.Left := Width - (btnAnBottom.Width * 2) - 20;
 
   Inc(x, 30);
   btnAnRight := CreateButton(self, x, y - 2, 26, '', nil);
   with btnAnRight do
   begin
-    ImageName  := 'vfd.anchorright';
-    ShowImage  := True;
+    ImageName := 'vfd.anchorright';
+    ShowImage := True;
     AllowAllUp := True;
     GroupIndex := 4;
-    Focusable  := False;
-    Anchors    := [ anBottom, anright];
-    OnClick    := @(maindsgn.OnAnchorChange);
-    end;
+    Focusable := False;
+    Anchors := [anBottom, anright];
+    OnClick := @(maindsgn.OnAnchorChange);
+  end;
 
-   btnAnRight.Left:= width - btnAnRight.Width -5 ;
+  btnAnRight.Left := Width - btnAnRight.Width - 5;
 
-   y := btnAnRight.Bottom + 5;
+  y := btnAnRight.Bottom + 5;
 
-  l7         := CreateLabel(self, 5, y, 'Unknown lines:');
+  l7 := CreateLabel(self, 5, y, 'Unknown lines:');
   l7.Anchors := [anLeft, anBottom];
   Inc(y, 16);
 
-  edOther          := TfpgMemo.Create(self);
-  edOther.BackgroundColor:=$EEEEEE;
+  edOther := TfpgMemo.Create(self);
+  edOther.BackgroundColor := $EEEEEE;
   edOther.SetPosition(0, y, self.Width, 78);
-  edOther.Anchors  := [anLeft, anRight, anBottom];
+  edOther.Anchors := [anLeft, anRight, anBottom];
   edOther.FontDesc := '#Edit2';
   edOther.OnChange := @(maindsgn.OnOtherChange);
   {%endregion}
@@ -1725,140 +1755,145 @@ begin
   inherited BeforeDestruction;
 end;
 
-procedure  TfrmProperties.frmPropertiesPaint(Sender: TObject);
+procedure TfrmProperties.frmPropertiesPaint(Sender: TObject);
 begin
-  edName.width := width - l2.Right + 28 ;
- edName.UpdateWindowPosition;
+  edName.Width := Width - l2.Right + 28;
+  edName.UpdateWindowPosition;
 
- if virtualpanel.Height < 50 then begin
-    lstProps.Height:= 186 + frmproperties.Height - 448   ;
-     virtualpanel.top:= frmproperties.lstProps.Height + frmproperties.lstProps.top -4 ;
-  end else
- begin
-     lstProps.Height:= 97+ frmproperties.Height - 448   ;
-     virtualpanel.top:= frmproperties.lstProps.Height + frmproperties.lstProps.top -4 ;
- end;
+  if virtualpanel.Height < 50 then
+  begin
+    lstProps.Height := 186 + frmproperties.Height - 448;
+    virtualpanel.top := frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
+  end
+  else
+  begin
+    lstProps.Height := 97 + frmproperties.Height - 448;
+    virtualpanel.top := frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
+  end;
   virtualpanel.UpdateWindowPosition;
   lstProps.UpdateWindowPosition;
 end;
 
-procedure  TfrmProperties.Vpanelpaint(Sender: TObject);
+procedure TfrmProperties.Vpanelpaint(Sender: TObject);
 var
- y : integer;
+  y: integer;
 begin
 
- virtualpanel.Canvas.SetColor(clblack);
- virtualpanel.Canvas.DrawText(4,2,60,20,'Visible');
- if virtualpanel.height > 66 then
- virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2,60,20,'Enabled');
+  virtualpanel.Canvas.SetColor(clblack);
+  virtualpanel.Canvas.DrawText(4, 2, 60, 20, 'Visible');
+  if virtualpanel.Height > 66 then
+    virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2, 60, 20, 'Enabled');
 
   y := 22;
- virtualpanel.Canvas.DrawText(4,2+y,60,20,'Focusable');
- if virtualpanel.height > 66 then
- virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2+y,60,20,'Tag')
-   else
-  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+35,2+y,60,20,'Tag');
+  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'Focusable');
+  if virtualpanel.Height > 66 then
+    virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'Tag')
+  else
+    virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 35, 2 + y, 60, 20, 'Tag');
 
- y := 22*2;
- virtualpanel.Canvas.DrawText(4,2+y,60,20,'FullScreen');
- virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2+y,60,20,'Sizable');
+  y := 22 * 2;
+  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'FullScreen');
+  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'Sizable');
 
- y := 22*3;
- virtualpanel.Canvas.DrawText(4,2+y,60,20,'MinWidth');
- virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2+y,60,20,'MaxWidth');
+  y := 22 * 3;
+  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'MinWidth');
+  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'MaxWidth');
 
- y := 22*4;
- virtualpanel.Canvas.DrawText(4,2+y,60,20,'MinHeight');
- virtualpanel.Canvas.DrawText((virtualpanel.Width div 2)+4,2+y,60,20,'MaxHeight');
+  y := 22 * 4;
+  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'MinHeight');
+  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'MaxHeight');
 
-   y := 22*5;
- virtualpanel.Canvas.DrawText(4,2+y,60,20,'WindowPosition');
+  y := 22 * 5;
+  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'WindowPosition');
 
   y := 22;
- virtualpanel.Canvas.SetColor(clgray);
-  While y < virtualpanel.Height do
- begin
- virtualpanel.Canvas.DrawLine(0,y,virtualpanel.Width,y);
- y := y + 22
- end;
+  virtualpanel.Canvas.SetColor(clgray);
+  while y < virtualpanel.Height do
+  begin
+    virtualpanel.Canvas.DrawLine(0, y, virtualpanel.Width, y);
+    y := y + 22;
+  end;
 
- virtualpanel.Canvas.DrawLine(0,0,virtualpanel.Width-1,0);   //top
- virtualpanel.Canvas.DrawLine(0,virtualpanel.Height-1,virtualpanel.Width-1,virtualpanel.Height-1);  //bottom
- virtualpanel.Canvas.DrawLine(virtualpanel.Width-1,0,virtualpanel.Width-1,virtualpanel.Height-1);  //right
- virtualpanel.Canvas.DrawLine(0,0,0,virtualpanel.Height-1);   // left
+  virtualpanel.Canvas.DrawLine(0, 0, virtualpanel.Width - 1, 0);   //top
+  virtualpanel.Canvas.DrawLine(0, virtualpanel.Height - 1, virtualpanel.Width - 1, virtualpanel.Height - 1);  //bottom
+  virtualpanel.Canvas.DrawLine(virtualpanel.Width - 1, 0, virtualpanel.Width - 1, virtualpanel.Height - 1);  //right
+  virtualpanel.Canvas.DrawLine(0, 0, 0, virtualpanel.Height - 1);   // left
 
- y := 22 ;
+  y := 22;
 
- cbvisible.top:= 1;
- cbenabled.top:= 1;
+  cbvisible.top := 1;
+  cbenabled.top := 1;
 
- if virtualpanel.Height>66 then begin
- cbenabled.Visible:=true;
- cbvisible.Left:=  (virtualpanel.Width div 4) + 1; ;
- cbvisible.width:= (virtualpanel.Width div 4) - 1;
- cbenabled.Left:= (3 *(virtualpanel.Width div 4)) + 1;
- cbenabled.width:= (virtualpanel.Width div 4) - 1;
- end else
- begin
-  cbenabled.Visible:=false;
-  cbvisible.width:= (virtualpanel.Width div 4) - 1;
-  cbvisible.Left:= 82;
-  cbvisible.width:= (virtualpanel.Width) - cbvisible.Left -1 ;
- end;
+  if virtualpanel.Height > 66 then
+  begin
+    cbenabled.Visible := True;
+    cbvisible.Left := (virtualpanel.Width div 4) + 1;
+    ;
+    cbvisible.Width := (virtualpanel.Width div 4) - 1;
+    cbenabled.Left := (3 * (virtualpanel.Width div 4)) + 1;
+    cbenabled.Width := (virtualpanel.Width div 4) - 1;
+  end
+  else
+  begin
+    cbenabled.Visible := False;
+    cbvisible.Width := (virtualpanel.Width div 4) - 1;
+    cbvisible.Left := 82;
+    cbvisible.Width := (virtualpanel.Width) - cbvisible.Left - 1;
+  end;
 
-  cbfocusable.top:= y +1;
-  cbfocusable.Left:= (virtualpanel.Width div 4) + 1;
-  cbfocusable.width:= (virtualpanel.Width div 4) - 1;
+  cbfocusable.top := y + 1;
+  cbfocusable.Left := (virtualpanel.Width div 4) + 1;
+  cbfocusable.Width := (virtualpanel.Width div 4) - 1;
 
-  edtag.top:= y +1;
-  edtag.Left:= (3 *(virtualpanel.Width div 4)) + 1;
-  edtag.width:= (virtualpanel.Width div 4) - 1;
+  edtag.top := y + 1;
+  edtag.Left := (3 * (virtualpanel.Width div 4)) + 1;
+  edtag.Width := (virtualpanel.Width div 4) - 1;
 
-  cbfullscreen.top:= (y*2) +1;
-  cbfullscreen.Left:= (virtualpanel.Width div 4) + 1;
-  cbfullscreen.width:= (virtualpanel.Width div 4) - 1;
+  cbfullscreen.top := (y * 2) + 1;
+  cbfullscreen.Left := (virtualpanel.Width div 4) + 1;
+  cbfullscreen.Width := (virtualpanel.Width div 4) - 1;
 
-  cbsizeable.top:=(y*2) +1;
-  cbsizeable.Left:= (3 *(virtualpanel.Width div 4)) + 1;
-  cbsizeable.width:= (virtualpanel.Width div 4) - 1;
+  cbsizeable.top := (y * 2) + 1;
+  cbsizeable.Left := (3 * (virtualpanel.Width div 4)) + 1;
+  cbsizeable.Width := (virtualpanel.Width div 4) - 1;
 
-  edminwidth.top:= (y*3) +1;
-  edminwidth.Left:= (virtualpanel.Width div 4) + 1;
-  edminwidth.width:= (virtualpanel.Width div 4) - 1;
+  edminwidth.top := (y * 3) + 1;
+  edminwidth.Left := (virtualpanel.Width div 4) + 1;
+  edminwidth.Width := (virtualpanel.Width div 4) - 1;
 
-  edmaxwidth.top:=(y*3) +1;
-  edmaxwidth.Left:= (3 *(virtualpanel.Width div 4)) + 1;
-  edmaxwidth.width:= (virtualpanel.Width div 4) - 1;
+  edmaxwidth.top := (y * 3) + 1;
+  edmaxwidth.Left := (3 * (virtualpanel.Width div 4)) + 1;
+  edmaxwidth.Width := (virtualpanel.Width div 4) - 1;
 
-  edminheight.top:= (y*4) +1;
-  edminheight.Left:= (virtualpanel.Width div 4) + 1;
-  edminheight.width:= (virtualpanel.Width div 4) - 1;
+  edminheight.top := (y * 4) + 1;
+  edminheight.Left := (virtualpanel.Width div 4) + 1;
+  edminheight.Width := (virtualpanel.Width div 4) - 1;
 
-  edmaxheight.top:=(y*4) +1;
-  edmaxheight.Left:= (3 *(virtualpanel.Width div 4)) + 1;
-  edmaxheight.width:= (virtualpanel.Width div 4) - 1;
+  edmaxheight.top := (y * 4) + 1;
+  edmaxheight.Left := (3 * (virtualpanel.Width div 4)) + 1;
+  edmaxheight.Width := (virtualpanel.Width div 4) - 1;
 
-  cbwindowposition.top:= (y*5) +1;
-  cbwindowposition.Left:= 105;
-  cbwindowposition.width:= (virtualpanel.Width) - cbwindowposition.Left -1 ;
+  cbwindowposition.top := (y * 5) + 1;
+  cbwindowposition.Left := 105;
+  cbwindowposition.Width := (virtualpanel.Width) - cbwindowposition.Left - 1;
 
   cbsizeable.UpdateWindowPosition;
- cbfocusable.UpdateWindowPosition;
- cbvisible.UpdateWindowPosition;
- cbfullscreen.UpdateWindowPosition;
- cbenabled.UpdateWindowPosition;
- edminwidth.UpdateWindowPosition;
- edmaxwidth.UpdateWindowPosition;
- edminheight.UpdateWindowPosition;
- edmaxheight.UpdateWindowPosition;
- cbwindowposition.UpdateWindowPosition;
- edtag.UpdateWindowPosition;
+  cbfocusable.UpdateWindowPosition;
+  cbvisible.UpdateWindowPosition;
+  cbfullscreen.UpdateWindowPosition;
+  cbenabled.UpdateWindowPosition;
+  edminwidth.UpdateWindowPosition;
+  edmaxwidth.UpdateWindowPosition;
+  edminheight.UpdateWindowPosition;
+  edmaxheight.UpdateWindowPosition;
+  cbwindowposition.UpdateWindowPosition;
+  edtag.UpdateWindowPosition;
 
 end;
 
 procedure TfrmProperties.HandleKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean);
 begin
-   if keycode = keyF11 then
+  if keycode = keyF11 then
   begin
     if maindsgn.selectedform <> nil then
     begin
@@ -1870,187 +1905,221 @@ begin
   inherited;
 end;
 
-procedure   TfrmProperties.VirtualPropertiesUpdate(Sender: TObject);
+procedure TfrmProperties.VirtualPropertiesUpdate(Sender: TObject);
 var
-  x : integer ;
-  TheWidget, TheParent : TfpgWidget ;
-  ok : boolean;
+  x: integer;
+  TheWidget, TheParent: TfpgWidget;
+  ok: boolean;
 begin
-     if  lstProps.Props.Widget is TDesignedForm then begin
-
-      TheWidget := lstProps.Props.Widget ;
-
-       if IsStrANumber(edminwidth.text) then edminwidth.text := inttostr(strtoint(edminwidth.text)) else edminwidth.text := '0';
-       if IsStrANumber(edmaxwidth.text) then edmaxwidth.text := inttostr(strtoint(edmaxwidth.text)) else edmaxwidth.text := '0';
-       if IsStrANumber(edminheight.text) then edminheight.text := inttostr(strtoint(edminheight.text)) else edminheight.text := '0';
-       if IsStrANumber(edmaxheight.text) then edmaxheight.text := inttostr(strtoint(edmaxheight.text)) else edmaxheight.text := '0';
-       if IsStrANumber(edtag.text) then edtag.text := inttostr(strtoint(edtag.text)) else edtag.text := '0';
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'siz=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'siz=' + cbsizeable.Text ;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'siz=' + cbsizeable.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'foc=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'foc=' + cbfocusable.Text ;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'   + 'foc=' + cbfocusable.Text );
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'vis=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'vis=' + cbvisible.Text ;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'vis=' + cbvisible.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'ful=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'ful=' + cbfullscreen.Text ;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'ful=' + cbfullscreen.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'ena=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'ena=' + cbenabled.Text ;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'ena=' + cbenabled.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'miw=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'miw=' + edminwidth.Text ;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'miw=' + edminwidth.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'maw=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'maw=' + edmaxwidth.Text;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + edmaxwidth.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'mih=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'mih=' + edminheight.Text;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'   + 'mih=' + edminheight.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'mah=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'mah=' + edmaxheight.Text;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'  + 'mah=' + edmaxheight.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'wip=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'wip=' + cbWindowPosition.Text;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'   + 'wip=' + cbWindowPosition.Text);
-
-   ok := false;
-   for x := 0 to  TDesignedForm(TheWidget).Virtualprop.Count -1 do
-   begin
-   if pos(TDesignedForm(TheWidget).Name + '.' + 'tag=',TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
-   begin
-   TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name +  '.'  + 'tag=' + edtag.Text;
-   ok := true;
-   end;
-   end;
-   if ok = false then TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.'   + 'tag=' + edtag.Text);
-
-   end else
-
-   begin
-   //////////////// Other  widgets
-
-  TheWidget := lstProps.Props.Widget ;
-
-  TheParent := TheWidget ;
-  if TheParent.HasParent = true then
-  TheParent :=  TheParent.Parent;
-
-  // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));
-
-  ok := false;
-   for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
- if pos(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.' + 'vis=',TDesignedForm(TheParent).Virtualprop[x]) > 0 then
- begin
-  ok := true;
-  TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'vis=' + cbvisible.Text;
- end;
- end;
- if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'vis=' + cbvisible.Text);
-
- ok := false;
-    for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
-  if pos(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.' + 'tag=',TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+  if lstProps.Props.Widget is TDesignedForm then
   begin
-   ok := true;
-   TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'tag=' + edtag.Text;
-  end;
-  end;
-  if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'   + 'tag=' + edtag.Text);
 
-   ok := false;
-    for x:= 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do begin
-  if pos(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.' + 'foc=',TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+    TheWidget := lstProps.Props.Widget;
+
+    if IsStrANumber(edminwidth.Text) then
+      edminwidth.Text := IntToStr(StrToInt(edminwidth.Text))
+    else
+      edminwidth.Text := '0';
+    if IsStrANumber(edmaxwidth.Text) then
+      edmaxwidth.Text := IntToStr(StrToInt(edmaxwidth.Text))
+    else
+      edmaxwidth.Text := '0';
+    if IsStrANumber(edminheight.Text) then
+      edminheight.Text := IntToStr(StrToInt(edminheight.Text))
+    else
+      edminheight.Text := '0';
+    if IsStrANumber(edmaxheight.Text) then
+      edmaxheight.Text := IntToStr(StrToInt(edmaxheight.Text))
+    else
+      edmaxheight.Text := '0';
+    if IsStrANumber(edtag.Text) then
+      edtag.Text := IntToStr(StrToInt(edtag.Text))
+    else
+      edtag.Text := '0';
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'siz=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'siz=' + cbsizeable.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'siz=' + cbsizeable.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'foc=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'foc=' + cbfocusable.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'foc=' + cbfocusable.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'vis=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'vis=' + cbvisible.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'vis=' + cbvisible.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'ful=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'ful=' + cbfullscreen.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'ful=' + cbfullscreen.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'ena=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'ena=' + cbenabled.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'ena=' + cbenabled.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'miw=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'miw=' + edminwidth.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'miw=' + edminwidth.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'maw=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'maw=' + edmaxwidth.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + edmaxwidth.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'mih=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'mih=' + edminheight.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'mih=' + edminheight.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'mah=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'mah=' + edmaxheight.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'mah=' + edmaxheight.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'wip=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'wip=' + cbWindowPosition.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'wip=' + cbWindowPosition.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'tag=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'tag=' + edtag.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'tag=' + edtag.Text);
+
+  end
+  else
+
   begin
-   ok := true;
-   TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'foc=' + cbfocusable.Text;
-  end;
-  end;
-  if ok = false then TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  TheWidget.Name + '.'  + 'foc=' + cbfocusable.Text);
+    //////////////// Other  widgets
 
-   end;
+    TheWidget := lstProps.Props.Widget;
+
+    TheParent := TheWidget;
+    if TheParent.HasParent = True then
+      TheParent := TheParent.Parent;
+
+    // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'vis=', TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+      begin
+        ok := True;
+        TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'vis=' + cbvisible.Text;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'vis=' + cbvisible.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'tag=', TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+      begin
+        ok := True;
+        TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'tag=' + edtag.Text;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'tag=' + edtag.Text);
+
+    ok := False;
+    for x := 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'foc=', TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+      begin
+        ok := True;
+        TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'foc=' + cbfocusable.Text;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'foc=' + cbfocusable.Text);
+
+  end;
 
 end;
 
@@ -2070,7 +2139,7 @@ end;
 
 constructor TPropertyList.Create;
 begin
-  FList  := TList.Create;
+  FList := TList.Create;
   Widget := nil;
 end;
 
@@ -2088,7 +2157,7 @@ end;
 
 function TPropertyList.GetItem(index: integer): TVFDWidgetProperty;
 begin
-  if (index < 0) or (index > Count-1) then
+  if (index < 0) or (index > Count - 1) then
     Result := nil
   else
     Result := TVFDWidgetProperty(FList[index]);
@@ -2099,12 +2168,12 @@ end;
 constructor TwgPropertyList.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  NameWidth       := 80;
-  editor          := nil;
-  OnChange        := @OnRowChange;
-  OnScroll        := @OnScrolling;
+  NameWidth := 80;
+  editor := nil;
+  OnChange := @OnRowChange;
+  OnScroll := @OnScrolling;
   BackgroundColor := clWindowBackground;
-  NameDrag        := False;
+  NameDrag := False;
   //FontName := 'arial-10:antialias=false';
 end;
 
@@ -2120,9 +2189,7 @@ end;
 
 procedure TwgPropertyList.DrawItem(num: integer; rect: TfpgRect; flags: integer);
 var
-  x,
-  y,
-  fy: integer;
+  x, y, fy: integer;
   s: string;
   prop: TVFDWidgetProperty;
   r: TfpgRect;
@@ -2131,8 +2198,8 @@ begin
   if prop = nil then
     Exit; //==>
 
-  x  := rect.left;
-  y  := rect.top;
+  x := rect.left;
+  y := rect.top;
   fy := y + rect.Height div 2 - FFont.Height div 2;
 
   s := prop.Name;
@@ -2192,7 +2259,7 @@ procedure TwgPropertyList.HandleLMouseDown(x, y: integer; shiftstate: TShiftStat
 begin
   if MouseCursor = mcSizeEW then
     NameDrag := True
-    //NameDragPos := x;
+  //NameDragPos := x;
   else
     inherited;
 end;
@@ -2207,8 +2274,7 @@ begin
     Editor.SetFocus;
 end;
 
-procedure TwgPropertyList.HandleMouseScroll(x, y: integer;
-  shiftstate: TShiftState; delta: smallint);
+procedure TwgPropertyList.HandleMouseScroll(x, y: integer; shiftstate: TShiftState; delta: smallint);
 begin
   inherited HandleMouseScroll(x, y, shiftstate, delta);
   AllocateEditor;
@@ -2247,75 +2313,77 @@ var
 begin
   x := 0;
   y := 0;
-  wgpalette.Width := width - 160;
-  for n := 0 to wgPalette.ComponentCount-1 do
+  wgpalette.Width := Width - 160;
+  for n := 0 to wgPalette.ComponentCount - 1 do
   begin
     btn := wgPalette.Components[n] as TwgPaletteButton;
     btn.SetPosition(x, y, 30, 28);
-    btn.ImageMargin   := -1;
-    btn.ImageSpacing  := 0;
+    btn.ImageMargin := -1;
+    btn.ImageSpacing := 0;
     Inc(x, 32);
-    if (x+30) >= wgpalette.Width then
+    if (x + 30) >= wgpalette.Width then
     begin
       x := 0;
       Inc(y, 30);
     end;
   end;
- end;
+end;
 
 procedure TfrmMainDesigner.OnStyleChange(Sender: TObject);
 var
-  x : integer;
+  x: integer;
 begin
-  if Sender is TfpgMenuItem then begin
-   if fpgstyleManager.setstyle(TfpgMenuItem(Sender).Text) then
-   begin
-
- for x := 0 to numstyle-1 do
- previewmenu.MenuItem(x).Checked:=false;
-
-TfpgMenuItem(Sender).Checked:= true;
-     fpgstyle := fpgstyleManager.Style;
-
-     hide;
-     show;
-
-     for x := 2 to 11 do
-     if windowmenu.MenuItem(x).Visible = true then
+  if Sender is TfpgMenuItem then
   begin
-  ArrayFormDesign[x-2].Form.hide ;
-  ArrayFormDesign[x-2].Form.Show ;
-  end;
-   if frmProperties.Visible = true then begin
-   frmProperties.hide;
-   fpgapplication.ProcessMessages;
-   frmProperties.Show;
-     end;
+    if fpgstyleManager.setstyle(TfpgMenuItem(Sender).Text) then
+    begin
 
-   end;
- end;
+      for x := 0 to numstyle - 1 do
+        previewmenu.MenuItem(x).Checked := False;
+
+      TfpgMenuItem(Sender).Checked := True;
+      fpgstyle := fpgstyleManager.Style;
+
+      hide;
+      Show;
+
+      for x := 2 to 11 do
+        if windowmenu.MenuItem(x).Visible = True then
+        begin
+          ArrayFormDesign[x - 2].Form.hide;
+          ArrayFormDesign[x - 2].Form.Show;
+        end;
+      if frmProperties.Visible = True then
+      begin
+        frmProperties.hide;
+        fpgapplication.ProcessMessages;
+        frmProperties.Show;
+      end;
+
+    end;
+  end;
 end;
 
 procedure TfrmMainDesigner.BuildThemePreviewMenu;
 var
   sl: TStringList;
-  i : integer;
+  i: integer;
 begin
   sl := TStringList.Create;
   fpgStyleManager.AssignStyleTypes(sl);
   sl.Sort;
-  numstyle := sl.Count-1 ;
-  for i := 0 to sl.Count-1 do
+  numstyle := sl.Count - 1;
+  for i := 0 to sl.Count - 1 do
   begin
     if sl[i] = 'auto' then
       continue;
-    previewmenu.AddMenuItem(sl[i], '', @OnStyleChange).Enabled := true;
+    previewmenu.AddMenuItem(sl[i], '', @OnStyleChange).Enabled := True;
 
   end;
 
-   for i := 0 to numstyle-1 do
-   if previewmenu.MenuItem(i).Text = 'Chrome silver flat menu' then
- previewmenu.MenuItem(i).Checked:=true;
+  for i := 0 to numstyle - 1 do
+    if previewmenu.MenuItem(i).Text = 'Chrome silver flat menu' then
+      previewmenu.MenuItem(i).Checked := True;
 
   sl.Free;
 
@@ -2328,7 +2396,7 @@ end;
 
 procedure TfrmMainDesigner.miHelpAboutGUI(Sender: TObject);
 begin
-TfpgMessageDialog.AboutFPGui;
+  TfpgMessageDialog.AboutFPGui;
 end;
 
 procedure TfrmMainDesigner.micolorwheel(Sender: TObject);
@@ -2396,9 +2464,9 @@ begin
     editor.Free;
 
   editor := prop.CreateEditor(Self);
-  x      := 3 + NameWidth;
-  y      := FMargin + ((FFocusItem - FFirstItem) * RowHeight);
-  editor.SetPosition(x, y, Width - FMargin - ScrollBarWidth - x, RowHeight-1); // last -1 is so cell border lines are still visible
+  x := 3 + NameWidth;
+  y := FMargin + ((FFocusItem - FFirstItem) * RowHeight);
+  editor.SetPosition(x, y, Width - FMargin - ScrollBarWidth - x, RowHeight - 1); // last -1 is so cell border lines are still visible
   editor.CreateLayout;
   editor.OnUpdate := @OnUpdateProperty;
   editor.LoadValue(Props.Widget);
@@ -2415,4 +2483,3 @@ begin
 end;
 
 end.
-

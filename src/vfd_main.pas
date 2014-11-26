@@ -89,9 +89,10 @@ type
     FFile: TVFDFile;
     FEditedFileName: string;
   public
+    s, p: string;
     ifundo: boolean;
     isFileNew: boolean;
-    FFileLoaded : string;
+    FFileLoaded: string;
     GridResolution: integer;
     SaveComponentNames: boolean;
     selectedform: TFormDesigner;
@@ -106,7 +107,7 @@ type
     procedure SaveUndo(Sender: TObject; typeundo: integer);
     procedure LoadUndo(undoindex: integer);
     function AddUnits(filedata: string): string;
-    function OnNewForm(Sender: TObject) : boolean;
+    function OnNewForm(Sender: TObject): boolean;
     procedure OnNewFile(Sender: TObject);
     procedure OnSaveFile(Sender: TObject);
     procedure OnLoadFile(Sender: TObject);
@@ -132,7 +133,6 @@ var
   isfpguifile: boolean = False;
   isFileLoaded: boolean;
   SelectedWidget: TfpgWidget;
-  s, p: string;
 
 implementation
 
@@ -153,7 +153,7 @@ var
   n: integer;
 begin
   ifundo := False;
-  FFileLoaded := '' ;
+  FFileLoaded := '';
   EditedFileName := '';
   isFileLoaded := False;
   fpgapplication.ProcessMessages;
@@ -177,7 +177,7 @@ begin
   frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
   if frmMainDesigner.btnToFront.Tag = 1 then
-    frmMainDesigner.MainMenu.MenuItem(6).Text :=
+    frmMainDesigner.MainMenu.MenuItem(8).Text :=
       'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
@@ -210,28 +210,27 @@ begin
   frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
   frmMainDesigner.undomenu.MenuItem(3).Enabled := False;
 
- if OnNewForm(Sender) = true then
- begin
- isfpguifile := True;
+  if OnNewForm(Sender) = True then
+  begin
+    isfpguifile := True;
 
- frmMainDesigner.windowmenu.MenuItem(0).Visible := True;
+    frmMainDesigner.windowmenu.MenuItem(0).Visible := True;
 
- frmMainDesigner.btnNewForm.Visible:=True;
- frmMainDesigner.btnSave.Visible:=True;
+    frmMainDesigner.btnNewForm.Visible := True;
+    frmMainDesigner.btnSave.Visible := True;
 
- frmMainDesigner.filemenu.MenuItem(4).Visible:=True;
- frmMainDesigner.filemenu.MenuItem(5).Visible:=True;
- frmMainDesigner.filemenu.MenuItem(6).Visible:=True;
- frmMainDesigner.filemenu.MenuItem(7).Visible:=True;
- frmMainDesigner.filemenu.MenuItem(8).Visible:=True;
- frmMainDesigner.filemenu.MenuItem(9).Visible:=True;
- frmMainDesigner.filemenu.MenuItem(10).Visible:=True;
- frmMainDesigner.filemenu.MenuItem(11).Visible:=True;
+    frmMainDesigner.filemenu.MenuItem(4).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(5).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(6).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(7).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(8).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(9).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(10).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(11).Visible := True;
 
- isFileLoaded := True;
- isFileNew := True;
- end;
-
+    isFileLoaded := True;
+    isFileNew := True;
+  end;
 
 end;
 
@@ -244,53 +243,70 @@ var
   afiledialog: TfpgFileDialog;
 begin
 
-  if maindsgn.FFileLoaded <>  'closeall' then
+  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => no fpGUI form-file';
+
+  if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(8).Text :=
+      '  => no fpGUI form-file';
+
+  if maindsgn.FFileLoaded <> 'closeall' then
   begin
 
-  fname := EditedFileName;
-  ifundo := False;
+    fname := EditedFileName;
+    ifundo := False;
 
-  if Sender <> maindsgn then
-  begin
-    afiledialog := TfpgFileDialog.Create(nil);
-    afiledialog.Filename := EditedFilename;
-    afiledialog.WindowTitle := 'Open form file';
-    afiledialog.Filter :=
-      'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
-    if afiledialog.RunOpenFile then
+    if Sender <> maindsgn then
     begin
-      EditedFileName := aFileDialog.Filename;
-      fname := EditedFilename;
-    end
-    else begin
-      fname := '';
-      exit;
+      afiledialog := TfpgFileDialog.Create(nil);
+      afiledialog.Filename := EditedFilename;
+      afiledialog.WindowTitle := 'Open form file';
+      afiledialog.Filter :=
+        'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
+      if afiledialog.RunOpenFile then
+      begin
+        EditedFileName := aFileDialog.Filename;
+        fname := EditedFilename;
+      end
+      else
+      begin
+        fname := '';
+        exit;
       end;
-    FreeAndNil(aFileDialog);
+      FreeAndNil(aFileDialog);
 
+    end;
+
+  end
+  else
+  begin
+    frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+
+    fname := '';
+    frmMainDesigner.MainMenu.MenuItem(8).Text := '';
+    s := '';
+    p := '';
   end;
 
-  end else fname := '' ;
+  FFileLoaded := '';
 
-   FFileLoaded := '' ;
+  isFileLoaded := False;
+  fpgapplication.ProcessMessages;
 
-    isFileLoaded := False;
-   fpgapplication.ProcessMessages;
   isfpguifile := False;
   frmProperties.Hide;
   frmmultiselect.Hide;
   frmmultiselect.ClearAll;
 
-  frmMainDesigner.btnNewForm.Visible:=false;
-  frmMainDesigner.btnSave.Visible:=false;
-  frmMainDesigner.filemenu.MenuItem(4).Visible:=false;
-  frmMainDesigner.filemenu.MenuItem(5).Visible:=false;
-  frmMainDesigner.filemenu.MenuItem(6).Visible:=false;
-  frmMainDesigner.filemenu.MenuItem(7).Visible:=false;
-  frmMainDesigner.filemenu.MenuItem(8).Visible:=false;
-  frmMainDesigner.filemenu.MenuItem(9).Visible:=false;
-  frmMainDesigner.filemenu.MenuItem(10).Visible:=false;
-  frmMainDesigner.filemenu.MenuItem(11).Visible:=false;
+  frmMainDesigner.btnNewForm.Visible := False;
+  frmMainDesigner.btnSave.Visible := False;
+  frmMainDesigner.filemenu.MenuItem(4).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(5).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(6).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(7).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(8).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(9).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(10).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(11).Visible := False;
 
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -300,12 +316,6 @@ begin
   FDesigners.Clear;
 
   frmproperties.edName.Text := '';
-
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => no fpGUI form-file';
-
-  if frmMainDesigner.btnToFront.Tag = 1 then
-    frmMainDesigner.MainMenu.MenuItem(6).Text :=
-      'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => no fpGUI form-file';
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
@@ -344,7 +354,7 @@ begin
 
   if not fpgFileExists(fname) then
   begin
-     FFileLoaded := '' ;
+    FFileLoaded := '';
     //  ShowMessage('File does not exists.', 'Error loading form');
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
@@ -356,7 +366,7 @@ begin
 
   if FFile.LoadFile(fname) = False then
   begin
-     FFileLoaded := '' ;
+    FFileLoaded := '';
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
@@ -367,7 +377,7 @@ begin
 
   if FFile.GetBlocks = 0 then
   begin
-     FFileLoaded := '' ;
+    FFileLoaded := '';
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
@@ -379,9 +389,13 @@ begin
   begin
     frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
 
-    if frmMainDesigner.btnToFront.Tag = 1 then
-      frmMainDesigner.MainMenu.MenuItem(6).Text :=
-        'Current file : ' + fname + '    fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+    frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
+
+    if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
+    begin
+      frmMainDesigner.MainMenu.MenuItem(8).Text := ' => ' + fname;
+      frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
+    end;
 
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
@@ -423,7 +437,7 @@ begin
       end;
   end;
 
-   for n := 0 to FDesigners.Count - 1 do
+  for n := 0 to FDesigners.Count - 1 do
   begin
     selectedform := nil;
     TFormDesigner(FDesigners[n]).Form.ShowGrid := FShowGrid;
@@ -438,17 +452,17 @@ begin
   isfpguifile := True;
   frmMainDesigner.windowmenu.MenuItem(0).Visible := True;
 
-  frmMainDesigner.btnNewForm.Visible:=True;
-  frmMainDesigner.btnSave.Visible:=True;
+  frmMainDesigner.btnNewForm.Visible := True;
+  frmMainDesigner.btnSave.Visible := True;
 
-  frmMainDesigner.filemenu.MenuItem(4).Visible:=True;
-  frmMainDesigner.filemenu.MenuItem(5).Visible:=True;
-  frmMainDesigner.filemenu.MenuItem(6).Visible:=True;
-  frmMainDesigner.filemenu.MenuItem(7).Visible:=True;
-  frmMainDesigner.filemenu.MenuItem(8).Visible:=True;
-  frmMainDesigner.filemenu.MenuItem(9).Visible:=True;
-  frmMainDesigner.filemenu.MenuItem(10).Visible:=True;
-  frmMainDesigner.filemenu.MenuItem(11).Visible:=True;
+  frmMainDesigner.filemenu.MenuItem(4).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(5).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(6).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(7).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(8).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(9).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(10).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(11).Visible := True;
 
   isFileLoaded := True;
 
@@ -831,118 +845,122 @@ var
   ff: file;
   fname, uname: string;
   aFileDialog: TfpgFileDialog;
-  aDialog: TfpgMessageDialog;
   frm: TfrmAlreadyExists;
-  modaresult: boolean;
 begin
 
- if isFileLoaded = false then exit else
-  begin
-  fname := EditedFileName;
-
-  if ((Sender as TComponent).Tag = 10) and (EditedFileName <> '') then
-    fname := EditedFileName
+  if isFileLoaded = False then
+    exit
   else
   begin
-    afiledialog := TfpgFileDialog.Create(nil);
-    afiledialog.Filename := EditedFilename;
-    if FFileLoaded = '' then
-    afiledialog.WindowTitle := 'Save form source'
+    fname := EditedFileName;
+
+    if ((Sender as TComponent).Tag = 10) and (EditedFileName <> '') then
+      fname := EditedFileName
     else
-     afiledialog.WindowTitle := 'Save file as...';
-    afiledialog.Filter :=
-      'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
-    if afiledialog.RunSaveFile then
     begin
-      fname := aFileDialog.Filename;
-      if (ExtractFileExt(fname) = '') then
-        fname := fname + DefaultPasExt;
-      EditedFileName := fname;
+      afiledialog := TfpgFileDialog.Create(nil);
+      afiledialog.Filename := EditedFilename;
+      if FFileLoaded = '' then
+        afiledialog.WindowTitle := 'Save form source'
+      else
+        afiledialog.WindowTitle := 'Save file as...';
+      afiledialog.Filter :=
+        'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
+      if afiledialog.RunSaveFile then
+      begin
+        fname := aFileDialog.Filename;
+        if (ExtractFileExt(fname) = '') then
+          fname := fname + DefaultPasExt;
+        EditedFileName := fname;
+      end
+      else
+      begin
+        fname := '';
+        isFileNew := False;
+      end;
+      aFileDialog.Free;
+    end;
+
+    if fname = '' then
+      Exit;
+
+    EditedFileName := fname;
+
+    if (isFileNew = True) and (fpgFileExists(fname)) then
+    begin
+      frm := TfrmAlreadyExists.Create(nil);
+      frm.lbl1.Text := trim(fname);
+      if frm.ShowModal = mrYes then
+        frm.Free
+      else
+      begin
+        isFileNew := False;
+        frm.Free;
+        exit;
+      end;
+    end;
+
+    if (fpgFileExists(fname)) and (isFileNew = False) and (FFileLoaded = '') then
+    begin
+      FFile.LoadFile(fname);
+      FFile.GetBlocks;
+    end
+    else
+    if (fpgFileExists(FFileLoaded)) and (isFileNew = True) then
+    begin
+      FFile.LoadFile(FFileLoaded);
+      FFile.GetBlocks;
+      FFileLoaded := '';
     end
     else
     begin
-      fname := '';
-      isFileNew := False;
+      uname := fpgExtractFileName(fname);
+      i := pos('.pas', LowerCase(uname));
+      if i > 0 then
+        uname := copy(uname, 1, i - 1);
+      FFile.NewFileSkeleton(uname);
     end;
-    aFileDialog.Free;
-  end;
 
-  if fname = '' then
-    Exit;
-
-  EditedFileName := fname;
-
-  if (isFileNew = True) and (fpgFileExists(fname)) then
-  begin
-    frm := TfrmAlreadyExists.Create(nil);
-    frm.lbl1.Text := trim(fname);
-    try
-      frm.ShowModal;
-    finally
-      if frm.ModalResult = mrYes then
-        modaresult := True
-      else
-        modaresult := False;
-      frm.Free;
-    end;
-    if modaresult = False then
+    for n := 0 to DesignerCount - 1 do
     begin
-      isFileNew := false;
-      exit;
-      end;
-  end;
-
- if (fpgFileExists(fname)) and (isFileNew = False) and (FFileLoaded = '') then
-  begin
-    FFile.LoadFile(fname);
-    FFile.GetBlocks;
-  end
-  else
-  if (fpgFileExists(FFileLoaded)) and (isFileNew = True) then
-  begin
-    FFile.LoadFile(FFileLoaded);
-    FFile.GetBlocks;
-    FFileLoaded := '' ;
-  end
-  else
-  begin
-    uname := fpgExtractFileName(fname);
-    i := pos('.pas', LowerCase(uname));
-    if i > 0 then
-      uname := copy(uname, 1, i - 1);
-    FFile.NewFileSkeleton(uname);
-  end;
-
-  for n := 0 to DesignerCount - 1 do
-  begin
-    fd := nil;
-    fd := Designer(n);
-    if fd = nil then
-      raise Exception.Create('Failed to find Designer Form');
-    FFile.SetFormData(fd.Form.Name, fd.GetFormSourceDecl, fd.GetFormSourceImpl);
-  end;
-
-  isfilenew := False;
-  fdata := FFile.MergeBlocks;
-
-  if enableautounits then
-    fdata := AddUnits(fdata);
-
-  AssignFile(ff, fpgToOSEncoding(fname));
-  try
-    Rewrite(ff, 1);
-    try
-      BlockWrite(ff, fdata[1], length(fdata));
-    finally
-      CloseFile(ff);
+      fd := nil;
+      fd := Designer(n);
+      if fd = nil then
+        raise Exception.Create('Failed to find Designer Form');
+      FFile.SetFormData(fd.Form.Name, fd.GetFormSourceDecl, fd.GetFormSourceImpl);
     end;
-    frmMainDesigner.mru.AddItem(fname);
-  except
-    on E: Exception do
-      raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' + #13 + E.Message);
+
+    isfilenew := False;
+    fdata := FFile.MergeBlocks;
+
+    if enableautounits then
+      fdata := AddUnits(fdata);
+
+    AssignFile(ff, fpgToOSEncoding(fname));
+    try
+      Rewrite(ff, 1);
+      try
+        BlockWrite(ff, fdata[1], length(fdata));
+      finally
+        CloseFile(ff);
+      end;
+      frmMainDesigner.mru.AddItem(fname);
+    except
+      on E: Exception do
+        raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' + #13 + E.Message);
+    end;
+    // if (enableundo = True) then SaveUndo(Sender, 6);
+    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
+
+    frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
+
+    if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
+    begin
+      frmMainDesigner.MainMenu.MenuItem(8).Text := ' => ' + fname;
+      frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
+    end;
+
   end;
-  // if (enableundo = True) then SaveUndo(Sender, 6);
-end;
 
 end;
 
@@ -1289,7 +1307,7 @@ begin
 
 end;
 
-function TMainDesigner.OnNewForm(Sender: TObject) : boolean;
+function TMainDesigner.OnNewForm(Sender: TObject): boolean;
 var
   fd: TFormDesigner;
   nfrm: TNewFormForm;
@@ -1311,7 +1329,7 @@ var
   end;
 
 begin
-  result := false;
+  Result := False;
   calculwidget := False;
   nfrm := TNewFormForm.Create(nil);
   try
@@ -1332,7 +1350,7 @@ begin
       FDesigners.Add(fd);
       SelectedForm := fd;
       fd.Show;
-      result := true;
+      Result := True;
 
       x := length(ArrayFormDesign);
 
@@ -1371,11 +1389,11 @@ begin
   isFileNew := False;
   isFileLoaded := False;
   FEditedFileName := '';
-  FFileLoaded  := '';
+  FFileLoaded := '';
   // options
   SaveComponentNames := True;
   LoadDefaults;
- end;
+end;
 
 destructor TMainDesigner.Destroy;
 var
@@ -1420,21 +1438,21 @@ end;
 function TMainDesigner.NewFormName: string;
 var
   n, i: integer;
-  s: string;
+  st: string;
 begin
   i := 0;
   repeat
     Inc(i);
-    s := 'Form' + IntToStr(i);
+    st := 'Form' + IntToStr(i);
     n := 0;
     while (n < DesignerCount) do
     begin
-      if Designer(n).Form.Name = s then
+      if Designer(n).Form.Name = st then
         Break;
       Inc(n);
     end;
   until n > DesignerCount - 1;
-  Result := s;
+  Result := st;
 end;
 
 function TMainDesigner.CreateParseForm(const FormName, FormHead, FormBody: string): TFormDesigner;
@@ -1593,14 +1611,14 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
   {@VFD_BODY_BEGIN: TfrmAlreadyExists}
-  Name := 'TfrmAlreadyExists';
+  Name := 'frmAlreadyExists';
   SetPosition(500, 319, 350, 90);
   WindowTitle := 'Warning => Existing File !';
   Hint := '';
   BackGroundColor := $80000001;
   Sizeable := False;
   WindowPosition := wpScreenCenter;
-  WindowType:= wtModalForm;
+  WindowType := wtModalForm;
 
   lbl1 := TfpgLabel.Create(self);
   with lbl1 do
@@ -1651,9 +1669,9 @@ begin
     Text := 'No';
   end;
 
-  {@VFD_BODY_END: TfrmAlreadyExists}
+  {@VFD_BODY_END: frmAlreadyExists}
   {%endregion}
 
- end;
+end;
 
 end.

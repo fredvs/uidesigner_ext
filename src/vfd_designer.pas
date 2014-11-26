@@ -80,7 +80,7 @@ type
 
   TWidgetDesigner = class(TObject)
   private
-    procedure   SetSelected(const AValue: boolean);
+    procedure SetSelected(const AValue: boolean);
   public
     FFormDesigner: TFormDesigner;
     FWidget: TfpgWidget;
@@ -88,13 +88,13 @@ type
     FSelected: boolean;
     resizer: array[1..8] of TwgResizer;
     other: TStringList;
-    MarkForDeletion: Boolean;
+    MarkForDeletion: boolean;
     constructor Create(AFormDesigner: TFormDesigner; wg: TfpgWidget; wgc: TVFDWidgetClass);
-    destructor  Destroy; override;
-    procedure   UpdateResizerPositions;
-    property    Selected: boolean read FSelected write SetSelected;
-    property    Widget: TfpgWidget read FWidget;
-    property    FormDesigner: TFormDesigner read FFormDesigner;
+    destructor Destroy; override;
+    procedure UpdateResizerPositions;
+    property Selected: boolean read FSelected write SetSelected;
+    property Widget: TfpgWidget read FWidget;
+    property FormDesigner: TFormDesigner read FFormDesigner;
   end;
 
   TFormDesigner = class(TObject)
@@ -116,15 +116,14 @@ type
     procedure MsgMove(var msg: TfpgMessageRec); message FPGM_MOVE;
     procedure MsgResize(var msg: TfpgMessageRec); message FPGM_RESIZE;
     procedure MsgActivate(var msg: TfpgMessageRec); message FPGM_ACTIVATE;
-    procedure DesignerKeyPress(var keycode: word; var shiftstate: TShiftState;
-      var consumed: boolean);
+    procedure DesignerKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean);
   public
     constructor Create;
     destructor Destroy; override;
     procedure ClearForm;
     procedure DefaultHandler(var msg); override;
     procedure Show;
-    function AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent : TFormDesigner): TWidgetDesigner;
+    function AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent: TFormDesigner): TWidgetDesigner;
     function WidgetDesigner(wg: TfpgWidget): TWidgetDesigner;
     function FindWidgetByName(const wgname: string): TfpgWidget;
     procedure DeSelectAll;
@@ -145,8 +144,7 @@ type
     function GenerateNewName(namebase: string): string;
     procedure RunWidgetEditor(wgd: TWidgetDesigner; wg: TfpgWidget);
     function GetFormSourceDecl: string;
-    function GetVirtualFormSourceImpl(TheForm: TDesignedForm;
-      s: TfpgString): TfpgString;
+    function GetVirtualFormSourceImpl(TheForm: TDesignedForm; s: TfpgString): TfpgString;
     function GetFormSourceImpl: string;
     function GetWidgetSourceImpl(wd: TWidgetDesigner; ident: string): string;
     function GetVirtualWidgetSourceImpl(TheWidget: TfpgWidget): string;
@@ -174,52 +172,56 @@ procedure TWidgetDesigner.SetSelected(const AValue: boolean);
 var
   n: integer;
 begin
-  if (isfileloaded = true)  then begin
-
-    if Widget.HasParent then SelectedWidget :=  Widget else
-  SelectedWidget :=   Widget.Parent ;
-
-   if FSelected = AValue then
-    Exit;
-  FSelected := AValue;
-
-   if FSelected then
-    Widget.MouseCursor := mcMove
-  else
-    Widget.MouseCursor := mcDefault;
-
-  for n := 1 to 8 do
+  if (isfileloaded = True) then
   begin
-    if FSelected then
-      resizer[n] := TwgResizer.Create(self, n)
+
+    if Widget.HasParent then
+      SelectedWidget := Widget
     else
-    begin
-      resizer[n].Free;
-      resizer[n] := nil;
-    end;
-  end;
+      SelectedWidget := Widget.Parent;
 
-  UpdateResizerPositions;
+    if FSelected = AValue then
+      Exit;
+    FSelected := AValue;
 
-  if FSelected and Widget.Parent.HasHandle then
+    if FSelected then
+      Widget.MouseCursor := mcMove
+    else
+      Widget.MouseCursor := mcDefault;
+
     for n := 1 to 8 do
-      resizer[n].Show;
+    begin
+      if FSelected then
+        resizer[n] := TwgResizer.Create(self, n)
+      else
+      begin
+        resizer[n].Free;
+        resizer[n] := nil;
+      end;
+    end;
 
-  frmproperties.Show;
+    UpdateResizerPositions;
 
-   if (widget is Tfpgform) then
-   begin
-    if (frmMultiSelect.Visible = true) then  frmMultiSelect.Getwidgetlist(widget);
-     end
-   else
-   if (frmMultiSelect.Visible = true) then frmMultiSelect.SelectedFromDesigner(Widget);
+    if FSelected and Widget.Parent.HasHandle then
+      for n := 1 to 8 do
+        resizer[n].Show;
+
+    frmproperties.Show;
+
+    if (widget is Tfpgform) then
+    begin
+      if (frmMultiSelect.Visible = True) then
+        frmMultiSelect.Getwidgetlist(widget);
+    end
+    else
+    if (frmMultiSelect.Visible = True) then
+      frmMultiSelect.SelectedFromDesigner(Widget);
 
   end;
 
 end;
 
-constructor TWidgetDesigner.Create(AFormDesigner: TFormDesigner;
-  wg: TfpgWidget; wgc: TVFDWidgetClass);
+constructor TWidgetDesigner.Create(AFormDesigner: TFormDesigner; wg: TfpgWidget; wgc: TVFDWidgetClass);
 var
   n: integer;
 begin
@@ -542,7 +544,7 @@ begin
   UpdatePropWin;
 end;
 
-function TFormDesigner.AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent : Tformdesigner): TWidgetDesigner;
+function TFormDesigner.AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent: Tformdesigner): TWidgetDesigner;
 var
   cd: TWidgetDesigner;
 begin
@@ -576,7 +578,7 @@ var
   n: integer;
   cd: TWidgetDesigner;
 begin
- for n := 0 to FWidgets.Count - 1 do
+  for n := 0 to FWidgets.Count - 1 do
   begin
     cd := TWidgetDesigner(FWidgets.Items[n]);
     cd.Selected := False;
@@ -668,14 +670,11 @@ var
     if not Assigned(ADesignWidget.Widget) then  // safety check
       Exit;
 
-    if (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFILENAMEEDIT') and
-       (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGDIRECTORYEDIT') and
-       (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFONTEDIT') and
-       (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGEDITBUTTON') and
-       (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGPAGECONTROL') and
-       (ADesignWidget.Widget.IsContainer) and
-       (ADesignWidget.Widget.ComponentCount > 0) then
-  begin
+    if (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFILENAMEEDIT') and (uppercase(ADesignWidget.Widget.ClassName) <>
+      'TFPGDIRECTORYEDIT') and (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFONTEDIT') and
+      (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGEDITBUTTON') and (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGPAGECONTROL') and
+      (ADesignWidget.Widget.IsContainer) and (ADesignWidget.Widget.ComponentCount > 0) then
+    begin
       for i := ADesignWidget.Widget.ComponentCount - 1 downto 0 do
         DeleteChildWidget(WidgetDesigner(TfpgWidget(ADesignWidget.Widget.Components[i])));
     end;
@@ -694,7 +693,7 @@ begin
   end;
 
   // Pass 2: free TWidgetDesigner instances that have no more Widget instances
-  for n := FWidgets.Count-1 downto 0 do
+  for n := FWidgets.Count - 1 downto 0 do
   begin
     cd := TWidgetDesigner(FWidgets.Items[n]);
     if cd.MarkForDeletion then
@@ -782,8 +781,7 @@ begin
   frm.Free;
 end;
 
-procedure TFormDesigner.DesignerKeyPress(var keycode: word;
-  var shiftstate: TShiftState; var consumed: boolean);
+procedure TFormDesigner.DesignerKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean);
 var
   dx, dy: integer;
 begin
@@ -808,8 +806,7 @@ begin
     end;
 
     keyF1:
-      ShowMessage(rsDesignerHelp1 + LineEnding + rsDesignerHelp2 +
-        LineEnding + rsDesignerHelp3 + LineEnding {+
+      ShowMessage(rsDesignerHelp1 + LineEnding + rsDesignerHelp2 + LineEnding + rsDesignerHelp3 + LineEnding {+
         'F4: edit items' + LineEnding}, rsDesignerQuickHelp);
 
     keyF2:
@@ -821,11 +818,11 @@ begin
 
     keyF11:
     begin
-       if (maindsgn.selectedform <> nil) and (frmProperties.edName.Text <> '') then
-  begin
-      frmProperties.SetFocus;
-      frmProperties.ActivateWindow;
-    end;
+      if (maindsgn.selectedform <> nil) and (frmProperties.edName.Text <> '') then
+      begin
+        frmProperties.SetFocus;
+        frmProperties.ActivateWindow;
+      end;
 
     end;
     else
@@ -845,324 +842,38 @@ var
   ok: boolean;
   TheParent: TfpgWidget;
 begin
-if  maindsgn.selectedform <> nil then
+  if maindsgn.selectedform <> nil then
   begin
-  if (TheWidget is TfpgForm) then
-  begin
-    if TDesignedForm(TheWidget).Virtualprop.Count > 0 then
+    if (TheWidget is TfpgForm) then
     begin
-
-      // Sizeable
-      i := 0;
-      ok := False;
-      while i < TDesignedForm(TheWidget).Virtualprop.Count do
+      if TDesignedForm(TheWidget).Virtualprop.Count > 0 then
       begin
-        if pos(TDesignedForm(TheWidget).Name + '.' +
-          'siz=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+
+        // Sizeable
+        i := 0;
+        ok := False;
+        while i < TDesignedForm(TheWidget).Virtualprop.Count do
         begin
-          frmProperties.cbsizeable.Text := 'False';
-          frmProperties.cbsizeable.FocusItem := 1;
-          ok := True;
-        end;
-        Inc(i);
-      end;
-      if ok = False then
-      begin
-        frmProperties.cbsizeable.Text := 'True';
-        frmProperties.cbsizeable.FocusItem := 0;
-      end;
-
-      // Focusable
-      i := 0;
-      ok := False;
-      while i < TDesignedForm(TheWidget).Virtualprop.Count do
-      begin
-        if pos(TDesignedForm(TheWidget).Name + '.' +
-          'foc=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-        begin
-          frmProperties.cbfocusable.Text := 'False';
-          frmProperties.cbfocusable.FocusItem := 1;
-          ok := True;
-        end;
-        Inc(i);
-      end;
-      if ok = False then
-      begin
-        frmProperties.cbfocusable.Text := 'True';
-        frmProperties.cbfocusable.FocusItem := 0;
-      end;
-
-      // Visible
-      i := 0;
-      ok := False;
-      while i < TDesignedForm(TheWidget).Virtualprop.Count do
-      begin
-        if pos(TDesignedForm(TheWidget).Name + '.' +
-          'vis=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-
-        begin
-          frmProperties.cbvisible.Text := 'False';
-          frmProperties.cbvisible.FocusItem := 1;
-          ok := True;
-        end;
-        Inc(i);
-      end;
-      if ok = False then
-      begin
-        frmProperties.cbvisible.Text := 'True';
-        frmProperties.cbvisible.FocusItem := 0;
-      end;
-
-      // FULLSCREEN
-      i := 0;
-      ok := False;
-      while i < TDesignedForm(TheWidget).Virtualprop.Count do
-      begin
-        if pos(TDesignedForm(TheWidget).Name + '.' +
-          'ful=True', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-        begin
-          frmProperties.cbfullscreen.Text := 'True';
-          frmProperties.cbfullscreen.FocusItem := 1;
-          ok := True;
-        end;
-        Inc(i);
-      end;
-      if ok = False then
-      begin
-        frmProperties.cbfullscreen.Text := 'False';
-        frmProperties.cbfullscreen.FocusItem := 0;
-      end;
-
-      // ENABLED
-      i := 0;
-      ok := False;
-      while i < TDesignedForm(TheWidget).Virtualprop.Count do
-      begin
-        if pos(TDesignedForm(TheWidget).Name + '.' +
-          'ena=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-        begin
-          frmProperties.cbenabled.Text := 'False';
-          frmProperties.cbenabled.FocusItem := 1;
-          ok := True;
-        end;
-        Inc(i);
-      end;
-      if ok = False then
-      begin
-        frmProperties.cbenabled.Text := 'True';
-        frmProperties.cbenabled.FocusItem := 0;
-      end;
-    end;
-
-    // MinWidth
-    i := 0;
-    ok := False;
-    while i < TDesignedForm(TheWidget).Virtualprop.Count do
-    begin
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'miw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-      begin
-        frmProperties.edminwidth.Text :=
-          copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos(
-          'miw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) + 4,
-          length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos(
-          'miw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
-        ok := True;
-      end;
-      Inc(i);
-    end;
-    if ok = False then
-    begin
-      frmProperties.edminwidth.Text := '0';
-    end;
-
-    // MaxWidth
-    i := 0;
-    ok := False;
-    while i < TDesignedForm(TheWidget).Virtualprop.Count do
-    begin
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'maw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-      begin
-        frmProperties.edmaxwidth.Text :=
-          copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos(
-          'maw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) + 4,
-          length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos(
-          'maw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
-        ok := True;
-      end;
-      Inc(i);
-    end;
-    if ok = False then
-    begin
-      frmProperties.edmaxwidth.Text := '0';
-    end;
-
-    // MinHeiht
-    i := 0;
-    ok := False;
-    while i < TDesignedForm(TheWidget).Virtualprop.Count do
-    begin
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'mih=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-      begin
-        frmProperties.edminheight.Text :=
-          copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos(
-          'mih=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) + 4,
-          length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos(
-          'mih=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
-        ok := True;
-      end;
-      Inc(i);
-    end;
-    if ok = False then
-    begin
-      frmProperties.edminheight.Text := '0';
-    end;
-
-    // MaxHeight
-    i := 0;
-    ok := False;
-    while i < TDesignedForm(TheWidget).Virtualprop.Count do
-    begin
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'mah=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-      begin
-        frmProperties.edmaxheight.Text :=
-          copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos(
-          'mah=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) + 4,
-          length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos(
-          'mah=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
-        ok := True;
-      end;
-      Inc(i);
-    end;
-    if ok = False then
-    begin
-      frmProperties.edmaxheight.Text := '0';
-    end;
-
-    // WindowPosition
-    i := 0;
-    ok := False;
-    while i < TDesignedForm(TheWidget).Virtualprop.Count do
-    begin
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'wip=wpUser', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-      begin
-        frmProperties.cbWindowPosition.Text := 'wpUser';
-        frmProperties.cbWindowPosition.FocusItem := 0;
-        ok := True;
-      end
-      else
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'wip=wpAuto', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-      begin
-        frmProperties.cbWindowPosition.Text := 'wpAuto';
-        frmProperties.cbWindowPosition.FocusItem := 1;
-        ok := True;
-      end
-      else
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'wip=wpScreenCenter', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-      begin
-        frmProperties.cbWindowPosition.Text := 'wpScreenCenter';
-        frmProperties.cbWindowPosition.FocusItem := 2;
-        ok := True;
-      end
-      else
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'wip=wpOneThirdDown', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-      begin
-        frmProperties.cbWindowPosition.Text := 'wpOneThirdDown';
-        frmProperties.cbWindowPosition.FocusItem := 3;
-        ok := True;
-      end;
-      Inc(i);
-    end;
-
-    if ok = False then
-    begin
-      frmProperties.cbWindowPosition.Text := 'wpUser';
-      frmProperties.cbWindowPosition.FocusItem := 0;
-    end;
-
-    // Tag
-    i := 0;
-    ok := False;
-    while i < TDesignedForm(TheWidget).Virtualprop.Count do
-    begin
-      if pos(TDesignedForm(TheWidget).Name + '.' +
-        'tag=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
-
-      begin
-        frmProperties.edtag.Text :=
-          copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos(
-          'tag=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) + 4,
-          length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos(
-          'tag=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
-        ok := True;
-      end;
-      Inc(i);
-    end;
-
-    if ok = False then
-    begin
-      frmProperties.edtag.Text := '0';
-    end;
-    frmproperties.lstProps.Anchors := [anLeft, anRight, antop];
-    frmproperties.virtualpanel.Anchors := [anLeft, anRight, anbottom];
-    frmproperties.lstProps.Height := 97 + frmproperties.Height - 448;
-    frmproperties.virtualpanel.top :=
-      frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
-    frmproperties.virtualpanel.Height := 133;
-    frmproperties.virtualpanel.UpdateWindowPosition;
-    frmproperties.lstProps.UpdateWindowPosition;
-    frmproperties.virtualpanel.Visible := True;
-
-  end
-  else
-  begin       ////// other widget
-
- TheParent := TheWidget;
-while  TheParent.HasParent = True do
-   TheParent := TheParent.Parent;
-    // Is it better ? =>
-  //  TheParent := WidgetParentForm(TfpgWidget(TheWidget));
-
-    // visible
-    i := 0;
-    ok := False;
-    if (TheParent) is TDesignedForm then
-      if TDesignedForm(TheParent).Virtualprop.Count > 0 then
-      begin
-        while i < TDesignedForm(TheParent).Virtualprop.Count do
-        begin
-          if pos(TheParent.Name + '.' + (TheWidget).Name + '.' +
-            'vis=False', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
+          if pos(TDesignedForm(TheWidget).Name + '.' + 'siz=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
           begin
-            frmProperties.cbvisible.Text := 'False';
-            frmProperties.cbvisible.FocusItem := 1;
+            frmProperties.cbsizeable.Text := 'False';
+            frmProperties.cbsizeable.FocusItem := 1;
             ok := True;
           end;
           Inc(i);
         end;
         if ok = False then
         begin
-          frmProperties.cbvisible.Text := 'True';
-          frmProperties.cbvisible.FocusItem := 0;
+          frmProperties.cbsizeable.Text := 'True';
+          frmProperties.cbsizeable.FocusItem := 0;
         end;
-      end;
 
-    i := 0;
-    ok := False;
-    if (TheParent) is TDesignedForm then
-      if TDesignedForm(TheParent).Virtualprop.Count > 0 then
-      begin
-        while i < TDesignedForm(TheParent).Virtualprop.Count do
+        // Focusable
+        i := 0;
+        ok := False;
+        while i < TDesignedForm(TheWidget).Virtualprop.Count do
         begin
-          if pos(TheParent.Name + '.' + (TheWidget).Name + '.' +
-            'foc=False', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
+          if pos(TDesignedForm(TheWidget).Name + '.' + 'foc=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
           begin
             frmProperties.cbfocusable.Text := 'False';
             frmProperties.cbfocusable.FocusItem := 1;
@@ -1175,48 +886,305 @@ while  TheParent.HasParent = True do
           frmProperties.cbfocusable.Text := 'True';
           frmProperties.cbfocusable.FocusItem := 0;
         end;
-      end;
 
-    // Tag
-    i := 0;
-    ok := False;
-
-    if (TheParent) is TDesignedForm then
-      if TDesignedForm(TheParent).Virtualprop.Count > 0 then
-      begin
-        while i < TDesignedForm(TheParent).Virtualprop.Count do
+        // Visible
+        i := 0;
+        ok := False;
+        while i < TDesignedForm(TheWidget).Virtualprop.Count do
         begin
-          if pos(TheParent.Name + '.' + (TheWidget).Name + '.' +
-            'tag=', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
+          if pos(TDesignedForm(TheWidget).Name + '.' + 'vis=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+
           begin
-            frmProperties.edtag.Text :=
-              copy(TDesignedForm(TheParent).Virtualprop.Strings[i], pos(
-              'tag=', TDesignedForm(TheParent).Virtualprop.Strings[i]) + 4,
-              length(TDesignedForm(TheParent).Virtualprop.Strings[i]) - pos(
-              'tag=', TDesignedForm(TheParent).Virtualprop.Strings[i]) - 3);
+            frmProperties.cbvisible.Text := 'False';
+            frmProperties.cbvisible.FocusItem := 1;
             ok := True;
           end;
           Inc(i);
         end;
-
         if ok = False then
         begin
-          frmProperties.edtag.Text := '0';
+          frmProperties.cbvisible.Text := 'True';
+          frmProperties.cbvisible.FocusItem := 0;
+        end;
+
+        // FULLSCREEN
+        i := 0;
+        ok := False;
+        while i < TDesignedForm(TheWidget).Virtualprop.Count do
+        begin
+          if pos(TDesignedForm(TheWidget).Name + '.' + 'ful=True', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+          begin
+            frmProperties.cbfullscreen.Text := 'True';
+            frmProperties.cbfullscreen.FocusItem := 1;
+            ok := True;
+          end;
+          Inc(i);
+        end;
+        if ok = False then
+        begin
+          frmProperties.cbfullscreen.Text := 'False';
+          frmProperties.cbfullscreen.FocusItem := 0;
+        end;
+
+        // ENABLED
+        i := 0;
+        ok := False;
+        while i < TDesignedForm(TheWidget).Virtualprop.Count do
+        begin
+          if pos(TDesignedForm(TheWidget).Name + '.' + 'ena=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+          begin
+            frmProperties.cbenabled.Text := 'False';
+            frmProperties.cbenabled.FocusItem := 1;
+            ok := True;
+          end;
+          Inc(i);
+        end;
+        if ok = False then
+        begin
+          frmProperties.cbenabled.Text := 'True';
+          frmProperties.cbenabled.FocusItem := 0;
         end;
       end;
 
-    //////
-    frmproperties.lstProps.Anchors := [anLeft, anRight, antop];
-    frmproperties.virtualpanel.Anchors := [anLeft, anRight, anbottom];
-    frmproperties.lstProps.Height := 186 + frmproperties.Height - 448;
-    frmproperties.virtualpanel.top :=
-      frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
-    frmproperties.virtualpanel.Height := 44;
-    frmproperties.virtualpanel.UpdateWindowPosition;
-    frmproperties.lstProps.UpdateWindowPosition;
-    frmproperties.virtualpanel.Visible := True;
-  end;
+      // MinWidth
+      i := 0;
+      ok := False;
+      while i < TDesignedForm(TheWidget).Virtualprop.Count do
+      begin
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'miw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+        begin
+          frmProperties.edminwidth.Text :=
+            copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos('miw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) +
+            4, length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos('miw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
+          ok := True;
+        end;
+        Inc(i);
+      end;
+      if ok = False then
+      begin
+        frmProperties.edminwidth.Text := '0';
+      end;
 
+      // MaxWidth
+      i := 0;
+      ok := False;
+      while i < TDesignedForm(TheWidget).Virtualprop.Count do
+      begin
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'maw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+        begin
+          frmProperties.edmaxwidth.Text :=
+            copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos('maw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) +
+            4, length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos('maw=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
+          ok := True;
+        end;
+        Inc(i);
+      end;
+      if ok = False then
+      begin
+        frmProperties.edmaxwidth.Text := '0';
+      end;
+
+      // MinHeiht
+      i := 0;
+      ok := False;
+      while i < TDesignedForm(TheWidget).Virtualprop.Count do
+      begin
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'mih=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+        begin
+          frmProperties.edminheight.Text :=
+            copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos('mih=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) +
+            4, length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos('mih=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
+          ok := True;
+        end;
+        Inc(i);
+      end;
+      if ok = False then
+      begin
+        frmProperties.edminheight.Text := '0';
+      end;
+
+      // MaxHeight
+      i := 0;
+      ok := False;
+      while i < TDesignedForm(TheWidget).Virtualprop.Count do
+      begin
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'mah=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+        begin
+          frmProperties.edmaxheight.Text :=
+            copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos('mah=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) +
+            4, length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos('mah=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
+          ok := True;
+        end;
+        Inc(i);
+      end;
+      if ok = False then
+      begin
+        frmProperties.edmaxheight.Text := '0';
+      end;
+
+      // WindowPosition
+      i := 0;
+      ok := False;
+      while i < TDesignedForm(TheWidget).Virtualprop.Count do
+      begin
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'wip=wpUser', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+        begin
+          frmProperties.cbWindowPosition.Text := 'wpUser';
+          frmProperties.cbWindowPosition.FocusItem := 0;
+          ok := True;
+        end
+        else
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'wip=wpAuto', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+        begin
+          frmProperties.cbWindowPosition.Text := 'wpAuto';
+          frmProperties.cbWindowPosition.FocusItem := 1;
+          ok := True;
+        end
+        else
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'wip=wpScreenCenter', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+        begin
+          frmProperties.cbWindowPosition.Text := 'wpScreenCenter';
+          frmProperties.cbWindowPosition.FocusItem := 2;
+          ok := True;
+        end
+        else
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'wip=wpOneThirdDown', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+        begin
+          frmProperties.cbWindowPosition.Text := 'wpOneThirdDown';
+          frmProperties.cbWindowPosition.FocusItem := 3;
+          ok := True;
+        end;
+        Inc(i);
+      end;
+
+      if ok = False then
+      begin
+        frmProperties.cbWindowPosition.Text := 'wpUser';
+        frmProperties.cbWindowPosition.FocusItem := 0;
+      end;
+
+      // Tag
+      i := 0;
+      ok := False;
+      while i < TDesignedForm(TheWidget).Virtualprop.Count do
+      begin
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'tag=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+
+        begin
+          frmProperties.edtag.Text :=
+            copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos('tag=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) +
+            4, length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos('tag=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
+          ok := True;
+        end;
+        Inc(i);
+      end;
+
+      if ok = False then
+      begin
+        frmProperties.edtag.Text := '0';
+      end;
+      frmproperties.lstProps.Anchors := [anLeft, anRight, antop];
+      frmproperties.virtualpanel.Anchors := [anLeft, anRight, anbottom];
+      frmproperties.lstProps.Height := 97 + frmproperties.Height - 448;
+      frmproperties.virtualpanel.top :=
+        frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
+      frmproperties.virtualpanel.Height := 133;
+      frmproperties.virtualpanel.UpdateWindowPosition;
+      frmproperties.lstProps.UpdateWindowPosition;
+      frmproperties.virtualpanel.Visible := True;
+
+    end
+    else
+    begin       ////// other widget
+
+      TheParent := TheWidget;
+      while TheParent.HasParent = True do
+        TheParent := TheParent.Parent;
+      // Is it better ? =>
+      //  TheParent := WidgetParentForm(TfpgWidget(TheWidget));
+
+      // visible
+      i := 0;
+      ok := False;
+      if (TheParent) is TDesignedForm then
+        if TDesignedForm(TheParent).Virtualprop.Count > 0 then
+        begin
+          while i < TDesignedForm(TheParent).Virtualprop.Count do
+          begin
+            if pos(TheParent.Name + '.' + (TheWidget).Name + '.' + 'vis=False', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
+            begin
+              frmProperties.cbvisible.Text := 'False';
+              frmProperties.cbvisible.FocusItem := 1;
+              ok := True;
+            end;
+            Inc(i);
+          end;
+          if ok = False then
+          begin
+            frmProperties.cbvisible.Text := 'True';
+            frmProperties.cbvisible.FocusItem := 0;
+          end;
+        end;
+
+      i := 0;
+      ok := False;
+      if (TheParent) is TDesignedForm then
+        if TDesignedForm(TheParent).Virtualprop.Count > 0 then
+        begin
+          while i < TDesignedForm(TheParent).Virtualprop.Count do
+          begin
+            if pos(TheParent.Name + '.' + (TheWidget).Name + '.' + 'foc=False', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
+            begin
+              frmProperties.cbfocusable.Text := 'False';
+              frmProperties.cbfocusable.FocusItem := 1;
+              ok := True;
+            end;
+            Inc(i);
+          end;
+          if ok = False then
+          begin
+            frmProperties.cbfocusable.Text := 'True';
+            frmProperties.cbfocusable.FocusItem := 0;
+          end;
+        end;
+
+      // Tag
+      i := 0;
+      ok := False;
+
+      if (TheParent) is TDesignedForm then
+        if TDesignedForm(TheParent).Virtualprop.Count > 0 then
+        begin
+          while i < TDesignedForm(TheParent).Virtualprop.Count do
+          begin
+            if pos(TheParent.Name + '.' + (TheWidget).Name + '.' + 'tag=', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
+            begin
+              frmProperties.edtag.Text :=
+                copy(TDesignedForm(TheParent).Virtualprop.Strings[i], pos('tag=', TDesignedForm(TheParent).Virtualprop.Strings[i]) +
+                4, length(TDesignedForm(TheParent).Virtualprop.Strings[i]) - pos('tag=',
+                TDesignedForm(TheParent).Virtualprop.Strings[i]) - 3);
+              ok := True;
+            end;
+            Inc(i);
+          end;
+
+          if ok = False then
+          begin
+            frmProperties.edtag.Text := '0';
+          end;
+        end;
+
+      //////
+      frmproperties.lstProps.Anchors := [anLeft, anRight, antop];
+      frmproperties.virtualpanel.Anchors := [anLeft, anRight, anbottom];
+      frmproperties.lstProps.Height := 186 + frmproperties.Height - 448;
+      frmproperties.virtualpanel.top :=
+        frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
+      frmproperties.virtualpanel.Height := 44;
+      frmproperties.virtualpanel.UpdateWindowPosition;
+      frmproperties.lstProps.UpdateWindowPosition;
+      frmproperties.virtualpanel.Visible := True;
+    end;
 
   end;
 end;
@@ -1228,7 +1196,7 @@ var
   wg: TfpgWidget;
 
   wgcnt: integer;
- // ok: boolean;
+  // ok: boolean;
   //bedit : boolean;
 
   lastpropname: string;
@@ -1236,91 +1204,89 @@ var
   wgc: TVFDWidgetClass;
 begin
 
- if  maindsgn.selectedform <> nil then
+  if maindsgn.selectedform <> nil then
   begin
-  wgcnt := 0;
-  wg := FForm;
-  wgc := VFDFormWidget;
-  scd := nil;
-  for n := 0 to FWidgets.Count - 1 do
-  begin
-    cd := TWidgetDesigner(FWidgets.Items[n]);
-    if cd.Selected then
+    wgcnt := 0;
+    wg := FForm;
+    wgc := VFDFormWidget;
+    scd := nil;
+    for n := 0 to FWidgets.Count - 1 do
     begin
-      Inc(wgcnt);
-      if wgcnt < 2 then
+      cd := TWidgetDesigner(FWidgets.Items[n]);
+      if cd.Selected then
       begin
-        wg := cd.Widget;
-        scd := cd;
+        Inc(wgcnt);
+        if wgcnt < 2 then
+        begin
+          wg := cd.Widget;
+          scd := cd;
+        end;
       end;
     end;
-  end;
-
-  if scd <> nil then
-    wgc := scd.FVFDClass;
-
-  n := frmProperties.lstProps.FocusItem;
-  if (n >= 0) and (PropList.GetItem(n) <> nil) then
-    lastpropname := PropList.GetItem(n).Name
-  else
-    lastpropname := '';
-
-  i := -1;
-
-  if PropList.Widget <> wg then
-  begin
-    frmProperties.lstProps.ReleaseEditor;
-    PropList.Clear;
-    PropList.Widget := wg;
-    for n := 0 to wgc.PropertyCount - 1 do
-    begin
-      if not (UpperCase(wgc.GetProperty(n).Name) = 'WINDOWPOSITION') then
-      begin
-        PropList.AddItem(wgc.GetProperty(n));
-        if UpperCase(wgc.GetProperty(n).Name) = UpperCase(lastPropName) then
-          i := n;
-      end;
-    end;
-    frmProperties.lstProps.Update;
-    if i > -1 then
-      frmProperties.lstProps.FocusItem := i;
-  end;
-
-  with frmProperties do
-  begin
-    if wg is TOtherWidget then
-      lbClass.Text := TOtherWidget(wg).wgClassName
-    else
-      lbClass.Text := wg.ClassName;
-    edName.Text := wg.Name;
 
     if scd <> nil then
-      edOther.Text := scd.other.Text
+      wgc := scd.FVFDClass;
+
+    n := frmProperties.lstProps.FocusItem;
+    if (n >= 0) and (PropList.GetItem(n) <> nil) then
+      lastpropname := PropList.GetItem(n).Name
     else
-      edOther.Text := FFormOther;
+      lastpropname := '';
 
-    edName.Visible := (wgcnt < 2);
-    edOther.Visible := (wgcnt < 2);
+    i := -1;
 
-    lstProps.Update;
-  end;
+    if PropList.Widget <> wg then
+    begin
+      frmProperties.lstProps.ReleaseEditor;
+      PropList.Clear;
+      PropList.Widget := wg;
+      for n := 0 to wgc.PropertyCount - 1 do
+      begin
+        if not (UpperCase(wgc.GetProperty(n).Name) = 'WINDOWPOSITION') then
+        begin
+          PropList.AddItem(wgc.GetProperty(n));
+          if UpperCase(wgc.GetProperty(n).Name) = UpperCase(lastPropName) then
+            i := n;
+        end;
+      end;
+      frmProperties.lstProps.Update;
+      if i > -1 then
+        frmProperties.lstProps.FocusItem := i;
+    end;
 
-  with frmProperties do
-  begin
-    btnLeft.Text := IntToStr(wg.Left);
-    btnTop.Text := IntToStr(wg.Top);
-    btnWidth.Text := IntToStr(wg.Width);
-    btnHeight.Text := IntToStr(wg.Height);
+    with frmProperties do
+    begin
+      if wg is TOtherWidget then
+        lbClass.Text := TOtherWidget(wg).wgClassName
+      else
+        lbClass.Text := wg.ClassName;
+      edName.Text := wg.Name;
 
-    btnAnLeft.Down := anLeft in wg.Anchors;
-    btnAnTop.Down := anTop in wg.Anchors;
-    btnAnRight.Down := anRight in wg.Anchors;
-    btnAnBottom.Down := anBottom in wg.Anchors;
-  end;
+      if scd <> nil then
+        edOther.Text := scd.other.Text
+      else
+        edOther.Text := FFormOther;
 
-  UpdateVirtualPropWin(wg);
+      edName.Visible := (wgcnt < 2);
+      edOther.Visible := (wgcnt < 2);
 
+      lstProps.Update;
+    end;
 
+    with frmProperties do
+    begin
+      btnLeft.Text := IntToStr(wg.Left);
+      btnTop.Text := IntToStr(wg.Top);
+      btnWidth.Text := IntToStr(wg.Width);
+      btnHeight.Text := IntToStr(wg.Height);
+
+      btnAnLeft.Down := anLeft in wg.Anchors;
+      btnAnTop.Down := anTop in wg.Anchors;
+      btnAnRight.Down := anRight in wg.Anchors;
+      btnAnBottom.Down := anBottom in wg.Anchors;
+    end;
+
+    UpdateVirtualPropWin(wg);
 
   end;
 
@@ -1389,13 +1355,15 @@ begin
     wg := FForm;
 
   try
- if SelectedWidget =  wg then
-       wg.Name := s else SelectedWidget :=  wg ;
+    if SelectedWidget = wg then
+      wg.Name := s
+    else
+      SelectedWidget := wg;
   except
     // invalid name...
   end;
 
- end;
+end;
 
 procedure TFormDesigner.OnPropPosEdit(Sender: TObject);
 var
@@ -1417,7 +1385,7 @@ var
       awg.Height := pval;
   end;
 
- begin
+begin
   wg := nil;
   for n := 0 to FWidgets.Count - 1 do
   begin
@@ -1434,9 +1402,9 @@ var
 
   frm := TEditPositionForm.Create(nil);
 
-   if Sender = frmProperties.btnLeft then
+  if Sender = frmProperties.btnLeft then
   begin
-    frm.lbPos.Text :=  'Left :=';
+    frm.lbPos.Text := 'Left :=';
     frm.edPos.Text := IntToStr(wg.Left);
   end
   else if Sender = frmProperties.btnTop then
@@ -1446,23 +1414,23 @@ var
   end
   else if Sender = frmProperties.btnWidth then
   begin
-    frm.lbPos.Text :='Width :='  ;
+    frm.lbPos.Text := 'Width :=';
     frm.edPos.Text := IntToStr(wg.Width);
   end
   else if Sender = frmProperties.btnHeight then
   begin
-    frm.lbPos.Text := 'Height :='   ;
+    frm.lbPos.Text := 'Height :=';
     frm.edPos.Text := IntToStr(wg.Height);
   end;
 
 
   posval := -9999;
 
-if frm.Showmodal = mrOk then
+  if frm.Showmodal = mrOk then
 
-posval := StrToIntDef(frm.edPos.Text, -9999);
+    posval := StrToIntDef(frm.edPos.Text, -9999);
 
- frm.Free;
+  frm.Free;
 
   if posval > -999 then
   begin
@@ -1488,7 +1456,7 @@ posval := StrToIntDef(frm.edPos.Text, -9999);
 
   UpdatePropWin;
 
-  end;
+end;
 
 procedure TFormDesigner.OnOtherChange(Sender: TObject);
 var
@@ -1497,23 +1465,23 @@ var
   s: string;
   sc: integer;
 begin
- if  (isfpguifile = true) and (maindsgn.selectedform <> nil) then
-   begin
-  sc := 0;
-  s := frmProperties.edOther.Text;
-  for n := 0 to FWidgets.Count - 1 do
+  if (isfpguifile = True) and (maindsgn.selectedform <> nil) then
   begin
-    cd := TWidgetDesigner(FWidgets.Items[n]);
-    if cd.Selected then
+    sc := 0;
+    s := frmProperties.edOther.Text;
+    for n := 0 to FWidgets.Count - 1 do
     begin
-      cd.other.Text := s;
-      Inc(sc);
+      cd := TWidgetDesigner(FWidgets.Items[n]);
+      if cd.Selected then
+      begin
+        cd.other.Text := s;
+        Inc(sc);
+      end;
     end;
-  end;
 
-  if sc < 1 then
-    FFormOther := s;
-end;
+    if sc < 1 then
+      FFormOther := s;
+  end;
 
 end;
 
@@ -1592,8 +1560,7 @@ begin
   end;
 end;
 
-function TFormDesigner.GetVirtualFormSourceImpl(TheForm: TDesignedForm;
-  s: TfpgString): TfpgString;
+function TFormDesigner.GetVirtualFormSourceImpl(TheForm: TDesignedForm; s: TfpgString): TfpgString;
 var
   x: integer;
 begin
@@ -1646,14 +1613,10 @@ begin
     while x < TheForm.Virtualprop.Count do
     begin
       if pos(TheForm.Name + '.' + 'miw=', TheForm.Virtualprop.Strings[x]) > 0 then
-        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos(
-          'miw=', TheForm.Virtualprop.Strings[x]) + 4,
-          length(TheForm.Virtualprop.Strings[x]) - pos(
-          'miw=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
-          s := s + Ind(1) + 'MinWidth := ' +
-            copy(TheForm.Virtualprop.Strings[x], pos('miw=', TheForm.Virtualprop.Strings[x]) + 4,
-            length(TheForm.Virtualprop.Strings[x]) - pos('miw=', TheForm.Virtualprop.Strings[x]) -
-            3) + ';' + LineEnding;
+        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos('miw=', TheForm.Virtualprop.Strings[x]) +
+          4, length(TheForm.Virtualprop.Strings[x]) - pos('miw=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
+          s := s + Ind(1) + 'MinWidth := ' + copy(TheForm.Virtualprop.Strings[x], pos('miw=', TheForm.Virtualprop.Strings[x]) +
+            4, length(TheForm.Virtualprop.Strings[x]) - pos('miw=', TheForm.Virtualprop.Strings[x]) - 3) + ';' + LineEnding;
       Inc(x);
     end;
     // MaxWidth
@@ -1661,14 +1624,10 @@ begin
     while x < TheForm.Virtualprop.Count do
     begin
       if pos(TheForm.Name + '.' + 'maw=', TheForm.Virtualprop.Strings[x]) > 0 then
-        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos(
-          'maw=', TheForm.Virtualprop.Strings[x]) + 4,
-          length(TheForm.Virtualprop.Strings[x]) - pos(
-          'maw=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
-          s := s + Ind(1) + 'MaxWidth := ' +
-            copy(TheForm.Virtualprop.Strings[x], pos('maw=', TheForm.Virtualprop.Strings[x]) + 4,
-            length(TheForm.Virtualprop.Strings[x]) - pos('maw=', TheForm.Virtualprop.Strings[x]) -
-            3) + ';' + LineEnding;
+        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos('maw=', TheForm.Virtualprop.Strings[x]) +
+          4, length(TheForm.Virtualprop.Strings[x]) - pos('maw=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
+          s := s + Ind(1) + 'MaxWidth := ' + copy(TheForm.Virtualprop.Strings[x], pos('maw=', TheForm.Virtualprop.Strings[x]) +
+            4, length(TheForm.Virtualprop.Strings[x]) - pos('maw=', TheForm.Virtualprop.Strings[x]) - 3) + ';' + LineEnding;
       Inc(x);
     end;
     // MinHeight
@@ -1676,14 +1635,10 @@ begin
     while x < TheForm.Virtualprop.Count do
     begin
       if pos(TheForm.Name + '.' + 'mih=', TheForm.Virtualprop.Strings[x]) > 0 then
-        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos(
-          'mih=', TheForm.Virtualprop.Strings[x]) + 4,
-          length(TheForm.Virtualprop.Strings[x]) - pos(
-          'mih=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
-          s := s + Ind(1) + 'MinHeight := ' +
-            copy(TheForm.Virtualprop.Strings[x], pos('mih=', TheForm.Virtualprop.Strings[x]) + 4,
-            length(TheForm.Virtualprop.Strings[x]) - pos('mih=', TheForm.Virtualprop.Strings[x]) -
-            3) + ';' + LineEnding;
+        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos('mih=', TheForm.Virtualprop.Strings[x]) +
+          4, length(TheForm.Virtualprop.Strings[x]) - pos('mih=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
+          s := s + Ind(1) + 'MinHeight := ' + copy(TheForm.Virtualprop.Strings[x], pos('mih=', TheForm.Virtualprop.Strings[x]) +
+            4, length(TheForm.Virtualprop.Strings[x]) - pos('mih=', TheForm.Virtualprop.Strings[x]) - 3) + ';' + LineEnding;
       Inc(x);
     end;
     // MaxHeight
@@ -1691,14 +1646,10 @@ begin
     while x < TheForm.Virtualprop.Count do
     begin
       if pos(TheForm.Name + '.' + 'mah=', TheForm.Virtualprop.Strings[x]) > 0 then
-        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos(
-          'mah=', TheForm.Virtualprop.Strings[x]) + 4,
-          length(TheForm.Virtualprop.Strings[x]) - pos(
-          'mah=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
-          s := s + Ind(1) + 'MaxHeight := ' +
-            copy(TheForm.Virtualprop.Strings[x], pos('mah=', TheForm.Virtualprop.Strings[x]) + 4,
-            length(TheForm.Virtualprop.Strings[x]) - pos('mah=', TheForm.Virtualprop.Strings[x]) -
-            3) + ';' + LineEnding;
+        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos('mah=', TheForm.Virtualprop.Strings[x]) +
+          4, length(TheForm.Virtualprop.Strings[x]) - pos('mah=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
+          s := s + Ind(1) + 'MaxHeight := ' + copy(TheForm.Virtualprop.Strings[x], pos('mah=', TheForm.Virtualprop.Strings[x]) +
+            4, length(TheForm.Virtualprop.Strings[x]) - pos('mah=', TheForm.Virtualprop.Strings[x]) - 3) + ';' + LineEnding;
       Inc(x);
     end;
     // WindowPosition
@@ -1706,10 +1657,9 @@ begin
     while x < TheForm.Virtualprop.Count do
     begin
       if pos(TheForm.Name + '.' + 'wip=', TheForm.Virtualprop.Strings[x]) > 0 then
-        s := s + Ind(1) + 'WindowPosition := ' +
-          copy(TheForm.Virtualprop.Strings[x], pos('wip=', TheForm.Virtualprop.Strings[x]) + 4,
-          length(TheForm.Virtualprop.Strings[x]) - pos('wip=', TheForm.Virtualprop.Strings[x]) -
-          3) + ';' + LineEnding;
+        s := s + Ind(1) + 'WindowPosition := ' + copy(TheForm.Virtualprop.Strings[x],
+          pos('wip=', TheForm.Virtualprop.Strings[x]) + 4, length(TheForm.Virtualprop.Strings[x]) -
+          pos('wip=', TheForm.Virtualprop.Strings[x]) - 3) + ';' + LineEnding;
       Inc(x);
     end;
     // Tag
@@ -1717,14 +1667,10 @@ begin
     while x < TheForm.Virtualprop.Count do
     begin
       if pos(TheForm.Name + '.' + 'tag=', TheForm.Virtualprop.Strings[x]) > 0 then
-        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos(
-          'tag=', TheForm.Virtualprop.Strings[x]) + 4,
-          length(TheForm.Virtualprop.Strings[x]) - pos(
-          'tag=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
-          s := s + Ind(1) + 'Tag := ' +
-            copy(TheForm.Virtualprop.Strings[x], pos('tag=', TheForm.Virtualprop.Strings[x]) + 4,
-            length(TheForm.Virtualprop.Strings[x]) - pos('tag=', TheForm.Virtualprop.Strings[x]) -
-            3) + ';' + LineEnding;
+        if StrToInt(copy(TheForm.Virtualprop.Strings[x], pos('tag=', TheForm.Virtualprop.Strings[x]) +
+          4, length(TheForm.Virtualprop.Strings[x]) - pos('tag=', TheForm.Virtualprop.Strings[x]) - 3)) > 0 then
+          s := s + Ind(1) + 'Tag := ' + copy(TheForm.Virtualprop.Strings[x], pos('tag=', TheForm.Virtualprop.Strings[x]) +
+            4, length(TheForm.Virtualprop.Strings[x]) - pos('tag=', TheForm.Virtualprop.Strings[x]) - 3) + ';' + LineEnding;
       Inc(x);
     end;
 
@@ -1743,7 +1689,7 @@ var
 
   t: TfpgString;
   i: integer;
- // ok: boolean;
+  // ok: boolean;
   PropInfo: PPropInfo;
 begin
   s := '';
@@ -1751,8 +1697,7 @@ begin
   if maindsgn.SaveComponentNames then
     s := s + Ind(1) + 'Name := ' + QuotedStr(FForm.Name) + ';' + LineEnding;
 
-  s := s + Ind(1) + 'SetPosition(' + IntToStr(FForm.Left) +
-    ', ' + IntToStr(FForm.Top) + ', ' + IntToStr(FForm.Width) +
+  s := s + Ind(1) + 'SetPosition(' + IntToStr(FForm.Left) + ', ' + IntToStr(FForm.Top) + ', ' + IntToStr(FForm.Width) +
     ', ' + IntToStr(FForm.Height) + ');' + LineEnding;
 
 
@@ -1809,21 +1754,23 @@ begin
       pwgname := 'self'
     else
     begin
-    if  wg.HasParent  then
-      pwgname := wg.Parent.Name else  pwgname := '';
-        end;
+      if wg.HasParent then
+        pwgname := wg.Parent.Name
+      else
+        pwgname := '';
+    end;
 
-    if pwgname <>  '' then begin
+    if pwgname <> '' then
+    begin
       if wg is TOtherWidget then
-      wgclass := TOtherWidget(wg).wgClassName
-    else
-      wgclass := wg.ClassName;
+        wgclass := TOtherWidget(wg).wgClassName
+      else
+        wgclass := wg.ClassName;
 
-    s := s + Ind(1) + wg.Name + ' := ' + wgclass + '.Create(' + pwgname +
-      ');' + LineEnding + Ind(1) + 'with ' + wg.Name + ' do' + LineEnding +
-      Ind(1) + 'begin' + LineEnding + GetWidgetSourceImpl(wd, Ind(2)) +
-      Ind(1) + 'end;' + LineEnding + LineEnding;
-  end;
+      s := s + Ind(1) + wg.Name + ' := ' + wgclass + '.Create(' + pwgname + ');' + LineEnding + Ind(1) + 'with ' +
+        wg.Name + ' do' + LineEnding + Ind(1) + 'begin' + LineEnding + GetWidgetSourceImpl(wd, Ind(2)) + Ind(1) +
+        'end;' + LineEnding + LineEnding;
+    end;
 
   end;
 
@@ -1839,10 +1786,10 @@ begin
   s := '';
 
   TheParent := TheWidget;
-while TheParent.HasParent = True do
-   TheParent := TheParent.Parent;
+  while TheParent.HasParent = True do
+    TheParent := TheParent.Parent;
   // Is it better ? =>
- // TheParent := WidgetParentForm(TfpgWidget(TheWidget));
+  // TheParent := WidgetParentForm(TfpgWidget(TheWidget));
 
   if TDesignedForm(TheParent).Virtualprop.Count > 0 then
   begin
@@ -1850,8 +1797,7 @@ while TheParent.HasParent = True do
     x := 0;
     while x < TDesignedForm(TheParent).Virtualprop.Count do
     begin
-      if pos(TheParent.Name + '.' + TheWidget.Name + '.' +
-        'vis=False', TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
+      if pos(TheParent.Name + '.' + TheWidget.Name + '.' + 'vis=False', TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
         s := s + '    Visible := False' + ';' + LineEnding;
       Inc(x);
     end;
@@ -1859,8 +1805,7 @@ while TheParent.HasParent = True do
     // Focusable
     while x < TDesignedForm(TheParent).Virtualprop.Count do
     begin
-      if pos(TheParent.Name + '.' + TheWidget.Name + '.' +
-        'foc=False', TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
+      if pos(TheParent.Name + '.' + TheWidget.Name + '.' + 'foc=False', TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
         s := s + '    Focusable := False' + ';' + LineEnding;
       Inc(x);
     end;
@@ -1868,17 +1813,13 @@ while TheParent.HasParent = True do
     x := 0;
     while x < TDesignedForm(TheParent).Virtualprop.Count do
     begin
-      if pos(TheParent.Name + '.' + TheWidget.Name + '.' +
-        'tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
-        if StrToInt(copy(TDesignedForm(TheParent).Virtualprop.Strings[x], pos(
-          'tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) + 4,
-          length(TDesignedForm(TheParent).Virtualprop.Strings[x]) - pos(
-          'tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) - 3)) > 0 then
-          s := s + '    Tag := ' +
-            copy(TDesignedForm(TheParent).Virtualprop.Strings[x], pos(
-            'tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) + 4,
-            length(TDesignedForm(TheParent).Virtualprop.Strings[x]) - pos(
-            'tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) - 3) + ';' + LineEnding;
+      if pos(TheParent.Name + '.' + TheWidget.Name + '.' + 'tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
+        if StrToInt(copy(TDesignedForm(TheParent).Virtualprop.Strings[x], pos('tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) +
+          4, length(TDesignedForm(TheParent).Virtualprop.Strings[x]) - pos('tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) -
+          3)) > 0 then
+          s := s + '    Tag := ' + copy(TDesignedForm(TheParent).Virtualprop.Strings[x], pos(
+            'tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) + 4, length(TDesignedForm(TheParent).Virtualprop.Strings[x]) -
+            pos('tag=', TDesignedForm(TheParent).Virtualprop.Strings[x]) - 3) + ';' + LineEnding;
       Inc(x);
     end;
   end;
@@ -1929,9 +1870,8 @@ begin
   if maindsgn.SaveComponentNames then
     s := s + ident + 'Name := ' + QuotedStr(wg.Name) + ';' + LineEnding;
 
-  s := s + ident + 'SetPosition(' + IntToStr(wg.Left) + ', ' +
-    IntToStr(wg.Top) + ', ' + IntToStr(wg.Width) + ', ' +
-    IntToStr(wg.Height) + ');' + LineEnding;
+  s := s + ident + 'SetPosition(' + IntToStr(wg.Left) + ', ' + IntToStr(wg.Top) + ', ' + IntToStr(wg.Width) +
+    ', ' + IntToStr(wg.Height) + ');' + LineEnding;
 
   if wg.Anchors <> [anLeft, anTop] then
   begin
@@ -1991,8 +1931,7 @@ begin
 }
 
   for n := 0 to wd.other.Count - 1 do
-    if (trim(wd.other.Strings[n]) <> '') and
-      (pos('VISIBLE :=', uppercase(wd.other.Strings[n])) = 0) then
+    if (trim(wd.other.Strings[n]) <> '') and (pos('VISIBLE :=', uppercase(wd.other.Strings[n])) = 0) then
       s := s + ident + wd.other.Strings[n] + LineEnding;
 
   Result := s;
@@ -2057,9 +1996,8 @@ begin
   end;
 end;
 
-procedure TFormDesigner.InsertWidget(pwg: TfpgWidget; x, y: integer;
-  wgc: TVFDWidgetClass);
-var
+procedure TFormDesigner.InsertWidget(pwg: TfpgWidget; x, y: integer; wgc: TVFDWidgetClass);
+ var
   cfrm: TInsertCustomForm;
   newname, newclassname: string;
   wg: TfpgWidget;
