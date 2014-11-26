@@ -106,7 +106,7 @@ type
     procedure SaveUndo(Sender: TObject; typeundo: integer);
     procedure LoadUndo(undoindex: integer);
     function AddUnits(filedata: string): string;
-    procedure OnNewForm(Sender: TObject);
+    function OnNewForm(Sender: TObject) : boolean;
     procedure OnNewFile(Sender: TObject);
     procedure OnSaveFile(Sender: TObject);
     procedure OnLoadFile(Sender: TObject);
@@ -210,15 +210,29 @@ begin
   frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
   frmMainDesigner.undomenu.MenuItem(3).Enabled := False;
 
-  isfpguifile := True;
-  frmMainDesigner.windowmenu.MenuItem(0).Visible := True;
-  frmMainDesigner.windowmenu.MenuItem(1).Visible := True;
+ if OnNewForm(Sender) = true then
+ begin
+ isfpguifile := True;
 
-  isFileLoaded := True;
-  isFileNew := True;
-  OnNewForm(Sender);
+ frmMainDesigner.windowmenu.MenuItem(0).Visible := True;
 
-  frmProperties.Show;
+ frmMainDesigner.btnNewForm.Visible:=True;
+ frmMainDesigner.btnSave.Visible:=True;
+
+ frmMainDesigner.filemenu.MenuItem(4).Visible:=True;
+ frmMainDesigner.filemenu.MenuItem(5).Visible:=True;
+ frmMainDesigner.filemenu.MenuItem(6).Visible:=True;
+ frmMainDesigner.filemenu.MenuItem(7).Visible:=True;
+ frmMainDesigner.filemenu.MenuItem(8).Visible:=True;
+ frmMainDesigner.filemenu.MenuItem(9).Visible:=True;
+ frmMainDesigner.filemenu.MenuItem(10).Visible:=True;
+ frmMainDesigner.filemenu.MenuItem(11).Visible:=True;
+
+ isFileLoaded := True;
+ isFileNew := True;
+ end;
+
+
 end;
 
 
@@ -229,12 +243,54 @@ var
   fname: string;
   afiledialog: TfpgFileDialog;
 begin
-  isFileLoaded := False;
-  fpgapplication.ProcessMessages;
+
+  if maindsgn.FFileLoaded <>  'closeall' then
+  begin
+
+  fname := EditedFileName;
+  ifundo := False;
+
+  if Sender <> maindsgn then
+  begin
+    afiledialog := TfpgFileDialog.Create(nil);
+    afiledialog.Filename := EditedFilename;
+    afiledialog.WindowTitle := 'Open form file';
+    afiledialog.Filter :=
+      'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
+    if afiledialog.RunOpenFile then
+    begin
+      EditedFileName := aFileDialog.Filename;
+      fname := EditedFilename;
+    end
+    else begin
+      fname := '';
+      exit;
+      end;
+    FreeAndNil(aFileDialog);
+
+  end;
+
+  end else fname := '' ;
+
+   FFileLoaded := '' ;
+
+    isFileLoaded := False;
+   fpgapplication.ProcessMessages;
   isfpguifile := False;
   frmProperties.Hide;
   frmmultiselect.Hide;
   frmmultiselect.ClearAll;
+
+  frmMainDesigner.btnNewForm.Visible:=false;
+  frmMainDesigner.btnSave.Visible:=false;
+  frmMainDesigner.filemenu.MenuItem(4).Visible:=false;
+  frmMainDesigner.filemenu.MenuItem(5).Visible:=false;
+  frmMainDesigner.filemenu.MenuItem(6).Visible:=false;
+  frmMainDesigner.filemenu.MenuItem(7).Visible:=false;
+  frmMainDesigner.filemenu.MenuItem(8).Visible:=false;
+  frmMainDesigner.filemenu.MenuItem(9).Visible:=false;
+  frmMainDesigner.filemenu.MenuItem(10).Visible:=false;
+  frmMainDesigner.filemenu.MenuItem(11).Visible:=false;
 
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -275,34 +331,6 @@ begin
   SetLength(ArrayFormDesign, 0);
   SetLength(ArrayUndo, 0);
   x := 0;
-
-
-  if maindsgn.FFileLoaded <>  'closeall' then
-  begin
-
-  fname := EditedFileName;
-  ifundo := False;
-
-  if Sender <> maindsgn then
-  begin
-    afiledialog := TfpgFileDialog.Create(nil);
-    afiledialog.Filename := EditedFilename;
-    afiledialog.WindowTitle := 'Open form file';
-    afiledialog.Filter :=
-      'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
-    if afiledialog.RunOpenFile then
-    begin
-      EditedFileName := aFileDialog.Filename;
-      fname := EditedFilename;
-    end
-    else
-      fname := '';
-    FreeAndNil(aFileDialog);
-  end;
-
-  end else fname := '' ;
-
-   FFileLoaded := '' ;
 
   if fname = '' then
   begin
@@ -395,10 +423,7 @@ begin
       end;
   end;
 
-  // sleep(200);
-  // fpgapplication.ProcessMessages;
-
-  for n := 0 to FDesigners.Count - 1 do
+   for n := 0 to FDesigners.Count - 1 do
   begin
     selectedform := nil;
     TFormDesigner(FDesigners[n]).Form.ShowGrid := FShowGrid;
@@ -412,9 +437,21 @@ begin
 
   isfpguifile := True;
   frmMainDesigner.windowmenu.MenuItem(0).Visible := True;
-  frmMainDesigner.windowmenu.MenuItem(1).Visible := True;
+
+  frmMainDesigner.btnNewForm.Visible:=True;
+  frmMainDesigner.btnSave.Visible:=True;
+
+  frmMainDesigner.filemenu.MenuItem(4).Visible:=True;
+  frmMainDesigner.filemenu.MenuItem(5).Visible:=True;
+  frmMainDesigner.filemenu.MenuItem(6).Visible:=True;
+  frmMainDesigner.filemenu.MenuItem(7).Visible:=True;
+  frmMainDesigner.filemenu.MenuItem(8).Visible:=True;
+  frmMainDesigner.filemenu.MenuItem(9).Visible:=True;
+  frmMainDesigner.filemenu.MenuItem(10).Visible:=True;
+  frmMainDesigner.filemenu.MenuItem(11).Visible:=True;
 
   isFileLoaded := True;
+
 
   frmProperties.Show;
 
@@ -812,7 +849,7 @@ begin
     if FFileLoaded = '' then
     afiledialog.WindowTitle := 'Save form source'
     else
-    afiledialog.WindowTitle := 'Save as...';
+     afiledialog.WindowTitle := 'Save file as...';
     afiledialog.Filter :=
       'Pascal source files (*.pp;*.pas;*.inc;*.dpr;*.lpr)|*.pp;*.pas;*.inc;*.dpr;*.lpr|All Files (*)|*';
     if afiledialog.RunSaveFile then
@@ -823,7 +860,10 @@ begin
       EditedFileName := fname;
     end
     else
+    begin
       fname := '';
+      isFileNew := False;
+    end;
     aFileDialog.Free;
   end;
 
@@ -846,10 +886,13 @@ begin
       frm.Free;
     end;
     if modaresult = False then
+    begin
+      isFileNew := false;
       exit;
+      end;
   end;
 
-  if (fpgFileExists(fname)) and (isFileNew = False) and (FFileLoaded = '') then
+ if (fpgFileExists(fname)) and (isFileNew = False) and (FFileLoaded = '') then
   begin
     FFile.LoadFile(fname);
     FFile.GetBlocks;
@@ -1246,7 +1289,7 @@ begin
 
 end;
 
-procedure TMainDesigner.OnNewForm(Sender: TObject);
+function TMainDesigner.OnNewForm(Sender: TObject) : boolean;
 var
   fd: TFormDesigner;
   nfrm: TNewFormForm;
@@ -1268,6 +1311,7 @@ var
   end;
 
 begin
+  result := false;
   calculwidget := False;
   nfrm := TNewFormForm.Create(nil);
   try
@@ -1288,6 +1332,7 @@ begin
       FDesigners.Add(fd);
       SelectedForm := fd;
       fd.Show;
+      result := true;
 
       x := length(ArrayFormDesign);
 

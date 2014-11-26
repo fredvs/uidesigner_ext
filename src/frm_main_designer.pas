@@ -132,7 +132,8 @@ type
     procedure   OnSaveNewFile(Sender: TObject);
     procedure   OnCloseAll(Sender: TObject);
     procedure   OnSaveAs(Sender: TObject);
-  end;
+    procedure   OnNewForm(Sender: TObject);
+   end;
 
   TPropertyList = class(TObject)
   private
@@ -491,7 +492,7 @@ begin
  filemenu.MenuItem(0).Visible:=true;
  filemenu.MenuItem(1).Visible:=false;
  filemenu.MenuItem(2).Visible:=false;
- 
+
  if ide = 2 then
   begin
 {$if defined(cpu64)}
@@ -753,11 +754,11 @@ begin
     mi := AddMenuItem('Save', 'Ctrl+S', @(maindsgn.OnSaveFile));
     mi.Tag := 10;
     AddMenuItem('Save As...', '', @OnSaveAs);
-    AddMenuItem('Close', 'Ctrl+C', @OnCloseAll);
+    AddMenuItem('Close', '', @OnCloseAll);
     AddMenuItem('-', '', nil);
     AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @OnSaveNewFile);
      AddMenuItem('-', '', nil);
-    AddMenuItem('Add New Form to Unit...', '', @(maindsgn.OnNewForm));
+    AddMenuItem('Add New Form to Unit...', '', @OnNewForm);
     AddMenuItem('-', '', nil);
     AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
   end;
@@ -886,8 +887,9 @@ begin
     ImageSpacing := 0;
     TabOrder := 1;
     Text := '';
+    Visible := false;
     Focusable := False;
-    OnClick   := @(maindsgn.OnNewForm);
+    OnClick   := @(OnNewForm);
   end;
 
   btnOpen := TfpgButton.Create(self);
@@ -917,7 +919,9 @@ begin
     ImageName := 'stdimg.save';
     ImageSpacing := 0;
     TabOrder := 3;
+    Tag := 10 ;
     Text := '';
+    Visible := false;
     Focusable := False;
     OnClick   := @(maindsgn.OnSaveFile);
   end;
@@ -1111,6 +1115,21 @@ begin
      windowType := wtpopup ;
        end;
 
+ filemenu.MenuItem(0).Visible:=true;
+
+ filemenu.MenuItem(4).Visible:=false;
+ filemenu.MenuItem(5).Visible:=false;
+ filemenu.MenuItem(6).Visible:=false;
+ filemenu.MenuItem(7).Visible:=false;
+ filemenu.MenuItem(8).Visible:=false;
+ filemenu.MenuItem(9).Visible:=false;
+ filemenu.MenuItem(10).Visible:=false;
+ filemenu.MenuItem(11).Visible:=false;
+
+ filemenu.MenuItem(1).Visible:=false;
+ filemenu.MenuItem(2).Visible:=false;
+ filemenu.MenuItem(12).Visible:=false;
+
     x := gINI.ReadInteger('Options', 'IDE', 0);
    idetemp := x ;
 if x = 0 then
@@ -1120,9 +1139,9 @@ begin
   btnSave.Left:= 69 ;
   btnSave.UpdateWindowPosition;
 
- filemenu.MenuItem(0).Visible:=true;
  filemenu.MenuItem(1).Visible:=true;
- filemenu.MenuItem(8).Visible:=true;
+ filemenu.MenuItem(2).Visible:=true;
+ filemenu.MenuItem(12).Visible:=true;
 
 indexundo := 0 ;
 
@@ -1200,6 +1219,11 @@ maindsgn.FFileLoaded :=  'closeall' ;
 maindsgn.OnLoadFile(sender);
 end;
 
+procedure TfrmMainDesigner.OnNewForm(Sender: TObject);
+begin
+maindsgn.OnNewForm(sender);
+end;
+
 procedure TfrmMainDesigner.OnSaveAs(Sender: TObject);
 begin
 maindsgn.isFileNew := true ;
@@ -1268,7 +1292,7 @@ begin
    fpgapplication.ProcessMessages;
     WindowType := wtpopup ;
     MainMenu.MenuItem(8).Visible:=true;
-   MainMenu.MenuItem(8).Text:=  'Current file : ' + p + s + '     fpGUI Designer_ext v' +  ext_version + ' ' + inttostr(bitcpu) + ' bit';
+   MainMenu.MenuItem(8).Text:=  '=> ' + p + s + '   Designer_ext v' +  ext_version + ' ' + inttostr(bitcpu) + ' bit';
    // btnToFront.Text:='toN';
    btnToFront.tag:=1;
  if idetemp = 1 then
@@ -1345,7 +1369,7 @@ procedure TfrmMainDesigner.OnHideClick(Sender: TObject);
 begin
   hide;
  WindowAttributes := [waBorderless];
- MainMenu.MenuItem(7).Text:= 'Current file : ' + p + s + '     Designer_ext' + ' ' + inttostr(bitcpu) + ' bit';
+ MainMenu.MenuItem(7).Text:= '=> ' + p + s + '   Designer_ext' + ' ' + inttostr(bitcpu) + ' bit';
  show;
 end;
 
