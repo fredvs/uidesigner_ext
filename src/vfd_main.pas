@@ -156,6 +156,7 @@ begin
   FFileLoaded := '';
   EditedFileName := '';
   isFileLoaded := False;
+   gINI.WriteFormState(frmMainDesigner);
   fpgapplication.ProcessMessages;
 
   isfpguifile := False;
@@ -206,9 +207,9 @@ begin
 
   ifundo := False;
 
-  frmMainDesigner.undomenu.MenuItem(0).Enabled := False;
-  frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
-  frmMainDesigner.undomenu.MenuItem(3).Enabled := False;
+  frmMainDesigner.undomenu.MenuItem(0).Visible := False;
+  frmMainDesigner.undomenu.MenuItem(1).Visible := False;
+  frmMainDesigner.undomenu.MenuItem(3).Visible := False;
 
   if OnNewForm(Sender) = True then
   begin
@@ -228,9 +229,47 @@ begin
     frmMainDesigner.filemenu.MenuItem(10).Visible := True;
     frmMainDesigner.filemenu.MenuItem(11).Visible := True;
 
+    frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
+    frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
+
+    if enableundo = True then
+      frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
+    frmproperties.Show;
     isFileLoaded := True;
     isFileNew := True;
+  end
+  else
+  begin
+
+    frmMainDesigner.MainMenu.MenuItem(2).Visible := False;
+    frmMainDesigner.MainMenu.MenuItem(5).Visible := False;
+    frmMainDesigner.MainMenu.MenuItem(1).Visible := False;
+    FFileLoaded := '';
+
+    isFileLoaded := False;
+    isfpguifile := False;
+    frmProperties.Hide;
+    frmmultiselect.Hide;
+    frmmultiselect.ClearAll;
+
+    frmMainDesigner.btnNewForm.Visible := False;
+    frmMainDesigner.btnSave.Visible := False;
+    frmMainDesigner.filemenu.MenuItem(4).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(5).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(6).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(7).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(8).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(9).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(10).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(11).Visible := False;
+
   end;
+
+  frmMainDesigner.hide;
+
+  fpgapplication.ProcessMessages;
+
+  frmMainDesigner.Show;
 
 end;
 
@@ -243,11 +282,9 @@ var
   afiledialog: TfpgFileDialog;
 begin
 
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => no fpGUI form-file';
+      gINI.WriteFormState(frmMainDesigner);
 
-  if frmMainDesigner.btnToFront.Tag = 1 then
-    frmMainDesigner.MainMenu.MenuItem(8).Text :=
-      '  => no fpGUI form-file';
+      fpgapplication.ProcessMessages;
 
   if maindsgn.FFileLoaded <> 'closeall' then
   begin
@@ -266,15 +303,14 @@ begin
       begin
         EditedFileName := aFileDialog.Filename;
         fname := EditedFilename;
+         FreeAndNil(aFileDialog);
       end
       else
       begin
-        fname := '';
+         FreeAndNil(aFileDialog);
         exit;
       end;
-      FreeAndNil(aFileDialog);
-
-    end;
+      end;
 
   end
   else
@@ -289,9 +325,11 @@ begin
 
   FFileLoaded := '';
 
-  isFileLoaded := False;
-  fpgapplication.ProcessMessages;
+  frmMainDesigner.MainMenu.MenuItem(1).Visible := False;
+  frmMainDesigner.MainMenu.MenuItem(2).Visible := False;
+  frmMainDesigner.MainMenu.MenuItem(5).Visible := False;
 
+  isFileLoaded := False;
   isfpguifile := False;
   frmProperties.Hide;
   frmmultiselect.Hide;
@@ -342,12 +380,25 @@ begin
   SetLength(ArrayUndo, 0);
   x := 0;
 
+
+
   if fname = '' then
   begin
+
+      frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+   if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(8).Text :=
+      '';
+
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
+    end else begin
+    frmProperties.Hide;
+    frmMainDesigner.hide;
+    fpgapplication.ProcessMessages;
+    frmMainDesigner.show;
     end;
     Exit;
   end;
@@ -355,11 +406,20 @@ begin
   if not fpgFileExists(fname) then
   begin
     FFileLoaded := '';
-    //  ShowMessage('File does not exists.', 'Error loading form');
+     frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => file does not exist';
+   if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(8).Text :=
+      '  => file does not exist';
+
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
+   end else begin
+    frmMainDesigner.hide;
+     frmProperties.Hide;
+    fpgapplication.ProcessMessages;
+    frmMainDesigner.show;
     end;
     Exit;
   end;
@@ -367,10 +427,20 @@ begin
   if FFile.LoadFile(fname) = False then
   begin
     FFileLoaded := '';
+      frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => file does not load';
+   if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(8).Text :=
+      '  => file does not load';
+
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
+  end else begin
+    frmMainDesigner.hide;
+      frmProperties.Hide;
+    fpgapplication.ProcessMessages;
+    frmMainDesigner.show;
     end;
     Exit;
   end;
@@ -378,10 +448,20 @@ begin
   if FFile.GetBlocks = 0 then
   begin
     FFileLoaded := '';
+      frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => not a fpGUI form-file';
+   if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(8).Text :=
+      '  => not a fpGUI form-file';
+
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
+   end else begin
+    frmMainDesigner.hide;
+     frmProperties.Hide;
+    fpgapplication.ProcessMessages;
+    frmMainDesigner.show;
     end;
     Exit;
   end
@@ -466,6 +546,15 @@ begin
 
   isFileLoaded := True;
 
+  if enableundo = True then
+    frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
+  frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
+  frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
+   frmMainDesigner.UpdateWindowPosition;
+   frmMainDesigner.hide;
+   frmProperties.Hide;
+  fpgapplication.ProcessMessages;
+  frmMainDesigner.Show;
 
   frmProperties.Show;
 
@@ -1349,8 +1438,6 @@ begin
       fd.OneClickMove := OneClickMove;
       FDesigners.Add(fd);
       SelectedForm := fd;
-      fd.Show;
-      Result := True;
 
       x := length(ArrayFormDesign);
 
@@ -1363,6 +1450,13 @@ begin
         frmMainDesigner.windowmenu.MenuItem(x + 1).Visible := True;
         frmMainDesigner.windowmenu.MenuItem(x + 1).Text := fd.Form.Name;
       end;
+      if enableundo = True then
+        frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
+      frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
+      frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
+
+      fd.Show;
+      Result := True;
 
     end;
 

@@ -731,7 +731,6 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(316, 189, 780, 92);
@@ -1087,11 +1086,6 @@ begin
   MainMenu.AddMenuItem('&Help', nil).SubMenu := helpmenu;
   MainMenu.AddMenuItem('', nil);
 
-  if enableundo = True then
-    MainMenu.MenuItem(1).Visible := True
-  else
-    MainMenu.MenuItem(1).Visible := False;
-
   FFileOpenRecent.SubMenu := miOpenRecentMenu;
   FlistUndo.SubMenu := listundomenu;
 
@@ -1102,7 +1096,12 @@ begin
   mru.ShowFullPath := gINI.ReadBool('Options', 'ShowFullPath', True);
   mru.LoadMRU;
 
-  MainMenu.MenuItem(8).Visible := False;
+
+ MainMenu.MenuItem(1).Visible:=false;
+ MainMenu.MenuItem(2).Visible:=false;
+ MainMenu.MenuItem(5).Visible:=false;
+
+ MainMenu.MenuItem(8).Visible := False;
 
   if gINI.ReadBool('Options', 'AlwaysToFront', False) = False then
   begin
