@@ -130,6 +130,7 @@ type
     procedure OnCloseAll(Sender: TObject);
     procedure OnSaveAs(Sender: TObject);
     procedure OnNewForm(Sender: TObject);
+    procedure OnChangeWidget(Sender: TObject);
   end;
 
   TPropertyList = class(TObject)
@@ -337,11 +338,11 @@ begin
   begin
     Name := 'btnClose';
     SetPosition(196, 163, 75, 24);
-    Anchors := [anRight, anBottom];
+    Anchors := [anRight,anBottom];
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.close';
-    ModalResult := mrOk;
+    ModalResult := mrOK;
     TabOrder := 2;
     Text := 'Close';
     TextColor := TfpgColor($FF000000);
@@ -733,7 +734,7 @@ begin
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(414, 172, 780, 92);
+  SetPosition(316, 189, 780, 92);
   WindowTitle := 'frmMainDesigner';
   Hint := '';
   ShowHint := True;
@@ -741,6 +742,23 @@ begin
   MinWidth := 770;
   MinHeight := 90;
   WindowPosition := wpUser;
+
+    PanelMove := TfpgPanel.Create(self);
+  with PanelMove do
+  begin
+    Name := 'PanelMove';
+    SetPosition(0, 0, 13, 92);
+    Align := alLeft;
+    BackgroundColor := TfpgColor($FEFEBA);
+    FontDesc := '#Label1';
+    Hint := 'Hold click to move palette...';
+    Style := bsLowered ;// bsRaised, bsFlat bsFlat;
+    Text := '';
+    Visible := False;
+    OnMouseMove := @onMovemovepanel;
+    OnMouseDown := @onClickDownPanel;
+    OnMouseUp := @onClickUpPanel;
+  end;
 
   MainMenu := TfpgMenuBar.Create(self);
   with MainMenu do
@@ -843,27 +861,16 @@ begin
     SetPosition(328, 52, 120, 20);
     AddMenuItem('Object Inspector', '', @OnObjInspect);
     AddMenuItem('-', '', nil);
-    MenuItem(1).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(2).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(3).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(4).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(5).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(6).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(7).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(8).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(9).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(10).Visible := False;
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
-    MenuItem(11).Visible := False;
     MenuItem(2).Tag := 0;
     MenuItem(3).Tag := 1;
     MenuItem(4).Tag := 2;
@@ -927,10 +934,10 @@ begin
     ImageName := 'stdimg.save';
     ImageSpacing := 0;
     TabOrder := 3;
-    Tag := 10;
     Text := '';
     Visible := False;
     Focusable := False;
+    Tag := 10;
     OnClick := @(maindsgn.OnSaveFile);
   end;
 
@@ -990,7 +997,7 @@ begin
   begin
     Name := 'wgpalette';
     SetPosition(180, 28, 606, 62);
-    Anchors := [anLeft, anRight, anTop, anBottom];
+    Anchors := [anLeft,anRight,anTop,anBottom];
     Focusable := False;
     Width := self.Width - 150;
     OnResize := @PaletteBarResized;
@@ -1001,31 +1008,16 @@ begin
   begin
     Name := 'chlPalette';
     SetPosition(16, 64, 156, 22);
-    Anchors := [anLeft, anBottom];
+    Anchors := [anLeft,anBottom];
     ExtraHint := '';
     FontDesc := '#List';
     Hint := '';
     Items.Add('-');
     FocusItem := 0;
+    Tag := 0;
     TabOrder := 5;
+    chlPalette.OnChange:=@OnChangeWidget;
     //     SetPosition(4, 67, 144, 22);
-  end;
-
-  PanelMove := TfpgPanel.Create(self);
-  with PanelMove do
-  begin
-    Name := 'PanelMove';
-    SetPosition(0, 0, 13, 92);
-    Align := alLeft;
-    BackgroundColor := TfpgColor($FEFEBA);
-    FontDesc := '#Label1';
-    Hint := 'Hold click to move palette...';
-    Style := bsFlat;
-    Text := '';
-    Visible := False;
-    OnMouseMove := @onMovemovepanel;
-    OnMouseDown := @onClickDownPanel;
-    OnMouseUp := @onClickUpPanel;
   end;
 
   {@VFD_BODY_END: frmMainDesigner}
@@ -1069,6 +1061,7 @@ begin
     btn.OnClick := @OnPaletteClick;
     btn.AllowDown := True;
     btn.AllowAllUp := True;
+    chlPalette.Tag:=1 ;
     chlPalette.Items.AddObject(wgc.WidgetClass.ClassName, wgc);
 
     Inc(x, 32);
@@ -1169,7 +1162,7 @@ begin
   end;
   PaletteBarResized(self);
   frmMultiSelect := Tfrm_multiselect.Create(nil);
-
+  chlPalette.Tag:=0;
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
@@ -1208,6 +1201,7 @@ var
   i: integer;
 begin
   i := -1;
+  chlPalette.Tag := 1;
   if TwgPaletteButton(Sender).Down then
   begin
     s := TwgPaletteButton(Sender).VFDWidget.WidgetClass.ClassName;
@@ -1216,6 +1210,7 @@ begin
   if i = -1 then
     i := 0; // select the '-' item
   chlPalette.FocusItem := i;
+  chlPalette.Tag := 0;
 end;
 
 procedure TfrmMainDesigner.OnSaveNewFile(Sender: TObject);
@@ -1233,6 +1228,19 @@ end;
 procedure TfrmMainDesigner.OnNewForm(Sender: TObject);
 begin
   maindsgn.OnNewForm(Sender);
+end;
+
+procedure TfrmMainDesigner.OnChangeWidget(Sender: TObject);
+var
+ n : integer;
+begin
+  if chlPalette.Tag =0 then
+  begin
+   for n := 0 to wgpalette.ComponentCount - 1 do
+      if TwgPaletteButton(wgpalette.Components[n]).VFDWidget.WidgetClass.ClassName =
+       chlPalette.Text  then  TwgPaletteButton(wgpalette.Components[n]).Down := true else
+      TwgPaletteButton(wgpalette.Components[n]).Down := false;
+  end;
 end;
 
 procedure TfrmMainDesigner.OnSaveAs(Sender: TObject);
@@ -1344,7 +1352,8 @@ begin
   end;
 
   UpdateWindowPosition;
-  PanelMove.Visible := True;
+
+    PanelMove.Visible := True;
   Show;
   if frmisvisible = True then
   begin
@@ -2327,6 +2336,7 @@ begin
       Inc(y, 30);
     end;
   end;
+
 end;
 
 procedure TfrmMainDesigner.OnStyleChange(Sender: TObject);
