@@ -156,15 +156,13 @@ begin
   FFileLoaded := '';
   EditedFileName := '';
   isFileLoaded := False;
-   gINI.WriteFormState(frmMainDesigner);
-  fpgapplication.ProcessMessages;
+ //  gINI.WriteFormState(frmMainDesigner);
+ // fpgapplication.ProcessMessages;
 
   isfpguifile := False;
   frmProperties.Hide;
   frmmultiselect.Hide;
   frmmultiselect.ClearAll;
-  // sleep(200);
-  // fpgapplication.ProcessMessages;
 
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -232,11 +230,19 @@ begin
     frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
     frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
 
+    frmMainDesigner.undomenu.MenuItem(0).Visible := true;
+    frmMainDesigner.undomenu.MenuItem(1).Visible := true;
+    frmMainDesigner.undomenu.MenuItem(3).Visible := true;
+
     if enableundo = True then
       frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
-    frmproperties.Show;
-    isFileLoaded := True;
+     isFileLoaded := True;
     isFileNew := True;
+        TFormDesigner(selectedform).Form.Hide;
+        fpgapplication.ProcessMessages;
+        TFormDesigner(selectedform).Form.Show;
+         frmproperties.Show;
+
   end
   else
   begin
@@ -245,6 +251,11 @@ begin
     frmMainDesigner.MainMenu.MenuItem(5).Visible := False;
     frmMainDesigner.MainMenu.MenuItem(1).Visible := False;
     FFileLoaded := '';
+
+      frmMainDesigner.MainMenu.Visible:=false;
+     frmMainDesigner.MainMenu.UpdateWindowPosition;
+     fpgapplication.ProcessMessages;
+     frmMainDesigner.MainMenu.Visible:=true;
 
     isFileLoaded := False;
     isfpguifile := False;
@@ -265,11 +276,6 @@ begin
 
   end;
 
-  frmMainDesigner.hide;
-
-  fpgapplication.ProcessMessages;
-
-  frmMainDesigner.Show;
 
 end;
 
@@ -282,9 +288,7 @@ var
   afiledialog: TfpgFileDialog;
 begin
 
-      gINI.WriteFormState(frmMainDesigner);
-
-      fpgapplication.ProcessMessages;
+     fpgapplication.ProcessMessages;
 
   if maindsgn.FFileLoaded <> 'closeall' then
   begin
@@ -324,7 +328,6 @@ begin
   end;
 
   FFileLoaded := '';
-
   frmMainDesigner.MainMenu.MenuItem(1).Visible := False;
   frmMainDesigner.MainMenu.MenuItem(2).Visible := False;
   frmMainDesigner.MainMenu.MenuItem(5).Visible := False;
@@ -380,7 +383,10 @@ begin
   SetLength(ArrayUndo, 0);
   x := 0;
 
-
+     frmMainDesigner.MainMenu.Visible:=false;
+ frmMainDesigner.MainMenu.UpdateWindowPosition;
+  fpgapplication.ProcessMessages;
+  frmMainDesigner.MainMenu.Visible:=true;
 
   if fname = '' then
   begin
@@ -390,16 +396,13 @@ begin
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '';
 
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
     end else begin
     frmProperties.Hide;
-    frmMainDesigner.hide;
-    fpgapplication.ProcessMessages;
-    frmMainDesigner.show;
-    end;
+     end;
     Exit;
   end;
 
@@ -416,11 +419,8 @@ begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
    end else begin
-    frmMainDesigner.hide;
      frmProperties.Hide;
-    fpgapplication.ProcessMessages;
-    frmMainDesigner.show;
-    end;
+     end;
     Exit;
   end;
 
@@ -437,10 +437,7 @@ begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
   end else begin
-    frmMainDesigner.hide;
       frmProperties.Hide;
-    fpgapplication.ProcessMessages;
-    frmMainDesigner.show;
     end;
     Exit;
   end;
@@ -458,11 +455,8 @@ begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
    end else begin
-    frmMainDesigner.hide;
      frmProperties.Hide;
-    fpgapplication.ProcessMessages;
-    frmMainDesigner.show;
-    end;
+   end;
     Exit;
   end
   else
@@ -477,14 +471,8 @@ begin
       frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
     end;
 
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-    begin
-      frmMainDesigner.Show;
     end;
-  end;
 
-  // sleep(200);
-  // fpgapplication.ProcessMessages;
 
   for n := 0 to FFile.BlockCount - 1 do
   begin
@@ -551,11 +539,13 @@ begin
   frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
   frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
    frmMainDesigner.UpdateWindowPosition;
-   frmMainDesigner.hide;
-   frmProperties.Hide;
-  fpgapplication.ProcessMessages;
-  frmMainDesigner.Show;
 
+   frmMainDesigner.MainMenu.Visible:=false;
+ frmMainDesigner.MainMenu.UpdateWindowPosition;
+  fpgapplication.ProcessMessages;
+  frmMainDesigner.MainMenu.Visible:=true;
+
+  frmMainDesigner.Show;
   frmProperties.Show;
 
 end;

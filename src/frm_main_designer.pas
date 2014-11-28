@@ -81,6 +81,7 @@ type
 
   public
     {@VFD_HEAD_BEGIN: frmMainDesigner}
+    PanelMove: TfpgPanel;
     MainMenu: TfpgMenuBar;
     filemenu: TfpgPopupMenu;
     formmenu: TfpgPopupMenu;
@@ -100,7 +101,6 @@ type
     btnSelected: TfpgButton;
     wgpalette: TwgPalette;
     chlPalette: TfpgComboBox;
-    PanelMove: TfpgPanel;
     {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
@@ -742,7 +742,7 @@ begin
   MinHeight := 90;
   WindowPosition := wpUser;
 
-    PanelMove := TfpgPanel.Create(self);
+  PanelMove := TfpgPanel.Create(self);
   with PanelMove do
   begin
     Name := 'PanelMove';
@@ -751,7 +751,7 @@ begin
     BackgroundColor := TfpgColor($FEFEBA);
     FontDesc := '#Label1';
     Hint := 'Hold click to move palette...';
-    Style := bsLowered ;// bsRaised, bsFlat bsFlat;
+    Style := bsLowered;
     Text := '';
     Visible := False;
     OnMouseMove := @onMovemovepanel;
@@ -776,6 +776,8 @@ begin
     AddMenuItem('Open...', 'Ctrl+O', @(maindsgn.OnLoadFile));
     FFileOpenRecent := AddMenuItem('Open Recent...', '', nil);
     AddMenuItem('-', '', nil);
+    AddMenuItem('Add New Form to Current Unit...', '', @OnNewForm);
+    AddMenuItem('-', '', nil);
     mi := AddMenuItem('Save', 'Ctrl+S', @(maindsgn.OnSaveFile));
     mi.Tag := 10;
     AddMenuItem('Save As...', '', @OnSaveAs);
@@ -783,9 +785,7 @@ begin
     AddMenuItem('-', '', nil);
     AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @OnSaveNewFile);
     AddMenuItem('-', '', nil);
-    AddMenuItem('Add New Form to Unit...', '', @OnNewForm);
-    AddMenuItem('-', '', nil);
-    AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
+     AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
   end;
 
   formmenu := TfpgPopupMenu.Create(self);
@@ -1006,18 +1006,14 @@ begin
   with chlPalette do
   begin
     Name := 'chlPalette';
-    SetPosition(16, 64, 156, 22);
-    Anchors := [anLeft,anBottom];
+    SetPosition(16, 62, 156, 22);
     ExtraHint := '';
     FontDesc := '#List';
     Hint := '';
-    Items.Add('-');
-    FocusItem := 0;
-    Tag := 0;
+    FocusItem := -1;
     TabOrder := 5;
     chlPalette.OnChange:=@OnChangeWidget;
-    //     SetPosition(4, 67, 144, 22);
-  end;
+   end;
 
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
