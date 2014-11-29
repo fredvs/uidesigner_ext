@@ -58,15 +58,20 @@ type
     procedure   AddNewFormImpl(formname, formbody: string);
     function    FindFormBlock(blockid, formname: string): TVFDFileBlock;
     procedure   SetFormData(formname, headblock, bodyblock: string);
-    procedure   NewFileSkeleton(AUnitname: string);
+    procedure   NewUnitSkeleton(AUnitname: string);
+    procedure   NewProgramSkeleton(AUnitname: string);
+    procedure   NewLibrarySkeleton(AUnitname: string);
+    procedure   NewLibraryJavaSkeleton(AUnitname: string);
+    procedure   NewJavaSkeleton(AUnitname, AJavaFileName: string);
   end;
-  
 
 implementation
 
 uses
   fpg_iniutils,
-  vfd_utils;
+  vfd_utils,
+  vfd_main;
+
 
 const
   cBlockPrefix = '{@VFD_';
@@ -344,14 +349,17 @@ begin
   Result := rs;
 end;
 
-procedure TVFDFile.NewFileSkeleton(AUnitname: string);
+procedure TVFDFile.NewUnitSkeleton(AUnitname: string);
 begin
   FFileData :=
     'unit ' + AUnitname + ';'+ LineEnding + LineEnding +
     '{$mode objfpc}{$H+}' + LineEnding + LineEnding +
     'interface' + LineEnding + LineEnding +
     'uses' + LineEnding +
-    Ind(1) + 'SysUtils, Classes, fpg_base, fpg_main, fpg_form;' + LineEnding + LineEnding +
+    Ind(1) +  '{$IFDEF UNIX}' + LineEnding +
+    Ind(1) + 'cthreads,'  + LineEnding +
+    Ind(1) +  '{$ENDIF}'  + LineEnding +
+    Ind(1) + 'SysUtils, Classes, fpg_base, fpg_main;' + LineEnding + LineEnding +
     'type' + LineEnding + LineEnding +
     '{@VFD_NEWFORM_DECL}' + LineEnding + LineEnding +
     'implementation' + LineEnding + LineEnding +
@@ -359,6 +367,139 @@ begin
     'end.' + LineEnding;
 
   GetBlocks;
+end;
+
+procedure TVFDFile.NewProgramSkeleton(AUnitname: string);
+begin
+   FFileData :=
+    'program ' + AUnitname + ';'+ LineEnding + LineEnding +
+    '{$mode objfpc}{$H+}' + LineEnding + LineEnding +
+     'uses' + LineEnding +
+    Ind(1) +  '{$IFDEF UNIX}' + LineEnding +
+    Ind(1) + 'cthreads,'  + LineEnding +
+    Ind(1) +  '{$ENDIF}'  + LineEnding +
+    Ind(1) + 'SysUtils, Classes, fpg_base, fpg_main;' + LineEnding + LineEnding +
+    'type' + LineEnding + LineEnding +
+    '{@VFD_NEWFORM_DECL}' + LineEnding + LineEnding +
+    '{@VFD_NEWFORM_IMPL}' + LineEnding + LineEnding +
+    'procedure MainProc;' + LineEnding  +
+     'var' + LineEnding +
+     '  frm: T' +  ArrayFormDesign[0].Form.Name + ';'+ LineEnding +
+     'begin' + LineEnding +
+     '  fpgApplication.Initialize;' + LineEnding +
+     '  try' + LineEnding +
+     '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
+     '    fpgApplication.MainForm := frm;' + LineEnding +
+     '    frm.Show;' + LineEnding +
+     '    fpgApplication.Run;' + LineEnding +
+     '  finally' + LineEnding +
+     '    frm.Free;' + LineEnding +
+     '  end;' + LineEnding +
+     'end;' + LineEnding + LineEnding +
+     'begin' + LineEnding +
+     '  MainProc;' + LineEnding +
+     'end.' + LineEnding ;
+
+  GetBlocks;
+end;
+
+procedure TVFDFile.NewLibrarySkeleton(AUnitname: string);
+begin
+    FFileData :=
+    'library ' + AUnitname + ';'+ LineEnding + LineEnding +
+    '{$mode objfpc}{$H+}' + LineEnding + LineEnding +
+     'uses' + LineEnding +
+     Ind(1) +  '{$IFDEF UNIX}' + LineEnding +
+    Ind(1) + 'cthreads,'  + LineEnding +
+    Ind(1) +  '{$ENDIF}'  + LineEnding +
+    Ind(1) + 'SysUtils, Classes, fpg_base, fpg_main;' + LineEnding + LineEnding +
+    'type' + LineEnding + LineEnding +
+    '{@VFD_NEWFORM_DECL}' + LineEnding + LineEnding +
+    '{@VFD_NEWFORM_IMPL}' + LineEnding + LineEnding +
+       'procedure MainProc; cdecl;' + LineEnding  +
+     'var' + LineEnding +
+     '  frm: T' +  ArrayFormDesign[0].Form.Name + ';'+ LineEnding +
+     'begin' + LineEnding +
+     '  fpgApplication.Initialize;' + LineEnding +
+     '  try' + LineEnding +
+     '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
+     '    fpgApplication.MainForm := frm;' + LineEnding +
+     '    frm.Show;' + LineEnding +
+     '    fpgApplication.Run;' + LineEnding +
+     '  finally' + LineEnding +
+     '    frm.Free;' + LineEnding +
+     '  end;' + LineEnding +
+     'end;' + LineEnding + LineEnding +
+    'exports' + LineEnding  +
+     '  {Here the only-one exported procedure...}' + LineEnding +
+     '  MainProc name ''mainproc'';' + LineEnding + LineEnding +
+      'end.' + LineEnding ;
+   GetBlocks;
+end;
+
+procedure TVFDFile.NewLibraryJavaSkeleton(AUnitname: string);
+begin
+   FFileData :=
+    'library ' + AUnitname + ';'+ LineEnding + LineEnding +
+    '{$mode objfpc}{$H+}' + LineEnding + LineEnding +
+     'uses' + LineEnding +
+    Ind(1) +  '{$IFDEF UNIX}' + LineEnding +
+    Ind(1) + 'cthreads, cwstring,'  + LineEnding +
+    Ind(1) +  '{$ENDIF}'  + LineEnding +
+    Ind(1) + 'SysUtils, Classes, fpg_base, fpg_main, fpg_form;' + LineEnding + LineEnding +
+    'type' + LineEnding + LineEnding +
+    '{@VFD_NEWFORM_DECL}' + LineEnding + LineEnding +
+    '{@VFD_NEWFORM_IMPL}' + LineEnding + LineEnding +
+    'procedure MainProc(PEnv: pointer; Obj: pointer); cdecl;' + LineEnding  +
+     'var' + LineEnding +
+     '  frm: T' +  ArrayFormDesign[0].Form.Name + ';'+ LineEnding +
+     'begin' + LineEnding +
+     '  fpgApplication.Initialize;' + LineEnding +
+     '  try' + LineEnding +
+     '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
+     '    fpgApplication.MainForm := frm;' + LineEnding +
+     '    frm.Show;' + LineEnding +
+     '    fpgApplication.Run;' + LineEnding +
+     '  finally' + LineEnding +
+     '    frm.Free;' + LineEnding +
+     '  end;' + LineEnding +
+     'end;' + LineEnding + LineEnding +
+    'exports' + LineEnding  +
+     '  {Here the only-one exported procedure...}' + LineEnding +
+     '  MainProc name ''Java_' + AUnitname + '_mainproc'';' + LineEnding + LineEnding +
+      'end.' + LineEnding ;
+   GetBlocks;
+end;
+
+procedure TVFDFile.NewJavaSkeleton(AUnitname, AJavaFileName: string);
+var
+  ff: file;
+  fdata : string;
+begin
+     fdata :=
+    'public class ' + AUnitname + '{'+ LineEnding + LineEnding +
+    '  public static native void mainproc();' + LineEnding + LineEnding +
+    '  public static void main(String[] args)' + LineEnding + LineEnding +
+    '  {' + LineEnding +
+    '  System.loadLibrary("' + AUnitname + '");' + LineEnding +
+    '  mainproc();' + LineEnding +
+    '  }' + LineEnding +
+    '}' + LineEnding;
+
+           AssignFile(ff, fpgToOSEncoding(AJavaFileName));
+           try
+       Rewrite(ff, 1);
+       try
+         BlockWrite(ff, fdata[1], length(fdata));
+       finally
+         CloseFile(ff);
+       end;
+     except
+       on E: Exception do
+         raise Exception.Create('Save I/O failure with ' + AJavaFileName + #13 + E.Message);
+     end;
+
+
 end;
 
 procedure TVFDFile.SetFormData(formname, headblock, bodyblock: string);

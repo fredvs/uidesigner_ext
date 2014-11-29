@@ -163,6 +163,8 @@ uses
   vfd_constants,
   fpg_tree;
 
+
+
 const
   cEditOrder: array[TfpgEditMode] of string = (rsDlgWidgetOrder, rsDlgTabOrder);
 

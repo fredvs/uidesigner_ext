@@ -220,12 +220,15 @@ begin
 
     frmMainDesigner.filemenu.MenuItem(4).Visible := True;
     frmMainDesigner.filemenu.MenuItem(5).Visible := True;
-    frmMainDesigner.filemenu.MenuItem(6).Visible := True;
-    frmMainDesigner.filemenu.MenuItem(7).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(6).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(7).Visible := false;
     frmMainDesigner.filemenu.MenuItem(8).Visible := True;
     frmMainDesigner.filemenu.MenuItem(9).Visible := True;
     frmMainDesigner.filemenu.MenuItem(10).Visible := True;
     frmMainDesigner.filemenu.MenuItem(11).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(12).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(13).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(14).Visible := True;
 
     frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
     frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
@@ -238,7 +241,9 @@ begin
       frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
      isFileLoaded := True;
     isFileNew := True;
-        TFormDesigner(selectedform).Form.Hide;
+
+     TFormDesigner(selectedform).Form.Hide;
+
         fpgapplication.ProcessMessages;
         TFormDesigner(selectedform).Form.Show;
          frmproperties.Show;
@@ -273,6 +278,9 @@ begin
     frmMainDesigner.filemenu.MenuItem(9).Visible := False;
     frmMainDesigner.filemenu.MenuItem(10).Visible := False;
     frmMainDesigner.filemenu.MenuItem(11).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(12).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(13).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(14).Visible := False;
 
   end;
 
@@ -348,6 +356,9 @@ begin
   frmMainDesigner.filemenu.MenuItem(9).Visible := False;
   frmMainDesigner.filemenu.MenuItem(10).Visible := False;
   frmMainDesigner.filemenu.MenuItem(11).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(12).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(13).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(14).Visible := False;
 
   for n := 0 to FDesigners.Count - 1 do
   begin
@@ -531,6 +542,9 @@ begin
   frmMainDesigner.filemenu.MenuItem(9).Visible := True;
   frmMainDesigner.filemenu.MenuItem(10).Visible := True;
   frmMainDesigner.filemenu.MenuItem(11).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(12).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(13).Visible := True;
+  frmMainDesigner.filemenu.MenuItem(14).Visible := True;
 
   isFileLoaded := True;
 
@@ -582,20 +596,21 @@ begin
   if datatmp <> '' then
   begin
     fdata1 := copy(filedata, 1, pos(datatmp, uppercase(filedata)) + length(datatmp)); /// all before "uses"
-    fdata2 := copy(filedata, pos(datatmp, uppercase(filedata)) + length(datatmp), 1 + length(filedata) - pos(datatmp, uppercase(filedata)));
-    /// all after "uses"
+    fdata2 := copy(filedata, pos(datatmp, uppercase(filedata)) + length(datatmp), 1 +
+              length(filedata) - pos(datatmp, uppercase(filedata)));   /// all after "uses"
     fdata3 := copy(fdata2, 1, pos(';', fdata2) + length(datatmp) - 4);  /// only "uses" section
     fdata4 := copy(fdata2, pos(';', fdata2) + 1, length(fdata2) - pos(';', fdata2));  // all after ";" of uses section
 
     fdata1 := TrimRight(fdata1);
-
     fdata3 := trim(fdata3);
+    fdata3 := copy(fdata3,1,length(fdata3)-1);
     fdata31 := '';
+    fdata32 := '';
 
     datatmp := '{%units ''Auto-generated GUI code''}';
 
     if pos(datatmp, fdata3) > 0 then  /// all units before auto-generated code
-      fdata31 := trim(copy(fdata3, 1, pos(datatmp, fdata3) - 1));
+      fdata31 :=  LineEnding+ '  ' + trim(copy(fdata3, 1, pos(datatmp, fdata3) - 1));
 
     fdata2 := LineEnding + '  ' + datatmp + LineEnding;  /// comment => begin
 
@@ -603,19 +618,25 @@ begin
 
     if pos(datatmp, fdata3) > 0 then /// all units after auto-generated code
     begin
-      fdata32 := copy(fdata3, pos(datatmp, fdata3) + length(datatmp) + 1, pos(';', fdata3) - pos(datatmp, fdata3) - length(datatmp) + 1);
+      fdata32 := trim(copy(fdata3, pos(datatmp, fdata3) + length(datatmp) + 1,
+      length(fdata3) - pos(datatmp, fdata3)));
       fdata3 := trim(fdata31) + fdata32;  /// add all before + all after generated code
     end;
 
-    datatmp := LineEnding + '  ' + datatmp + LineEnding;  /// comment => end
+     datatmp := LineEnding + '  ' + datatmp + LineEnding;  /// comment => end
 
-    /// looking for already declared units in add all before + all after generated code
+     /// looking for already declared units in add all before + all after generated code
+     if pos('FPG_FORM', uppercase(fdata3)) > 0 then
+      funit := ' '
+    else
+      funit := '  fpg_form,' ;
+
     if pos('FPG_LABEL', uppercase(fdata3)) > 0 then
       cns_label := True
     else
       cns_label := False;
 
-    if pos('FPG_BUTTON', uppercase(fdata3)) > 0 then
+     if pos('FPG_BUTTON', uppercase(fdata3)) > 0 then
       cns_button := True
     else
       cns_button := False;
@@ -735,7 +756,6 @@ begin
     else
       cns_editgrid := False;
 
-    funit := ' ';
 
     //////////// get the classname of each object and add his unit.
     for n := 0 to FDesigners.Count - 1 do
@@ -907,11 +927,24 @@ begin
 
       end;
     end;
-    if trim(funit) <> '' then
-      Result := fdata1 + fdata2 + funit + datatmp + '  ' + trim(fdata3) + fdata4
-    else  /// some units added
+
+   if trim(funit) <> '' then  /// some units added
+   begin
+    funit := copy(funit,1,length(funit)-1);
+    if  trim(fdata31) +  fdata32 = '' then fdata31 := LineEnding + '  ' + fdata3 + ',';
+    if fdata32 = '' then  Result := fdata1 + fdata31 + fdata2  +  funit + datatmp + '  ;' + fdata4
+    else
+    begin
+     fdata32 := trim(fdata32);
+     if pos(',', fdata32) = 1 then fdata32 := trim(copy(fdata32, 2, length(fdata32)-1)) ;
+     Result := fdata1 + fdata31 + fdata2  +  funit + ',' + datatmp + '  ' + fdata32 + ';' + fdata4
+    end;
+    end  else
+    begin
+      if  trim(fdata31) +  fdata32 = '' then fdata3 := fdata3 + ';' ;
       Result := fdata1 + LineEnding + '  ' + fdata3 + fdata4;    /// nothing added
-  end
+    end;
+    end
   else
     Result := filedata; /// no uses section finded
 end;
@@ -922,7 +955,7 @@ var
   fd: TFormDesigner;
   fdata: string;
   ff: file;
-  fname, uname: string;
+  fname, fnamejava, uname: string;
   aFileDialog: TfpgFileDialog;
   frm: TfrmAlreadyExists;
 begin
@@ -949,7 +982,11 @@ begin
       begin
         fname := aFileDialog.Filename;
         if (ExtractFileExt(fname) = '') then
-          fname := fname + DefaultPasExt;
+        begin
+        fnamejava := fname + '.java';
+        fname := fname + DefaultPasExt;
+        end else
+        fnamejava := ChangeFileExt(fname, '.java');
         EditedFileName := fname;
       end
       else
@@ -997,8 +1034,16 @@ begin
       i := pos('.pas', LowerCase(uname));
       if i > 0 then
         uname := copy(uname, 1, i - 1);
-      FFile.NewFileSkeleton(uname);
-    end;
+       case (Sender as TComponent).Tag of
+       11 : FFile.NewProgramSkeleton(uname);
+       12 : FFile.NewUnitSkeleton(uname);
+       13 : FFile.NewLibrarySkeleton(uname);
+       14 :
+         begin
+         FFile.NewLibraryJavaSkeleton(uname);
+         FFile.NewJavaSkeleton(uname, fnamejava);
+         end;
+     end;
 
     for n := 0 to DesignerCount - 1 do
     begin
@@ -1029,6 +1074,12 @@ begin
         raise Exception.Create('Form save I/O failure in TMainDesigner.OnSaveFile.' + #13 + E.Message);
     end;
     // if (enableundo = True) then SaveUndo(Sender, 6);
+
+    frmMainDesigner.filemenu.MenuItem(6).Visible := true;
+    frmMainDesigner.filemenu.MenuItem(7).Visible := true;
+
+    isfilenew := false;
+
     frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
 
     frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
@@ -1040,6 +1091,8 @@ begin
     end;
 
   end;
+
+end;
 
 end;
 
@@ -1390,6 +1443,7 @@ function TMainDesigner.OnNewForm(Sender: TObject): boolean;
 var
   fd: TFormDesigner;
   nfrm: TNewFormForm;
+  frm : TfrmAlreadyExists;
   x: integer;
 
   function DoesNameAlreadyExist(const AName: string): boolean;
@@ -1416,10 +1470,21 @@ begin
     begin
       if DoesNameAlreadyExist(nfrm.edName.Text) then
       begin
-        TfpgMessageDialog.Critical('Name Conflict',
-          'The form name already exists in the current unit, please try again');
-        exit;
+      frm := TfrmAlreadyExists.Create(nil);
+      frm.Width:=320;
+      frm.WindowTitle:='Warning => Existing Form Name !';
+      frm.lbl1.Width:=frm.Width;
+      frm.lbl2.Width:=frm.Width;
+      frm.lbl1.Text := 'form => ' + trim(nfrm.edName.Text);
+      frm.lbl2.Text :=  'Already exists... Please try a other name...';
+      frm.btnNo.Visible:=false;
+      frm.btnYes.Text:='OK';
+      frm.btnYes.Left:=(frm.Width-frm.btnYes.Width)div 2;
+      frm.ShowModal;
+      frm.Free;
+      exit;
       end;
+
       fd := TFormDesigner.Create;
       if nfrm.edName.Text <> '' then
         fd.Form.Name := nfrm.edName.Text;

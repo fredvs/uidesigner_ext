@@ -726,7 +726,7 @@ var
   n, x, y: integer;
   wgc: TVFDWidgetClass;
   btn: TwgPaletteButton;
-  mi: TfpgMenuItem;
+  mi, mi2, mi3, mi4, mi5: TfpgMenuItem;
 
 begin
   {%region 'Auto-generated GUI code' -fold}
@@ -783,7 +783,14 @@ begin
     AddMenuItem('Save As...', '', @OnSaveAs);
     AddMenuItem('Close', '', @OnCloseAll);
     AddMenuItem('-', '', nil);
-    AddMenuItem('Save As New Template Unit...', 'Ctrl+Shift+S', @OnSaveNewFile);
+     mi2 := AddMenuItem('Save As New Program...', 'Ctrl+Shift+P', @OnSaveNewFile);
+     mi2.Tag := 11;
+    mi3 := AddMenuItem('Save As New Unit...', 'Ctrl+Shift+U', @OnSaveNewFile);
+    mi3.Tag := 12;
+    mi4 := AddMenuItem('Save As New Library...', 'Ctrl+Shift+L', @OnSaveNewFile);
+    mi4.Tag := 13;
+    mi5 := AddMenuItem('Save As New Java Library...', 'Ctrl+Shift+J', @OnSaveNewFile);
+    mi5.Tag := 14;
     AddMenuItem('-', '', nil);
      AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
   end;
@@ -1122,10 +1129,13 @@ begin
   filemenu.MenuItem(9).Visible := False;
   filemenu.MenuItem(10).Visible := False;
   filemenu.MenuItem(11).Visible := False;
+  filemenu.MenuItem(12).Visible := False;
+  filemenu.MenuItem(13).Visible := False;
+  filemenu.MenuItem(14).Visible := False;
 
   filemenu.MenuItem(1).Visible := False;
   filemenu.MenuItem(2).Visible := False;
-  filemenu.MenuItem(12).Visible := False;
+  filemenu.MenuItem(15).Visible := False;
 
   x := gINI.ReadInteger('Options', 'IDE', 0);
   idetemp := x;
@@ -1138,7 +1148,7 @@ begin
 
     filemenu.MenuItem(1).Visible := True;
     filemenu.MenuItem(2).Visible := True;
-    filemenu.MenuItem(12).Visible := True;
+    filemenu.MenuItem(15).Visible := True;
 
     indexundo := 0;
 
