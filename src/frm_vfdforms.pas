@@ -30,9 +30,9 @@ unit frm_vfdforms;
 interface
 
 uses
-{%units 'Auto-generated GUI code'}
- fpg_label, fpg_button, fpg_combobox,
-{%endunits}
+  {%units 'Auto-generated GUI code'}
+  fpg_label, fpg_button, fpg_combobox,
+  {%endunits}
   Classes,
   SysUtils,
   fpg_base,
@@ -171,6 +171,7 @@ type
     Labelonlyonce: TfpgLabel;
     chkonlyonce: TfpgCheckBox;
     chkautounits: TfpgCheckBox;
+    rbideu: TfpgRadioButton;
     {@VFD_HEAD_END: frmVFDSetup}
     procedure AfterCreate; override;
     // procedure BeforeDestruction; override;
@@ -530,6 +531,12 @@ begin
     // frmMainDesigner.filemenu.MenuItem(9).Visible:=true;
   end;
 
+  if Sender = rbideu then
+  begin
+    rbideu.Checked := True;
+    frmMainDesigner.LoadIDEparameters(3);
+  end;
+
   if Sender = rbtyphon then
   begin
     rbtyphon.Checked := True;
@@ -557,6 +564,7 @@ begin
     0: rbnone.Checked := True;
     1: rblaz.Checked := True;
     2: rbtyphon.Checked := True;
+    3: rbideu.Checked := True;
   end;
 
   x := gINI.ReadInteger('Options', 'Editor', 0);
@@ -640,12 +648,15 @@ begin
     idetemp := 1;
   if rbtyphon.Checked = True then
     idetemp := 2;
+  if rbideu.Checked = True then
+    idetemp := 3;
 
   if idetemp <> changeide then
     case idetemp of
       0: ShowMessage('IDE des-integration will append after closing application');
       1: ShowMessage('IDE integration will append next run of Lazarus');
       2: ShowMessage('IDE integration will append next run of Typhon');
+      3: ShowMessage('IDE integration will append next run of ideU');
     end;
 
 end;
@@ -674,6 +685,8 @@ begin
       IdeIntegration(rblaz);
     if rbtyphon.Checked = True then
       IdeIntegration(rbtyphon);
+     if rbideu.Checked = True then
+      IdeIntegration(rbideu);
     fpgapplication.ProcessMessages;
     Show;
   end;
@@ -1102,6 +1115,18 @@ begin
     Hint := '';
     TabOrder := 36;
     Text := 'Auto Add Units in uses section';
+  end;
+
+  rbideu := TfpgRadioButton.Create(self);
+  with rbideu do
+  begin
+    Name := 'rbideu';
+    SetPosition(252, 86, 120, 19);
+    FontDesc := '#Label1';
+    GroupIndex := 0;
+    Hint := '';
+    TabOrder := 36;
+    Text := 'with ideU';
   end;
 
   {@VFD_BODY_END: frmVFDSetup}

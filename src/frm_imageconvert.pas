@@ -178,7 +178,7 @@ begin
 
   {@VFD_BODY_BEGIN: MainForm}
   Name := 'MainForm';
-  SetPosition(478, 227, 700, 378);
+  SetPosition(441, 156, 700, 378);
   WindowTitle := 'Bitmap Image Conversion into Pascal resource';
   Hint := '';
   ShowHint := True;
@@ -192,7 +192,7 @@ begin
   begin
     Name := 'FilenameEdit1';
     SetPosition(4, 8, 384, 24);
-    Anchors := [anLeft, anRight, anTop];
+    Anchors := [anLeft,anRight,anTop];
     ExtraHint := '';
     FileName := '';
     Filter := '';
@@ -205,7 +205,7 @@ begin
   begin
     Name := 'memImages';
     SetPosition(4, 56, 692, 318);
-    Anchors := [anLeft, anRight, anTop, anBottom];
+    Anchors := [anLeft,anRight,anTop,anBottom];
     FontDesc := '#Edit2';
     Hint := '';
     TabOrder := 5;
@@ -219,14 +219,14 @@ begin
   begin
     Name := 'Button1';
     SetPosition(396, 8, 64, 24);
-    Anchors := [anRight, anTop];
-    AllowDown := True;
+    Anchors := [anRight,anTop];
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := 'Conver bitmap image into Pascal resource';
     ImageName := '';
     TabOrder := 4;
     Text := 'Convert';
+    AllowDown := True;
     OnClick := @btnConvertClicked;
   end;
 
@@ -245,14 +245,14 @@ begin
   begin
     Name := 'btnCopy';
     SetPosition(464, 8, 70, 24);
-    Anchors := [anRight, anTop];
-    AllowDown := True;
+    Anchors := [anRight,anTop];
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := 'Copy to clipboard';
     ImageName := 'stdimg.copy';
     TabOrder := 8;
     Text := 'Copy';
+    AllowDown := True;
     OnClick := @btnCopyClicked;
   end;
 
@@ -261,14 +261,14 @@ begin
   begin
     Name := 'btnClear';
     SetPosition(540, 8, 60, 24);
-    Anchors := [anRight, anTop];
-    AllowDown := True;
+    Anchors := [anRight,anTop];
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := 'Clear text box';
     ImageName := '';
     TabOrder := 6;
     Text := 'Clear';
+    AllowDown := True;
     OnClick := @btnClearClicked;
   end;
 
@@ -277,14 +277,14 @@ begin
   begin
     Name := 'Button2';
     SetPosition(636, 8, 60, 24);
-    Anchors := [anRight, anTop];
-    AllowDown := True;
+    Anchors := [anRight,anTop];
     FontDesc := '#Label1';
     GroupIndex := 1;
     Hint := 'Close Image Convertor';
     ImageName := 'stdimg.close';
     TabOrder := 7;
     Text := 'Quit';
+    AllowDown := True;
     OnClick := @btnquitClicked;
   end;
 

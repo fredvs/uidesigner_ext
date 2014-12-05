@@ -495,6 +495,8 @@ begin
   filemenu.MenuItem(2).Visible := False;
 
   /// => This code gives problem to JEDI code-formater
+ if ide <> 3 then
+ begin
 
  if ide = 2 then
   begin
@@ -673,6 +675,7 @@ if fileexists(pchar(dataf)) then
       CloseFile(f);
        UpdateWindowPosition;
          end;
+end;
   ////
 end;
 

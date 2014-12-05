@@ -1045,6 +1045,8 @@ begin
          end;
      end;
 
+     end;
+
     for n := 0 to DesignerCount - 1 do
     begin
       fd := nil;
@@ -1089,8 +1091,6 @@ begin
       frmMainDesigner.MainMenu.MenuItem(8).Text := ' => ' + fname;
       frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
     end;
-
-  end;
 
 end;
 

@@ -21,7 +21,7 @@ fiens@hotmail.com
       The starting unit for the UI Designer project.
 }
 
-program designer_ext;
+library fpguidesignerext ;
 
 {$mode objfpc}{$H+}
 
@@ -71,7 +71,7 @@ uses {$IFDEF UNIX}
   frm_main_designer,
   vfd_widgets;
 
-  procedure MainProc;
+  procedure MainProc(PEnv: pointer; Obj: pointer); cdecl;
   var
     filedir: string;
   begin
@@ -130,7 +130,8 @@ uses {$IFDEF UNIX}
     end;
   end;
 
+exports
+  {Here the only-one exported procedure...}
+  MainProc name 'Java_fpguidesignerext_mainproc';
 
-begin
-  MainProc;
 end.
