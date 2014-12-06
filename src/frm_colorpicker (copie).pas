@@ -6,11 +6,10 @@ interface
 
 uses
   SysUtils, Classes, fpg_base, fpg_main,
-  fpg_menu, fpg_spinedit,
-  {%units 'Auto-generated GUI code'}
-  fpg_form, fpg_label, fpg_button, fpg_hyperlink, fpg_colorwheel, fpg_checkbox, fpg_combobox, fpg_edit, fpg_panel
-  {%endunits}
-  ;
+  fpg_edit, fpg_form, fpg_label, fpg_button,
+  fpg_checkbox, fpg_combobox, fpg_hyperlink,
+  fpg_menu,
+  fpg_panel, fpg_ColorWheel, fpg_spinedit;
 
 type
 
@@ -73,15 +72,15 @@ type
   TColorPickerForm = class(TfpgForm)
   private
     {@VFD_HEAD_BEGIN: WheelColorForm}
-    MainMenu: TfpgMenuBar;
-    helpmenu: TfpgPopupMenu;
-    ColorWheel1: TfpgColorWheel;
-    chkCrossHair: TfpgCheckBox;
-    panel1: TfpgPanel;
-    ValueBar1: TfpgValueBar;
-    Label10: TfpgLabel;
+    frmcompare: TCompareForm;
     ColorBox: TfpgComboBox;
+    Button1: TfpgButton;
+    ColorWheel1: TfpgColorWheel;
+    ValueBar1: TfpgValueBar;
+    bevel1: Tfpgbevel;
+    panel1: Tfpgpanel;
     Label1: TfpgLabel;
+    Label10: TfpgLabel;
     Label2: TfpgLabel;
     Label3: TfpgLabel;
     edH: TfpgEdit;
@@ -93,18 +92,17 @@ type
     edR: TfpgSpinEdit;
     edG: TfpgSpinEdit;
     edB: TfpgSpinEdit;
-    bevel1: TfpgBevel;
-    lblHexa: TfpgLabel;
-    edHexa: TfpgEdit;
     Label7: TfpgLabel;
     Label8: TfpgLabel;
+    lblHexa: TfpgLabel;
+    edHexa: TfpgEdit;
+    chkCrossHair: TfpgCheckBox;
     btnPicker: TPickerButton;
     chkContinuous: TfpgCheckBox;
-    btnClose: TfpgButton;
+
     {@VFD_HEAD_END: WheelColorForm}
     FViaRGB: boolean; // to prevent recursive changes
     FColorPicking: boolean;
-    frmcompare: TCompareForm;
     procedure miHelpAboutClick(Sender: TObject);
     procedure btnColorPicked(Sender: TObject; const AMousePos: TPoint;
       const AColor: TfpgColor);
@@ -123,6 +121,8 @@ type
     procedure E_HexaKeyPress(Sender: TObject; var KeyCode: word;
       var ShiftState: TShiftState; var Consumed: boolean);
   public
+    MainMenu: TfpgMenuBar;
+    helpmenu: TfpgPopupMenu;
     constructor Create(AOwner: TComponent); override;
     procedure AfterCreate; override;
   end;
@@ -880,7 +880,9 @@ var
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-   {@VFD_BODY_BEGIN: frmAbout}
+
+
+  {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(143, 130, 242, 145);
   WindowTitle := 'About Color_Picker';
@@ -921,14 +923,14 @@ begin
     Name := 'btnClose';
     SetPosition(153, 112, 80, 23);
     Anchors := [];
+    AllowDown := True;
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.close';
-    ModalResult := mrOK;
+    ModalResult := mrOk;
     TabOrder := 2;
     Text := 'Close';
     TextColor := TfpgColor($FF000000);
-    AllowDown := True;
   end;
 
   lblWrittenBy := TfpgLabel.Create(self);
@@ -1042,6 +1044,7 @@ begin
 
   Name := 'frmcompare';
   SetPosition(220, 180, 100, 100);
+  // WindowPosition := wpUser;
   WindowType := wtPopup;
   OnMouseMove := @onMovemovepanel;
   OnMouseDown := @onClickDownPanel;
@@ -1237,18 +1240,12 @@ var
   i: integer;
 begin
   y := 20;
- {%region 'Auto-generated GUI code' -fold}
-
-
   {@VFD_BODY_BEGIN: WheelColorForm}
   Name := 'WheelColorForm';
-  SetPosition(371, 241, 380, 452);
-  WindowTitle := 'Color_Picker';
-  Hint := '';
-  BackGroundColor := $80000001;
-  Sizeable := False;
-  WindowPosition := wpScreenCenter;
   SetPosition(349, 242, 380, 452 + y);
+  WindowTitle := 'Color_Picker';
+  WindowPosition := wpScreenCenter;
+  Sizeable := False;
   onclose := @onclosemain;
 
   MainMenu := TfpgMenuBar.Create(self);
@@ -1267,11 +1264,14 @@ begin
     AddMenuItem('About Color_Picker...', '', @miHelpAboutClick);
   end;
 
+  fpgImages.AddMaskedBMP('icn.picker', @icn_picker,
+    sizeof(icn_picker), 0, 0);
+
   ColorWheel1 := TfpgColorWheel.Create(self);
   with ColorWheel1 do
   begin
     Name := 'ColorWheel1';
-    SetPosition(20, 20, 100, 100);
+   // Border := True;
     SetPosition(20, 20 + y, 272, 250);
   end;
 
@@ -1279,24 +1279,18 @@ begin
   with chkCrossHair do
   begin
     Name := 'chkCrossHair';
-    SetPosition(30, 270, 120, 19);
+    SetPosition(30, 270 + y, 110, 20);
     FontDesc := '#Label1';
-    Hint := '';
     TabOrder := 20;
     Text := 'Large Cross';
-    SetPosition(30, 270 + y, 110, 20);
     OnChange := @chkCrossHairChange;
   end;
 
-  panel1 := TfpgPanel.Create(self);
+  panel1 := Tfpgpanel.Create(self);
   with panel1 do
   begin
-    Name := 'panel1';
-    SetPosition(301, 22, 80, 80);
-    FontDesc := '#Label1';
-    Hint := '';
-    Text := 'Panel';
     panel1.BackgroundColor := clgray;
+    Name := 'panel1';
     SetPosition(301, 22 + y, 56, 242);
   end;
 
@@ -1304,10 +1298,8 @@ begin
   with ValueBar1 do
   begin
     Name := 'ValueBar1';
-    SetPosition(304, 24, 80, 100);
-    CursorHeight := 15;
-    Value := 1;
     SetPosition(304, 24 + y, 52, 238);
+    CursorHeight := 15;
     ValueBar1.MarginWidth := 1;
     OnChange := @ColorChanged;
   end;
@@ -1316,25 +1308,19 @@ begin
   with Label10 do
   begin
     Name := 'Label10';
-    SetPosition(170, 270, 80, 15);
+    SetPosition(170, 270 + y, 164, 16);
     Alignment := taCenter;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Predefined Colors';
-    SetPosition(170, 270 + y, 164, 16);
   end;
 
   ColorBox := TfpgComboBox.Create(self);
   with ColorBox do
   begin
     Name := 'ColorBox';
-    SetPosition(170, 288, 120, 24);
-    ExtraHint := '';
-    FontDesc := '#List';
-    Hint := '';
-    FocusItem := -1;
-    TabOrder := 8;
     SetPosition(170, 288 + y, 164, 20);
+    FontDesc := '#List';
     OnChange := @ColorBoxChange;
   end;
 
@@ -1342,127 +1328,111 @@ begin
   with Label1 do
   begin
     Name := 'Label1';
-    SetPosition(126, 324, 80, 15);
+    SetPosition(126, 324 + y, 52, 18);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Hue';
-    SetPosition(126, 324 + y, 52, 18);
   end;
 
   Label2 := TfpgLabel.Create(self);
   with Label2 do
   begin
     Name := 'Label2';
-    SetPosition(126, 352, 80, 15);
+    SetPosition(126, 352 + y, 52, 18);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Sat';
-    SetPosition(126, 352 + y, 52, 18);
   end;
 
   Label3 := TfpgLabel.Create(self);
   with Label3 do
   begin
     Name := 'Label3';
-    SetPosition(126, 380, 80, 15);
+    SetPosition(126, 380 + y, 52, 18);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Bright';
-    SetPosition(126, 380 + y, 52, 18);
   end;
 
   edH := TfpgEdit.Create(self);
   with edH do
   begin
     Name := 'edH';
-    SetPosition(182, 320, 120, 24);
-    BackgroundColor := TfpgColor($80000001);
-    ExtraHint := '';
-    FontDesc := '#Edit1';
-    Hint := '';
+    SetPosition(182, 320 + y, 50, 26);
     TabOrder := 8;
     Text := '';
-    Focusable := False;
-    SetPosition(182, 320 + y, 50, 26);
     ReadOnly := True;
+    Focusable := False;
+    FontDesc := '#Edit1';
+    BackgroundColor := clWindowBackground;
   end;
 
   edS := TfpgEdit.Create(self);
   with edS do
   begin
     Name := 'edS';
-    SetPosition(182, 348, 120, 24);
-    BackgroundColor := TfpgColor($80000001);
-    ExtraHint := '';
-    FontDesc := '#Edit1';
-    Hint := '';
+    SetPosition(182, 348 + y, 50, 26);
     TabOrder := 9;
     Text := '';
+    FontDesc := '#Edit1';
     Focusable := False;
-    SetPosition(182, 348 + y, 50, 26);
     ReadOnly := True;
+    BackgroundColor := clWindowBackground;
   end;
 
   edV := TfpgEdit.Create(self);
   with edV do
   begin
     Name := 'edV';
-    SetPosition(182, 376, 120, 24);
-    BackgroundColor := TfpgColor($80000001);
-    ExtraHint := '';
-    FontDesc := '#Edit1';
-    Hint := '';
+    SetPosition(182, 376 + y, 50, 26);
     TabOrder := 10;
     Text := '';
-    Focusable := False;
-    SetPosition(182, 376 + y, 50, 26);
+    FontDesc := '#Edit1';
     ReadOnly := True;
+    Focusable := False;
+    BackgroundColor := clWindowBackground;
   end;
 
   Label4 := TfpgLabel.Create(self);
   with Label4 do
   begin
     Name := 'Label4';
-    SetPosition(236, 324, 80, 15);
+    SetPosition(236, 324 + y, 56, 18);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Red';
-    SetPosition(236, 324 + y, 56, 18);
   end;
 
   Label5 := TfpgLabel.Create(self);
   with Label5 do
   begin
     Name := 'Label5';
-    SetPosition(236, 352, 80, 15);
+    SetPosition(236, 352 + y, 56, 18);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Green';
-    SetPosition(236, 352 + y, 56, 18);
   end;
 
   Label6 := TfpgLabel.Create(self);
   with Label6 do
   begin
     Name := 'Label6';
-    SetPosition(236, 380, 80, 15);
+    SetPosition(236, 380 + y, 56, 18);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Blue';
-    SetPosition(236, 380 + y, 56, 18);
   end;
 
   edR := TfpgSpinEdit.Create(self);
   with edR do
   begin
     Name := 'edR';
-    SetPosition(296, 320, 120, 32);
     SetPosition(296, 320 + y, 44, 26);
     TabOrder := 13;
     MinValue := 0;
@@ -1477,7 +1447,6 @@ begin
   with edG do
   begin
     Name := 'edG';
-    SetPosition(296, 348, 120, 32);
     SetPosition(296, 348 + y, 44, 26);
     TabOrder := 14;
     MinValue := 0;
@@ -1492,7 +1461,6 @@ begin
   with edB do
   begin
     Name := 'edB';
-    SetPosition(296, 376, 120, 32);
     SetPosition(296, 376 + y, 44, 26);
     TabOrder := 15;
     MinValue := 0;
@@ -1503,40 +1471,33 @@ begin
     OnExit := @RGBChanged;
   end;
 
-  bevel1 := TfpgBevel.Create(self);
+  bevel1 := Tfpgbevel.Create(self);
   with bevel1 do
   begin
     Name := 'bevel1';
-    SetPosition(20, 350, 80, 80);
-    Hint := '';
     SetPosition(20, 350 + y, 100, 90);
   end;
 
-  lblHexa := TfpgLabel.Create(self);
+  lblHexa := Tfpglabel.Create(self);
   with lblHexa do
   begin
     Name := 'lblHexa';
-    SetPosition(20, 297, 80, 15);
+    SetPosition(20, 297 + y, 100, 16);
     FontDesc := '#Label1';
     Hint := '';
-    Text := 'Hexadecimal';
-    SetPosition(20, 297 + y, 100, 16);
     lblHexa.Alignment := taCenter;
+    Text := 'Hexadecimal';
   end;
 
-  edHexa := TfpgEdit.Create(self);
+  edHexa := Tfpgedit.Create(self);
   with edHexa do
   begin
     Name := 'edHexa';
-    SetPosition(20, 315, 120, 24);
-    ExtraHint := '';
+    SetPosition(20, 315 + y, 100, 26);
     FontDesc := '#Label1';
     Hint := 'Mouse out change edit...';
-    ParentShowHint := False;
-    ShowHint := True;
-    TabOrder := 23;
+    showhint := True;
     Text := '';
-    SetPosition(20, 315 + y, 100, 26);
     MaxLength := 7;
     OnMouseExit := @ConvertToRGB;
     OnKeyChar := @E_HexaKeyChar;
@@ -1547,77 +1508,65 @@ begin
   with Label7 do
   begin
     Name := 'Label7';
-    SetPosition(135, 4, 80, 15);
+    SetPosition(135, 4 + y, 80, 16);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Colors';
-    SetPosition(135, 4 + y, 80, 16);
   end;
 
   Label8 := TfpgLabel.Create(self);
   with Label8 do
   begin
     Name := 'Label8';
-    SetPosition(310, 3, 80, 15);
+    SetPosition(310, 3 + y, 64, 16);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Bright';
-    SetPosition(310, 3 + y, 64, 16);
   end;
 
   btnPicker := TPickerButton.Create(self);
   with btnPicker do
   begin
     Name := 'btnPicker';
-    SetPosition(125, 410, 120, 32);
     SetPosition(125, 410 + y, 80, 24);
     Text := 'Picker';
     FontDesc := '#Label1';
     Hint := 'Click on Picker and maintain click => release get the color';
+    ImageName := 'vfd.picker';
     ShowHint := True;
     TabOrder := 24;
     OnColorPicked := @btnColorPicked;
   end;
 
+  fpgapplication.HintPause := 1500;
+
   chkContinuous := TfpgCheckBox.Create(self);
   with chkContinuous do
   begin
-    Name := 'chkContinuous';
-    SetPosition(210, 413, 120, 19);
+    Name := 'chkContinous';
+    SetPosition(210, 413 + y, 80, 20);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 25;
     Text := 'Continous';
-    SetPosition(210, 413 + y, 80, 20);
     OnChange := @chkContinuousChanged;
   end;
 
-  btnClose := TfpgButton.Create(self);
-  with btnClose do
+  Button1 := TfpgButton.Create(self);
+  with Button1 do
   begin
-    Name := 'btnClose';
-    SetPosition(300, 418, 80, 23);
+    Name := 'Button1';
+    SetPosition(300, 418 + y, 70, 26);
+    //   Anchors := [anRight,anBottom];
+    Text := 'Quit';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.close';
     TabOrder := 0;
-    Text := 'Quit';
-    SetPosition(300, 418 + y, 70, 26);
     OnClick := @btnQuitClicked;
   end;
 
-  {@VFD_BODY_END: WheelColorForm}
-
-    {%endregion}
-
   MainMenu.AddMenuItem('&About', nil).SubMenu := helpmenu;
-
- fpgImages.AddMaskedBMP('icn.picker', @icn_picker,
-    sizeof(icn_picker), 0, 0);
-
- btnPicker.ImageName := 'icn.picker';
-
-  fpgapplication.HintPause := 1500;
 
   for i := 0 to Pred(ColorList.Count) do
     ColorBox.Items.Add(TColor(ColorList[i]).Name);
@@ -1627,7 +1576,7 @@ begin
   oriWheelColorForm.Y := top;
 
   fpgapplication.ProcessMessages;
-  
+  {@VFD_BODY_END: WheelColorForm}
   frmcompare := TCompareForm.Create(nil);
 
   frmcompare.Show;

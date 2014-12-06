@@ -30,6 +30,7 @@ unit frm_vfdforms;
 interface
 
 uses
+  
   {%units 'Auto-generated GUI code'}
   fpg_label, fpg_button, fpg_combobox,
   {%endunits}
@@ -699,7 +700,7 @@ var
 begin
   {@VFD_BODY_BEGIN: frmVFDSetup}
   Name := 'frmVFDSetup';
-  SetPosition(283, 192, 549, 365);
+  SetPosition(196, 237, 549, 365);
   WindowTitle := 'General settings';
   Hint := '';
   ShowHint := True;

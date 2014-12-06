@@ -29,6 +29,7 @@ unit frm_main_designer;
 interface
 
 uses
+  
   {%units 'Auto-generated GUI code'}
   fpg_button, fpg_label, fpg_hyperlink,
   {%endunits}
@@ -299,7 +300,7 @@ begin
 
   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
-  SetPosition(694, 311, 278, 195);
+  SetPosition(464, 277, 278, 195);
   WindowTitle := 'About Designer_ext';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
@@ -736,7 +737,7 @@ begin
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(316, 189, 780, 92);
+  SetPosition(384, 124, 780, 92);
   WindowTitle := 'frmMainDesigner';
   Hint := '';
   ShowHint := True;
@@ -786,8 +787,8 @@ begin
     AddMenuItem('Save As...', '', @OnSaveAs);
     AddMenuItem('Close', '', @OnCloseAll);
     AddMenuItem('-', '', nil);
-     mi2 := AddMenuItem('Save As New Program...', 'Ctrl+Shift+P', @OnSaveNewFile);
-     mi2.Tag := 11;
+    mi2 := AddMenuItem('Save As New Program...', 'Ctrl+Shift+P', @OnSaveNewFile);
+    mi2.Tag := 11;
     mi3 := AddMenuItem('Save As New Unit...', 'Ctrl+Shift+U', @OnSaveNewFile);
     mi3.Tag := 12;
     mi4 := AddMenuItem('Save As New Library...', 'Ctrl+Shift+L', @OnSaveNewFile);
@@ -795,7 +796,7 @@ begin
     mi5 := AddMenuItem('Save As New Java Library...', 'Ctrl+Shift+J', @OnSaveNewFile);
     mi5.Tag := 14;
     AddMenuItem('-', '', nil);
-     AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
+    AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
   end;
 
   formmenu := TfpgPopupMenu.Create(self);
@@ -1023,7 +1024,7 @@ begin
     FocusItem := -1;
     TabOrder := 5;
     chlPalette.OnChange:=@OnChangeWidget;
-   end;
+  end;
 
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
