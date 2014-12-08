@@ -21,6 +21,10 @@ fiens@hotmail.com
     Description:
       Essential classes used by the fpGUI Designer
  }
+ 
+ /// for compiling into library => uncoment it in vfd_main too
+{.$DEFINE library}   // uncomment it for building library (native and java)
+{.$DEFINE java}   // uncomment it for building java library
 
 unit frm_main_designer;
 
@@ -35,7 +39,10 @@ uses
   {%endunits}
   fpg_panel,
   fpg_menu,
+  {$IF DEFINED(library)}
+  {$else}
   RunOnce_PostIt,
+  {$endif}
   frm_colorpicker,
   frm_imageconvert,
   frm_multiselect,
@@ -122,7 +129,10 @@ type
     procedure OnFormDesignShow(Sender: TObject);
     procedure onMultiSelect(Sender: TObject);
     procedure LoadIDEparameters(ide: integer);
+    {$IF DEFINED(library)}
+    {$else}
     procedure onMessagePost;
+    {$endif}
     procedure OnStyleChange(Sender: TObject);
     procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
@@ -437,6 +447,20 @@ procedure TfrmMainDesigner.MainCloseQueryEvent(Sender: TObject; var CanClose: bo
 var
   x: integer;
 begin
+
+{$IF DEFINED(library)}
+ CanClose := False;
+      x := 0;
+      while x < length(ArrayFormDesign) do
+      begin
+        ArrayFormDesign[x].Form.Close;
+        Inc(x);
+      end;
+      frmProperties.Close;
+      frmMainDesigner.hide;
+      frmmultiselect.hide;
+{$else}
+   
   if (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) then
   begin
     x := 0;
@@ -476,6 +500,8 @@ begin
       CanClose := True;
     end;
   end;
+  {$endif}
+ 
 end;
 
 procedure TfrmMainDesigner.LoadIDEparameters(ide: integer);
@@ -495,6 +521,9 @@ begin
   filemenu.MenuItem(1).Visible := False;
   filemenu.MenuItem(2).Visible := False;
 
+{$IF DEFINED(library)}
+
+{$else}
   /// => This code gives problem to JEDI code-formater
  if ide <> 3 then
  begin
@@ -677,9 +706,11 @@ if fileexists(pchar(dataf)) then
        UpdateWindowPosition;
          end;
 end;
-  ////
+   {$endif}
 end;
 
+{$IF DEFINED(library)}
+{$else}
 procedure TfrmMainDesigner.onMessagePost;
 begin
   if theMessage = 'quit' then
@@ -692,6 +723,7 @@ begin
   end;
   BringToFront;
 end;
+{$endif}
 
 procedure TfrmMainDesigner.OnLoadUndo(Sender: TObject);
 begin
@@ -1140,7 +1172,11 @@ begin
   filemenu.MenuItem(1).Visible := False;
   filemenu.MenuItem(2).Visible := False;
   filemenu.MenuItem(15).Visible := False;
-
+  
+  {$IF DEFINED(library)}
+   idetemp := 3;
+   LoadIDEparameters(3);
+  {$else}
   x := gINI.ReadInteger('Options', 'IDE', 0);
   idetemp := x;
   if x = 0 then
@@ -1163,12 +1199,13 @@ begin
   end
   else
     LoadIDEparameters(x);
-
   if ifonlyone = True then
   begin
     InitMessage;
     StartMessage(@onMessagePost, 1000);
   end;
+ {$endif}
+
   PaletteBarResized(self);
   frmMultiSelect := Tfrm_multiselect.Create(nil);
   chlPalette.Tag:=0;

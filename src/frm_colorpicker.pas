@@ -882,7 +882,7 @@ begin
 
    {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
-  SetPosition(143, 130, 242, 145);
+  SetPosition(489, 139, 242, 145);
   WindowTitle := 'About Color_Picker';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
@@ -1242,7 +1242,7 @@ begin
 
   {@VFD_BODY_BEGIN: WheelColorForm}
   Name := 'WheelColorForm';
-  SetPosition(371, 241, 380, 452);
+  SetPosition(415, 261, 380, 452);
   WindowTitle := 'Color_Picker';
   Hint := '';
   BackGroundColor := $80000001;

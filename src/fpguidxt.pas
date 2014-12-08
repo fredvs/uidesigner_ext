@@ -21,7 +21,7 @@ fiens@hotmail.com
       The starting unit for the UI Designer project.
 }
 
-library fpguidesignerext ;
+library fpguidxt ;
 
 {$mode objfpc}{$H+}
 
@@ -71,8 +71,8 @@ uses {$IFDEF UNIX}
   frm_main_designer,
   vfd_widgets;
  
-//procedure hidefpguidesigner(PEnv: pointer; Obj: pointer); cdecl; // Java 
- procedure hidefpguidesigner(); cdecl; // native
+//procedure hidefpguid(PEnv: pointer; Obj: pointer); cdecl; // Java 
+ procedure hidefpguid(); cdecl; // native
  begin
    frmMainDesigner.hide;
    frmProperties.hide;
@@ -98,9 +98,9 @@ uses {$IFDEF UNIX}
 //procedure MainProc(PEnv: pointer; Obj: pointer); cdecl; // Java
   procedure MainProc(); cdecl; // native
   begin
-    ifonlyone := false;
- 
-    fpgApplication.Initialize;
+    //ifonlyone := false;
+        
+     fpgApplication.Initialize;
     try
       RegisterWidgets;
       if fpgStyleManager.SetStyle('Chrome silver flat menu') then

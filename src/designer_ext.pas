@@ -119,8 +119,7 @@ uses {$IFDEF UNIX}
 
       fpgApplication.MainForm := frmMainDesigner;
 
-      fpgApplication;
-       frmProperties.hide;
+     frmProperties.hide;
       fpgApplication.Run;
 
       PropList.Free;

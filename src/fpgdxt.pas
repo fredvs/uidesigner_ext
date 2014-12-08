@@ -1,6 +1,6 @@
 { 
 This library is the extended version of fpGUI uidesigner.
-With run-only-once, window list, undo feature, integration into IDE, editor launcher,...
+With  window list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
 }
@@ -21,7 +21,9 @@ fiens@hotmail.com
       The starting unit for the UI Designer project.
 }
 
-library fpguidesignerext ;
+library fpgdxt ;
+
+// WARNING => => uncoment {$DEFINE library} in vfd_main.pas + frm_main_designer.pas.
 
 {$mode objfpc}{$H+}
 
@@ -29,7 +31,7 @@ uses {$IFDEF UNIX}
   cthreads, {$ENDIF}
   fpg_iniutils,
   sysutils,
-  RunOnce_PostIt,
+   RunOnce_PostIt,
   fpg_cmdlineparams,
   fpg_style_anim_round_silver_horz,
   fpg_style_round_silver_flat_horz,
@@ -71,22 +73,22 @@ uses {$IFDEF UNIX}
   frm_main_designer,
   vfd_widgets;
  
-//procedure hidefpguidesigner(PEnv: pointer; Obj: pointer); cdecl; // Java 
- procedure hidefpguidesigner(); cdecl; // native
+//procedure fpgdxthide(PEnv: pointer; Obj: pointer); cdecl; // Java 
+ procedure fpgdxthide(); cdecl; // native
  begin
    frmMainDesigner.hide;
    frmProperties.hide;
  end;
  
-//procedure closefpguidesigner(PEnv: pointer; Obj: pointer); cdecl; // Java 
- procedure closefpguidesigner(); cdecl; // native
+//procedure fpgdxtclose(PEnv: pointer; Obj: pointer); cdecl; // Java 
+ procedure fpgdxtclose(); cdecl; // native
  begin
    frmMainDesigner.hide;
    frmProperties.hide;
  end;
  
-//function loadfilefpguidesigner(PEnv: pointer; Obj: pointer; afilename : PChar); cdecl; // Java 
- function loadfilefpguidesigner(afilename : PChar) : integer ; cdecl; // native
+//function fpgdxtloadfile(PEnv: pointer; Obj: pointer; afilename : PChar); cdecl; // Java 
+ function fpgdxtloadfile(afilename : PChar) : integer ; cdecl; // native
  begin
   if FileExists(afilename) then
   begin
@@ -95,16 +97,47 @@ uses {$IFDEF UNIX}
   end;
   end;
  
-//procedure MainProc(PEnv: pointer; Obj: pointer); cdecl; // Java
-  procedure MainProc(); cdecl; // native
+//procedure fpgdxtmainproc(PEnv: pointer; Obj: pointer); cdecl; // Java
+  procedure fpgdxtmainproc(); cdecl; // native
+   var
+    filedir: string;
   begin
     ifonlyone := false;
- 
+    filedir := '';
+
+    if (isrunningIDE('typhon') = False) and (isrunningIDE('lazarus') = False) then
+    begin
+        if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then
+      begin
+    ifonlyone := true;
+       filedir := 'clear';
+             RunOnce(filedir);
+       end
+      else ifonlyone := false;
+    end
+    else
+    begin
+      { If file passed in as clasical first param, load it! }
+      if (FileExists(ParamStr(1))) or (ParamStr(1) = 'closeall') or
+        (ParamStr(1) = 'quit') then
+        filedir := ParamStr(1);
+
+       if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then
+      begin
+         ifonlyone := true;
+          RunOnce(filedir) ;
+      end
+      else ifonlyone := false;
+      end;
+
     fpgApplication.Initialize;
     try
       RegisterWidgets;
-      if fpgStyleManager.SetStyle('Chrome silver flat menu') then
+      if not gCommandLineParams.IsParam('style') then
+      begin
+            if fpgStyleManager.SetStyle('Chrome silver flat menu') then
           fpgStyle := fpgStyleManager.Style;
+      end;
 
       PropList := TPropertyList.Create;
       maindsgn := TMainDesigner.Create;
@@ -112,9 +145,8 @@ uses {$IFDEF UNIX}
       maindsgn.CreateWindows;
 
       fpgApplication.MainForm := frmMainDesigner;
-       
-       frmMainDesigner.hide;
-        frmProperties.hide;
+
+     frmProperties.hide;
       fpgApplication.Run;
 
       PropList.Free;
@@ -127,17 +159,17 @@ uses {$IFDEF UNIX}
   
 exports
   //{  // native
-  MainProc name 'mainprocfpguidesigner',
-  closefpguidesigner name 'closefpguidesigner',
-  loadfilefpguidesigner name 'loadfilefpguidesigner',
-  hidefpguidesigner name 'hidefpguidesigner';
+  fpgdxtmainproc name 'fpgdxtmainproc',
+  fpgdxtclose name 'fpgdxtclose',
+  fpgdxtloadfile name 'fpgdxtloadfile',
+  fpgdxthide name 'fpgdxthide';
   //}
  
  { // Java
- MainProc name 'Java_fpguidesignerext_mainprocfpguidesigner',
- closefpguidesigner name 'Java_fpguidesignerext_closefpguidesigner',
- hidefpguidesigner name 'Java_fpguidesignerext_hidefpguidesigner',
- loadfilefpguidesigner name  'Java_fpguidesignerext_loadfilefpguidesigner' ;
+ fpgdxtmainproc name 'Java_fpgdxt_mainproc',
+ fpgdxtclose name 'Java_fpgdxt_close',
+ fpgdxthide name 'Java_fpgdxt_loadfile',
+ fpgdxtloadfile name  'Java_fpgdxt_loadfile' ;
 }
 
 end.

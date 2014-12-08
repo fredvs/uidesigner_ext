@@ -24,6 +24,11 @@ fiens@hotmail.com
 }
 
 unit vfd_main;
+ 
+  /// for compiling into library => uncoment it in frm_main_designer too
+{.$DEFINE library}   // uncomment it for building library (native and java) 
+{.$DEFINE java}   // uncomment it for building java library
+
 
 {$mode objfpc}{$H+}
 
@@ -407,6 +412,10 @@ begin
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '';
 
+ {$IF DEFINED(library)}
+  frmMainDesigner.Hide;
+ frmProperties.Hide;
+  {$else}
      if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
@@ -414,8 +423,9 @@ begin
     end else begin
     frmProperties.Hide;
      end;
-    Exit;
-  end;
+   {$endif}
+  Exit;
+   end;
 
   if not fpgFileExists(fname) then
   begin
@@ -425,15 +435,20 @@ begin
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => file does not exist';
 
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+ {$IF DEFINED(library)}
+  frmMainDesigner.Hide;
+ frmProperties.Hide;
+  {$else}
+     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
-   end else begin
-     frmProperties.Hide;
+    end else begin
+    frmProperties.Hide;
      end;
-    Exit;
-  end;
+   {$endif}
+  Exit;
+   end;
 
   if FFile.LoadFile(fname) = False then
   begin
@@ -442,16 +457,20 @@ begin
    if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => file does not load';
-
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+{$IF DEFINED(library)}
+  frmMainDesigner.Hide;
+ frmProperties.Hide;
+  {$else}
+     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
-  end else begin
-      frmProperties.Hide;
-    end;
-    Exit;
-  end;
+    end else begin
+    frmProperties.Hide;
+     end;
+   {$endif}
+  Exit;
+   end;
 
   if FFile.GetBlocks = 0 then
   begin
@@ -461,15 +480,20 @@ begin
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => not a fpGUI form-file';
 
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+   {$IF DEFINED(library)}
+  frmMainDesigner.Hide;
+ frmProperties.Hide;
+  {$else}
+     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
-   end else begin
-     frmProperties.Hide;
-   end;
-    Exit;
-  end
+    end else begin
+    frmProperties.Hide;
+     end;
+   {$endif}
+  Exit;
+   end
   else
   begin
     frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
@@ -1732,9 +1756,6 @@ end;
 procedure TMainDesigner.LoadDefaults;
 begin
   GridResolution := gINI.ReadInteger('Options', 'GridResolution', 4);
-  DefaultPasExt := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
-  UndoOnPropExit := gINI.ReadBool('Options', 'UndoOnExit', DefUndoOnPropExit);
-  OneClickMove := gINI.ReadBool('Options', 'OneClickMove', True);
   DefaultPasExt := gINI.ReadString('Options', 'DefaultFileExt', '.pas');
   UndoOnPropExit := gINI.ReadBool('Options', 'UndoOnExit', DefUndoOnPropExit);
   OneClickMove := gINI.ReadBool('Options', 'OneClickMove', True);
