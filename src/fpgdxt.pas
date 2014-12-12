@@ -118,8 +118,8 @@ uses {$IFDEF UNIX}
     else
     begin
       { If file passed in as clasical first param, load it! }
-      if (FileExists(ParamStr(1))) or (ParamStr(1) = 'closeall') or
-        (ParamStr(1) = 'quit') then
+      if (FileExists(ParamStr(1))) or (ParamStr(1) = 'closeall')
+        or (trim(ParamStr(1)) = 'showit') or (ParamStr(1) = 'quit') or (ParamStr(1) = 'hideit')  then
         filedir := ParamStr(1);
 
        if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then

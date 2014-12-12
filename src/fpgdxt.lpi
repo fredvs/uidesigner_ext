@@ -7,7 +7,6 @@
         <MainUnitHasCreateFormStatements Value="False"/>
         <MainUnitHasTitleStatement Value="False"/>
         <LRSInOutputDirectory Value="False"/>
-        <UseDefaultCompilerOptions Value="True"/>
       </Flags>
       <SessionStorage Value="None"/>
       <MainUnit Value="0"/>
@@ -36,7 +35,6 @@
       <Unit0>
         <Filename Value="fpgdxt.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="fpgdxt"/>
       </Unit0>
     </Units>
   </ProjectOptions>
@@ -67,7 +65,7 @@
     <Other>
       <ConfigFile>
         <CustomConfigFile Value="True"/>
-        <ConfigFilePath Value="fpgextrafpc.cfg"/>
+        <ConfigFilePath Value="fpgextrafpcwin.cfg"/>
       </ConfigFile>
     </Other>
   </CompilerOptions>

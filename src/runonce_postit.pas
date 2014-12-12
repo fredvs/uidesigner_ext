@@ -37,7 +37,7 @@ type
     ATimer: TTimer;         /// for lcl timer
     procedure InitMessage(AOwner: TComponent);
     {$else}
-    ATimer: Tfpgtimer;             /// for fpGUI
+  //  ATimer: Tfpgtimer;             /// for fpGUI
     procedure InitMessage;
    {$endif}
     function ExecProcess(const ACommandLine: string): string;
@@ -63,11 +63,12 @@ procedure InitMessage;      /// fpgui
 function IsRunningIDE(AProcess : string) :boolean;
 procedure FreeRunOnce;
 procedure StopMessage;
-procedure StartMessage(AProc: Tproc; const AInterval: integer = 1000);
+procedure StartMessage(AProc: Tproc; const AInterval: integer = 500);
 
 var
    TheOncePost: TOncePost;
    TheMessage: string;
+    ATimer: Tfpgtimer;
 
 implementation
 
@@ -93,34 +94,34 @@ end;
     {$else}
   procedure InitMessage ;         /// fpgui
 begin
-   if assigned(TheOncePost.ATimer) = false then  TheOncePost.InitMessage;
+   if assigned(ATimer) = false then  TheOncePost.InitMessage;
 end;
    {$endif}
 
 
 procedure StopMessage;
 begin
-  if assigned(TheOncePost.ATimer) then
+  if assigned(ATimer) then
    begin
-   TheOncePost.ATimer.Enabled:=false;
+   ATimer.Enabled:=false;
    end;
 end;
 
-procedure StartMessage(AProc: Tproc; const AInterval: integer = 1000);
+procedure StartMessage(AProc: Tproc; const AInterval: integer = 500);
 begin
-  TheOncePost.ATimer.Enabled := false;
+  ATimer.Enabled := false;
   TheOncePost.TheProc := AProc;
- TheOncePost.ATimer.Interval := AInterval;
- TheOncePost.ATimer.OnTimer := @TheOncePost.onTimerPost;
- TheOncePost.ATimer.Enabled := True;
+ ATimer.Interval := AInterval;
+ ATimer.OnTimer := @TheOncePost.onTimerPost;
+ ATimer.Enabled := True;
 end;
 
 procedure FreeRunOnce;
 begin
-   if assigned(TheOncePost.ATimer) then
+   if assigned(ATimer) then
    begin
-   TheOncePost.ATimer.Enabled:=false;
-   TheOncePost.ATimer.Free;
+   ATimer.Enabled:=false;
+   ATimer.Free;
    end;
   TheOncePost.Free;
 end;
@@ -161,7 +162,7 @@ end;
 {$else}
 procedure TOncePost.InitMessage;
 begin
-   ATimer := TfpgTimer.Create(1000);           /// for fpGUI
+   ATimer := TfpgTimer.Create(500);           /// for fpGUI
    ATimer.Enabled := false;
  end;
 {$endif}

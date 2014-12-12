@@ -1,4 +1,4 @@
-Designer_ext is the extended version of fpGUI UIDesigner.
+designer_ext is the extended version of fpGUI uiDesigner.
 
 With : 
 auto-add units in uses section,

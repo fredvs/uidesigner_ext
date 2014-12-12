@@ -139,7 +139,8 @@ install:
         <IsPartOfProject Value="True"/>
         <UnitName Value="designer_ext"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="76" Y="74"/>
+        <TopLine Value="58"/>
+        <CursorPos X="3" Y="82"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -237,6 +238,10 @@ install:
     </Parsing>
     <CodeGeneration>
       <SmartLinkUnit Value="True"/>
+      <Optimizations>
+        <OptimizationLevel Value="2"/>
+      </Optimizations>
+      <SmallerCode Value="True"/>
     </CodeGeneration>
     <Linking>
       <Debugging>

@@ -1,5 +1,5 @@
 {
-This is the extended version of fpGUI uidesigner => Designer_ext.
+This is the extended version of fpGUI uidesigner => designer_ext.
 With window list, undo feature, integration into IDE, editor launcher, extra-properties editor,...
 
 Fred van Stappen
@@ -23,8 +23,8 @@ fiens@hotmail.com
  }
  
  /// for compiling into library => uncoment it in vfd_main too
-{.$DEFINE library}   // uncomment it for building library (native and java)
-{.$DEFINE java}   // uncomment it for building java library
+ //{$DEFINE library}   // uncomment it for building library (native and java)
+ //{$DEFINE java}   // uncomment it for building java library
 
 unit frm_main_designer;
 
@@ -33,16 +33,8 @@ unit frm_main_designer;
 interface
 
 uses
-  
-  {%units 'Auto-generated GUI code'}
-  fpg_button, fpg_label, fpg_hyperlink,
-  {%endunits}
-  fpg_panel,
   fpg_menu,
-  {$IF DEFINED(library)}
-  {$else}
-  RunOnce_PostIt,
-  {$endif}
+   RunOnce_PostIt,
   frm_colorpicker,
   frm_imageconvert,
   frm_multiselect,
@@ -51,15 +43,20 @@ uses
   fpg_base,
   fpg_main,
   fpg_widget,
-  fpg_form,
   fpg_edit,
-  fpg_listbox,
-  fpg_dialogs,
-  fpg_memo,
   fpg_combobox,
+  fpg_listbox,
+  fpg_memo,
+  fpg_dialogs,
+  fpg_panel,
   fpg_mru,
   vfd_widgetclass,
-  vfd_widgets;
+  vfd_widgets,
+
+  {%units 'Auto-generated GUI code'}
+  fpg_form, fpg_label, fpg_button, fpg_hyperlink
+  {%endunits}
+  ;
 
 type
 
@@ -89,7 +86,9 @@ type
 
   public
     {@VFD_HEAD_BEGIN: frmMainDesigner}
+    panel1: TfpgPanel;
     PanelMove: TfpgPanel;
+    xicon: TfpgLabel;
     MainMenu: TfpgMenuBar;
     filemenu: TfpgPopupMenu;
     formmenu: TfpgPopupMenu;
@@ -112,7 +111,8 @@ type
     {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
-    procedure MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     function GetSelectedWidget: TVFDWidgetClass;
     procedure SetSelectedWidget(wgc: TVFDWidgetClass);
     procedure AfterCreate; override;
@@ -129,10 +129,7 @@ type
     procedure OnFormDesignShow(Sender: TObject);
     procedure onMultiSelect(Sender: TObject);
     procedure LoadIDEparameters(ide: integer);
-    {$IF DEFINED(library)}
-    {$else}
     procedure onMessagePost;
-    {$endif}
     procedure OnStyleChange(Sender: TObject);
     procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
@@ -234,7 +231,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '1.5';
+  ext_version: string = '1.6';
 
 var
   frmProperties: TfrmProperties;
@@ -247,6 +244,8 @@ var
   enableautounits: boolean;
   numstyle: integer;
   bitcpu: integer;
+  mayclose : boolean = false;
+  ideuintegration : boolean = false ;
 
 implementation
 
@@ -308,10 +307,11 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(464, 277, 278, 195);
-  WindowTitle := 'About Designer_ext';
+  WindowTitle := 'About designer_ext';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
   Sizeable := False;
@@ -327,7 +327,7 @@ begin
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-20';
     Hint := '';
-    Text := 'Designer_ext';
+    Text := 'designer_ext';
     TextColor := TfpgColor($4B8133);
   end;
 
@@ -443,26 +443,28 @@ begin
   end;
 end;
 
-procedure TfrmMainDesigner.MainCloseQueryEvent(Sender: TObject; var CanClose: boolean);
-var
-  x: integer;
+procedure TfrmMainDesigner.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
 
-{$IF DEFINED(library)}
- CanClose := False;
-      x := 0;
-      while x < length(ArrayFormDesign) do
+    if (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+   (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False) ) or
+      (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
       begin
-        ArrayFormDesign[x].Form.Close;
-        Inc(x);
-      end;
-      frmProperties.Close;
-      frmMainDesigner.hide;
-      frmmultiselect.hide;
-{$else}
-   
-  if (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) then
-  begin
+      if assigned(ATimer) then
+      ATimer.Enabled:=false;
+    CloseAction := caFree; end else CloseAction := canone ;
+end;
+
+procedure TfrmMainDesigner.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+var
+  x: integer;
+  f : textfile;
+begin
+
+ if  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+   (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False) ) or
+      (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
+    begin
     x := 0;
     if assigned(frmmultiselect.cbSelected) then
       while x < length(frmmultiselect.cbSelected) do
@@ -470,24 +472,53 @@ begin
         frmmultiselect.cbSelected[x].Free;
         Inc(x);
       end;
+     if assigned(ATimer) then
+      ATimer.Enabled:=false;
     CanClose := True;
   end
   else
   begin
-    CanClose := False;
+    {
+
+     AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
+        rewrite(f);
+        append(f);
+        writeln(f, 'quit') ;
+        Flush(f);
+        CloseFile(f);
+      }
+
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       x := 0;
+
+      if assigned(frmmultiselect.cbSelected) then
+        while x < length(frmmultiselect.cbSelected) do
+        begin
+          frmmultiselect.cbSelected[x].Free;
+          Inc(x);
+        end;
+
+       x := 0 ;
       while x < length(ArrayFormDesign) do
       begin
         ArrayFormDesign[x].Form.Close;
         Inc(x);
       end;
+
+     if   (gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) then
+     begin
       frmProperties.Close;
       frmMainDesigner.hide;
       frmmultiselect.hide;
-
-    end
+      CanClose := false;
+     end else
+     begin
+       if assigned(ATimer) then
+      ATimer.Enabled:=false;
+      CanClose := True;
+     end;
+     end
     else
     begin
       x := 0;
@@ -497,11 +528,12 @@ begin
           frmmultiselect.cbSelected[x].Free;
           Inc(x);
         end;
+       if assigned(ATimer) then
+      ATimer.Enabled:=false;
       CanClose := True;
     end;
   end;
-  {$endif}
- 
+
 end;
 
 procedure TfrmMainDesigner.LoadIDEparameters(ide: integer);
@@ -521,11 +553,11 @@ begin
   filemenu.MenuItem(1).Visible := False;
   filemenu.MenuItem(2).Visible := False;
 
-{$IF DEFINED(library)}
-
-{$else}
   /// => This code gives problem to JEDI code-formater
- if ide <> 3 then
+ if ide = 3 then
+ begin
+
+ end else
  begin
 
  if ide = 2 then
@@ -706,24 +738,29 @@ if fileexists(pchar(dataf)) then
        UpdateWindowPosition;
          end;
 end;
-   {$endif}
+
 end;
 
-{$IF DEFINED(library)}
-{$else}
 procedure TfrmMainDesigner.onMessagePost;
 begin
+
   if theMessage = 'quit' then
-    Close
+    begin
+     mayclose := true;
+       if assigned(ATimer) then
+   ATimer.Enabled:=false;
+       fpgapplication.Terminate;
+    end
   else
-  if (FileExists(theMessage)) or (theMessage = 'closeall') then
+  // or (theMessage = 'closeall')
+  if  ( (FileExists(theMessage)) or  (theMessage = 'showit') or (theMessage = 'hideit') ) then
   begin
     maindsgn.EditedFileName := theMessage;
     maindsgn.OnLoadFile(maindsgn);
   end;
   BringToFront;
 end;
-{$endif}
+
 
 procedure TfrmMainDesigner.OnLoadUndo(Sender: TObject);
 begin
@@ -757,20 +794,24 @@ begin
     frmMainDesigner.undomenu.MenuItem(1).Enabled := False;
 end;
 
+{@VFD_NEWFORM_DECL}
+
+{@VFD_NEWFORM_IMPL}
+
 procedure TfrmMainDesigner.AfterCreate;
 var
   n, x, y: integer;
   wgc: TVFDWidgetClass;
   btn: TwgPaletteButton;
   mi, mi2, mi3, mi4, mi5: TfpgMenuItem;
-
 begin
+
   {%region 'Auto-generated GUI code' -fold}
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(384, 124, 780, 92);
-  WindowTitle := 'frmMainDesigner';
+  SetPosition(400, 10, 800, 92);
+  WindowTitle := 'fpGUI designer ext';
   Hint := '';
   ShowHint := True;
   BackGroundColor := $80000001;
@@ -778,24 +819,49 @@ begin
   MinHeight := 90;
   WindowPosition := wpUser;
 
-  PanelMove := TfpgPanel.Create(self);
+  panel1 := TfpgPanel.Create(self);
+  with panel1 do
+  begin
+    Name := 'panel1';
+    SetPosition(0, 0, 800, 92);
+    Anchors := [anLeft,anRight,anTop,anBottom];
+    Align := alClient;
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := '';
+  end;
+
+  PanelMove := TfpgPanel.Create(panel1);
   with PanelMove do
   begin
     Name := 'PanelMove';
-    SetPosition(0, 0, 13, 92);
+    SetPosition(2, 2, 13, 88);
     Align := alLeft;
-    BackgroundColor := TfpgColor($FEFEBA);
+    BackgroundColor := TfpgColor($BED9BE);
     FontDesc := '#Label1';
-    Hint := 'Hold click to move palette...';
+    Hint := 'Hold left-click to move, right-click to resize...';
     Style := bsLowered;
     Text := '';
-    Visible := False;
     OnMouseMove := @onMovemovepanel;
     OnMouseDown := @onClickDownPanel;
     OnMouseUp := @onClickUpPanel;
   end;
 
-  MainMenu := TfpgMenuBar.Create(self);
+  xicon := TfpgLabel.Create(PanelMove);
+  with xicon do
+  begin
+    Name := 'xicon';
+    SetPosition(1, 1, 11, 14);
+    BackgroundColor := TfpgColor($BED9BE);
+    FontDesc := '#Label1';
+    Hint := 'Close';
+    ParentShowHint := False;
+    ShowHint := True;
+    Text := 'X';
+    OnClick := @maindsgn.OnHide;
+  end;
+
+  MainMenu := TfpgMenuBar.Create(panel1);
   with MainMenu do
   begin
     Name := 'MainMenu';
@@ -803,7 +869,7 @@ begin
     Align := alTop;
   end;
 
-  filemenu := TfpgPopupMenu.Create(self);
+  filemenu := TfpgPopupMenu.Create(panel1);
   with filemenu do
   begin
     Name := 'filemenu';
@@ -831,7 +897,7 @@ begin
     AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
   end;
 
-  formmenu := TfpgPopupMenu.Create(self);
+  formmenu := TfpgPopupMenu.Create(panel1);
   with formmenu do
   begin
     Name := 'formmenu';
@@ -842,7 +908,7 @@ begin
     AddMenuItem('Edit special...', '', nil).Enabled := False; // TODO
   end;
 
-  miOpenRecentMenu := TfpgPopupMenu.Create(self);
+  miOpenRecentMenu := TfpgPopupMenu.Create(panel1);
   with miOpenRecentMenu do
   begin
     Name := 'miOpenRecentMenu';
@@ -857,7 +923,7 @@ begin
     AddMenuItem('General Settings', '', @(maindsgn.OnOptionsClick));
   end;
 
-  undomenu := TfpgPopupMenu.Create(self);
+  undomenu := TfpgPopupMenu.Create(panel1);
   with undomenu do
   begin
     Name := 'undomenu';
@@ -871,7 +937,7 @@ begin
     MenuItem(3).Enabled := False;
   end;
 
-  toolsmenu := TfpgPopupMenu.Create(self);
+  toolsmenu := TfpgPopupMenu.Create(panel1);
   with toolsmenu do
   begin
     Name := 'toolsmenu';
@@ -880,23 +946,23 @@ begin
     AddMenuItem('Image Convertor', '', @miimageconv);
   end;
 
-  helpmenu := TfpgPopupMenu.Create(self);
+  helpmenu := TfpgPopupMenu.Create(panel1);
   with helpmenu do
   begin
     Name := 'helpmenu';
     SetPosition(448, 52, 120, 20);
     AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
-    AddMenuItem('About Designer_ext...', '', @miHelpAboutClick);
+    AddMenuItem('About designer_ext...', '', @miHelpAboutClick);
   end;
 
-  listundomenu := TfpgPopupMenu.Create(self);
+  listundomenu := TfpgPopupMenu.Create(panel1);
   with listundomenu do
   begin
     Name := 'listundomenu';
     SetPosition(328, 52, 120, 20);
   end;
 
-  windowmenu := TfpgPopupMenu.Create(self);
+  windowmenu := TfpgPopupMenu.Create(panel1);
   with windowmenu do
   begin
     Name := 'windowmenu';
@@ -925,14 +991,14 @@ begin
     MenuItem(11).Tag := 9;
   end;
 
-  previewmenu := TfpgPopupMenu.Create(self);
+  previewmenu := TfpgPopupMenu.Create(panel1);
   with previewmenu do
   begin
     Name := 'previewmenu';
     SetPosition(324, 36, 120, 20);
   end;
 
-  btnNewForm := TfpgButton.Create(self);
+  btnNewForm := TfpgButton.Create(panel1);
   with btnNewForm do
   begin
     Name := 'btnNewForm';
@@ -949,7 +1015,7 @@ begin
     OnClick := @(OnNewForm);
   end;
 
-  btnOpen := TfpgButton.Create(self);
+  btnOpen := TfpgButton.Create(panel1);
   with btnOpen do
   begin
     Name := 'btnOpen';
@@ -961,11 +1027,12 @@ begin
     ImageSpacing := 0;
     TabOrder := 2;
     Text := '';
+    Visible := False;
     Focusable := False;
     OnClick := @(maindsgn.OnLoadFile);
   end;
 
-  btnSave := TfpgButton.Create(self);
+  btnSave := TfpgButton.Create(panel1);
   with btnSave do
   begin
     Name := 'btnSave';
@@ -979,11 +1046,10 @@ begin
     Text := '';
     Visible := False;
     Focusable := False;
-    Tag := 10;
     OnClick := @(maindsgn.OnSaveFile);
   end;
 
-  btnGrid := TfpgButton.Create(self);
+  btnGrid := TfpgButton.Create(panel1);
   with btnGrid do
   begin
     Name := 'btnGrid';
@@ -1001,7 +1067,7 @@ begin
     OnClick := @ToggleDesignerGrid;
   end;
 
-  btnToFront := TfpgButton.Create(self);
+  btnToFront := TfpgButton.Create(panel1);
   with btnToFront do
   begin
     Name := 'btnToFront';
@@ -1015,10 +1081,9 @@ begin
     Text := '';
     Focusable := False;
     onClick := @ToFrontClick;
-    hide;
   end;
 
-  btnSelected := TfpgButton.Create(self);
+  btnSelected := TfpgButton.Create(panel1);
   with btnSelected do
   begin
     Name := 'btnSelected';
@@ -1034,7 +1099,7 @@ begin
     OnClick := @onmultiselect;
   end;
 
-  wgpalette := TwgPalette.Create(self);
+  wgpalette := TwgPalette.Create(panel1);
   with wgpalette do
   begin
     Name := 'wgpalette';
@@ -1045,7 +1110,7 @@ begin
     OnResize := @PaletteBarResized;
   end;
 
-  chlPalette := TfpgComboBox.Create(self);
+  chlPalette := TfpgComboBox.Create(panel1);
   with chlPalette do
   begin
     Name := 'chlPalette';
@@ -1067,8 +1132,7 @@ begin
   bitcpu := 32;
    {$endif}
 
-
-  for x := 0 to 99 do
+     for x := 0 to 99 do
   begin
     listundomenu.AddMenuItem('', '', @OnLoadUndo);
     listundomenu.MenuItem(x).Visible := False;
@@ -1080,7 +1144,8 @@ begin
   x := 0;
   y := 0;
 
-  OnCloseQuery := @MainCloseQueryEvent;
+  OnCloseQuery := @FormCloseQuery;
+  OnClose := @FormClose;
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
   enableautounits := gINI.ReadBool('Options', 'EnableAutoUnits', True);
@@ -1110,10 +1175,21 @@ begin
     end;
   end;
 
-
   BuildThemePreviewMenu;
 
   chlPalette.Items.Sort;
+
+  if gINI.ReadBool('Options', 'AlwaysToFront', False)  = False then
+  begin
+    windowType := wtwindow;
+    btnToFront.tag := 0;
+  end
+  else
+  begin
+    windowType := wtpopup;
+     btnToFront.tag := 1;
+  end;
+
 
   MainMenu.AddMenuItem('&File', nil).SubMenu := filemenu;
   MainMenu.AddMenuItem('&Undo', nil).SubMenu := undomenu;
@@ -1135,33 +1211,23 @@ begin
   mru.ShowFullPath := gINI.ReadBool('Options', 'ShowFullPath', True);
   mru.LoadMRU;
 
-
  MainMenu.MenuItem(1).Visible:=false;
  MainMenu.MenuItem(2).Visible:=false;
  MainMenu.MenuItem(5).Visible:=false;
 
- MainMenu.MenuItem(8).Visible := False;
+// MainMenu.MenuItem(8).Visible := False;
+ MainMenu.MenuItem(8).Text :=
+      'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
-  if gINI.ReadBool('Options', 'AlwaysToFront', False) = False then
-  begin
-    windowType := wtwindow;
-    btnToFront.tag := 0;
-  end
-  else
-  begin
-    MainMenu.MenuItem(8).Visible := True;
-    MainMenu.MenuItem(8).Text := WindowTitle;
-    btnToFront.tag := 1;
-    windowType := wtpopup;
-  end;
+windowtitle := MainMenu.MenuItem(8).Text;
 
-  filemenu.MenuItem(0).Visible := True;
+   filemenu.MenuItem(0).Visible := True;
 
   filemenu.MenuItem(4).Visible := False;
   filemenu.MenuItem(5).Visible := False;
   filemenu.MenuItem(6).Visible := False;
   filemenu.MenuItem(7).Visible := False;
-  filemenu.MenuItem(8).Visible := False;
+  filemenu.MenuItem(8).Visible := True;
   filemenu.MenuItem(9).Visible := False;
   filemenu.MenuItem(10).Visible := False;
   filemenu.MenuItem(11).Visible := False;
@@ -1172,41 +1238,70 @@ begin
   filemenu.MenuItem(1).Visible := False;
   filemenu.MenuItem(2).Visible := False;
   filemenu.MenuItem(15).Visible := False;
-  
-  {$IF DEFINED(library)}
-   idetemp := 3;
-   LoadIDEparameters(3);
-  {$else}
-  x := gINI.ReadInteger('Options', 'IDE', 0);
-  idetemp := x;
-  if x = 0 then
-  begin
 
-    btnOpen.Visible := True;
-    btnSave.Left := 69;
-    btnSave.UpdateWindowPosition;
 
-    filemenu.MenuItem(1).Visible := True;
-    filemenu.MenuItem(2).Visible := True;
-    filemenu.MenuItem(15).Visible := True;
+  if ideuintegration = false then
+   x := gINI.ReadInteger('Options', 'IDE', 0)
+  else
+    begin
+    gINI.ReadInteger('Options', 'IDE', 3) ;
+  idetemp := 3;
+   x := idetemp
+     end;
 
-    indexundo := 0;
 
-    if gINI.ReadBool('frmMainState', 'FirstLoad', True) = False then
+ left := 400;
+ top := 10 ;
+ width := 800 ;
+ height := 92 ;
+ updatewindowposition;
+       
+
+   if gINI.ReadBool('frmMainState', 'FirstLoad', True) = False then
       gINI.ReadFormState(self)
     else
       gINI.WriteBool('frmMainState', 'FirstLoad', False);
-  end
+   hide;
+    fpgapplication.ProcessMessages;
+
+hide;
+
+fpgapplication.ProcessMessages;
+
+  if x = 0 then
+  begin
+   btnToFront.tag := 0;
+  WindowType := wtwindow;  // with borders, not on front.
+    btnOpen.Visible := True;
+    btnSave.Left := 69;
+    btnSave.UpdateWindowPosition;
+      WindowAttributes:= [];
+       panel1.Style := bsflat;
+      panel1.UpdateWindowPosition;
+      filemenu.MenuItem(1).Visible := True;
+    filemenu.MenuItem(2).Visible := True;
+    filemenu.MenuItem(15).Visible := true;
+    indexundo := 0;
+     MainMenu.MenuItem(8).Visible := false;
+   end
   else
-    LoadIDEparameters(x);
+  begin
+     MainMenu.MenuItem(8).Visible := true;
+      panel1.Style := bsLowered;
+      panel1.UpdateWindowPosition;
+      WindowAttributes:= [waSizeable, waBorderless];
+     LoadIDEparameters(x);
+  end;
+
   if ifonlyone = True then
   begin
     InitMessage;
-    StartMessage(@onMessagePost, 1000);
+    StartMessage(@onMessagePost, 500);
   end;
- {$endif}
 
-  PaletteBarResized(self);
+   PaletteBarResized(self);
+
+     UpdateWindowPosition;
   frmMultiSelect := Tfrm_multiselect.Create(nil);
   chlPalette.Tag:=0;
 end;
@@ -1305,6 +1400,7 @@ end;
 procedure TfrmMainDesigner.onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
 begin
   PanelMove.Tag := 0;
+   gINI.WriteFormState(self) ;
 end;
 
 procedure TfrmMainDesigner.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
@@ -1312,9 +1408,15 @@ begin
   if PanelMove.Tag = 1 then
   begin
     fpgapplication.ProcessMessages;
-    top := top + (AMousePos.Y - oriMousePos.y);
+  if  (AShift =  [ssRight]) or  (AShift =   [ssCtrl]) then
+  begin
+   width := width  - (AMousePos.Y - oriMousePos.y);
+  end else
+  begin
+   top := top + (AMousePos.Y - oriMousePos.y);
     left := left + (AMousePos.x - oriMousePos.X);
-    UpdateWindowPosition;
+   end;
+   UpdateWindowPosition;
   end;
 end;
 
@@ -1360,7 +1462,8 @@ var
   frmisvisible: boolean;
 begin
   hide;
-  fpgapplication.ProcessMessages;
+
+    fpgapplication.ProcessMessages;
   if frmProperties.Visible = True then
     frmisvisible := True
   else
@@ -1368,13 +1471,6 @@ begin
 
   WindowType := wtpopup;
 
-  MainMenu.MenuItem(8).Visible := False;
-
-  if trim(maindsgn.p + maindsgn.s) <> '' then
-  begin
-    MainMenu.MenuItem(8).Text := '=> ' + maindsgn.p + maindsgn.s;
-    MainMenu.MenuItem(8).Visible := True;
-  end;
   btnToFront.tag := 1;
   if idetemp = 1 then
   begin
@@ -1396,10 +1492,23 @@ begin
     left := left + 8;
      {$ENDIF}
   end;
+   UpdateWindowPosition;
 
-  UpdateWindowPosition;
+ //    PanelMove.Visible := True;
 
-    PanelMove.Visible := True;
+      if idetemp = 0 then
+  begin
+      panel1.Style := bsLowered;
+      panel1.UpdateWindowPosition;
+     MainMenu.MenuItem(8).Visible := False;
+
+  if trim(maindsgn.p + maindsgn.s) <> '' then
+  begin
+    MainMenu.MenuItem(8).Text := '=> ' + maindsgn.p + maindsgn.s;
+    MainMenu.MenuItem(8).Visible := True;
+  end;
+  end;
+
   Show;
   if frmisvisible = True then
   begin
@@ -1414,19 +1523,14 @@ var
   frmisvisible: boolean;
 begin
   hide;
-  PanelMove.Visible := False;
-  fpgapplication.ProcessMessages;
-
+    fpgapplication.ProcessMessages;
   if frmProperties.Visible = True then
     frmisvisible := True
   else
     frmisvisible := False;
 
-  MainMenu.MenuItem(8).Text := '';
-  MainMenu.MenuItem(8).Visible := False;
-  btnToFront.tag := 0;
+   btnToFront.tag := 0;
   WindowType := wtwindow;  // with borders, not on front.
-  WindowAttributes := [];
 
   if idetemp = 1 then
   begin
@@ -1450,7 +1554,16 @@ begin
   end;
   UpdateWindowPosition;
 
+    if idetemp = 0 then
+  begin
+      panel1.Style := bsflat;
+      panel1.UpdateWindowPosition;
+      MainMenu.MenuItem(8).Text := '';
+      MainMenu.MenuItem(8).Visible := False;
+  end;
+
   Show;
+
   if frmisvisible = True then
   begin
     frmProperties.hide;
@@ -2132,11 +2245,12 @@ begin
 
     TheWidget := lstProps.Props.Widget;
 
+    {
     TheParent := TheWidget;
     if TheParent.HasParent = True then
       TheParent := TheParent.Parent;
-
-    // Is it better ? => TheParent := WidgetParentForm(TfpgWidget(TheWidget));
+    }
+    TheParent := WidgetParentForm(TfpgWidget(TheWidget));
 
     ok := False;
     for x := 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do

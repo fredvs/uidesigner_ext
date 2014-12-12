@@ -30,7 +30,7 @@ uses
 const
   cFileFilter = '%s (%s)|%s';
   cPascalSourceFiles = '*.pp;*.pas;*.inc;*.dpr;*.lpr';
-  cAppName = 'Designer_ext';
+  cAppName = 'designer_ext';
   cAppVersion = FPGUI_VERSION;
   cAppNameAndVersion = cAppName + ' v' + cAppVersion;
   cDesignerINIVersion = 1;
@@ -69,7 +69,7 @@ resourcestring
   rsUseCodeRegions = 'Use code-folding regions in auto-generated code';
   rsIndentType = 'Indent Type for generated code';
 
-  rsDlgProductInfo = 'About UIdesigner_ext';
+  rsDlgProductInfo = 'About designer_ext';
   rsDlgSetup = 'General Settings';
   rsDlgInsertCustomWidget = 'Insert Custom Widget';
   rsDlgNewForm = 'New Form';

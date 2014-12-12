@@ -1,5 +1,5 @@
 {
-This is the extended version of fpGUI uidesigner => Designer_ext.
+This is the extended version of fpGUI uidesigner => designer_ext.
 With window list, undo feature, integration into IDE, editor launcher, extra-properties editor,...
 
 Fred van Stappen
@@ -39,6 +39,7 @@ uses
   fpg_label, fpg_button,
   {%endunits}
   Classes,
+  runonce_postit,
   Process,
   SysUtils,
   fpg_dialogs,
@@ -111,6 +112,7 @@ type
     function CreateParseForm(const FormName, FormHead, FormBody: string): TFormDesigner;
     procedure SaveUndo(Sender: TObject; typeundo: integer);
     procedure LoadUndo(undoindex: integer);
+    procedure OnHide(Sender: TObject);
     function AddUnits(filedata: string): string;
     function OnNewForm(Sender: TObject): boolean;
     procedure OnNewFile(Sender: TObject);
@@ -128,6 +130,7 @@ type
     procedure OnOptionsClick(Sender: TObject);
     property EditedFileName: string read FEditedFileName write SetEditedFileName;
     property ShowGrid: boolean read FShowGrid write SetShowGrid;
+
   end;
 
 var
@@ -169,6 +172,8 @@ begin
   frmmultiselect.Hide;
   frmmultiselect.ClearAll;
 
+  if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
   for n := 0 to FDesigners.Count - 1 do
   begin
     TFormDesigner(FDesigners[n]).DeSelectAll;
@@ -178,11 +183,11 @@ begin
 
   frmproperties.edName.Text := '';
 
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+  frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
-  if frmMainDesigner.btnToFront.Tag = 1 then
+//  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
-      'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+      'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
@@ -279,7 +284,7 @@ begin
     frmMainDesigner.filemenu.MenuItem(5).Visible := False;
     frmMainDesigner.filemenu.MenuItem(6).Visible := False;
     frmMainDesigner.filemenu.MenuItem(7).Visible := False;
-    frmMainDesigner.filemenu.MenuItem(8).Visible := False;
+    frmMainDesigner.filemenu.MenuItem(8).Visible := True;
     frmMainDesigner.filemenu.MenuItem(9).Visible := False;
     frmMainDesigner.filemenu.MenuItem(10).Visible := False;
     frmMainDesigner.filemenu.MenuItem(11).Visible := False;
@@ -288,10 +293,40 @@ begin
     frmMainDesigner.filemenu.MenuItem(14).Visible := False;
 
   end;
+ end;
 
+procedure TMainDesigner.OnHide(Sender: TObject);
+var
+n : integer;
+begin
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+    begin
+          if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
+          begin
+    if assigned(ATimer) then
+   begin
+   ATimer.Enabled:=false;
+ //  ATimer.Free;
+   end;
+     fpgapplication.Terminate; end else
+     begin
 
+       if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+       frmMainDesigner.hide;
+         if assigned(FDesigners) then  if FDesigners.Count > 0 then
+      for n := 0 to FDesigners.Count - 1 do  TFormDesigner(FDesigners[n]).Form.Hide;
+        frmProperties.hide;
+       frmmultiselect.Hide;
+     end;
+     end else   begin
+    if assigned(ATimer) then
+   begin
+   ATimer.Enabled:=false;
+  // ATimer.Free;
+   end;
+     fpgapplication.Terminate;
+     end;
 end;
-
 
 procedure TMainDesigner.OnLoadFile(Sender: TObject);
 var
@@ -299,9 +334,43 @@ var
   bl, bl2: TVFDFileBlock;
   fname: string;
   afiledialog: TfpgFileDialog;
+ // ifshow : boolean = false;
 begin
+ // writeln(maindsgn.EditedFileName);
 
-     fpgapplication.ProcessMessages;
+     if (maindsgn.EditedFileName = 'showit') then
+       begin
+     //  ifshow := true;
+         frmMainDesigner.hide;
+
+     if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
+       for n := 0 to FDesigners.Count - 1 do
+    TFormDesigner(FDesigners[n]).Form.Hide;
+        fpgapplication.ProcessMessages;
+        if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
+       for n := 0 to FDesigners.Count - 1 do
+     TFormDesigner(FDesigners[n]).Form.show;
+
+        fpgapplication.ProcessMessages;
+      if assigned(FDesigners) then
+        if FDesigners.Count > 0 then   frmProperties.show;
+       frmMainDesigner.Show;
+       end else
+
+        if (maindsgn.EditedFileName = 'hideit') then
+       begin
+     //  ifshow := true;
+
+         frmMainDesigner.hide;
+          if assigned(FDesigners) then  if FDesigners.Count > 0 then
+       for n := 0 to FDesigners.Count - 1 do  TFormDesigner(FDesigners[n]).Form.Hide;
+         frmProperties.hide;
+        frmmultiselect.Hide;
+       end else
+
+       begin
 
   if maindsgn.FFileLoaded <> 'closeall' then
   begin
@@ -332,7 +401,7 @@ begin
   end
   else
   begin
-    frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
     fname := '';
     frmMainDesigner.MainMenu.MenuItem(8).Text := '';
@@ -357,7 +426,7 @@ begin
   frmMainDesigner.filemenu.MenuItem(5).Visible := False;
   frmMainDesigner.filemenu.MenuItem(6).Visible := False;
   frmMainDesigner.filemenu.MenuItem(7).Visible := False;
-  frmMainDesigner.filemenu.MenuItem(8).Visible := False;
+  frmMainDesigner.filemenu.MenuItem(8).Visible := True;
   frmMainDesigner.filemenu.MenuItem(9).Visible := False;
   frmMainDesigner.filemenu.MenuItem(10).Visible := False;
   frmMainDesigner.filemenu.MenuItem(11).Visible := False;
@@ -365,6 +434,8 @@ begin
   frmMainDesigner.filemenu.MenuItem(13).Visible := False;
   frmMainDesigner.filemenu.MenuItem(14).Visible := False;
 
+   if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
   for n := 0 to FDesigners.Count - 1 do
   begin
     TFormDesigner(FDesigners[n]).DeSelectAll;
@@ -407,104 +478,109 @@ begin
   if fname = '' then
   begin
 
-      frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
-   if frmMainDesigner.btnToFront.Tag = 1 then
-    frmMainDesigner.MainMenu.MenuItem(8).Text :=
-      '';
+      frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+ //  if frmMainDesigner.btnToFront.Tag = 1 then
+    frmMainDesigner.MainMenu.MenuItem(8).Text := '';
 
- {$IF DEFINED(library)}
-  frmMainDesigner.Hide;
- frmProperties.Hide;
-  {$else}
+
      if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-    begin
+     begin
+     if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
+       begin
+    if assigned(ATimer) then
+   begin
+   ATimer.Enabled:=false;
+  // ATimer.Free;
+   end;
+     fpgapplication.Terminate; end
+
+   else
+      begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
-    end else begin
-    frmProperties.Hide;
-     end;
-   {$endif}
-  Exit;
+    end; end else frmProperties.Hide;
+      Exit;
    end;
 
   if not fpgFileExists(fname) then
   begin
     FFileLoaded := '';
-     frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => file does not exist';
-   if frmMainDesigner.btnToFront.Tag = 1 then
+     frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => file does not exist';
+ //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => file does not exist';
 
- {$IF DEFINED(library)}
-  frmMainDesigner.Hide;
- frmProperties.Hide;
-  {$else}
-     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-    begin
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+     begin
+     if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
+       begin
+    if assigned(ATimer) then
+   begin
+   ATimer.Enabled:=false;
+  // ATimer.Free;
+   end;
+     fpgapplication.Terminate; end else
+      begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
-    end else begin
-    frmProperties.Hide;
-     end;
-   {$endif}
-  Exit;
+    end; end else frmProperties.Hide;
+      Exit;
    end;
 
   if FFile.LoadFile(fname) = False then
   begin
     FFileLoaded := '';
-      frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => file does not load';
-   if frmMainDesigner.btnToFront.Tag = 1 then
+      frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => file does not load';
+ //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => file does not load';
-{$IF DEFINED(library)}
-  frmMainDesigner.Hide;
- frmProperties.Hide;
-  {$else}
-     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-    begin
-      frmMainDesigner.Hide;
-      frmProperties.Hide;
-    end else begin
-    frmProperties.Hide;
-     end;
-   {$endif}
-  Exit;
+
+   if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+        begin
+        if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
+        begin
+    if assigned(ATimer) then
+   begin
+   ATimer.Enabled:=false;
+ //  ATimer.Free;
    end;
+     fpgapplication.Terminate; end else
+         begin
+         frmMainDesigner.Hide;
+         frmProperties.Hide;
+       end; end else frmProperties.Hide;
+         Exit;
+      end;
 
   if FFile.GetBlocks = 0 then
   begin
     FFileLoaded := '';
-      frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => not a fpGUI form-file';
-   if frmMainDesigner.btnToFront.Tag = 1 then
+      frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => not a fpGUI form-file';
+ //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => not a fpGUI form-file';
 
-   {$IF DEFINED(library)}
-  frmMainDesigner.Hide;
- frmProperties.Hide;
-  {$else}
-     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-    begin
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+     begin
+     if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
+     fpgapplication.Terminate else
+      begin
       frmMainDesigner.Hide;
       frmProperties.Hide;
-    end else begin
-    frmProperties.Hide;
-     end;
-   {$endif}
-  Exit;
+    end; end else frmProperties.Hide;
+      Exit;
    end
   else
   begin
-    frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
+    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
 
-    frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
+  //  frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
 
-    if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
-    begin
+  //  if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
+  //  begin
       frmMainDesigner.MainMenu.MenuItem(8).Text := ' => ' + fname;
-      frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
-    end;
+  //    frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
+   // end;
 
     end;
 
@@ -540,6 +616,8 @@ begin
       end;
   end;
 
+      if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
   for n := 0 to FDesigners.Count - 1 do
   begin
     selectedform := nil;
@@ -582,10 +660,12 @@ begin
  frmMainDesigner.MainMenu.UpdateWindowPosition;
   fpgapplication.ProcessMessages;
   frmMainDesigner.MainMenu.Visible:=true;
+    frmMainDesigner.hide;
+  fpgapplication.ProcessMessages;
 
   frmMainDesigner.Show;
   frmProperties.Show;
-
+ end;
 end;
 
 function TMainDesigner.AddUnits(filedata: string): string;
@@ -782,6 +862,8 @@ begin
 
 
     //////////// get the classname of each object and add his unit.
+     if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
     for n := 0 to FDesigners.Count - 1 do
     begin
       for n2 := 0 to TFormDesigner(FDesigners[n]).Form.ComponentCount - 1 do
@@ -1108,13 +1190,13 @@ begin
 
     frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
 
-    frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
+  //  frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
 
-    if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
-    begin
+   // if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
+  //  begin
       frmMainDesigner.MainMenu.MenuItem(8).Text := ' => ' + fname;
-      frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
-    end;
+   //   frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
+   // end;
 
 end;
 
@@ -1135,7 +1217,8 @@ begin
   frmmultiselect.Hide;
   frmmultiselect.ClearAll;
 
-
+    if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
   for n := 0 to FDesigners.Count - 1 do
   begin
     TFormDesigner(FDesigners[n]).DeSelectAll;
@@ -1206,6 +1289,8 @@ begin
     ifundo := False;
     frmMainDesigner.undomenu.MenuItem(1).Enabled := True;
 
+     if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
     for n := 0 to FDesigners.Count - 1 do
     begin
       selectedform := nil;
@@ -1475,6 +1560,9 @@ var
     i: integer;
   begin
     Result := False;
+
+     if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
     for i := 0 to FDesigners.Count - 1 do
     begin
       if TFormDesigner(FDesigners[i]).Form.Name = AName then
@@ -1547,7 +1635,7 @@ end;
 procedure TMainDesigner.CreateWindows;
 begin
   frmMainDesigner := TfrmMainDesigner.Create(nil);
-  frmMainDesigner.WindowTitle := 'fpGUI Designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+  frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
   frmMainDesigner.Show;
 
   frmProperties := TfrmProperties.Create(nil);
@@ -1578,6 +1666,8 @@ begin
       deletefile(ArrayUndo[n].FileName);
   end;
 
+   if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
   for n := 0 to FDesigners.Count - 1 do
     TFormDesigner(FDesigners[n]).Free;
   FDesigners.Free;
@@ -1771,6 +1861,9 @@ begin
     if FShowGrid = AValue then
       Exit;
     FShowGrid := AValue;
+
+     if assigned(FDesigners) then
+       if FDesigners.Count > 0 then
     for i := 0 to FDesigners.Count - 1 do
       TFormDesigner(FDesigners[i]).Form.ShowGrid := AValue;
   end;

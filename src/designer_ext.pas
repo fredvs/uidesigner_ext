@@ -28,7 +28,7 @@ program designer_ext;
 uses {$IFDEF UNIX}
   cthreads, {$ENDIF}
   fpg_iniutils,
-  sysutils,
+  SysUtils,
   RunOnce_PostIt,
   fpg_cmdlineparams,
   fpg_style_anim_round_silver_horz,
@@ -78,37 +78,63 @@ uses {$IFDEF UNIX}
     ifonlyone := True;
     filedir := '';
 
-    if (isrunningIDE('typhon') = False) and (isrunningIDE('lazarus') = False) then
+    //// ideu custom plugin
+   ideuintegration := True;
+
+    //writeln('init');
+
+    if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
     begin
-        if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then
-      begin
-       ifonlyone := true;
-       filedir := 'clear';
-             RunOnce(filedir);
-       end
-      else ifonlyone := false;
+      ifonlyone := True;
+      RunOnce('showit');
     end
     else
-    begin
-      { If file passed in as clasical first param, load it! }
-      if (FileExists(ParamStr(1))) or (ParamStr(1) = 'closeall') or
-        (ParamStr(1) = 'quit') then
-        filedir := ParamStr(1);
 
-       if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then
+    if ((trim(ParamStr(1)) = 'hideit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
+    begin
+      ifonlyone := True;
+      RunOnce('hideit');
+    end
+    else
+
+    begin
+
+      if (gINI.ReadInteger('Options', 'IDE', 0) = 0) or ((gINI.ReadInteger('Options', 'IDE', 0) > 0) and
+        (isrunningIDE('typhon') = False) and (isrunningIDE('ideu') = False) and (isrunningIDE('lazarus') = False)) then
       begin
-          ifonlyone := true;
-          RunOnce(filedir) ;
+        if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
+        begin
+          ifonlyone := True;
+          filedir := 'clear';
+          RunOnce(filedir);
+        end
+        else
+          ifonlyone := False;
       end
-      else ifonlyone := false;
+      else
+      begin
+        { If file passed in as clasical first param, load it! }
+        if (FileExists(ParamStr(1))) or (ParamStr(1) = 'closeall') or (trim(ParamStr(1)) = 'showit') or
+          (trim(ParamStr(1)) = 'hideit') or (ParamStr(1) = 'quit') then
+          filedir := ParamStr(1);
+
+        if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
+        begin
+          ifonlyone := True;
+          RunOnce(filedir);
+        end
+        else
+          ifonlyone := False;
       end;
+
+    end;
 
     fpgApplication.Initialize;
     try
       RegisterWidgets;
       if not gCommandLineParams.IsParam('style') then
       begin
-            if fpgStyleManager.SetStyle('Chrome silver flat menu') then
+        if fpgStyleManager.SetStyle('Chrome silver flat menu') then
           fpgStyle := fpgStyleManager.Style;
       end;
 
@@ -119,7 +145,16 @@ uses {$IFDEF UNIX}
 
       fpgApplication.MainForm := frmMainDesigner;
 
-     frmProperties.hide;
+      frmProperties.hide;
+
+      if (FileExists(ParamStr(1))) and (ifonlyone = False) then
+      begin
+        maindsgn.EditedFileName := ParamStr(1);
+        maindsgn.OnLoadFile(maindsgn);
+
+
+      end;
+
       fpgApplication.Run;
 
       PropList.Free;

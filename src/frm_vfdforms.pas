@@ -908,7 +908,7 @@ begin
   with pathini do
   begin
     Name := 'pathini';
-    SetPosition(16, 312, 524, 20);
+    SetPosition(14, 310, 524, 20);
     Alignment := taCenter;
     FontDesc := '#Label2';
     Hint := '';
@@ -931,7 +931,7 @@ begin
   with rbTyphon do
   begin
     Name := 'rbTyphon';
-    SetPosition(252, 64, 120, 19);
+    SetPosition(252, 80, 120, 19);
     FontDesc := '#Label1';
     GroupIndex := 0;
     Hint := '';
@@ -944,7 +944,7 @@ begin
   with rbLaz do
   begin
     Name := 'rbLaz';
-    SetPosition(252, 44, 104, 19);
+    SetPosition(252, 60, 104, 19);
     FontDesc := '#Label1';
     GroupIndex := 0;
     Hint := '';
@@ -1041,7 +1041,7 @@ begin
   with Label3 do
   begin
     Name := 'Label3';
-    SetPosition(258, 110, 116, 19);
+    SetPosition(300, 118, 116, 19);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Undo Feature';
@@ -1051,7 +1051,7 @@ begin
   with CheckBox1 do
   begin
     Name := 'CheckBox1';
-    SetPosition(260, 130, 120, 19);
+    SetPosition(296, 136, 120, 19);
     Checked := True;
     FontDesc := '#Label1';
     Hint := '';
@@ -1064,7 +1064,7 @@ begin
   with Label4 do
   begin
     Name := 'Label4';
-    SetPosition(260, 153, 104, 19);
+    SetPosition(290, 161, 104, 19);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Max Undo:';
@@ -1074,7 +1074,7 @@ begin
   with TrackBarUndo do
   begin
     Name := 'TrackBarUndo';
-    SetPosition(330, 148, 100, 30);
+    SetPosition(362, 154, 100, 30);
     Hint := '';
     Min := 10;
     Position := 20;
@@ -1088,7 +1088,7 @@ begin
   with Labelonlyonce do
   begin
     Name := 'Labelonlyonce';
-    SetPosition(360, 185, 180, 19);
+    SetPosition(388, 193, 180, 19);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Run Only One Instance';
@@ -1098,7 +1098,7 @@ begin
   with chkonlyonce do
   begin
     Name := 'chkonlyonce';
-    SetPosition(380, 205, 120, 19);
+    SetPosition(412, 211, 120, 19);
     Checked := True;
     FontDesc := '#Label1';
     Hint := 'If checked, only one instance will be loaded.';
@@ -1122,7 +1122,7 @@ begin
   with rbideu do
   begin
     Name := 'rbideu';
-    SetPosition(252, 86, 120, 19);
+    SetPosition(252, 42, 120, 19);
     FontDesc := '#Label1';
     GroupIndex := 0;
     Hint := '';
@@ -1189,6 +1189,20 @@ begin
     rblaz.Enabled := True
   else
     rblaz.Enabled := False;
+
+{$IFDEF Windows}
+  dataf := copy(GetAppConfigDir(False), 1, pos('designer_ext', GetAppConfigDir(False)) -
+    1) + 'ideU\ideU.ini';
+   {$ENDIF}
+ {$IFDEF Linux}
+  dataf := GetUserDir + '.config/ideU/ideU.ini';
+{$ENDIF}
+
+  if fileexists(PChar(dataf)) then
+    rbideu.Enabled := True
+  else
+    rbideu.Enabled := False;
+
 
 {
   if gINI.ReadBool('frmVFDSetupState', 'FirstLoad', True) = False then

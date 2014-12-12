@@ -426,9 +426,13 @@ var
   bval: boolean;
    TheParent : TfpgWidget ;
   Begin
+    {
     TheParent := wg ;
   if TheParent.HasParent = true then
   TheParent :=  TheParent.Parent;
+    }
+
+  TheParent := WidgetParentForm(TfpgWidget(wg));
 
     result := false ;
    if ident = 'SIZEABLE' then
