@@ -1044,6 +1044,7 @@ begin
     ImageSpacing := 0;
     TabOrder := 3;
     Text := '';
+    tag := 10;
     Visible := False;
     Focusable := False;
     OnClick := @(maindsgn.OnSaveFile);
@@ -1244,10 +1245,10 @@ windowtitle := MainMenu.MenuItem(8).Text;
    x := gINI.ReadInteger('Options', 'IDE', 0)
   else
     begin
-    gINI.ReadInteger('Options', 'IDE', 3) ;
+   x :=  gINI.ReadInteger('Options', 'IDE', 3) ;
   idetemp := 3;
-   x := idetemp
-     end;
+   x := idetemp  ;
+    end;
 
 
  left := 400;

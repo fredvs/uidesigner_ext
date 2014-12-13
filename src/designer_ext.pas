@@ -79,7 +79,7 @@ uses {$IFDEF UNIX}
     filedir := '';
 
     //// ideu custom plugin
-   ideuintegration := True;
+  // ideuintegration := True;
 
     //writeln('init');
 

@@ -1242,7 +1242,7 @@ begin
 
   {@VFD_BODY_BEGIN: WheelColorForm}
   Name := 'WheelColorForm';
-  SetPosition(415, 261, 380, 452);
+  SetPosition(349, 242, 380, 452);
   WindowTitle := 'Color_Picker';
   Hint := '';
   BackGroundColor := $80000001;
