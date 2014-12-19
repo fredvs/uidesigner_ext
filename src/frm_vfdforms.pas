@@ -557,7 +557,7 @@ var
 begin
   fpgapplication.ProcessMessages;
 
-  //x := gINI.ReadInteger('Options', 'IDE', 0);
+  idetemp := gINI.ReadInteger('Options', 'IDE', 0);
 
   changeIde := idetemp;
 
@@ -659,6 +659,7 @@ begin
       2: ShowMessage('IDE integration will append next run of Typhon');
       3: ShowMessage('IDE integration will append next run of ideU');
     end;
+   gINI.WriteInteger('Options', 'IDE', idetemp);
 
 end;
 

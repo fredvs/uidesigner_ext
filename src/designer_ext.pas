@@ -79,7 +79,7 @@ uses {$IFDEF UNIX}
     filedir := '';
 
     //// ideu custom plugin
-  // ideuintegration := True;
+   //ideuintegration := true;
 
     //writeln('init');
 
@@ -100,7 +100,7 @@ uses {$IFDEF UNIX}
     begin
 
       if (gINI.ReadInteger('Options', 'IDE', 0) = 0) or ((gINI.ReadInteger('Options', 'IDE', 0) > 0) and
-        (isrunningIDE('typhon') = False) and (isrunningIDE('ideu') = False) and (isrunningIDE('lazarus') = False)) then
+        (isrunningIDE('typhon') = False) and (isrunningIDE('ideu') = False) and (isrunningIDE('ideU') = False) and (isrunningIDE('lazarus') = False)) then
       begin
         if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
         begin
@@ -151,9 +151,7 @@ uses {$IFDEF UNIX}
       begin
         maindsgn.EditedFileName := ParamStr(1);
         maindsgn.OnLoadFile(maindsgn);
-
-
-      end;
+          end;
 
       fpgApplication.Run;
 

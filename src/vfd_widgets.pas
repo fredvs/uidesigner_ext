@@ -376,6 +376,7 @@ begin
   wc          := TVFDWidgetClass.Create(TfpgForm);
   wc.NameBase := 'frm';
   wc.AddProperty('WindowTitle', TPropertyString, '');
+  wc.AddProperty('IconName', TPropertyString, 'Image name to change window icon');
   wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
   wc.AddProperty('ShowHint', TPropertyBoolean, '');
   wc.AddProperty('BackgroundColor', TPropertyColor, '');

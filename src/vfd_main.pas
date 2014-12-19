@@ -299,6 +299,16 @@ procedure TMainDesigner.OnHide(Sender: TObject);
 var
 n : integer;
 begin
+  if idetemp = 0 then
+  begin
+    if assigned(ATimer) then
+   begin
+   ATimer.Enabled:=false;
+  // ATimer.Free;
+   end;
+     fpgapplication.Terminate;
+     end else
+
     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
           if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then

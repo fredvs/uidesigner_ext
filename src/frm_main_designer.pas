@@ -307,7 +307,6 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
-
   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(464, 277, 278, 195);
@@ -458,7 +457,7 @@ end;
 procedure TfrmMainDesigner.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 var
   x: integer;
-  f : textfile;
+
 begin
 
  if  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
@@ -808,6 +807,7 @@ begin
 
   {%region 'Auto-generated GUI code' -fold}
 
+
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(400, 10, 800, 92);
@@ -818,6 +818,7 @@ begin
   MinWidth := 770;
   MinHeight := 90;
   WindowPosition := wpUser;
+  //iconname := 'vfd.fpgicon' ;
 
   panel1 := TfpgPanel.Create(self);
   with panel1 do
@@ -1242,7 +1243,8 @@ windowtitle := MainMenu.MenuItem(8).Text;
 
 
   if ideuintegration = false then
-   x := gINI.ReadInteger('Options', 'IDE', 0)
+ x := gINI.ReadInteger('Options', 'IDE', 0)
+
   else
     begin
    x :=  gINI.ReadInteger('Options', 'IDE', 3) ;
@@ -1253,7 +1255,7 @@ windowtitle := MainMenu.MenuItem(8).Text;
 
  left := 400;
  top := 10 ;
- width := 800 ;
+ width := 775 ;
  height := 92 ;
  updatewindowposition;
        
@@ -1265,7 +1267,6 @@ windowtitle := MainMenu.MenuItem(8).Text;
    hide;
     fpgapplication.ProcessMessages;
 
-hide;
 
 fpgapplication.ProcessMessages;
 
@@ -1305,6 +1306,7 @@ fpgapplication.ProcessMessages;
      UpdateWindowPosition;
   frmMultiSelect := Tfrm_multiselect.Create(nil);
   chlPalette.Tag:=0;
+
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
@@ -1327,6 +1329,8 @@ begin
     sizeof(vfd_tofront), 0, 0);
   fpgImages.AddMaskedBMP('vfd.select', @vfd_select,
     sizeof(vfd_select), 0, 0);
+  //  fpgImages.AddMaskedBMP('vfd.fpgicon', @vfd_fpgicon,
+  //  sizeof(vfd_fpgicon), 0, 0);
   OnShow := @FormShow;
 end;
 
@@ -1510,13 +1514,14 @@ begin
   end;
   end;
 
-  Show;
+   Show;
   if frmisvisible = True then
   begin
     frmProperties.hide;
     fpgapplication.ProcessMessages;
     frmProperties.Show;
   end;
+   UpdateWindowPosition;
 end;
 
 procedure TfrmMainDesigner.OnNeverToFront(Sender: TObject);
@@ -1563,7 +1568,7 @@ begin
       MainMenu.MenuItem(8).Visible := False;
   end;
 
-  Show;
+   Show;
 
   if frmisvisible = True then
   begin
@@ -1571,6 +1576,7 @@ begin
     fpgapplication.ProcessMessages;
     frmProperties.Show;
   end;
+   UpdateWindowPosition;
 end;
 
 procedure TfrmMainDesigner.OnObjInspect(Sender: TObject);
@@ -2516,7 +2522,7 @@ begin
       fpgstyle := fpgstyleManager.Style;
 
       hide;
-      Show;
+     Show;
 
       for x := 2 to 11 do
         if windowmenu.MenuItem(x).Visible = True then

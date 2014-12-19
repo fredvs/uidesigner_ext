@@ -1705,6 +1705,14 @@ begin
 
   s := s + Ind(1) + 'WindowTitle := ' + QuotedStr(FForm.WindowTitle) + ';' + LineEnding;
 
+   // IconName property - This is ugly, Form's properties are not handled well!!
+ PropInfo := GetPropInfo(FForm.ClassType, 'IconName');
+  t := GetStrProp(FForm, 'IconName');
+ if IsStoredProp(FForm, PropInfo) then
+ begin
+  s := s + Ind(1) + 'IconName := ' + QuotedStr(t) + ';' + LineEnding;
+ end;
+
   // Hint property - This is ugly, Form's properties are not handled well!!
   PropInfo := GetPropInfo(FForm.ClassType, 'Hint');
   t := GetStrProp(FForm, 'Hint');
@@ -1713,7 +1721,7 @@ begin
     s := s + Ind(1) + 'Hint := ' + QuotedStr(t) + ';' + LineEnding;
   end;
 
-  // ShowHint property - This is ugly, Form's properties are not handled well!!
+   // ShowHint property - This is ugly, Form's properties are not handled well!!
   PropInfo := GetPropInfo(FForm.ClassType, 'ShowHint');
   i := GetOrdProp(FForm, 'ShowHint');
   if IsStoredProp(FForm, PropInfo) then
