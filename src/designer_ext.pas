@@ -79,7 +79,7 @@ uses {$IFDEF UNIX}
     filedir := '';
 
     //// ideu custom plugin
-   //ideuintegration := true;
+   ideuintegration := True;
 
     //writeln('init');
 
@@ -151,7 +151,7 @@ uses {$IFDEF UNIX}
       begin
         maindsgn.EditedFileName := ParamStr(1);
         maindsgn.OnLoadFile(maindsgn);
-          end;
+      end;
 
       fpgApplication.Run;
 

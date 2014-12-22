@@ -106,7 +106,7 @@ options=99
  sorted=0
  col=0
  row=0
- rowheight=15
+ rowheight=17
  [projectoptionsfo.newfile]
  firsttab=0
  index=0
@@ -128,9 +128,9 @@ options=99
  sortdescend6=0
  [projectoptionsfo.macrosplitter]
  x=0
- y=144
+ y=143
  xprop=1
- yprop=0.32739420935412
+ yprop=0.32808988764045
  [projectoptionsfo.macrogrid]
  propcolwidthref=547
  sortdescend0=0
@@ -172,11 +172,11 @@ options=99
  index=1
  [projectoptionsfo.tabwidget]
  firsttab=0
- index=2
+ index=0
  [projectoptionsfo]
  stackedunder=
- x=293
- y=160
+ x=298
+ y=122
  cx=773
  cy=497
 programparameters=18
@@ -213,17 +213,18 @@ settings=13
  active=1
  visible=1
 mainfile=${PROJECTDIR}designer_ext.pas
-targetfile=designer_ext
+targetfile=${PROJECTDIR}bin/designer_ext
 messageoutputfile=
 makecommand=${COMPILER}
 makedir=
-unitdirs=6
- ${FPGUI_DIR}/lib/${TargetCPU}-${TargetOS}/
- ${FPGUI_DIR}/
- ${FPGUI_DIR}/src/corelib/gdi/
- ${FPGUI_DIR}/src/corelib/x11/
- ${FPGUI_DIR}/src/gui/
- ${FPGUI_DIR}/src/corelib/
+unitdirs=7
+ ${FPGUIDIR}/lib/${TargetCPU}-${TargetOS}
+ ${FPGUIDIR}
+ ${FPGUIDIR}/src/corelib/gdi
+ ${FPGUIDIR}/src
+ ${FPGUIDIR}/src/corelib/x11
+ ${FPGUIDIR}/src/gui
+ ${FPGUIDIR}/src/corelib
 unitpref=-Fu
 incpref=-Fi
 libpref=-Fl
@@ -231,24 +232,14 @@ objpref=-Fo
 targpref=-o
 befcommand=0
 aftcommand=0
-makeoptions=17
- -l -Mobjfpc -Sh
- -Fi${FPGUIDIR}src/corelib/
- -Fu${FPGUIDIR}src/corelib/
- -Fu${FPGUIDIR}src/gui/
- -Fu${FPGUIDIR}src/
- -Fu${FPGUIDIR}src/corelib/x11/
- -Fi${FPGUIDIR}src/corelib/x11/
- -Fu${FPGUIDIR}src/corelib/gdi/
- -Fi${FPGUIDIR}src/corelib/gdi/
- -Fi${FPGUIDIR}src/
- -Schi 
+makeoptions=7
+ -fPIC
+ -l -Mobjfpc -Schi
  -FE.
  -FUunits
  -B
  -O2 -XX -Xs -CX
- -vewinh
- -FEunits/
+ -vewnhibq
 codetemplatedirs=1
  ${TEMPLATEDIR}
 toolmenus=1
@@ -381,52 +372,40 @@ modulenames=0
 moduletypes=0
 modulefiles=0
 befcommandon=0
-makeoptionson=17
- 63
- 63
- 63
- 63
- 63
- 63
- 63
- 0
+makeoptionson=7
  0
  63
  63
- 34
+ 63
  32
- 63
- 0
- 63
+ 48
  63
 aftcommandon=0
-unitdirson=6
- 65539
- 131100
- 196616
- 196612
- 65564
- 65564
-macroon=6
+unitdirson=7
+ 196671
+ 196671
+ 0
+ 196671
+ 196671
+ 196671
+ 196671
+macroon=5
  1
  3
  6
  4
  63
- 63
-macronames=6
+macronames=5
  TargetCPU
  TargetOS
  TargetCPU
  TargetOS
- FPGUI_DIR
  HelpPath
-macrovalues=6
+macrovalues=5
  x86_64
  linux
  i386
  win32
- /home/fred/fpGUI-fred
  /opt/FPC_Docs/inf/
 macrogroup=0
 groupcomments=6
@@ -471,7 +450,7 @@ sourcefilemasks=5
  "*.ipf"
  "*.sql"
 syntaxdeffiles=5
- ${SYNTAXDEFDIR}pascal.sdef
+ ${SYNTAXDEFDIR}pascal_ideu.sdef
  ${SYNTAXDEFDIR}cpp.sdef
  ${SYNTAXDEFDIR}objecttext.sdef
  ${SYNTAXDEFDIR}ipf2.sdef
@@ -719,7 +698,8 @@ findhistory=7
  sort
  uses
 findoptions=1
-editpos=10
+editpos=15
+ 0,0
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -729,7 +709,11 @@ editpos=10
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 16,13
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -740,29 +724,49 @@ bookmarks6=0
 bookmarks7=0
 bookmarks8=0
 bookmarks9=0
-sourcefiles=10
+bookmarks10=0
+bookmarks11=0
+bookmarks12=0
+bookmarks13=0
+bookmarks14=0
+sourcefiles=15
  /home/fred/A_fpGUI-test/test1.pas
  ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/icons.inc
  ${PROJECTDIR}/vfd_propeditgrid.pas
  ${PROJECTDIR}/vfd_widgetclass.pas
  ${PROJECTDIR}/vfd_formparser.pas
  ${PROJECTDIR}/vfd_editors.pas
- /home/fred/fpGUI-fred/src/corelib/fpg_constants.pas
-relpaths=10
- A_fpGUI-test/test1.pas
+ /home/fred/fpGUI-fred/src/corelib/fpg_base.pas
+ /Z:/home/fred/fpGUI-fred/src/corelib/x11/fpg_impl.pas
+ /home/fred/fpGUI-develop/src/corelib/x11/fpg_impl.pas
+ /home/fred/fpGUI-develop/src/corelib/fpg_base.pas
+ ${PROJECTDIR}/designer_ext.pas
+ ${PROJECTDIR}/anchors.inc
+ ${PROJECTDIR}/fpg_iniutils.pas
+relpaths=15
+ ../../A_fpGUI-test/test1.pas
  frm_main_designer.pas
- designer_ext.pas
  frm_vfdforms.pas
  icons.inc
  vfd_propeditgrid.pas
  vfd_widgetclass.pas
  vfd_formparser.pas
  vfd_editors.pas
- ../../fpGUI-fred/src/corelib/fpg_constants.pas
-ismoduletexts=10
+ fpGUI-fred/src/corelib/fpg_base.pas
+ fpGUI-fred/src/corelib/x11/fpg_impl.pas
+ fpGUI-develop/src/corelib/x11/fpg_impl.pas
+ fpGUI-develop/src/corelib/fpg_base.pas
+ designer_ext.pas
+ anchors.inc
+ fpg_iniutils.pas
+ismoduletexts=15
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -778,20 +782,25 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.tabwidget]
-order=10
+order=15
  0
+ 12
+ 14
+ 13
  1
- 9
- 5
- 6
  2
  3
  4
+ 5
+ 6
  7
  8
-tabsize=152
+ 9
+ 10
+ 11
+tabsize=113
 firsttab=0
-index=2
+index=0
 [layout]
 windowlayout=503
  [mainfo.basedock]
@@ -807,8 +816,8 @@ windowlayout=503
  ny=0
  ncx=0
  ncy=0
- x=116
- y=25
+ x=143
+ y=24
  cx=1139
  cy=680
  rcx=0

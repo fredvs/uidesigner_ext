@@ -818,7 +818,7 @@ begin
   MinWidth := 770;
   MinHeight := 90;
   WindowPosition := wpUser;
-  //iconname := 'vfd.fpgicon' ;
+  //iconname := 'vfd.ideuicon' ;
 
   panel1 := TfpgPanel.Create(self);
   with panel1 do
@@ -1321,7 +1321,7 @@ begin
 end;
 
 constructor TfrmMainDesigner.Create(AOwner: TComponent);
-begin
+begin                                                              //
   inherited Create(AOwner);
   fpgImages.AddMaskedBMP('vfd.grid', @vfd_grid,
     sizeof(vfd_grid), 0, 0);
@@ -1329,8 +1329,7 @@ begin
     sizeof(vfd_tofront), 0, 0);
   fpgImages.AddMaskedBMP('vfd.select', @vfd_select,
     sizeof(vfd_select), 0, 0);
-  //  fpgImages.AddMaskedBMP('vfd.fpgicon', @vfd_fpgicon,
-  //  sizeof(vfd_fpgicon), 0, 0);
+    fpgImages.AddMaskedBMP('vfd.ideuicon', @vfd_ideuicon, sizeof(vfd_ideuicon), 0, 0);
   OnShow := @FormShow;
 end;
 
@@ -2524,6 +2523,7 @@ begin
       hide;
      Show;
 
+     if length(ArrayFormDesign) > 2 then
       for x := 2 to 11 do
         if windowmenu.MenuItem(x).Visible = True then
         begin
