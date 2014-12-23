@@ -172,7 +172,7 @@ options=99
  index=1
  [projectoptionsfo.tabwidget]
  firsttab=0
- index=0
+ index=2
  [projectoptionsfo]
  stackedunder=
  x=298
@@ -699,8 +699,8 @@ findhistory=7
  uses
 findoptions=1
 editpos=15
- 0,0
  0,-1073741823
+ 11,6
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -746,7 +746,7 @@ sourcefiles=15
  ${PROJECTDIR}/anchors.inc
  ${PROJECTDIR}/fpg_iniutils.pas
 relpaths=15
- ../../A_fpGUI-test/test1.pas
+ A_fpGUI-test/test1.pas
  frm_main_designer.pas
  frm_vfdforms.pas
  icons.inc
@@ -800,7 +800,7 @@ order=15
  11
 tabsize=113
 firsttab=0
-index=0
+index=4
 [layout]
 windowlayout=503
  [mainfo.basedock]
@@ -816,10 +816,10 @@ windowlayout=503
  ny=0
  ncx=0
  ncy=0
- x=143
+ x=109
  y=24
  cx=1139
- cy=680
+ cy=717
  rcx=0
  rcy=0
  wsize=0
@@ -936,7 +936,7 @@ windowlayout=503
  x=0
  y=0
  cx=159
- cy=502
+ cy=535
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1145,9 +1145,9 @@ windowlayout=503
  ncx=0
  ncy=0
  x=0
- y=546
+ y=579
  cx=1129
- cy=96
+ cy=100
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1263,7 +1263,7 @@ windowlayout=503
  x=162
  y=0
  cx=967
- cy=502
+ cy=535
  rcx=0
  rcy=0
  [actionsmo.watchesonact]
@@ -1283,7 +1283,7 @@ windowlayout=503
  x=0
  y=41
  cx=1129
- cy=502
+ cy=535
  rcx=0
  rcy=0
  [cpui386fo]
