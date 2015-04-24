@@ -18,7 +18,7 @@ order15=0
 order16=0
 [projectoptions]
 projectdir=${PROJECTDIR}/
-projectfilename=${PROJECTDIR}/designer_ext.prj
+projectfilename=/Z:/home/fred/designer_ext/src/designer_ext.prj
 findinfiledialog=34
  [findinfileadialogfo.subdirs]
  value=0
@@ -145,7 +145,7 @@ options=99
  sortdescend7=0
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=1
+ index=2
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=724
  width0=47
@@ -175,8 +175,8 @@ options=99
  index=2
  [projectoptionsfo]
  stackedunder=
- x=298
- y=122
+ x=292
+ y=97
  cx=773
  cy=497
 programparameters=18
@@ -213,7 +213,7 @@ settings=13
  active=1
  visible=1
 mainfile=${PROJECTDIR}designer_ext.pas
-targetfile=${PROJECTDIR}bin/designer_ext
+targetfile=${PROJECTDIR}/designer_ext
 messageoutputfile=
 makecommand=${COMPILER}
 makedir=
@@ -384,9 +384,9 @@ aftcommandon=0
 unitdirson=7
  196671
  196671
+ 196671
+ 196671
  0
- 196671
- 196671
  196671
  196671
 macroon=5
@@ -503,7 +503,7 @@ runcommand=
 xtermcommand=xterm -S${PTSN}/${PTSH}
 remoteconnection=
 uploadcommand=
-gdbprocessor=i386
+gdbprocessor=Auto
 gdbservercommand=
 gdbservercommandattach=
 beforeconnect=
@@ -673,7 +673,7 @@ files=
   )
  )
 [componentstore]
-storedir=/home/fred/msegui/apps/ide/compstore/
+storedir=/Z:/home/fred/msegui/apps/mse/compstore/
 filename=
 [components]
 [selecteditpage]
@@ -698,9 +698,7 @@ findhistory=7
  sort
  uses
 findoptions=1
-editpos=15
- 0,-1073741823
- 11,6
+editpos=18
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -714,6 +712,11 @@ editpos=15
  0,-1073741823
  0,-1073741823
  0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,0
+ 0,0
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -729,10 +732,13 @@ bookmarks11=0
 bookmarks12=0
 bookmarks13=0
 bookmarks14=0
-sourcefiles=15
+bookmarks15=0
+bookmarks16=0
+bookmarks17=0
+sourcefiles=18
  /home/fred/A_fpGUI-test/test1.pas
  ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/frm_vfdforms.pas
+ /Z:/home/fred/designer_ext/src/frm_vfdforms.pas
  ${PROJECTDIR}/icons.inc
  ${PROJECTDIR}/vfd_propeditgrid.pas
  ${PROJECTDIR}/vfd_widgetclass.pas
@@ -745,7 +751,10 @@ sourcefiles=15
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/anchors.inc
  ${PROJECTDIR}/fpg_iniutils.pas
-relpaths=15
+ ${PROJECTDIR}/fpg_style_anim_round_silver_flat_horz.pas
+ /Z:/home/fred/testgraoutlibthread/graout.pas
+ /Z:/home/fred/testgraoutlibthread/progfpgui_graout.pas
+relpaths=18
  A_fpGUI-test/test1.pas
  frm_main_designer.pas
  frm_vfdforms.pas
@@ -761,7 +770,13 @@ relpaths=15
  designer_ext.pas
  anchors.inc
  fpg_iniutils.pas
-ismoduletexts=15
+ fpg_style_anim_round_silver_flat_horz.pas
+ ../../testgraoutlibthread/graout.pas
+ ../../testgraoutlibthread/progfpgui_graout.pas
+ismoduletexts=18
+ 0
+ 0
+ 0
  0
  0
  0
@@ -782,12 +797,15 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.tabwidget]
-order=15
+order=18
  0
  12
+ 15
  14
  13
  1
+ 16
+ 17
  2
  3
  4
@@ -800,7 +818,7 @@ order=15
  11
 tabsize=113
 firsttab=0
-index=4
+index=7
 [layout]
 windowlayout=503
  [mainfo.basedock]
@@ -816,7 +834,7 @@ windowlayout=503
  ny=0
  ncx=0
  ncy=0
- x=109
+ x=144
  y=24
  cx=1139
  cy=717
@@ -834,8 +852,8 @@ windowlayout=503
  ny=0
  ncx=0
  ncy=0
- x=680
- y=236
+ x=501
+ y=206
  cx=497
  cy=314
  rcx=0
@@ -936,7 +954,7 @@ windowlayout=503
  x=0
  y=0
  cx=159
- cy=535
+ cy=538
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -948,7 +966,7 @@ windowlayout=503
  sorted=0
  col=0
  row=2
- rowheight=17
+ rowheight=16
  [stackfo]
  splitdir=0
  useroptions=24681
@@ -1106,7 +1124,7 @@ windowlayout=503
  cx=247
  cy=44
  rcx=1129
- rcy=642
+ rcy=679
  [watchfo.grid]
  propcolwidthref=123
  values0=2
@@ -1145,9 +1163,9 @@ windowlayout=503
  ncx=0
  ncy=0
  x=0
- y=579
+ y=582
  cx=1129
- cy=100
+ cy=101
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1263,29 +1281,13 @@ windowlayout=503
  x=162
  y=0
  cx=967
- cy=535
+ cy=538
  rcx=0
  rcy=0
  [actionsmo.watchesonact]
  checked=1
  [actionsmo.bluedotsonact]
  checked=1
- [mainfo.panel1]
- splitdir=1
- useroptions=33652203
- parent=mainfo.basedock
- visible=1
- mdistate=0
- nx=0
- ny=0
- ncx=0
- ncy=0
- x=0
- y=41
- cx=1129
- cy=535
- rcx=0
- rcy=0
  [cpui386fo]
  irqoff=0
  splitdir=0
@@ -1306,6 +1308,22 @@ windowlayout=503
  wsize=0
  active=0
  visible=0
+ [mainfo.panel1]
+ splitdir=1
+ useroptions=33652203
+ parent=mainfo.basedock
+ visible=1
+ mdistate=0
+ nx=0
+ ny=0
+ ncx=0
+ ncy=0
+ x=0
+ y=41
+ cx=1129
+ cy=538
+ rcx=0
+ rcy=0
 [targetconsole]
 finddtext=
 findhistory=0

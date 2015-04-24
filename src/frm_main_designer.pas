@@ -23,7 +23,7 @@ fiens@hotmail.com
  }
  
  /// for compiling into library => uncoment it in vfd_main too
- //{$DEFINE library}   // uncomment it for building library (native and java)
+ //{$DEFINE library} // uncomment it for building library (native and java)
  //{$DEFINE java}   // uncomment it for building java library
 
 unit frm_main_designer;
@@ -140,7 +140,7 @@ type
     procedure OnNewForm(Sender: TObject);
     procedure OnChangeWidget(Sender: TObject);
   end;
-
+  //  TPropertyList =    class(TfpgForm)
   TPropertyList = class(TObject)
   private
     FList: TList;
@@ -239,6 +239,7 @@ var
   ifonlyone: boolean;
   PropList: TPropertyList;
   oriMousePos: TPoint;
+   idetempchanged : boolean = false;
   idetemp, maxundo, indexundo: integer;
   enableundo: boolean;
   enableautounits: boolean;
@@ -434,7 +435,8 @@ class procedure TfrmAbout.Execute;
 var
   frm: TfrmAbout;
 begin
-  frm := TfrmAbout.Create(nil);
+//  frm := TfrmAbout.Create(nil);
+      fpgApplication.CreateForm(TfrmAbout, frm);
   try
     frm.ShowModal;
   finally
@@ -1243,11 +1245,12 @@ windowtitle := MainMenu.MenuItem(8).Text;
 
 
   if ideuintegration = false then
- x := gINI.ReadInteger('Options', 'IDE', 0)
-
+  begin
+ x := gINI.ReadInteger('Options', 'IDE', 0)  ;
+ idetemp := x ;
+  end
   else
     begin
-   x :=  gINI.ReadInteger('Options', 'IDE', 3) ;
   idetemp := 3;
    x := idetemp  ;
     end;
@@ -1304,7 +1307,8 @@ fpgapplication.ProcessMessages;
    PaletteBarResized(self);
 
      UpdateWindowPosition;
-  frmMultiSelect := Tfrm_multiselect.Create(nil);
+//  frmMultiSelect := Tfrm_multiselect.Create(nil);
+      fpgApplication.CreateForm(Tfrm_multiselect, frmMultiSelect);
   chlPalette.Tag:=0;
 
 end;
@@ -1598,7 +1602,7 @@ end;
 
 procedure TfrmProperties.AfterCreate;
 var
-  x, x2, w, y, gap: integer;
+  x, x2, w, y, nblist, gap: integer;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
@@ -1674,11 +1678,20 @@ begin
 
   Inc(y, gap + 5);
 
+   //  fpgApplication.CreateForm(TwgPropertyList, lstProps);
+
   lstProps := TwgPropertyList.Create(self);
   lstProps.SetPosition(0, y, Width, (self.Height - y - 150) div 2);
   lstProps.Anchors := AllAnchors;
   lstProps.Props := PropList;
   lstProps.Props.Widget := edName;
+
+  nblist := 1 ;
+  while nblist < 15 do
+  begin
+   lstProps.Items.Add('row, ' + inttostr(nblist));
+   inc(nblist);
+   end;
 
   y := lstProps.Bottom;
 
@@ -2304,6 +2317,7 @@ end;
 procedure TPropertyList.AddItem(aProp: TVFDWidgetProperty);
 begin
   FList.Add(aProp);
+
 end;
 
 procedure TPropertyList.Clear;
@@ -2580,7 +2594,8 @@ procedure TfrmMainDesigner.micolorwheel(Sender: TObject);
 var
   frm: TColorPickerForm;
 begin
-  frm := TColorPickerForm.Create(nil);
+//  frm := TColorPickerForm.Create(nil);
+     fpgApplication.CreateForm(TColorPickerForm, frm);
   frm.Show;
 end;
 
@@ -2588,7 +2603,8 @@ procedure TfrmMainDesigner.miimageconv(Sender: TObject);
 var
   frm: TImageConvert;
 begin
-  frm := TImageConvert.Create(nil);
+ // frm := TImageConvert.Create(nil);
+   fpgApplication.CreateForm(TImageConvert, frm);
   frm.Show;
 end;
 

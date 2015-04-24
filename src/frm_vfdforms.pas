@@ -34,6 +34,7 @@ uses
   {%units 'Auto-generated GUI code'}
   fpg_label, fpg_button, fpg_combobox,
   {%endunits}
+   sak_fpg,
   Classes,
   SysUtils,
   fpg_base,
@@ -134,7 +135,7 @@ type
     procedure setAlwaysToFront(Sender: TObject);
     procedure IdeIntegration(Sender: TObject);
     procedure UndoLook(Sender: TObject);
-
+    procedure onAssistive(Sender: TObject);
   public
     {@VFD_HEAD_BEGIN: frmVFDSetup}
     lb1: TfpgLabel;
@@ -173,6 +174,8 @@ type
     chkonlyonce: TfpgCheckBox;
     chkautounits: TfpgCheckBox;
     rbideu: TfpgRadioButton;
+    Label5: TfpgLabel;
+    CheckAssistive: TfpgCheckBox;
     {@VFD_HEAD_END: frmVFDSetup}
     procedure AfterCreate; override;
     // procedure BeforeDestruction; override;
@@ -364,6 +367,7 @@ begin
   Name := 'WidgetOrderForm';
   SetPosition(534, 173, 426, 398);
   WindowTitle := 'TWidgetOrderForm';
+  IconName := '';
   Hint := '';
   BackGroundColor := $80000001;
   WindowPosition := wpScreenCenter;
@@ -504,6 +508,14 @@ begin
 end;
 
 { TfrmVFDSetup}
+ procedure TfrmVFDSetup.onAssistive(Sender: TObject);
+begin
+
+   if checkassistive.Checked = true then
+    SAKUnLoadlib
+  else
+   SAKLoadlib;
+end;
 
 procedure TfrmVFDSetup.UndoLook(Sender: TObject);
 begin
@@ -580,7 +592,11 @@ begin
   TrackBarUndo.Position := gINI.ReadInteger('Options', 'MaxUndo', 10);
   CheckBox1.Checked := gINI.ReadBool('Options', 'EnableUndo', True);
   chkautounits.Checked := gINI.ReadBool('Options', 'EnableAutoUnits', True);
+
   enableautounits :=  chkautounits.Checked ;
+
+  CheckAssistive.Checked := gINI.ReadBool('Options', 'EnableAssistive', false)  ;
+
   maxundo := TrackBarUndo.Position;
   FINIVersion := gINI.ReadInteger('Designer', 'Version', 0);
   edtGridX.Value := gINI.ReadInteger('Options', 'GridResolution', 4);
@@ -614,7 +630,9 @@ begin
   maxundo := TrackBarUndo.Position;
   enableundo := checkBox1.Checked;
 
-  gINI.WriteBool('Options', 'ShowFullPath', chkFullPath.Checked);
+  gINI.WriteBool('Options', 'EnableAssistive', CheckAssistive.Checked)  ;
+
+   gINI.WriteBool('Options', 'ShowFullPath', chkFullPath.Checked);
 
   gINI.WriteBool('Options', 'RunOnlyOnce', chkonlyonce.Checked);
 
@@ -703,6 +721,7 @@ begin
   Name := 'frmVFDSetup';
   SetPosition(196, 237, 549, 365);
   WindowTitle := 'General settings';
+  IconName := '';
   Hint := '';
   ShowHint := True;
   BackGroundColor := $80000001;
@@ -1042,7 +1061,7 @@ begin
   with Label3 do
   begin
     Name := 'Label3';
-    SetPosition(300, 118, 116, 19);
+    SetPosition(248, 106, 116, 19);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Undo Feature';
@@ -1052,7 +1071,7 @@ begin
   with CheckBox1 do
   begin
     Name := 'CheckBox1';
-    SetPosition(296, 136, 120, 19);
+    SetPosition(248, 124, 120, 19);
     Checked := True;
     FontDesc := '#Label1';
     Hint := '';
@@ -1065,7 +1084,7 @@ begin
   with Label4 do
   begin
     Name := 'Label4';
-    SetPosition(290, 161, 104, 19);
+    SetPosition(266, 145, 76, 19);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Max Undo:';
@@ -1075,7 +1094,7 @@ begin
   with TrackBarUndo do
   begin
     Name := 'TrackBarUndo';
-    SetPosition(362, 154, 100, 30);
+    SetPosition(254, 158, 100, 30);
     Hint := '';
     Min := 10;
     Position := 20;
@@ -1089,7 +1108,7 @@ begin
   with Labelonlyonce do
   begin
     Name := 'Labelonlyonce';
-    SetPosition(388, 193, 180, 19);
+    SetPosition(376, 117, 180, 19);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Run Only One Instance';
@@ -1099,7 +1118,7 @@ begin
   with chkonlyonce do
   begin
     Name := 'chkonlyonce';
-    SetPosition(412, 211, 120, 19);
+    SetPosition(392, 135, 120, 19);
     Checked := True;
     FontDesc := '#Label1';
     Hint := 'If checked, only one instance will be loaded.';
@@ -1129,6 +1148,28 @@ begin
     Hint := '';
     TabOrder := 36;
     Text := 'with ideU';
+  end;
+
+  Label5 := TfpgLabel.Create(self);
+  with Label5 do
+  begin
+    Name := 'Label5';
+    SetPosition(384, 172, 128, 19);
+    FontDesc := '#Label2';
+    Hint := '';
+    Text := 'Speaker Assistive';
+  end;
+
+  CheckAssistive := TfpgCheckBox.Create(self);
+  with CheckAssistive do
+  begin
+    Name := 'CheckAssistive';
+    SetPosition(388, 192, 128, 19);
+    FontDesc := '#Label1';
+    Hint := 'If checked, speaker will assist you.';
+    TabOrder := 38;
+    Text := 'Enable Assistive';
+    OnClick := @onAssistive;
   end;
 
   {@VFD_BODY_END: frmVFDSetup}

@@ -109,6 +109,7 @@ end;
 function TVFDFormParser.ParseForm: TFormDesigner;
 begin
   ffd           := TFormDesigner.Create;
+
   ffd.Form.Name := fformname;
   // parsing line by line
   // the unknown lines will be "other properties"

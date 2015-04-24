@@ -25,6 +25,7 @@ uses
   Classes,
   SysUtils,
   fpg_base,
+   fpg_main,
   fpg_widget,
   fpg_form,
   fpg_label,
@@ -101,7 +102,8 @@ procedure EditStringGridColumns(agrid: TfpgStringGrid);
 var
   frm: TColumnEditForm;
 begin
-  frm        := TColumnEditForm.Create(nil);
+//  frm        := TColumnEditForm.Create(nil);
+  fpgApplication.CreateForm(TColumnEditForm, frm);
   frm.dbgrid := agrid;
   frm.grid.dbgrid := agrid;
   frm.ShowModal;

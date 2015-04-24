@@ -137,9 +137,9 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="68"/>
-        <CursorPos X="3" Y="82"/>
+        <UnitName Value="designer_ext"/>
+        <TopLine Value="82"/>
+        <CursorPos X="49" Y="99"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -263,7 +263,7 @@ install:
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="3">
+    <Exceptions Count="4">
       <Item1>
         <Name Value="EComponentError"/>
       </Item1>
@@ -273,6 +273,9 @@ install:
       <Item3>
         <Name Value="EListError"/>
       </Item3>
+      <Item4>
+        <Name Value="EStringListError"/>
+      </Item4>
     </Exceptions>
   </Debugging>
 </CONFIG>

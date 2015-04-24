@@ -83,8 +83,7 @@ type
 
 
 type
-
-  TMainDesigner = class(TObject)
+   TMainDesigner = class(TObject)
   private
     FShowGrid: boolean;
     procedure SetEditedFileName(const Value: string);
@@ -390,7 +389,9 @@ begin
 
     if Sender <> maindsgn then
     begin
-      afiledialog := TfpgFileDialog.Create(nil);
+    //  afiledialog := TfpgFileDialog.Create(nil);
+
+        fpgApplication.CreateForm(TfpgFileDialog, afiledialog);
       afiledialog.Filename := EditedFilename;
       afiledialog.WindowTitle := 'Open form file';
       afiledialog.Filter :=
@@ -1086,7 +1087,8 @@ begin
       fname := EditedFileName
     else
     begin
-      afiledialog := TfpgFileDialog.Create(nil);
+   //   afiledialog := TfpgFileDialog.Create(nil);
+           fpgApplication.CreateForm(TfpgFileDialog, afiledialog);
       afiledialog.Filename := EditedFilename;
       if FFileLoaded = '' then
         afiledialog.WindowTitle := 'Save form source'
@@ -1120,7 +1122,8 @@ begin
 
     if (isFileNew = True) and (fpgFileExists(fname)) then
     begin
-      frm := TfrmAlreadyExists.Create(nil);
+    //  frm := TfrmAlreadyExists.Create(nil);
+           fpgApplication.CreateForm(TfrmAlreadyExists, frm);
       frm.lbl1.Text := trim(fname);
       if frm.ShowModal = mrYes then
         frm.Free
@@ -1586,13 +1589,15 @@ var
 begin
   Result := False;
   calculwidget := False;
-  nfrm := TNewFormForm.Create(nil);
+ // nfrm := TNewFormForm.Create(nil);
+     fpgApplication.CreateForm(TNewFormForm, nfrm);
   try
     if nfrm.ShowModal = mrOk then
     begin
       if DoesNameAlreadyExist(nfrm.edName.Text) then
       begin
-      frm := TfrmAlreadyExists.Create(nil);
+     // frm := TfrmAlreadyExists.Create(nil);
+       fpgApplication.CreateForm(TfrmAlreadyExists, frm);
       frm.Width:=320;
       frm.WindowTitle:='Warning => Existing Form Name !';
       frm.lbl1.Width:=frm.Width;
@@ -1608,7 +1613,8 @@ begin
       end;
 
       fd := TFormDesigner.Create;
-      if nfrm.edName.Text <> '' then
+
+       if nfrm.edName.Text <> '' then
         fd.Form.Name := nfrm.edName.Text;
       fd.Form.WindowTitle := fd.Form.Name;
       fd.Form.ShowGrid := FShowGrid;
@@ -1644,12 +1650,15 @@ end;
 
 procedure TMainDesigner.CreateWindows;
 begin
-  frmMainDesigner := TfrmMainDesigner.Create(nil);
+ // frmMainDesigner := TfrmMainDesigner.Create(nil);
+
+    fpgApplication.CreateForm(TfrmMainDesigner, frmMainDesigner);
   frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
   frmMainDesigner.Show;
 
-  frmProperties := TfrmProperties.Create(nil);
-  frmProperties.Show;
+ //  frmProperties := TfrmProperties.Create(nil);
+   fpgApplication.CreateForm(TfrmProperties, frmProperties);
+//  frmProperties.Show;
 end;
 
 constructor TMainDesigner.Create;
@@ -1773,7 +1782,9 @@ var
   frm: TfrmVFDSetup;
 begin
   // gINI.WriteFormState(frmMainDesigner);
-  frm := TfrmVFDSetup.Create(nil);
+// frm := TfrmVFDSetup.Create(nil);
+      fpgApplication.CreateForm(TfrmVFDSetup, frm);
+
   try
     if frm.ShowModal = mrOk then
     begin

@@ -184,7 +184,8 @@ procedure EditStringList(sl: TStringList);
 var
   frm: TItemEditorForm;
 begin
-  frm := TItemEditorForm.Create(nil);
+//  frm := TItemEditorForm.Create(nil);
+    fpgApplication.CreateForm(TItemEditorForm, frm);
   try
     frm.edItems.Lines.Assign(sl);
     if frm.ShowModal = mrOK then

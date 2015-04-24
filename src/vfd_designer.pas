@@ -501,7 +501,9 @@ begin
 
   FOneClickMove := True;
 
-  FForm := TDesignedForm.Create(nil);
+ // FForm := TDesignedForm.Create(nil);
+ fpgApplication.CreateForm(TDesignedForm, FForm);
+
   FForm.FormDesigner := self;
   FForm.Name := maindsgn.NewFormName;
   FForm.WindowTitle := FForm.Name;
@@ -743,7 +745,8 @@ var
   end;
 
 begin
-  frm := TWidgetOrderForm.Create(nil);
+//  frm := TWidgetOrderForm.Create(nil);
+   fpgApplication.CreateForm(TWidgetOrderForm, frm);
   frm.WindowTitle := cEditOrder[AMode];
   frm.Title := maindsgn.selectedform.Form.Name;
 
@@ -1402,7 +1405,10 @@ begin
   if wg = nil then
     wg := Form;
 
-  frm := TEditPositionForm.Create(nil);
+//  frm := TEditPositionForm.Create(nil);
+
+    fpgApplication.CreateForm(TEditPositionForm, frm);
+
 
   if Sender = frmProperties.btnLeft then
   begin
@@ -1973,7 +1979,10 @@ var
   frmie: TItemEditorForm;
   //ax,ay : integer;
 begin
-  frmie := TItemEditorForm.Create(nil);
+ // frmie := TItemEditorForm.Create(nil);
+
+     fpgApplication.CreateForm(TItemEditorForm, frmie);
+
   //GfxGetAbsolutePosition(PropertyForm.btnEdit.WinHandle, PropertyForm.btnEdit.width, 0, ax,ay);
   //frmie.Left := ax;
   //frmie.Top := ay;
@@ -2022,7 +2031,10 @@ begin
   if wgc.WidgetClass = TOtherWidget then
   begin
     newclassname := '';
-    cfrm := TInsertCustomForm.Create(nil);
+  //  cfrm := TInsertCustomForm.Create(nil);
+
+    fpgApplication.CreateForm(TInsertCustomForm, cfrm);
+
     cfrm.edName.Text := GenerateNewName(wgc.NameBase);
     cfrm.edClass.Text := 'Tfpg';
     if cfrm.ShowModal = mrOk then

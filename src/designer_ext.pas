@@ -27,6 +27,7 @@ program designer_ext;
 
 uses {$IFDEF UNIX}
   cthreads, {$ENDIF}
+  sak_fpg,
   fpg_iniutils,
   SysUtils,
   RunOnce_PostIt,
@@ -78,12 +79,10 @@ uses {$IFDEF UNIX}
     ifonlyone := True;
     filedir := '';
 
-    //// ideu custom plugin
-   ideuintegration := True;
+    // ideu custom plugin => uncomment it for ideU integration
+//   ideuintegration := True;
 
-    //writeln('init');
-
-    if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
+     if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
     begin
       ifonlyone := True;
       RunOnce('showit');
@@ -96,10 +95,8 @@ uses {$IFDEF UNIX}
       RunOnce('hideit');
     end
     else
-
-    begin
-
-      if (gINI.ReadInteger('Options', 'IDE', 0) = 0) or ((gINI.ReadInteger('Options', 'IDE', 0) > 0) and
+     begin
+        if (gINI.ReadInteger('Options', 'IDE', 0) = 0) or ((gINI.ReadInteger('Options', 'IDE', 0) > 0) and
         (isrunningIDE('typhon') = False) and (isrunningIDE('ideu') = False) and (isrunningIDE('ideU') = False) and (isrunningIDE('lazarus') = False)) then
       begin
         if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
@@ -126,8 +123,7 @@ uses {$IFDEF UNIX}
         else
           ifonlyone := False;
       end;
-
-    end;
+     end;
 
     fpgApplication.Initialize;
     try
@@ -138,8 +134,8 @@ uses {$IFDEF UNIX}
           fpgStyle := fpgStyleManager.Style;
       end;
 
-      PropList := TPropertyList.Create;
-      maindsgn := TMainDesigner.Create;
+     PropList := TPropertyList.Create;
+     maindsgn := TMainDesigner.Create;
 
       maindsgn.CreateWindows;
 
@@ -153,11 +149,16 @@ uses {$IFDEF UNIX}
         maindsgn.OnLoadFile(maindsgn);
       end;
 
-      fpgApplication.Run;
+         if gINI.ReadBool('Options', 'EnableAssistive', false) = True then
+         SAKLoadlib;
+
+
+   fpgApplication.Run;
 
       PropList.Free;
 
     finally
+    SAKFreeLib;
       maindsgn.Free;
     end;
   end;

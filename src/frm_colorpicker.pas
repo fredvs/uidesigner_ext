@@ -860,7 +860,8 @@ class procedure TfrmAbout.Execute;
 var
   frm: TfrmAbout;
 begin
-  frm := TfrmAbout.Create(nil);
+//  frm := TfrmAbout.Create(nil);
+  fpgApplication.CreateForm(TfrmAbout, frm);
   try
     frm.ShowModal;
   finally
@@ -1629,6 +1630,7 @@ begin
   fpgapplication.ProcessMessages;
   
   frmcompare := TCompareForm.Create(nil);
+ // fpgApplication.CreateForm(TCompareForm, frmcompare);
 
   frmcompare.Show;
 
