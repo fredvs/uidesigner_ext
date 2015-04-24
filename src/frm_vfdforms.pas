@@ -34,7 +34,6 @@ uses
   {%units 'Auto-generated GUI code'}
   fpg_label, fpg_button, fpg_combobox,
   {%endunits}
-   sak_fpg,
   Classes,
   SysUtils,
   fpg_base,
@@ -367,7 +366,6 @@ begin
   Name := 'WidgetOrderForm';
   SetPosition(534, 173, 426, 398);
   WindowTitle := 'TWidgetOrderForm';
-  IconName := '';
   Hint := '';
   BackGroundColor := $80000001;
   WindowPosition := wpScreenCenter;
@@ -510,11 +508,12 @@ end;
 { TfrmVFDSetup}
  procedure TfrmVFDSetup.onAssistive(Sender: TObject);
 begin
-
+ {
    if checkassistive.Checked = true then
     SAKUnLoadlib
   else
    SAKLoadlib;
+   }
 end;
 
 procedure TfrmVFDSetup.UndoLook(Sender: TObject);
@@ -722,7 +721,6 @@ begin
   SetPosition(196, 237, 549, 365);
   WindowTitle := 'General settings';
   IconName := '';
-  Hint := '';
   ShowHint := True;
   BackGroundColor := $80000001;
   MinWidth := 549;
@@ -1169,6 +1167,7 @@ begin
     Hint := 'If checked, speaker will assist you.';
     TabOrder := 38;
     Text := 'Enable Assistive';
+    enabled := false;
     OnClick := @onAssistive;
   end;
 
@@ -1194,7 +1193,7 @@ begin
     GetAppConfigDir(False)) - 1) + 'Application Data\typhon64\environmentoptions.xml';
 
      {$ENDIF}
-  {$IFDEF Linux}
+  {$IFDEF unix}
   dataf := GetUserDir + '.typhon64/environmentoptions.xml';
 {$ENDIF}
 
@@ -1208,7 +1207,7 @@ begin
   dataf := copy(GetAppConfigDir(False), 1, pos('Local Settings\Application Data\',
     GetAppConfigDir(False)) - 1) + 'Application Data\typhon32\environmentoptions.xml';
     {$ENDIF}
-  {$IFDEF Linux}
+  {$IFDEF unix}
   dataf := GetUserDir + '.typhon32/environmentoptions.xml';
 {$ENDIF}
 {$endif}
@@ -1223,7 +1222,7 @@ begin
   dataf := copy(GetAppConfigDir(False), 1, pos('designer_ext', GetAppConfigDir(False)) -
     1) + 'lazarus\environmentoptions.xml';
    {$ENDIF}
- {$IFDEF Linux}
+ {$IFDEF unix}
   dataf := GetUserDir + '.lazarus/environmentoptions.xml';
 {$ENDIF}
 
@@ -1236,7 +1235,7 @@ begin
   dataf := copy(GetAppConfigDir(False), 1, pos('designer_ext', GetAppConfigDir(False)) -
     1) + 'ideU\ideU.ini';
    {$ENDIF}
- {$IFDEF Linux}
+ {$IFDEF unix}
   dataf := GetUserDir + '.config/ideU/ideU.ini';
 {$ENDIF}
 

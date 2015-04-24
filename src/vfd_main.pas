@@ -1824,7 +1824,7 @@ begin
   if s = '' then
     s := '[' + rsNewUnnamedForm + ']';
 
-   {$IFDEF Linux}
+   {$IFDEF unix}
   if (fileexists(PChar(p + s))) and (gINI.ReadInteger('Options', 'Editor', 0) > 1) then
   begin
     {$WARN SYMBOL_DEPRECATED OFF}

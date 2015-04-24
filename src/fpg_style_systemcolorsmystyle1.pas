@@ -1,4 +1,4 @@
-{ fpGUI style which load native system palette on Windows and Linux
+{ fpGUI style which load native system palette on Windows and Unix
 
   Copyright (C) 2013 Krzysztof Dibowski dibowski_at_interia.pl
 
