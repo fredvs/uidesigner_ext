@@ -27,7 +27,6 @@ program designer_ext;
 
 uses {$IFDEF UNIX}
   cthreads, {$ENDIF}
-  sak_fpg,
   fpg_iniutils,
   SysUtils,
   RunOnce_PostIt,
@@ -149,8 +148,7 @@ uses {$IFDEF UNIX}
         maindsgn.OnLoadFile(maindsgn);
       end;
 
-         if gINI.ReadBool('Options', 'EnableAssistive', false) = True then
-         SAKLoadlib;
+      //   if gINI.ReadBool('Options', 'EnableAssistive', false) = True then SAKLoadlib;
 
 
    fpgApplication.Run;
@@ -158,7 +156,7 @@ uses {$IFDEF UNIX}
       PropList.Free;
 
     finally
-    SAKFreeLib;
+//    SAKFreeLib;
       maindsgn.Free;
     end;
   end;

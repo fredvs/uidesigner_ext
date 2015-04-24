@@ -138,8 +138,9 @@ install:
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="designer_ext"/>
-        <TopLine Value="82"/>
-        <CursorPos X="49" Y="99"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="62"/>
+        <CursorPos X="41" Y="151"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
