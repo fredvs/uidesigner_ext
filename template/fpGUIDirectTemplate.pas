@@ -41,7 +41,8 @@ end;
     frm: Tform1;
   begin
     fpgApplication.Initialize;
-    frm := Tform1.Create(nil);
+    fpgApplication.CreateForm(Tform1, frm);
+    fpgApplication.MainForm := frm;
     try
       frm.Show;
       frm.UpdateWindowPosition;
