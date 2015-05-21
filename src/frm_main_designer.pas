@@ -833,7 +833,7 @@ begin
     Hint := '';
     Text := '';
   end;
-}
+// }
   PanelMove := TfpgPanel.Create(self);
   with PanelMove do
   begin
@@ -1282,7 +1282,7 @@ fpgapplication.ProcessMessages;
     btnSave.UpdateWindowPosition;
       WindowAttributes:= [];
     //   panel1.Style := bsflat;
-    //  panel1.UpdateWindowPosition;
+    //   panel1.UpdateWindowPosition;
       filemenu.MenuItem(1).Visible := True;
     filemenu.MenuItem(2).Visible := True;
     filemenu.MenuItem(15).Visible := true;
@@ -1292,9 +1292,11 @@ fpgapplication.ProcessMessages;
   else
   begin
      MainMenu.MenuItem(8).Visible := true;
-    //  panel1.Style := bsLowered;
-    //  panel1.UpdateWindowPosition;
-      WindowAttributes:= [waSizeable, waBorderless];
+   //   panel1.Style := bsLowered;
+   //   panel1.UpdateWindowPosition;
+   //   WindowAttributes:= [waSizeable, waBorderless];
+        WindowAttributes:= [];
+
      LoadIDEparameters(x);
   end;
 
@@ -1506,8 +1508,8 @@ begin
 
       if idetemp = 0 then
   begin
-    //  panel1.Style := bsLowered;
-    //  panel1.UpdateWindowPosition;
+  //    panel1.Style := bsLowered;
+  //    panel1.UpdateWindowPosition;
      MainMenu.MenuItem(8).Visible := False;
 
   if trim(maindsgn.p + maindsgn.s) <> '' then
@@ -1565,8 +1567,8 @@ begin
 
     if idetemp = 0 then
   begin
-     // panel1.Style := bsflat;
-     // panel1.UpdateWindowPosition;
+  //    panel1.Style := bsflat;
+  //    panel1.UpdateWindowPosition;
       MainMenu.MenuItem(8).Text := '';
       MainMenu.MenuItem(8).Visible := False;
   end;

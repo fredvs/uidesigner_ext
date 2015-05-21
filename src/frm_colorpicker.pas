@@ -1629,8 +1629,8 @@ begin
 
   fpgapplication.ProcessMessages;
   
-  frmcompare := TCompareForm.Create(nil);
- // fpgApplication.CreateForm(TCompareForm, frmcompare);
+ frmcompare := TCompareForm.Create(nil);
+ //fpgApplication.CreateForm(TCompareForm, frmcompare);
 
   frmcompare.Show;
 

@@ -224,8 +224,16 @@ begin
   end
   else
   if (Sender is TfpgForm) then
-    Result := TfpgForm(Sender).WindowTitle
-  else
+  begin
+   if (trim(TfpgForm(Sender).WindowTitle) <> '') then
+      Result := TfpgForm(Sender).WindowTitle
+    else
+    if (trim(TfpgForm(Sender).Name) <> '') then
+      Result := TfpgForm(Sender).Name
+    else
+      Result := TfpgForm(Sender).hint;
+  end
+    else
   if (Sender is TfpgPanel) then
     Result := TfpgPanel(Sender).Name
   else
@@ -263,7 +271,10 @@ begin
     Result := TfpgTrackBar(Sender).Name
   else
   if (Sender is TfpgComboBox) then
-    Result := TfpgComboBox(Sender).Name;
+    Result := TfpgComboBox(Sender).Name
+     else
+  if (Sender is TfpgWidget) then
+    Result := TfpgWidget(Sender).Name;
 
 end;
 
@@ -530,21 +541,21 @@ begin
       if (CheckObject = InitSpeech.AssistiveData[i].TheObject) then
       begin
         espeak_cancel;
-        if CheckObject is TfpgForm then
-        begin
+       // if CheckObject is TfpgForm then
+       // begin
           lastfocused := ' ';
 
           //  texttmp := 'Left,  ' + IntToStr(CheckPoint.X) + ' , of,  ' + IntToStr(TfpgForm(CheckObject).Width) +
           //    '.   Top,  ' + IntToStr(CheckPoint.y) + ' , of, ' + IntToStr(TfpgForm(CheckObject).Height);
           // espeak_Key(texttmp);
-        end
-        else
-        begin
+       // end
+       // else
+       // begin
           nameobj := whatname(CheckObject);
           lastfocused := nameobj;
           texttmp := InitSpeech.AssistiveData[i].Description + ' ' + nameobj + ' focused';
           espeak_Key(texttmp);
-        end;
+        //end;
         exit;
       end;
     end;
@@ -1400,18 +1411,27 @@ begin
           if (Components[i] is TfpgWidget) then
           begin
             {
-            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
-              'Panel,';
-            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
-              TfpgPanel(Components[i]);
-            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnClick :=
-              TfpgPanel(Components[i]).OnClick;
-            TfpgPanel(Components[i]).OnClick := @InitSpeech.SAKClick;
-            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
-              TfpgPanel(Components[i]).OnMouseMove;
-            TfpgPanel(Components[i]).OnMouseMove := @InitSpeech.SAKMouseMove;
-             }
+               SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
 
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              '';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgWidget(Components[i]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnClick :=
+              TfpgWidget(Components[i]).OnClick;
+            TfpgWidget(Components[i]).OnClick := @InitSpeech.SAKClick;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgWidget(Components[i]).OnEnter;
+            TfpgWidget(Components[i]).OnEnter := @InitSpeech.SAKEnter;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgWidget(Components[i]).OnMouseMove;
+            TfpgWidget(Components[i]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          }
             with Components[i] as TfpgWidget do
 
               for j := 0 to ComponentCount - 1 do
@@ -1437,7 +1457,8 @@ begin
                   InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
                     TfpgButton(Components[j]).OnMouseMove;
                   TfpgButton(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
-                end;
+                end
+                else
 
                 if (Components[j] is TfpgLabel) then
                 begin
@@ -1456,14 +1477,241 @@ begin
                   InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
                     TfpgLabel(Components[j]).OnMouseMove;
                   TfpgLabel(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
-                end;
-              end;
+                end
+                 else
+          if (Components[j] is TfpgStringGrid) then
+          begin
+            SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
 
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              'Grid,';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgStringGrid(Components[j]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnFocusChange :=
+              TfpgStringGrid(Components[j]).OnFocusChange;
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseDown :=
+              TfpgStringGrid(Components[j]).OnMouseDown;
+            TfpgStringGrid(Components[j]).OnFocusChange := @InitSpeech.SAKFocusChange;
+            TfpgStringGrid(Components[j]).OnMouseDown := @InitSpeech.SAKMouseDown;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgStringGrid(Components[j]).OnEnter;
+            TfpgStringGrid(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgStringGrid(Components[j]).OnMouseMove;
+            TfpgStringGrid(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          end
+          else
+          if (Components[j] is TfpgTrackBar) then
+          begin
+            SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              'Track bar,';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgTrackBar(Components[j]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnTrackbarChange :=
+              TfpgTrackBar(Components[j]).OnChange;
+
+            TfpgTrackBar(Components[j]).OnChange := @InitSpeech.SAKTrackBarChange;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgTrackBar(Components[j]).OnEnter;
+
+            TfpgTrackBar(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgTrackBar(Components[j]).OnMouseMove;
+            TfpgTrackBar(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          end
+          else
+          if (Components[j] is TfpgRadiobutton) then
+          begin
+            SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              'Radio Button,';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgRadiobutton(Components[j]);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnChange :=
+              TfpgRadiobutton(Components[j]).OnChange;
+
+            TfpgRadiobutton(Components[j]).OnChange := @InitSpeech.SAKChange;
+
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgRadiobutton(Components[j]).OnEnter;
+
+            TfpgRadiobutton(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgRadiobutton(Components[j]).OnMouseMove;
+            TfpgRadiobutton(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          end
+          else
+
+          if (Components[j] is TfpgCheckBox) then
+          begin
+            SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              'Check Box,';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgCheckBox(Components[j]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnChange :=
+              TfpgCheckBox(Components[j]).OnChange;
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgCheckBox(Components[j]).OnEnter;
+
+            TfpgCheckBox(Components[j]).OnChange := @InitSpeech.SAKChange;
+            TfpgCheckBox(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgCheckBox(Components[j]).OnMouseMove;
+            TfpgCheckBox(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          end
+          else
+          if (Components[j] is TfpgListBox) then
+          begin
+            SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              'List Box,';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgListBox(Components[j]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnChange :=
+              TfpgListBox(Components[j]).OnChange;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgListBox(Components[j]).OnEnter;
+
+            TfpgListBox(Components[j]).OnChange := @InitSpeech.SAKChange;
+            TfpgListBox(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgListBox(Components[j]).OnMouseMove;
+            TfpgListBox(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          end
+          else
+          if (Components[j] is TfpgComboBox) then
+          begin
+            SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              'Combo Box,';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgComboBox(Components[j]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnChange :=
+              TfpgComboBox(Components[j]).OnChange;
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgComboBox(Components[j]).OnEnter;
+            TfpgComboBox(Components[j]).OnChange := @InitSpeech.SAKChange;
+            TfpgComboBox(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgComboBox(Components[j]).OnMouseMove;
+            TfpgComboBox(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          end
+          else
+          if (Components[j] is TfpgMemo) then
+          begin
+            SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              'Memo,';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgMemo(Components[j]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgMemo(Components[j]).OnEnter;
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnKeyChar :=
+              TfpgMemo(Components[j]).OnKeyChar;
+
+            TfpgMemo(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+            TfpgMemo(Components[j]).OnKeyChar := @InitSpeech.SAKKeyChar;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgMemo(Components[j]).OnMouseMove;
+            TfpgMemo(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          end
+          else
+          if (Components[j] is TfpgEdit) then
+          begin
+            SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              'Edit,';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgEdit(Components[j]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgEdit(Components[j]).OnEnter;
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnKeyChar :=
+              TfpgEdit(Components[j]).OnKeyChar;
+            TfpgEdit(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+            TfpgEdit(Components[j]).OnKeyChar := @InitSpeech.SAKKeyChar;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgEdit(Components[j]).OnMouseMove;
+            TfpgEdit(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+          end ;
+          {
+          else
+          if (Components[j] is TfpgWidget) then
+          begin
+
+               SetLength(InitSpeech.AssistiveData, Length(InitSpeech.AssistiveData) + 1);
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1] :=
+              TSAK_Assistive.Create();
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].Description :=
+              '';
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].TheObject :=
+              TfpgWidget(Components[j]);
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnClick :=
+              TfpgWidget(Components[j]).OnClick;
+            TfpgWidget(Components[j]).OnClick := @InitSpeech.SAKClick;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnEnter :=
+              TfpgWidget(Components[j]).OnEnter;
+            TfpgWidget(Components[j]).OnEnter := @InitSpeech.SAKEnter;
+
+            InitSpeech.AssistiveData[Length(InitSpeech.AssistiveData) - 1].OriOnMouseMove :=
+              TfpgWidget(Components[j]).OnMouseMove;
+            TfpgWidget(Components[j]).OnMouseMove := @InitSpeech.SAKMouseMove;
+              end;
+           }
           end;
 
         end;
       end;
   end;
+end;
+
 end;
 
 procedure TSAK_Init.CheckCount(Sender: TObject);
@@ -1749,6 +1997,19 @@ begin
         TfpgRadiobutton(InitSpeech.AssistiveData[i].TheObject).OnMouseMove :=
           InitSpeech.AssistiveData[i].oriOnMouseMove;
       end;
+
+     {
+      else
+      if (assigned(InitSpeech.AssistiveData[i].TheObject)) and (InitSpeech.AssistiveData[i].TheObject is TfpgWidget) then
+      begin
+        TfpgWidget(InitSpeech.AssistiveData[i].TheObject).OnClick :=
+          InitSpeech.AssistiveData[i].OriOnClick;
+        TfpgWidget(InitSpeech.AssistiveData[i].TheObject).OnEnter :=
+          InitSpeech.AssistiveData[i].OriOnEnter;
+        TfpgWidget(InitSpeech.AssistiveData[i].TheObject).OnMouseMove :=
+          InitSpeech.AssistiveData[i].oriOnMouseMove;
+      end;
+    //  }
     end;
     SetLength(InitSpeech.AssistiveData, 0);
   end;

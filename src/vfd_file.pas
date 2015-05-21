@@ -388,7 +388,9 @@ begin
      'begin' + LineEnding +
      '  fpgApplication.Initialize;' + LineEnding +
      '  try' + LineEnding +
-     '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
+
+     '    fpgApplication.CreateForm(T'+ ArrayFormDesign[0].Form.Name + ', frm);' + LineEnding +
+  // '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
      '    fpgApplication.MainForm := frm;' + LineEnding +
      '    frm.Show;' + LineEnding +
      '    fpgApplication.Run;' + LineEnding +
@@ -422,7 +424,8 @@ begin
      'begin' + LineEnding +
      '  fpgApplication.Initialize;' + LineEnding +
      '  try' + LineEnding +
-     '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
+     '    fpgApplication.CreateForm(T'+ ArrayFormDesign[0].Form.Name + ', frm);' + LineEnding +
+  // '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
      '    fpgApplication.MainForm := frm;' + LineEnding +
      '    frm.Show;' + LineEnding +
      '    fpgApplication.Run;' + LineEnding +
@@ -456,7 +459,8 @@ begin
      'begin' + LineEnding +
      '  fpgApplication.Initialize;' + LineEnding +
      '  try' + LineEnding +
-     '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
+     '    fpgApplication.CreateForm(T'+ ArrayFormDesign[0].Form.Name + ', frm);' + LineEnding +
+  // '    frm := T'+ ArrayFormDesign[0].Form.Name + '.Create(nil);'  + LineEnding +
      '    fpgApplication.MainForm := frm;' + LineEnding +
      '    frm.Show;' + LineEnding +
      '    fpgApplication.Run;' + LineEnding +
