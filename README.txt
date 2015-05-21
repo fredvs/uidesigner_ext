@@ -11,8 +11,10 @@ and much more...
 
 There are also patches for integration with fpc, Lazarus, Typhon, Geany,...
 
-Designer_ext needs the last fpGUI-develop branch =>
-https://github.com/graemeg/fpgui/tree/develop
+Added in /bin => sak (speecher assistive kit) => to make designer_ext "assistivized".
+
+Designer_ext needs fpGUI =>
+https://github.com/graemeg/fpgui/
 
 Fred van Stappen => fiens@hotmail.com  
 

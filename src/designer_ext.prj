@@ -18,7 +18,7 @@ order15=0
 order16=0
 [projectoptions]
 projectdir=${PROJECTDIR}/
-projectfilename=/Z:/home/fred/designer_ext/src/designer_ext.prj
+projectfilename=${PROJECTDIR}/designer_ext.prj
 findinfiledialog=34
  [findinfileadialogfo.subdirs]
  value=0
@@ -673,7 +673,7 @@ files=
   )
  )
 [componentstore]
-storedir=/Z:/home/fred/msegui/apps/mse/compstore/
+storedir=/home/fred/designer_ext/src/apps/ide/compstore/
 filename=
 [components]
 [selecteditpage]
@@ -699,6 +699,7 @@ findhistory=7
  uses
 findoptions=1
 editpos=18
+ 4,4
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -715,8 +716,7 @@ editpos=18
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,0
- 0,0
+ 0,-1073741823
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -738,7 +738,7 @@ bookmarks17=0
 sourcefiles=18
  /home/fred/A_fpGUI-test/test1.pas
  ${PROJECTDIR}/frm_main_designer.pas
- /Z:/home/fred/designer_ext/src/frm_vfdforms.pas
+ ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/icons.inc
  ${PROJECTDIR}/vfd_propeditgrid.pas
  ${PROJECTDIR}/vfd_widgetclass.pas
@@ -753,9 +753,9 @@ sourcefiles=18
  ${PROJECTDIR}/fpg_iniutils.pas
  ${PROJECTDIR}/fpg_style_anim_round_silver_flat_horz.pas
  /Z:/home/fred/testgraoutlibthread/graout.pas
- /Z:/home/fred/testgraoutlibthread/progfpgui_graout.pas
+ /home/fred/testgraoutlibthread/progfpgui_graout.pas
 relpaths=18
- A_fpGUI-test/test1.pas
+ ../../A_fpGUI-test/test1.pas
  frm_main_designer.pas
  frm_vfdforms.pas
  icons.inc
@@ -771,8 +771,8 @@ relpaths=18
  anchors.inc
  fpg_iniutils.pas
  fpg_style_anim_round_silver_flat_horz.pas
- ../../testgraoutlibthread/graout.pas
- ../../testgraoutlibthread/progfpgui_graout.pas
+ testgraoutlibthread/graout.pas
+ testgraoutlibthread/progfpgui_graout.pas
 ismoduletexts=18
  0
  0
@@ -818,7 +818,7 @@ order=18
  11
 tabsize=113
 firsttab=0
-index=7
+index=0
 [layout]
 windowlayout=503
  [mainfo.basedock]
@@ -841,7 +841,7 @@ windowlayout=503
  rcx=0
  rcy=0
  wsize=0
- active=1
+ active=0
  visible=1
  [targetconsolefo]
  splitdir=0
@@ -882,7 +882,7 @@ windowlayout=503
  [memoryfo]
  splitdir=0
  useroptions=16507
- stackedunder=cpui386fo
+ stackedunder=cpuc86_64fo
  parent=
  mdistate=0
  nx=0
@@ -954,7 +954,7 @@ windowlayout=503
  x=0
  y=0
  cx=159
- cy=538
+ cy=535
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -965,8 +965,8 @@ windowlayout=503
  sortdescend1=0
  sorted=0
  col=0
- row=2
- rowheight=16
+ row=4
+ rowheight=17
  [stackfo]
  splitdir=0
  useroptions=24681
@@ -1163,9 +1163,9 @@ windowlayout=503
  ncx=0
  ncy=0
  x=0
- y=582
+ y=579
  cx=1129
- cy=101
+ cy=100
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1281,14 +1281,14 @@ windowlayout=503
  x=162
  y=0
  cx=967
- cy=538
+ cy=535
  rcx=0
  rcy=0
  [actionsmo.watchesonact]
  checked=1
  [actionsmo.bluedotsonact]
  checked=1
- [cpui386fo]
+ [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=16491
@@ -1299,10 +1299,10 @@ windowlayout=503
  ny=0
  ncx=0
  ncy=0
- x=337
- y=295
- cx=273
- cy=207
+ x=183
+ y=113
+ cx=352
+ cy=277
  rcx=0
  rcy=0
  wsize=0
@@ -1321,7 +1321,7 @@ windowlayout=503
  x=0
  y=41
  cx=1129
- cy=538
+ cy=535
  rcx=0
  rcy=0
 [targetconsole]

@@ -25,11 +25,14 @@ program designer_ext;
 
 {$mode objfpc}{$H+}
 
-uses {$IFDEF UNIX}
+uses
+ {$IFDEF UNIX}
   cthreads, {$ENDIF}
   fpg_iniutils,
   SysUtils,
   RunOnce_PostIt,
+  sak_fpg,
+
   fpg_cmdlineparams,
   fpg_style_anim_round_silver_horz,
   fpg_style_round_silver_flat_horz,
@@ -73,13 +76,14 @@ uses {$IFDEF UNIX}
 
   procedure MainProc;
   var
-    filedir: string;
+    filedir, ordir : string;
   begin
     ifonlyone := True;
     filedir := '';
+     ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
 
     // ideu custom plugin => uncomment it for ideU integration
-//   ideuintegration := True;
+ // ideuintegration := True;
 
      if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
     begin
@@ -148,15 +152,29 @@ uses {$IFDEF UNIX}
         maindsgn.OnLoadFile(maindsgn);
       end;
 
-      //   if gINI.ReadBool('Options', 'EnableAssistive', false) = True then SAKLoadlib;
+      {$ifdef windows}
+   if directoryexists(ordir + '\sakit')
+     {$else}
+    if directoryexists(ordir + '/sakit')
+       {$endif}
 
+    then  if gINI.ReadBool('Options', 'EnableAssistive', false) = True then SAKLoadlib;
 
    fpgApplication.Run;
 
       PropList.Free;
 
     finally
-//    SAKFreeLib;
+
+         {$ifdef windows}
+   if directoryexists(ordir + '\sakit')
+     {$else}
+    if directoryexists(ordir + '/sakit')
+       {$endif}
+       then  if gINI.ReadBool('Options', 'EnableAssistive', false) = True then begin
+     SAKUnLoadLib;
+     SAKFreeLib;
+      end;
       maindsgn.Free;
     end;
   end;

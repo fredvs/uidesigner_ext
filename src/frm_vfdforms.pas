@@ -35,6 +35,7 @@ uses
   fpg_label, fpg_button, fpg_combobox,
   {%endunits}
   Classes,
+  sak_fpg,
   SysUtils,
   fpg_base,
   fpg_form,
@@ -508,12 +509,15 @@ end;
 { TfrmVFDSetup}
  procedure TfrmVFDSetup.onAssistive(Sender: TObject);
 begin
- {
+  if checkassistive.Enabled = true then
+  begin
    if checkassistive.Checked = true then
     SAKUnLoadlib
   else
    SAKLoadlib;
-   }
+  end;
+
+
 end;
 
 procedure TfrmVFDSetup.UndoLook(Sender: TObject);
@@ -714,7 +718,7 @@ end;
 
 procedure TfrmVFDSetup.AfterCreate;
 var
-  dataf: string;
+  dataf, ordir: string;
 begin
   {@VFD_BODY_BEGIN: frmVFDSetup}
   Name := 'frmVFDSetup';
@@ -1244,6 +1248,14 @@ begin
   else
     rbideu.Enabled := False;
 
+ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
+
+{$ifdef windows}
+if directoryexists(ordir + '\sakit')
+  {$else}
+ if directoryexists(ordir + '/sakit')
+    {$endif}
+ then CheckAssistive.enabled := true;
 
 {
   if gINI.ReadBool('frmVFDSetupState', 'FirstLoad', True) = False then

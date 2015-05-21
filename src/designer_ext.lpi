@@ -133,90 +133,45 @@ install:
         <PackageName Value="fpgui_toolkit"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="16">
+    <Units Count="4">
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="131"/>
-        <CursorPos X="88" Y="151"/>
+        <UnitName Value="designer_ext"/>
+        <TopLine Value="25"/>
+        <CursorPos X="2" Y="34"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
-        <Filename Value="vfdmain.pas"/>
+        <Filename Value="frm_main_designer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
+        <UnitName Value="frm_main_designer"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="220"/>
+        <CursorPos X="29" Y="234"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
       </Unit1>
       <Unit2>
-        <Filename Value="vfdresizer.pas"/>
+        <Filename Value="frm_vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
+        <UnitName Value="frm_vfdforms"/>
+        <EditorIndex Value="3"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="vfdforms.pas"/>
+        <Filename Value="sak_fpg.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
+        <UnitName Value="sak_fpg"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="1511"/>
+        <CursorPos X="21" Y="1531"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
       </Unit3>
-      <Unit4>
-        <Filename Value="vfddesigner.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="vfdfile.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="newformdesigner.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="vfdwidgets.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit7>
-      <Unit8>
-        <Filename Value="vfdwidgetclass.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit8>
-      <Unit9>
-        <Filename Value="vfdeditors.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit9>
-      <Unit10>
-        <Filename Value="vfdformparser.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit10>
-      <Unit11>
-        <Filename Value="vfdprops.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit11>
-      <Unit12>
-        <Filename Value="vfdutils.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit12>
-      <Unit13>
-        <Filename Value="vfdpropeditgrid.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit13>
-      <Unit14>
-        <Filename Value="anchors.inc"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit14>
-      <Unit15>
-        <Filename Value="icons.inc"/>
-        <IsPartOfProject Value="True"/>
-        <UsageCount Value="200"/>
-      </Unit15>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -235,7 +190,6 @@ install:
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
-      <SmartLinkUnit Value="True"/>
       <Optimizations>
         <OptimizationLevel Value="2"/>
       </Optimizations>
@@ -245,7 +199,6 @@ install:
       <Debugging>
         <GenerateDebugInfo Value="False"/>
         <StripSymbols Value="True"/>
-        <UseExternalDbgSyms Value="True"/>
       </Debugging>
       <LinkSmart Value="True"/>
       <Options>
