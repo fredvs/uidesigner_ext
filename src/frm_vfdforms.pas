@@ -4,7 +4,7 @@ With window list, undo feature, integration into IDE, editor launcher, extra-pro
 
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2014
+2013 - 2015
 }
 {
     fpGUI  -  Free Pascal GUI Toolkit
@@ -1159,7 +1159,7 @@ begin
     SetPosition(384, 172, 128, 19);
     FontDesc := '#Label2';
     Hint := '';
-    Text := 'Speaker Assistive';
+    Text := 'Speecher Assistive';
   end;
 
   CheckAssistive := TfpgCheckBox.Create(self);
@@ -1168,7 +1168,7 @@ begin
     Name := 'CheckAssistive';
     SetPosition(388, 192, 128, 19);
     FontDesc := '#Label1';
-    Hint := 'If checked, speaker will assist you.';
+    Hint := 'If checked, speecher will assist you.';
     TabOrder := 38;
     Text := 'Enable Assistive';
     enabled := false;

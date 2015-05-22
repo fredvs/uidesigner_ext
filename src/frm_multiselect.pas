@@ -4,7 +4,7 @@ With window list, undo feature, integration into IDE, editor launcher, extra-pro
 
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2014
+2013 - 2015
 }
 unit frm_multiselect;
 
@@ -1221,7 +1221,9 @@ begin
     begin
       oricount := Theobj.ComponentCount;
       TheSelectedForm := Theobj;
-      ProcGetwidgetlist(TheSelectedForm);
+
+      if TheSelectedForm is tfpgpagecontrol then else   /// not working with tfpgpagecontrol
+       ProcGetwidgetlist(TheSelectedForm);
     end;
   end;
 end;

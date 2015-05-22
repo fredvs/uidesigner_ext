@@ -4,7 +4,7 @@ With window list, undo feature, integration into IDE, editor launcher, extra-pro
 
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2014
+2013 - 2015
 }
 {
     fpGUI  -  Free Pascal GUI Toolkit
@@ -1612,7 +1612,10 @@ begin
       exit;
       end;
 
-      fd := TFormDesigner.Create;
+     fd := TFormDesigner.Create;
+
+     // fd := TFormDesigner.Create(fpgApplication);
+     //  fpgApplication.CreateForm(TFormDesigner, fd);
 
        if nfrm.edName.Text <> '' then
         fd.Form.Name := nfrm.edName.Text;

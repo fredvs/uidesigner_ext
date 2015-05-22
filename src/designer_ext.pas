@@ -3,6 +3,7 @@ This is the extended version of fpGUI uidesigner.
 With run-only-once, window list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
+2013 - 2015
 }
 {
     fpGUI  -  Free Pascal GUI Library
