@@ -16,7 +16,7 @@ uses
   SysUtils, Classes, fpg_base, fpg_Grid, fpg_button, fpg_editbtn,
   fpg_main, fpg_hyperlink, fpg_tab,
   fpg_panel, fpg_label, fpg_edit, vfd_widgetclass, vfd_widgets,
-  fpg_scrollbar, fpg_radiobutton,
+  fpg_scrollbar, fpg_radiobutton, sak_fpg,
   fpg_checkbox, fpg_widget, fpg_spinedit, fpg_form;
 
 type
@@ -1280,8 +1280,15 @@ end;
 procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);
 var
   x: integer;
+  sakloaded : boolean = false;
 begin
   calculwidget := False;
+ if SakIsEnabled = true then
+ begin
+ sakloaded := true ;
+  saksuspend ;
+  end;
+
   if (maindsgn.selectedform <> nil) then
   begin
     fpgapplication.ProcessMessages;
@@ -1420,6 +1427,8 @@ begin
     Show;
   end;
   calculwidget := True;
+  if sakloaded = true then sakupdate;
+
 end;
 
 procedure Tfrm_multiselect.onDestroyFrm(Sender: TObject);

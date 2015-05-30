@@ -33,7 +33,6 @@ uses
   SysUtils,
   RunOnce_PostIt,
   sak_fpg,
-
   fpg_cmdlineparams,
   fpg_style_anim_round_silver_horz,
   fpg_style_round_silver_flat_horz,
