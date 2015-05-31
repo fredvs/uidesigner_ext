@@ -1672,6 +1672,7 @@ begin
 
   edName := TfpgEdit.Create(self);
   edName.Text := '';
+  edName.name := 'name';
   edName.Width := Width - l2.Right + 28;
   edName.Top := y - 2;
   edName.left := x2;
@@ -1711,6 +1712,7 @@ begin
   cbfocusable.Items.Add('False');
   cbfocusable.FocusItem := 0;
   cbfocusable.Text := 'True';
+  cbfocusable.name := 'focusable';
   cbfocusable.BackgroundColor := $E0E0E0;
   cbfocusable.Height := 21;
   cbfocusable.OnExit := @VirtualPropertiesUpdate;
@@ -1720,6 +1722,7 @@ begin
   cbsizeable.Items.Add('False');
   cbsizeable.FocusItem := 0;
   cbsizeable.Text := 'True';
+  cbsizeable.name := 'sizeable';
   cbsizeable.BackgroundColor := $E0E0E0;
   cbsizeable.Height := 21;
   cbsizeable.OnExit := @VirtualPropertiesUpdate;
@@ -1730,6 +1733,7 @@ begin
   cbvisible.FocusItem := 0;
   cbvisible.Text := 'True';
   cbvisible.BackgroundColor := $E0E0E0;
+  cbvisible.name := 'visible';
   cbvisible.Height := 21;
   cbvisible.OnExit := @VirtualPropertiesUpdate;
   ;
@@ -1739,27 +1743,30 @@ begin
   cbfullscreen.Items.Add('True');
   cbfullscreen.FocusItem := 0;
   cbfullscreen.Text := 'False';
+  cbfullscreen.name := 'fullscreen';
+
   cbfullscreen.BackgroundColor := $E0E0E0;
   cbfullscreen.Height := 21;
   cbfullscreen.OnExit := @VirtualPropertiesUpdate;
-  ;
+
 
   cbenabled := TfpgCombobox.Create(virtualpanel);
   cbenabled.Items.Add('True');
   cbenabled.Items.Add('False');
   cbenabled.FocusItem := 0;
   cbenabled.Text := 'True';
+  cbenabled.name := 'enabled';
   cbenabled.BackgroundColor := $E0E0E0;
   cbenabled.Height := 21;
   cbenabled.OnExit := @VirtualPropertiesUpdate;
-  ;
+
 
   edminwidth := TfpgEdit.Create(virtualpanel);
   edminwidth.Text := '0';
   edminwidth.BackgroundColor := $E0E0E0;
   edminwidth.Height := 21;
   edminwidth.OnExit := @VirtualPropertiesUpdate;
-  ;
+  edminwidth.name := 'minwidth';
 
 
   edminheight := TfpgEdit.Create(virtualpanel);
@@ -1767,20 +1774,21 @@ begin
   edminheight.BackgroundColor := $E0E0E0;
   edminheight.Height := 21;
   edminheight.OnExit := @VirtualPropertiesUpdate;
-  ;
+  edminheight.name := 'minheight';
 
   edmaxwidth := TfpgEdit.Create(virtualpanel);
   edmaxwidth.Text := '0';
   edmaxwidth.BackgroundColor := $E0E0E0;
   edmaxwidth.Height := 21;
   edmaxwidth.OnExit := @VirtualPropertiesUpdate;
-  ;
+   edmaxwidth.name := 'maxwidth';
 
   edmaxheight := TfpgEdit.Create(virtualpanel);
   edmaxheight.Text := '0';
   edmaxheight.BackgroundColor := $E0E0E0;
   edmaxheight.Height := 21;
   edmaxheight.OnExit := @VirtualPropertiesUpdate;
+   edmaxheight.name := 'maxheight';
 
   cbWindowPosition := TfpgCombobox.Create(virtualpanel);
   cbWindowPosition.Items.Add('wpUser');
@@ -1792,12 +1800,14 @@ begin
   cbWindowPosition.BackgroundColor := $E0E0E0;
   cbWindowPosition.Height := 21;
   cbWindowPosition.OnExit := @VirtualPropertiesUpdate;
+   cbWindowPosition.name := 'WindowPosition';
 
   edTag := TfpgEdit.Create(virtualpanel);
   edTag.Text := '0';
   edTag.BackgroundColor := $E0E0E0;
   edTag.Height := 21;
   edTag.OnExit := @VirtualPropertiesUpdate;
+   edTag.name := 'Tag';
 
   y := virtualpanel.Bottom + 5;
 
@@ -1825,7 +1835,7 @@ begin
     Height := 22;
     Anchors := [anLeft, anBottom];
     Focusable := False;
-  end;
+    end;
 
   btnTop := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
 
@@ -1834,7 +1844,7 @@ begin
     Height := 22;
     Anchors := [anright, anBottom];
     Focusable := False;
-  end;
+   end;
 
   btnTop.Left := Width - (btnTop.Width) - 5;
 
@@ -1847,6 +1857,7 @@ begin
   begin
     Height := 22;
     Anchors := [anleft, anBottom];
+
     Focusable := False;
   end;
 
@@ -1871,6 +1882,7 @@ begin
   begin
     ImageName := 'vfd.anchorleft';
     ShowImage := True;
+      name := 'anchor_left';
     AllowAllUp := True;
     GroupIndex := 1;
     Focusable := False;
@@ -1886,6 +1898,7 @@ begin
     ImageName := 'vfd.anchortop';
     ShowImage := True;
     AllowAllUp := True;
+      name := 'anchor_top';
     GroupIndex := 2;
     Focusable := False;
     Anchors := [anright, anBottom];
@@ -1900,6 +1913,7 @@ begin
     ImageName := 'vfd.anchorbottom';
     ShowImage := True;
     AllowAllUp := True;
+      name := 'anchor_bottom';
     GroupIndex := 3;
     Focusable := False;
     Anchors := [anBottom, anright];
@@ -1914,6 +1928,7 @@ begin
     ImageName := 'vfd.anchorright';
     ShowImage := True;
     AllowAllUp := True;
+      name := 'anchor_right';
     GroupIndex := 4;
     Focusable := False;
     Anchors := [anBottom, anright];

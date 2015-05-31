@@ -790,7 +790,6 @@ begin
     Position := 4;
     ShowPosition := True;
     TabOrder := 3;
-    Style :=  StGradient ;
   end;
 
   chkFullPath := TfpgCheckBox.Create(self);
@@ -1103,7 +1102,6 @@ begin
     Position := 20;
     ShowPosition := True;
     TabOrder := 32;
-    Style :=  StGradient ;
   end;
 
   Labelonlyonce := TfpgLabel.Create(self);

@@ -1017,6 +1017,8 @@ begin
 
   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
+  fpgapplication.ProcessMessages;
+
   Getwidgetlist(TheSelectedForm);
 end;
 
@@ -1212,11 +1214,17 @@ begin
 end;
 
 procedure Tfrm_multiselect.Getwidgetlist(Theobj: TfpgWidget);
+var
+   sakloaded : boolean = false;
 begin
   if ((Visible = True) and (maindsgn.selectedform <> nil)) or (calculwidget = True) then
   begin
     fpgapplication.ProcessMessages;
-
+ if SakIsEnabled = true then
+ begin
+ sakloaded := true ;
+ saksuspend ;
+  end;
     if (Tfpgwidget(TheSelectedForm) <> Tfpgwidget(Theobj)) or (Theobj.ComponentCount <> oricount) then
     begin
       oricount := Theobj.ComponentCount;
@@ -1224,6 +1232,7 @@ begin
 
       if TheSelectedForm is tfpgpagecontrol then else   /// not working with tfpgpagecontrol
        ProcGetwidgetlist(TheSelectedForm);
+  if sakloaded = true then sakupdate;
     end;
   end;
 end;
@@ -1286,7 +1295,7 @@ begin
  if SakIsEnabled = true then
  begin
  sakloaded := true ;
-  saksuspend ;
+ // saksuspend ;
   end;
 
   if (maindsgn.selectedform <> nil) then
@@ -1427,7 +1436,7 @@ begin
     Show;
   end;
   calculwidget := True;
-  if sakloaded = true then sakupdate;
+//  if sakloaded = true then sakupdate;
 
 end;
 

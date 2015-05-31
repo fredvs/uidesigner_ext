@@ -32,6 +32,7 @@ interface
 
 uses
   Classes,
+  sak_fpg,
   SysUtils,
   fpg_base,
   fpg_main,
@@ -666,13 +667,21 @@ procedure TFormDesigner.DeleteWidgets;
 var
   n: integer;
   cd: TWidgetDesigner;
+  sakenabled : boolean = false;
+  multisel : boolean = false;
+   widget :  TfpgWidget;
 
   procedure DeleteChildWidget(ADesignWidget: TWidgetDesigner);
   var
     i: integer;
+
   begin
     if not Assigned(ADesignWidget.Widget) then  // safety check
       Exit;
+     widget := ADesignWidget.Widget.Parent;
+
+ //   while widget.HasParent = true do
+ //  widget := Widget.Parent;
 
     if (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFILENAMEEDIT') and (uppercase(ADesignWidget.Widget.ClassName) <>
       'TFPGDIRECTORYEDIT') and (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFONTEDIT') and
@@ -687,6 +696,17 @@ var
 
 begin
   n := 0;
+
+  if frmmultiselect.Visible = true then
+  begin
+    frmmultiselect.hide;
+    multisel := true;
+  end;
+
+  if SakIsEnabled() = true then begin
+  saksuspend;
+   sakenabled := true;
+  end;
   // Pass 1: Mark widgets and children than need deletion
   while n < FWidgets.Count do
   begin
@@ -709,6 +729,17 @@ begin
   end;
 
   UpdatePropWin;
+
+  if sakenabled = true then begin
+     sakupdate;
+    end;
+
+   if multisel = true then
+  begin
+    fpgapplication.ProcessMessages;
+     frmMultiSelect.Getwidgetlist(widget);
+     frmmultiselect.show;
+  end;
 end;
 
 
