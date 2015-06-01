@@ -809,13 +809,11 @@ begin
 
   {%region 'Auto-generated GUI code' -fold}
 
-
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(400, 10, 800, 92);
   WindowTitle := 'fpGUI designer ext';
   Hint := '';
-  ShowHint := True;
   BackGroundColor := $80000001;
   MinWidth := 770;
   MinHeight := 90;
@@ -844,6 +842,7 @@ begin
     FontDesc := '#Label1';
     Hint := 'Hold left-click to move, right-click to resize...';
     Style := bsLowered;
+    ShowHint := True;
     Text := '';
     OnMouseMove := @onMovemovepanel;
     OnMouseDown := @onClickDownPanel;
@@ -857,8 +856,7 @@ begin
     SetPosition(1, 1, 11, 14);
     BackgroundColor := TfpgColor($BED9BE);
     FontDesc := '#Label1';
-    Hint := 'Close';
-    ParentShowHint := False;
+    Hint := 'Quit';
     ShowHint := True;
     Text := 'X';
     OnClick := @maindsgn.OnHide;
@@ -1014,6 +1012,7 @@ begin
     TabOrder := 1;
     Text := '';
     Visible := False;
+    ShowHint := True;
     Focusable := False;
     OnClick := @(OnNewForm);
   end;
@@ -1030,6 +1029,7 @@ begin
     ImageSpacing := 0;
     TabOrder := 2;
     Text := '';
+    ShowHint := True;
     Visible := False;
     Focusable := False;
     OnClick := @(maindsgn.OnLoadFile);
@@ -1050,6 +1050,7 @@ begin
     tag := 10;
     Visible := False;
     Focusable := False;
+    ShowHint := True;
     OnClick := @(maindsgn.OnSaveFile);
   end;
 
@@ -1068,6 +1069,7 @@ begin
     Text := '';
     Focusable := False;
     AllowDown := True;
+    ShowHint := True;
     OnClick := @ToggleDesignerGrid;
   end;
 
@@ -1084,6 +1086,7 @@ begin
     TabOrder := 3;
     Text := '';
     Focusable := False;
+    ShowHint := True;
     onClick := @ToFrontClick;
   end;
 
@@ -1100,6 +1103,7 @@ begin
     TabOrder := 20;
     Text := '';
     Focusable := False;
+    ShowHint := True;
     OnClick := @onmultiselect;
   end;
 
@@ -1110,6 +1114,7 @@ begin
     SetPosition(180, 28, 606, 62);
     Anchors := [anLeft,anRight,anTop,anBottom];
     Focusable := False;
+    ShowHint := True;
     Width := self.Width - 150;
     OnResize := @PaletteBarResized;
   end;
@@ -1121,7 +1126,8 @@ begin
     SetPosition(16, 62, 156, 22);
     ExtraHint := '';
     FontDesc := '#List';
-    Hint := '';
+    Hint := 'Widgets list';
+    ShowHint := True;
     FocusItem := -1;
     TabOrder := 5;
     chlPalette.OnChange:=@OnChangeWidget;
@@ -1165,6 +1171,7 @@ begin
     btn.Text := '';
     btn.Hint := wgc.WidgetClass.ClassName;
     btn.Focusable := False;
+    btn.ShowHint := True;
     btn.OnClick := @OnPaletteClick;
     btn.AllowDown := True;
     btn.AllowAllUp := True;

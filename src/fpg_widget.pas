@@ -523,13 +523,11 @@ begin
 end;
 
 destructor TfpgWidget.Destroy;
-var
-  ifsak : boolean = false;
 begin
   {$IFDEF DEBUG}
   writeln('TfpgWidget.Destroy [', Classname, '.', Name, ']');
   {$ENDIF}
-   HandleHide;
+  HandleHide;
   if Owner <> nil then
     if (Owner is TfpgWidget) and (TfpgWidget(Owner).ActiveWidget = self) then
       TfpgWidget(Owner).ActiveWidget := nil;
@@ -680,7 +678,6 @@ var
 begin
   if InDesigner then
   begin
-
     // dispatching message to designer
     FFormDesigner.Dispatch(msg);
     if msg.Stop then
@@ -785,10 +782,10 @@ procedure TfpgWidget.MsgMouseMove(var msg: TfpgMessageRec);
 begin
   if InDesigner then
   begin
-
-    /// fred was here
-   if Assigned(OnMouseMove) then OnMouseMove(self, msg.Params.mouse.shiftstate,
-   Point(msg.Params.mouse.x, msg.Params.mouse.y));
+      HandleMouseMove(msg.Params.mouse.x, msg.Params.mouse.y, msg.Params.mouse.Buttons, msg.Params.mouse.shiftstate);
+  if Assigned(OnMouseMove) then
+    OnMouseMove(self, msg.Params.mouse.shiftstate,
+        Point(msg.Params.mouse.x, msg.Params.mouse.y));
 
     FFormDesigner.Dispatch(msg);
     if msg.Stop then
@@ -835,13 +832,16 @@ begin
   {$IFDEF Debug}
   itf := DebugMethodEnter('TfpgWidget.MsgMouseEnter - ' + ClassName + ' ('+Name+')');
   {$ENDIF}
-
   if InDesigner then
   begin
     FFormDesigner.Dispatch(msg);
     if msg.Stop then
       Exit;
   end;
+
+  HandleMouseEnter;
+  if Assigned(FOnMouseEnter) then
+    FOnMouseEnter(self);
 end;
 
 procedure TfpgWidget.MsgMouseExit(var msg: TfpgMessageRec);

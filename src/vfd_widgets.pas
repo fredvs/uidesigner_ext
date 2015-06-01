@@ -50,7 +50,7 @@ uses
   fpg_main,
   vfd_designer,
   u_editgrid,
- // fpg_nicegrid,
+  // fpg_nicegrid,
   fpg_widget,
   fpg_form,
   fpg_label,

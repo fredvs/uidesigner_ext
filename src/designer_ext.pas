@@ -160,6 +160,7 @@ uses
 
     then  if gINI.ReadBool('Options', 'EnableAssistive', false) = True then SAKLoadlib;
 
+      fpgApplication.ShowHint:=true;
    fpgApplication.Run;
 
       PropList.Free;
