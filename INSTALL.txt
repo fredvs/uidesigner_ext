@@ -9,7 +9,7 @@ How to install it ?
 
 Just compile /designer_ext/src/designer_ext.pas
 
-If you want assistive for designer_ext => copy /designer_ext/bin/your_system/sak folder => into your main application folder.
+If you want assistive for designer_ext => copy /sakit/ folder => into your main application folder.
 Then in "Settings" => enable "Assistive".
 
 For integation with fpc, Lazarus, Typhon, Geany, external-code-editor, ..., you may use the patches...

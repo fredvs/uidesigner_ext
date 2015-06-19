@@ -137,8 +137,9 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="149"/>
-        <CursorPos X="79" Y="164"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="62"/>
+        <CursorPos X="3" Y="86"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -162,9 +163,9 @@ install:
       <Unit3>
         <Filename Value="sak_fpg.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="38"/>
-        <CursorPos X="99" Y="49"/>
+        <CursorPos X="14" Y="48"/>
         <UsageCount Value="42"/>
         <Loaded Value="True"/>
       </Unit3>
