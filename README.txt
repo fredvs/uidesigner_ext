@@ -11,7 +11,7 @@ and much more...
 
 There are also patches for integration with fpc, Lazarus, Typhon, Geany,...
 
-Added in /bin => sak (speecher assistive kit) => to make designer_ext "assistivized".
+Added /sakit (speecher assistive kit) => to make designer_ext "assistivized".
 
 Designer_ext needs fpGUI =>
 https://github.com/graemeg/fpgui/
