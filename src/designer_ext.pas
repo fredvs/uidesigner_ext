@@ -153,33 +153,33 @@ uses
       end;
 
       {$ifdef windows}
-   if directoryexists(ordir + '\sakit')
-     {$else}
-    if directoryexists(ordir + '/sakit')
+   if (directoryexists(ordir + '\sakit'))and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
+     then SAKLoadlib(ordir);
+       {$else}
+   if (directoryexists(ordir + '/sakit')) and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
+      then SAKLoadlib(ordir)  else
+      if (directoryexists('/usr/local/share/sakit')) and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
+        then SAKLoadlib('/usr/local/share/');
        {$endif}
-
-    then  if gINI.ReadBool('Options', 'EnableAssistive', false) = True then SAKLoadlib;
-
       fpgApplication.ShowHint:=true;
-   fpgApplication.Run;
+      fpgApplication.Run;
 
       PropList.Free;
 
     finally
 
          {$ifdef windows}
-   if directoryexists(ordir + '\sakit')
+   if (directoryexists(ordir + '\sakit')) and
      {$else}
-    if directoryexists(ordir + '/sakit')
-       {$endif}
-       then  if gINI.ReadBool('Options', 'EnableAssistive', false) = True then begin
+    if ((directoryexists(ordir + '/sakit')) or (directoryexists('/usr/local/share/sakit'))) and
+     {$endif}
+       (gINI.ReadBool('Options', 'EnableAssistive', false) = True) then
      SAKUnLoadLib;
-     SAKFreeLib;
-      end;
-      maindsgn.Free;
+        maindsgn.Free;
     end;
-  end;
 
+
+  end;
 
 begin
   MainProc;

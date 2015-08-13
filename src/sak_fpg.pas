@@ -114,13 +114,15 @@ type
   lastfocused: string ;
   AProcess: TProcess;
 
-    TheWord: string;  //// use F11 key in memo
-    TheSentence: string;   //// use F10 key in memo
-    TheLastSentence: string;  //// use F10 key in memo
+    TheWord: string;  //// use F10 key in edit
+    TheSentence: string;   //// use F11 key in edit
 
     ES_ExeFileName: ansistring;
     ES_DataDirectory: ansistring;
-  
+    ES_LibFileName: ansistring;
+
+    PA_LibFileName: ansistring;
+
     voice_language: ansistring; //-v
     voice_gender: ansistring;  //-g
     voice_speed: integer;  //-s
@@ -167,6 +169,10 @@ type
     procedure UpdateChild(AComp : TComponent) ;
     function WhatName(Sender: TObject): string;
     procedure ChildComponentCount(AComponent: TComponent);
+    function WhatPos(sender : Tobject; kind : integer) : string ;  // kind 0 = all, , 1 = part
+    function WhatDeleted(sender : Tobject) : string;
+    function WhatWord(sender : Tobject) : string;
+    function WhatLine(sender : Tobject) : string;
     function LoadLib: integer;
     procedure unLoadLib;
     procedure InitObject;
@@ -174,31 +180,32 @@ type
 
    TWarning = class(TfpgForm)
   private
-    {@VFD_HEAD_BEGIN: Warning}
     Label1: TfpgLabel;
     Label2: TfpgLabel;
     Label3: TfpgLabel;
     Label4: TfpgLabel;
     Button1: TfpgButton;
     Button2: TfpgButton;
-    {@VFD_HEAD_END: Warning}
   public
     modresult : integer;
     procedure AfterCreate; override;
     procedure buttonclicked(Sender: TObject);
   end;
 
+ ///// to find the file in sak.ini (what => 0 = espeak bin, 1 = portaudio lib, 2 = espeak lib, 3 = epeak-data dir)
+function WhatFile(sakini : string; what : integer) : string;
+
+  {$IF DEFINED(unix)}
+function ChangePermission(thefile : string; raisemessage : boolean = true) : integer ;
+{$endif}
+
 /// Load with custom sakit dir
 function SAKLoadLib(const SakitDir: string = ''): integer;
                             //'' = default
 
 /// Load with custom espeak dir
-function SAKLoadLib(const eSpeakBin: string;
+function SAKLoadLib(const eSpeakBin: string; const eSpeaklib: string; const PortaudioLib: string;
                                       const eSpeakDataDir: string): integer;
-
-function WhatSpeakBin(espeakscript : string) : string;
-
-function ChangePermission(thefile : string; raisemessage : boolean = true) : integer ;
 
 function SAKUnloadLib: integer;
 
@@ -227,20 +234,169 @@ function SAKSay(Text: string): integer;
 //// cancel current speaker
 function SakCancel : integer;
 
-var
-  sak: TSAK;
-  isenabled: boolean = False;
-
-implementation
-
 {$IFDEF FREEBSD}
 // These are missing for FreeBSD in FPC's RTL
 const
   S_IRWXU = S_IRUSR or S_IWUSR or S_IXUSR;
   S_IRWXG = S_IRGRP or S_IWGRP or S_IXGRP;
   S_IRWXO = S_IROTH or S_IWOTH or S_IXOTH;
-
 {$ENDIF}
+
+var
+  sak: TSAK;
+  isenabled: boolean = False;
+ 
+implementation
+
+function Tsak.WhatDeleted(sender : Tobject) : string;
+var
+ strline, posword1, posword2 : string;
+ pos1 : integer;
+begin
+   with sender as Tfpgmemo do
+      begin
+           espeak_cancel;
+          strline :=  Lines[cursorline];
+        posword1 := '';
+             pos1 := cursorpos ;
+        while (copy(strline,pos1,1) <> ' ') and (pos1 > 0) do
+          begin
+        posword1 := copy(strline,pos1,1)   + posword1;
+        dec(pos1);
+          end;
+
+    //    writeln('chars before pos = ' + posword1);  // the letters before cursor
+
+    posword2 := '';
+             pos1 := cursorpos +1 ;
+        while (copy(strline,pos1,1) <> ' ') and (pos1 < length(strline) +1) do
+          begin
+        posword2 := posword2 + copy(strline,pos1,1)  ;
+        inc(pos1);
+          end;
+
+      if trim(posword1 + posword2) = '' then posword1 := 'empty, ';
+
+
+       if  copy(strline,cursorpos+1,1) = ' '   // the letter after cursor is space
+              then
+              begin
+       result := 'deleted, space, after, '  +  posword1 + posword2 + ' in line ' + inttostr(cursorline+1)
+  end else
+   begin
+     result := 'deleted, position, ' + inttostr(length(posword1)+1) +  ', line, ' + inttostr(cursorline+1) +  ', in, ' +  posword1 + posword2;
+        end;
+
+//     writeln(result);
+
+        end;
+
+
+end;
+
+function Tsak.WhatPos(sender : Tobject; kind : integer) : string ;  // kind 0 = all, , 1 = part
+var
+ strline, posword1, posword2 : string;
+ pos1 : integer;
+begin
+
+            with sender as Tfpgmemo do
+           begin
+                  espeak_cancel;
+
+         strline :=  Lines[cursorline];
+        posword1 := '';
+             pos1 := cursorpos ;
+        while (copy(strline,pos1,1) <> ' ') and (pos1 > 0) do
+          begin
+        posword1 := copy(strline,pos1,1)   + posword1;
+        dec(pos1);
+          end;
+
+    //    writeln('chars before pos = ' + posword1);  // the letters before cursor
+
+    posword2 := '';
+             pos1 := cursorpos +1 ;
+        while (copy(strline,pos1,1) <> ' ') and (pos1 < length(strline) +1) do
+          begin
+        posword2 := posword2 + copy(strline,pos1,1)  ;
+        inc(pos1);
+          end;
+
+      if trim(posword1 + posword2) = '' then posword1 := 'empty, ';
+
+
+       if  copy(strline,cursorpos+1,1) = ' '   // the letter after cursor is space
+              then
+   //      writeln('space, after, '  +  posword1 + posword2 + ' in line ' + inttostr(cursorline) )
+        if kind = 0 then
+         result := 'space, after, '  +  posword1 + posword2 + ', in line, ' + inttostr(cursorline+1)
+         else   result := 'space, after, '  +  posword1 + posword2
+
+   else
+   begin
+   //   writeln(copy(strline,cursorpos+1,1) + ', line, ' + inttostr(cursorline) + ' , position, ' + inttostr(length(posword1)+1) + ', in, ' +
+  // posword1 + posword2);
+     if kind = 0 then
+     result := copy(strline,cursorpos+1,1) +  ' , position, ' + inttostr(length(posword1)+1) + ', line, ' + inttostr(cursorline+1)+ ', in, ' +
+   posword1 + posword2 else
+      result := copy(strline,cursorpos+1,1) +  ' , position, ' + inttostr(length(posword1)+1) + ', in, ' +
+   posword1 + posword2
+
+   end;
+
+  //   writeln(result);
+
+end;
+
+end;
+
+function  Tsak.WhatLine(sender : Tobject) : string;
+begin
+               with sender as Tfpgmemo do
+           begin
+                  espeak_cancel;
+          result := 'line, ' + inttostr(cursorline +1) + ', ' +  Lines[cursorline];
+
+           end;
+
+end;
+
+function Tsak.WhatWord(sender : Tobject) : string ;
+var
+ strline, posword1, posword2 : string;
+ pos1 : integer;
+begin
+
+            with sender as Tfpgmemo do
+           begin
+                  espeak_cancel;
+          strline :=  Lines[cursorline];
+        posword1 := '';
+             pos1 := cursorpos -1;
+        while (copy(strline,pos1,1) <> ' ') and (pos1 > 0) do
+          begin
+        posword1 := copy(strline,pos1,1)   + posword1;
+        dec(pos1);
+          end;
+
+    //    writeln('chars before pos = ' + posword1);  // the letters before cursor
+
+    posword2 := '';
+             pos1 := cursorpos  ;
+        while (copy(strline,pos1,1) <> ' ') and (pos1 < length(strline) +1) do
+          begin
+        posword2 := posword2 + copy(strline,pos1,1)  ;
+        inc(pos1);
+          end;
+
+      if trim(posword1 + posword2) = '' then posword1 := 'empty, ';
+
+            result := posword1 + posword2  ;
+
+end;
+
+end;
 
 procedure Tsak.UpdateChild(AComp : TComponent) ;
 var
@@ -1023,7 +1179,7 @@ begin
   CheckShift := Shift;
     if (CheckObject is TfpgMemo) or (CheckObject is Tfpgedit)  or (CheckObject is Tfpgstringgrid) then
    begin
-
+     espeak_cancel;
   oldlang := voice_language;
     if voice_gender = '' then
     oldgender := -1 else
@@ -1033,12 +1189,13 @@ begin
   oldspeed := voice_speed;
   oldpitch := voice_pitch;
   oldvolume := voice_volume;
-
-   if CheckKey = 32 then
+     if CheckKey = 32 then
    begin
    //espeak_Key('space') ;
+
    SAKSetVoice(2,'',150,-1,-1);
-   espeak_Key(Theword) ;
+    if (CheckObject is TfpgMemo) then espeak_Key(WhatWord(CheckObject))
+   else espeak_Key(Theword) ;
    TheSentence := TheSentence + ' ' + TheWord;
    Theword := '';
    SAKSetVoice(oldgender,oldlang,oldspeed,oldpitch,oldvolume);
@@ -1048,15 +1205,16 @@ begin
    begin
    //espeak_Key('dot') ;
    SAKSetVoice(2,'',150,-1,-1);
-   espeak_Key( Theword + ', ' + TheSentence + ' ' + Theword) ;
+     if (CheckObject is TfpgMemo) then espeak_Key(Whatword(CheckObject)+ ', ' + WhatLine(CheckObject))
+   else  espeak_Key( Theword + ', ' + TheSentence + ' ' + Theword) ;
    SAKSetVoice(oldgender,oldlang,oldspeed,oldpitch,oldvolume);
-   TheLastSentence := TheSentence + ' ' + Theword ;
    TheSentence := '';
    Theword := '';
    end
+
   else
   begin
-     if ((CheckObject is Tfpgstringgrid) or (CheckObject is Tfpgtrackbar)) and ( (CheckKey =keyUp) or (CheckKey = keydown) or
+     if ((CheckObject is Tfpgstringgrid) or (CheckObject is TfpgMemo) or (CheckObject is Tfpgtrackbar)) and ( (CheckKey =keyUp) or (CheckKey = keydown) or
      (CheckKey =57398) or (CheckKey = 57399) or
   (CheckKey = keyleft) or (CheckKey = keyright)) then
   begin
@@ -1068,11 +1226,12 @@ begin
     if CheckKey =57398 then  espeak_Key('page up') else
    if CheckKey =57399 then  espeak_Key('page down') ;
 
-   TimerRepeat.Interval := 800 ;
+   TimerRepeat.Interval := 600 ;
   end
   else  TimerRepeat.Interval := 1 ;
     TimerRepeat.Enabled := True;
    end;
+
 
    end
    else
@@ -1097,7 +1256,7 @@ procedure TSAK.CheckRepeatKeyPress(Sender: TObject);
 var
   i: integer;
   ifok: boolean = True;
-oldlang : string;
+oldlang: string;
  oldgender, oldspeed, oldpitch, oldvolume : integer;
 begin
   TimerRepeat.Enabled := False;
@@ -1124,15 +1283,24 @@ begin
 (CheckKey = 57398) or (CheckKey = 57399) or (CheckKey = 127) or   (CheckKey = 57378) or (CheckKey = 27) or (CheckKey = 57401) or   (CheckKey = 57400)
 then
  begin
-      espeak_cancel;   // f11 CheckKey = 57611
-     if (CheckKey = 57611) and ((CheckObject is TfpgMemo) or (CheckObject is TfpgEdit))
-       then
-         else
-      begin
-        case CheckKey of
+      espeak_cancel;   //
+
+      case CheckKey of
 
           13: espeak_Key('enter');
-          8: espeak_Key('back space');
+          8: begin  /// backspace
+           if (CheckObject is Tfpgedit) and (length(theword) > 1) then
+    begin
+    theword := copy(theword,1,length(theword)-1);
+     SAKSetVoice(2,'',165,-1,-1);
+      espeak_Key('back space, ' + theword) ;
+     SAKSetVoice(oldgender,oldlang,oldspeed,oldpitch,oldvolume);
+     end  else
+      if (CheckObject is Tfpgmemo) then
+       espeak_Key('back space, ' + WhatDeleted(CheckObject))
+      else
+                    espeak_Key('back space');
+  end;
           32: begin
           if (CheckObject is TfpgCheckBox) or (CheckObject is TfpgRadioButton) or (CheckObject is TfpgComboBox) or
               (CheckObject is TfpgListBox) then
@@ -1142,6 +1310,8 @@ then
 
           keyUp:
           begin
+             if (CheckObject is Tfpgmemo) then   espeak_Key(' in ' + whatline(CheckObject) + ', ' + whatpos(CheckObject,1)) else
+             begin
 
             if (CheckObject is TfpgTrackBar) then
               with CheckObject as TfpgTrackBar do
@@ -1158,8 +1328,14 @@ then
                 espeak_Key('up');
            end;
 
+          end;
+
           keydown:
           begin
+
+          if (CheckObject is Tfpgmemo) then  espeak_Key(' in ' + whatline(CheckObject) +', ' + whatpos(CheckObject,1))
+          else
+             begin
 
             if (CheckObject is TfpgTrackBar) then
               with CheckObject as TfpgTrackBar do
@@ -1176,8 +1352,13 @@ then
              espeak_Key('down');
           end;
 
+            end;
+
           keyleft:
           begin
+
+            if (CheckObject is Tfpgmemo) then  espeak_Key(whatpos(CheckObject,0))
+            else begin
 
             if (CheckObject is TfpgTrackBar) then
               with CheckObject as TfpgTrackBar do
@@ -1195,8 +1376,13 @@ then
 
           end;
 
+          end;
+
           keyright:
           begin
+
+            if (CheckObject is Tfpgmemo) then espeak_Key(whatpos(CheckObject,0)) else
+             begin
 
             if (CheckObject is TfpgTrackBar) then
               with CheckObject as TfpgTrackBar do
@@ -1210,6 +1396,8 @@ then
               with CheckObject as Tfpgstringgrid do
                CheckFocusChange(CheckObject) else
                 espeak_Key('right');
+
+          end;
 
           end;
           57601: espeak_Key('f, 1');
@@ -1239,26 +1427,22 @@ then
                CheckFocusChange(CheckObject) else
              espeak_Key('page, down');
 
-          127: espeak_Key('delete');
+          127:   if (CheckObject is Tfpgmemo) then
+           espeak_Key('delete, ' + WhatDeleted(CheckObject))
+          else
+                      espeak_Key('delete');
           57378: espeak_Key('insert');
           27: espeak_Key('escape');
           57401: espeak_Key('end');
           57400: espeak_Key('home');
 
 
-         57609:  if (CheckObject is TfpgMemo) then
-                   begin
-                SAKSetVoice(2,'',165,-1,-1);
-                espeak_Key(thelastsentence) ;
-                SAKSetVoice(oldgender,oldlang,oldspeed,oldpitch,oldvolume);
-              end
-                  else
-          espeak_Key('f, 9');
+         57609:  espeak_Key('f, 9');
 
           57610: if (CheckObject is TfpgMemo) then
                     begin
                 SAKSetVoice(2,'',165,-1,-1);
-                espeak_Key(theword) ;
+               espeak_Key( whatword(CheckObject)) ;
                 SAKSetVoice(oldgender,oldlang,oldspeed,oldpitch,oldvolume);
               end
                   else espeak_Key('f, 10');
@@ -1266,7 +1450,7 @@ then
           57611: if (CheckObject is TfpgMemo) then
                     begin
                 SAKSetVoice(2,'',165,-1,-1);
-                espeak_Key(thesentence) ;
+                espeak_Key(whatline(CheckObject)) ;
                 SAKSetVoice(oldgender,oldlang,oldspeed,oldpitch,oldvolume);
               end
                   else espeak_Key('f, 11');
@@ -1290,8 +1474,7 @@ then
               espeak_Key('f, 12');
         end;
         exit;
-      end;
-    end else    espeak_Key(KeycodeToText(CheckKey, [])) ;
+        end else    espeak_Key(KeycodeToText(CheckKey, [])) ;
     end;
   end;
 end;
@@ -1304,7 +1487,7 @@ begin
    CheckObject := Sender;
    CheckKeyChar := key;
 
-   if (Sender is TfpgMemo) or (Sender is Tfpgedit) then
+     if (Sender is TfpgMemo) or (Sender is Tfpgedit) then
   Theword := Theword + key;
 
   while (finded = False) and (i < (Length(sak.AssistiveData))) do
@@ -1342,39 +1525,52 @@ end;
 
 ////////////////////// Loading Procedure
 
-/// to find what executable is used by espeak-script
-function WhatSpeakBin(espeakscript : string) : string;
+ ///// to find the file in sak.ini (what => 0 = espeak bin, 1 = portaudio lib, 2 = espeak lib, 3 = epeak-data dir)
+function WhatFile(sakini : string; what : integer) : string;
 var
 tf: textfile;
 ffinded : boolean ;
-dataf : string;
+dataf, whatfil : string;
+len : integer;
 begin
 ffinded := false;
 result := '';
 
-//writeln( 'espeakscript is ' + espeakscript);
+//writeln( 'sakini is ' + sakini);
 
-if fileexists(espeakscript) then
+if fileexists(sakini) then
 begin
-  AssignFile(tf,pchar(espeakscript));
+  AssignFile(tf,pchar(sakini));
    Reset(tF);
+
+   case what of
+    0: whatfil := 'BINESPEAK=';
+    1: whatfil := 'LIBPORTAUDIO=';
+    2: whatfil := 'LIBESPEAK=';
+    3: whatfil := 'DIRESPEAKDATA=';
+     end;
+
+   len := length(whatfil);
 
    while (eof(tf) = false) and (ffinded = false) do
      begin
        Readln(tF, dataf);
     dataf := trim(dataf);
-    if  Pos('ESPEAKBIN=',dataf) > 0 then
+
+    if  Pos(whatfil,dataf) > 0 then
    begin
     if  Pos('#',dataf) > 0 then  dataf := trim(copy(dataf,1, Pos('#',dataf)-1));
-     result := copy(dataf,Pos('ESPEAKBIN=',dataf)+ 10 , length(dataf)-10);
-     //  writeln( 'Result is ' +  dataf);
-    ffinded := true;
+     result := copy(dataf,Pos(whatfil,dataf)+ len , length(dataf)-len);
+
+     ffinded := true;
    end;
      end;
   CloseFile(tf);
 end;
 
 end;
+
+{$ifdef unix}
 
 function ChangePermission(thefile : string; raisemessage : boolean = true) : integer ;
 var
@@ -1416,7 +1612,7 @@ begin
 
   end;
 end;
-
+{$endif}
 
 
 function TSAK.LoadLib: integer;
@@ -1434,15 +1630,29 @@ begin
   TimerRepeat.Enabled := False;
   TimerCount := Tfpgtimer.Create(50000);
   TimerCount.Enabled := False;
- //{
+
   AProcess := TProcess.Create(nil);
   AProcess.Options := AProcess.Options + [poNoConsole, poUsePipes];
   AProcess.FreeOnRelease;
+
+//  writeln('ES_LibFileName => ' + ES_LibFileName);
+
+{$ifdef unix}
+  if trim(ES_LibFileName) <> '' then
+begin
+ AProcess.Environment.Text := 'LD_LIBRARY_PATH=' + ExtractFilePath(ES_LibFileName) ;
+if trim(PA_LibFileName) <> '' then
+   AProcess.Environment.Text := AProcess.Environment.Text + ':' + ExtractFilePath(PA_LibFileName)
+
+end  else
+  if trim(PA_LibFileName) <> '' then
+   AProcess.Environment.Text := 'LD_PRELOAD=' + PA_LibFileName ;
+{$endif}
+
   AProcess.Executable :=  ES_ExeFileName;
- //}
+
   TheWord := '' ;
   TheSentence := '' ;
-  TheLastSentence := '' ;
 
   voice_gender := '' ;
   voice_language := '' ;
@@ -1691,37 +1901,42 @@ begin
 end;
 
 
-function SAKLoadLib(const eSpeakBin: string;
+function SAKLoadLib(const eSpeakBin: string; const eSpeaklib: string; const PortaudioLib: string;
                                       const eSpeakDataDir: string): integer;
 begin
  Result := -1;
- if sak = nil then begin
-  sak:= TSAK.Create;
- end;
- if (espeakdatadir = '') or directoryexists(eSpeakDataDir) then begin
+ if sak = nil then sak:= TSAK.Create;
+
+ if (eSpeakDataDir = '') or directoryexists(eSpeakDataDir) 
+then
+ begin
   Result:= 0;
   sak.ES_DataDirectory:= eSpeakDataDir;
  end;
  sak.ES_ExeFileName:= eSpeakBin;
+ sak.ES_LibFileName:= eSpeaklib;
+ sak.PA_LibFileName:= PortaudioLib;
+ 
+ //writeln('PA_LibFileName:= '+ PortaudioLib);
+// writeln('PA_LibFiledir:= '+ExtractFilePath( PortaudioLib));
+
  Result:= sak.loadlib;
- if result <> 0 then begin
-  freeandnil(sak);
- end;
+ if result <> 0 then freeandnil(sak);
 end;
 
 function SAKLoadLib(const sakitdir: string = ''): integer;
 var
- ordir: string;
- espeakbin, espeaksak, espeakdatadir: string;
+ordir, sakini, espeakbin, espeaklib, portaudiolib, espeakdatadir, tmp: string;
 const
+ sakininame = 'sak.ini';
+
 {$ifdef mswindows}
- espeakstarter = 'espeak.bat';
  espeaklibdir = 'libwin32';
  espeakdefault = 'espeak.exe';
 {$else}
- espeakstarter = 'espeak.sh';
  espeakdefault = 'espeak';
 {$endif}
+
 {$if defined(linux) and  defined(cpu64)}
  espeaklibdir = 'liblinux64';
 {$endif}
@@ -1733,7 +1948,7 @@ const
 {$endif}
 {$if defined(freebsd) and defined(cpu86) } 
  espeaklibdir = 'libfreebsd32';
-{$endif}
+ {$endif}
 {$ifdef darwin}
  espeaklibdir = 'libmac32';
 {$endif}
@@ -1748,43 +1963,110 @@ begin
   ordir:= sakitdir;
  end;
 
- espeakbin:= ordir + espeakstarter;
- espeaksak:= ordir + WhatSpeakBin(espeakbin);
+ sakini:= ordir + sakininame;
+ espeakbin:= ordir + WhatFile(sakini,0);
 
- if (fileexists(espeakbin)) and (fileexists(espeaksak)) then
+ tmp := WhatFile(sakini,1);
+ if tmp <> '' then
+ portaudiolib:= ordir + tmp else  portaudiolib:= '';
+
+ espeaklib:= ordir + WhatFile(sakini,2);
+
+ tmp := WhatFile(sakini,2);
+ if tmp <> '' then
+ espeaklib:= ordir + tmp else  espeaklib:= '';
+
+ tmp := WhatFile(sakini,3);
+ if (tmp = '/') or (tmp = './') then
+ espeakdatadir:= ordir else 
+if tmp = '../' then
+ espeakdatadir:= ExtractFilePath(ordir)
+else 
+ espeakdatadir:= tmp ;
+
+
+ if (directoryexists(espeakdatadir)) and (fileexists(espeakbin)) and (fileexists(sakini)) and ((fileexists(portaudiolib)) or (portaudiolib = ''))
+ and ((fileexists(espeaklib)) or (espeaklib = ''))
+ then
   begin
    Result:= 0;
+   espeakdatadir:= ordir ;
    {$ifdef unix}
  result := ChangePermission(espeakbin,true);
- if result = 0 then
-  result := ChangePermission(espeaksak,true);
    {$endif}
   end
  else begin
-  espeakbin:= ordir +  directoryseparator +'sakit' + directoryseparator +
-  espeaklibdir + directoryseparator + espeakstarter;
-  espeaksak:= ordir + directoryseparator + 'sakit' + directoryseparator +
-  espeaklibdir+ directoryseparator + WhatSpeakBin(espeakbin);
-    if (fileexists(espeaksak)) and (fileexists(espeakbin)) then begin
+  sakini:= ordir +  directoryseparator +'sakit' + directoryseparator +
+  espeaklibdir + directoryseparator + sakininame;
+
+  espeakbin:= ordir + directoryseparator + 'sakit' + directoryseparator +
+  espeaklibdir+ directoryseparator + WhatFile(sakini, 0);
+
+  tmp := WhatFile(sakini,1);
+ if tmp <> '' then
+  portaudiolib:= ordir + directoryseparator + 'sakit' + directoryseparator +
+  espeaklibdir+ directoryseparator + tmp else  portaudiolib:= '';
+
+ tmp := WhatFile(sakini,2);
+ if tmp <> '' then
+ espeaklib:= ordir + directoryseparator + 'sakit' + directoryseparator +
+  espeaklibdir+ directoryseparator + tmp else  espeaklib:= '';
+
+ tmp := WhatFile(sakini,3);
+ if (tmp = '/') or (tmp = './') then
+ espeakdatadir:= ordir + directoryseparator + 'sakit' + directoryseparator +
+  espeaklibdir+ directoryseparator else 
+if tmp = '../' then
+ espeakdatadir:= ordir + directoryseparator + 'sakit' + directoryseparator
+else 
+ espeakdatadir:= tmp ;
+
+   if (directoryexists(espeakdatadir)) and (fileexists(espeakbin)) and (fileexists(sakini)) and ((fileexists(portaudiolib)) or (portaudiolib = ''))
+   and ((fileexists(espeaklib)) or (espeaklib = ''))   then
+ begin
     Result:= 0;
-     {$ifdef unix}
+       {$ifdef unix}
   result := ChangePermission(espeakbin,true);
- if result = 0 then
-  result := ChangePermission(espeaksak,true);
     {$endif}
    end
   else begin
+
 {$ifdef unix}
-  if (fileexists('/usr/bin/espeak')) or (fileexists('/usr/local/bin/espeak')) then begin
-   espeakbin:= espeakdefault; //try to run default binary
-     Result:= 0;
-    end;
-{$endif}
-  end;
+  if (fileexists('/usr/bin/'+espeakdefault)) then begin
+  espeakbin:= '/usr/bin/'+espeakdefault;
+ result := 0;
+end else
+ if
+ (fileexists('/usr/local/bin/'+espeakdefault)) then
+begin
+  espeakbin:= '/usr/local/bin/'+espeakdefault;
+result := 0;
+end;
+ {$endif}
+
+{$ifdef windows}
+  if (fileexists('c:\Program Files (x86)\eSpeak\command_line\'+espeakdefault)) then
+begin
+  espeakbin:= 'c:\Program Files (x86)\eSpeak\command_line\'+espeakdefault;
+ result := 0;
+end else
+ if
+ (fileexists('c:\Program Files\eSpeak\command_line\'+espeakdefault)) then
+begin
+  espeakbin:= 'c:\Program Files\eSpeak\command_line\'+espeakdefault;
+result := 0;
+end;
+ {$endif}
+
+espeakdatadir:= '';
+portaudiolib:= '' ;
+
+end;
+
  end;
 
  if result = 0 then begin
-  result:= sakloadlib(espeakbin,espeakdatadir);
+  result:= sakloadlib(espeakbin,espeaklib,portaudiolib,espeakdatadir);
  end;
 end;
 
@@ -2207,14 +2489,7 @@ procedure TSAK.espeak_key(Text: string);
 var
  params: string = '';
 begin
-  {
-  AProcess := TProcess.Create(nil);
-  AProcess.Options := AProcess.Options + [poNoConsole, poUsePipes];
-  AProcess.FreeOnRelease;
-  AProcess.Executable :=  ES_ExeFileName;
-   }
-
-   AProcess.Parameters.clear;
+    AProcess.Parameters.clear;
 
  if (voice_gender <> '') or (voice_language <> '') then begin
   params:= params + '-v';
@@ -2237,12 +2512,17 @@ if voice_speed <> -1 then AProcess.Parameters.Add('-s' + inttostr(voice_speed)) 
 if voice_pitch <> -1 then AProcess.Parameters.Add('-p' + inttostr(voice_pitch)) ;
 if voice_volume <> -1 then AProcess.Parameters.Add('-a' + inttostr(voice_volume)) ;
 
-{$IF DEFINED(Windows)}
   if sak.es_datadirectory <> '' then
-  AProcess.Parameters.Add('--path=' + sak.ES_DataDirectory);
-    {$endif}  ;
+      AProcess.Parameters.Add('--path=' + sak.ES_DataDirectory);
 
   AProcess.Parameters.Add('"' + Text + '"');
+  {
+  writeln('command line ' + AProcess.CommandLine)  ;
+  writeln('parameter ' + AProcess.Parameters.Text)  ;
+  writeln('executable ' + AProcess.Executable)  ;
+  writeln('environ ' + AProcess.Environment.Text)  ;
+  }
+
   AProcess.Execute;
 
 end;
@@ -2270,7 +2550,7 @@ procedure TSAK.espeak_cancel;
 begin
     if assigned(AProcess) then
   begin
-    AProcess.Active:=false;
+   AProcess.Active:=false;
    AProcess.Terminate(0);
    // freeandnil(AProcess);
   end;
@@ -2359,10 +2639,7 @@ end;
 
 procedure TWarning.AfterCreate;
 begin
- {%region 'Auto-generated GUI code' -fold}
-
- {@VFD_BODY_BEGIN: Warning}
-  SetPosition(338, 262, 481, 111);
+   SetPosition(338, 262, 481, 111);
   WindowTitle := 'Warning...';
   IconName := '';
   Hint := '';
@@ -2434,9 +2711,6 @@ begin
    Text := 'Cancel';
     onclick := @buttonclicked;
  end;
-
- {@VFD_BODY_END: Warning}
- {%endregion}
 end;
 
 finalization
