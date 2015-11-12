@@ -406,7 +406,7 @@ begin
 
       end;
 
-      wd           := ffd.AddWidget(wg, nil,TFormDesigner(wg.FormDesigner));
+      wd           := ffd.AddWidget(wg, nil);
       wd.FVFDClass := wgc;
       wd.other.Text := wgother;
 

@@ -137,37 +137,36 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="154"/>
-        <CursorPos X="6" Y="165"/>
+        <TopLine Value="56"/>
+        <CursorPos Y="73"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="frm_main_designer.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="843"/>
-        <CursorPos X="19" Y="874"/>
-        <UsageCount Value="43"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="2095"/>
+        <CursorPos X="29" Y="2117"/>
+        <UsageCount Value="56"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="frm_vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1089"/>
-        <CursorPos X="3" Y="1105"/>
-        <UsageCount Value="43"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="262"/>
+        <CursorPos X="70" Y="270"/>
+        <UsageCount Value="56"/>
+        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="sak_fpg.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="38"/>
-        <CursorPos X="64" Y="54"/>
-        <UsageCount Value="43"/>
-        <Loaded Value="True"/>
+        <CursorPos X="99" Y="40"/>
+        <UsageCount Value="56"/>
       </Unit3>
     </Units>
   </ProjectOptions>
@@ -191,7 +190,6 @@ install:
       <Optimizations>
         <OptimizationLevel Value="2"/>
       </Optimizations>
-      <SmallerCode Value="True"/>
     </CodeGeneration>
     <Linking>
       <Debugging>
@@ -213,6 +211,15 @@ install:
     </Other>
   </CompilerOptions>
   <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="frm_multiselect.pas"/>
+        <Line Value="1325"/>
+      </Item1>
+    </BreakPoints>
     <Exceptions Count="4">
       <Item1>
         <Name Value="EComponentError"/>

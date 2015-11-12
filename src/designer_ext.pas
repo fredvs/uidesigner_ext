@@ -29,11 +29,13 @@ program designer_ext;
 uses
  {$IFDEF UNIX}
   cthreads, {$ENDIF}
+  fpg_main,
   fpg_iniutils,
   SysUtils,
   RunOnce_PostIt,
   sak_fpg,
   fpg_cmdlineparams,
+
   fpg_style_anim_round_silver_horz,
   fpg_style_round_silver_flat_horz,
   fpg_style_anim_round_silver_flat_horz,
@@ -68,8 +70,8 @@ uses
   fpg_style_SystemColors,
   fpg_style_SystemColorsMyStyle1,
   fpg_style_SystemColorsMyStyle2,
+
   fpg_stylemanager,
-  fpg_main,
   vfd_main,
   frm_main_designer,
   vfd_widgets;

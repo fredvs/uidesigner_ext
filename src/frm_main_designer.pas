@@ -446,7 +446,9 @@ end;
 
 procedure TfrmMainDesigner.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-
+  {
+     frmmultiselect.Hide;
+      frmmultiselect.ClearAll;
     if (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
    (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False) ) or
       (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
@@ -454,13 +456,20 @@ begin
       if assigned(ATimer) then
       ATimer.Enabled:=false;
     CloseAction := caFree; end else CloseAction := canone ;
-end;
+    }
+
+
+    end;
 
 procedure TfrmMainDesigner.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 var
   x: integer;
 
 begin
+
+   {
+       frmmultiselect.Hide;
+      frmmultiselect.ClearAll;
 
  if  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
    (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False) ) or
@@ -479,6 +488,8 @@ begin
   end
   else
   begin
+
+
     {
 
      AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
@@ -534,6 +545,7 @@ begin
       CanClose := True;
     end;
   end;
+    }
 
 end;
 
@@ -550,9 +562,9 @@ begin
   btnSave.Left := btnOpen.Left;
   btnSave.UpdateWindowPosition;
 
-  filemenu.MenuItem(0).Visible := True;
-  filemenu.MenuItem(1).Visible := False;
-  filemenu.MenuItem(2).Visible := False;
+  filemenu.MenuItem(0).enabled := True;
+  filemenu.MenuItem(1).enabled := False;
+  filemenu.MenuItem(2).enabled := False;
 
   /// => This code gives problem to JEDI code-formater
  if ide = 3 then
@@ -809,6 +821,7 @@ begin
 
   {%region 'Auto-generated GUI code' -fold}
 
+
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(400, 10, 800, 92);
@@ -895,7 +908,7 @@ begin
     mi5 := AddMenuItem('Save As New Java Library...', 'Ctrl+Shift+J', @OnSaveNewFile);
     mi5.Tag := 14;
     AddMenuItem('-', '', nil);
-    AddMenuItem('Exit', 'Ctrl+Q', @(maindsgn.OnExit));
+    AddMenuItem('Exit', 'Ctrl+Q', @maindsgn.OnHide);
   end;
 
   formmenu := TfpgPopupMenu.Create(self);
@@ -1232,23 +1245,23 @@ begin
 
 windowtitle := MainMenu.MenuItem(8).Text;
 
-   filemenu.MenuItem(0).Visible := True;
+   //filemenu.MenuItem(5).visible := false;
 
-  filemenu.MenuItem(4).Visible := False;
-  filemenu.MenuItem(5).Visible := False;
-  filemenu.MenuItem(6).Visible := False;
-  filemenu.MenuItem(7).Visible := False;
-  filemenu.MenuItem(8).Visible := True;
-  filemenu.MenuItem(9).Visible := False;
-  filemenu.MenuItem(10).Visible := False;
-  filemenu.MenuItem(11).Visible := False;
-  filemenu.MenuItem(12).Visible := False;
-  filemenu.MenuItem(13).Visible := False;
-  filemenu.MenuItem(14).Visible := False;
+  filemenu.MenuItem(4).enabled := False;
+  filemenu.MenuItem(5).enabled := False;
+  filemenu.MenuItem(6).enabled := False;
+  filemenu.MenuItem(7).enabled := False;
+  filemenu.MenuItem(8).enabled := false;
+  filemenu.MenuItem(9).enabled := False;
+  filemenu.MenuItem(10).enabled := False;
+  filemenu.MenuItem(11).enabled := False;
+  filemenu.MenuItem(12).enabled := False;
+  filemenu.MenuItem(13).enabled := False;
+  filemenu.MenuItem(14).enabled := False;
 
-  filemenu.MenuItem(1).Visible := False;
-  filemenu.MenuItem(2).Visible := False;
-  filemenu.MenuItem(15).Visible := False;
+  filemenu.MenuItem(1).enabled := False;
+  filemenu.MenuItem(2).enabled := False;
+  filemenu.MenuItem(15).enabled := False;
 
 
   if ideuintegration = false then
@@ -1267,7 +1280,7 @@ windowtitle := MainMenu.MenuItem(8).Text;
  top := 10 ;
  width := 775 ;
  height := 92 ;
- updatewindowposition;
+ UpdateWindowPosition;
        
 
    if gINI.ReadBool('frmMainState', 'FirstLoad', True) = False then
@@ -1287,12 +1300,12 @@ fpgapplication.ProcessMessages;
     btnOpen.Visible := True;
     btnSave.Left := 69;
     btnSave.UpdateWindowPosition;
-      WindowAttributes:= [];
+   //   WindowAttributes:= [];
     //   panel1.Style := bsflat;
     //   panel1.UpdateWindowPosition;
-      filemenu.MenuItem(1).Visible := True;
-    filemenu.MenuItem(2).Visible := True;
-    filemenu.MenuItem(15).Visible := true;
+      filemenu.MenuItem(1).enabled := True;
+    filemenu.MenuItem(2).enabled := True;
+    filemenu.MenuItem(15).enabled := true;
     indexundo := 0;
      MainMenu.MenuItem(8).Visible := false;
    end
@@ -1302,7 +1315,7 @@ fpgapplication.ProcessMessages;
    //   panel1.Style := bsLowered;
    //   panel1.UpdateWindowPosition;
    //   WindowAttributes:= [waSizeable, waBorderless];
-        WindowAttributes:= [];
+    //    WindowAttributes:= [];
 
      LoadIDEparameters(x);
   end;
@@ -1348,6 +1361,9 @@ end;
 
 procedure TfrmMainDesigner.BeforeDestruction;
 begin
+  frmmultiselect.Hide;
+  // frmmultiselect.ClearAll;
+  maindsgn.OnHide(self) ;
   gINI.WriteFormState(self);
   gINI.WriteInteger('Options', 'IDE', idetemp);
   inherited BeforeDestruction;
@@ -1455,8 +1471,8 @@ begin
 
     TheParent := frmProperties.lstProps.Props.Widget;
 
-    if TheParent.HasParent then
-      TheParent := frmProperties.lstProps.Props.Widget.Parent;
+     if TheParent.HasParent then
+     TheParent := frmProperties.lstProps.Props.Widget.Parent;
 
     calculwidget := True;
 

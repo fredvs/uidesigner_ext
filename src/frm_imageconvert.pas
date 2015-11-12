@@ -184,7 +184,7 @@ begin
   ShowHint := True;
   BackGroundColor := $80000001;
   WindowPosition := wpScreenCenter;
-  DNDEnabled := True;
+ // DNDEnabled := True;
   onclose := @onclosemain;
 
   FilenameEdit1 := TfpgFileNameEdit.Create(self);
@@ -209,9 +209,9 @@ begin
     FontDesc := '#Edit2';
     Hint := '';
     TabOrder := 5;
-    AcceptDrops := True;
-    OnDragEnter := @MemoDragEnter;
-    OnDragDrop := @MemoDragDrop;
+  //  AcceptDrops := True;
+  //  OnDragEnter := @MemoDragEnter;
+  //  OnDragDrop := @MemoDragDrop;
   end;
 
   Button1 := TfpgButton.Create(self);

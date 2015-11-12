@@ -52,35 +52,24 @@ procedure TExtStyle.DrawControlFrame(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord)
 var
   r: TfpgRect;
 begin
+
    r.SetRect(x, y, w, h);
-   if ACanvas.Window.ClassName = 'TfpgValueBar' then
-   begin
-    ACanvas.SetColor(clblack);
+    ACanvas.SetColor(cldarkgray);
    ACanvas.DrawRectangle(r);
 
    r.SetRect(x+1, y+1, w-2, h-2);
-    ACanvas.SetColor(cllime);
-      ACanvas.DrawRectangle(r);
-
-     r.SetRect(x+2, y+2, w-4, h-4);
     ACanvas.SetColor(clwhite);
       ACanvas.DrawRectangle(r);
 
-   end else
-     begin
-
-  ACanvas.SetColor(clShadow1);
-  ACanvas.Clear(clWindowBackground);
-  ACanvas.DrawRectangle(r);
-end;
-
-end;
+  end;
 
 procedure TExtStyle.DrawButtonFace(ACanvas: TfpgCanvas; x, y, w, h: TfpgCoord;
   AFlags: TfpgButtonFlags);
 var
   r, r21, r22: TfpgRect;
 begin
+
+
   r.SetRect(x, y, w, h);
 
   r21.SetRect(x, y, w, h div 2);
@@ -128,13 +117,14 @@ begin
   else
   begin
 
-    ACanvas.GradientFill(r21, clsilver, $E6E6E6, gdVertical);
+   ACanvas.GradientFill(r21, clsilver, $E6E6E6, gdVertical);
     ACanvas.GradientFill(r22, $E6E6E6, clsilver, gdVertical);
-  //    ACanvas.SetColor(clblack);
+ //    ACanvas.SetColor(clblack);
        ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
 
   end;
+
 end;
 
 procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;

@@ -1,8 +1,7 @@
 {
-    fpGUI  -  Free Pascal GUI Toolkit
+    This unit is part of the fpGUI Toolkit project.
 
-    Copyright (C) 2006 - 2010 See the file AUTHORS.txt, included in this
-    distribution, for details of the copyright.
+    Copyright (c) 2006 - 2015 by Graeme Geldenhuys.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
     for details about redistributing fpGUI.
@@ -27,9 +26,7 @@ uses
   fpg_base,
   fpg_main,
   fpg_widget,
-  fpg_dialogs,
   fpg_menu;
-
 
 type
   TWidgetClass = class of TfpgWidget;
@@ -71,9 +68,12 @@ type
   TVFDPropertyClass = class of TVFDWidgetProperty;
 
 
+  { TVFDWidgetClass }
+
   TVFDWidgetClass = class(TObject)
   private
     FProps: TList;
+    FErrors: TStrings;
   public
     WidgetClass: TWidgetClass;
     Description: string;
@@ -85,6 +85,7 @@ type
     destructor  Destroy; override;
     function    AddProperty(apropname: string; apropclass: TVFDPropertyClass; desc: string): TVFDWidgetProperty;
     function    PropertyCount: integer;
+    function    GetError(var AErr: String): Boolean;
     function    GetProperty(ind: integer): TVFDWidgetProperty;
     function    CreateWidget(AOwner: TComponent): TfpgWidget;
     function    CreatePopupMenu(AWidget: TfpgWidget): TfpgPopupMenu; virtual;
@@ -106,7 +107,16 @@ type
 
 function TVFDWidgetClass.AddProperty(apropname: string; apropclass: TVFDPropertyClass;
   desc: string): TVFDWidgetProperty;
+var
+  PropInfo: PPropInfo;
 begin
+  PropInfo := GetPropInfo(WidgetClass, apropname);
+  if not Assigned(PropInfo) then
+  begin
+    Result := nil;
+    FErrors.Add(Format('Invalid property: %s', [apropname]));
+    Exit; // ==>
+  end;
   Result := apropclass.Create(apropname);
   Result.Description := desc;
   FProps.Add(Result);
@@ -116,6 +126,7 @@ constructor TVFDWidgetClass.Create(aClass: TWidgetClass);
 begin
   WidgetClass := aClass;
   FProps      := TList.Create;
+  FErrors     := TStringList.Create;
   Description := '';
   NameBase    := 'Widget';
   Container   := False;
@@ -138,6 +149,7 @@ destructor TVFDWidgetClass.Destroy;
 var
   n: integer;
 begin
+  FErrors.Free;
   for n := 0 to FProps.Count - 1 do
     TVFDWidgetProperty(FProps[n]).Free;
   FProps.Free;
@@ -152,6 +164,16 @@ end;
 function TVFDWidgetClass.PropertyCount: integer;
 begin
   Result := FProps.Count;
+end;
+
+function TVFDWidgetClass.GetError(var AErr: String): Boolean;
+begin
+  Result := FErrors.Count>0;
+  if Result then
+  begin
+    AErr:=FErrors[0];
+    FErrors.Delete(0);
+  end;
 end;
 
 { TVFDWidgetProperty }

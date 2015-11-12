@@ -1,15 +1,14 @@
 {
-  fpGUI  -  Free Pascal GUI Toolkit
+    This unit is part of the fpGUI Toolkit project.
 
-  Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
-  distribution, for details of the copyright.
+    Copyright (c) 2006 - 2015 by Graeme Geldenhuys.
 
-  See the file COPYING.modifiedLGPL, included in this distribution,
-  for details about redistributing fpGUI.
+    See the file COPYING.modifiedLGPL, included in this distribution,
+    for details about redistributing fpGUI.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
   Description:
     This unit contains all the language resource strings used by the
@@ -30,7 +29,7 @@ uses
 const
   cFileFilter = '%s (%s)|%s';
   cPascalSourceFiles = '*.pp;*.pas;*.inc;*.dpr;*.lpr';
-  cAppName = 'designer_ext';
+  cAppName = 'fpGUI UI Designer';
   cAppVersion = FPGUI_VERSION;
   cAppNameAndVersion = cAppName + ' v' + cAppVersion;
   cDesignerINIVersion = 1;
@@ -69,11 +68,11 @@ resourcestring
   rsUseCodeRegions = 'Use code-folding regions in auto-generated code';
   rsIndentType = 'Indent Type for generated code';
 
-  rsDlgProductInfo = 'About designer_ext';
+  rsDlgProductInfo = 'Product Information';
   rsDlgSetup = 'General Settings';
   rsDlgInsertCustomWidget = 'Insert Custom Widget';
   rsDlgNewForm = 'New Form';
-  rsDlgEditFormPosition = 'Edit Value';
+  rsDlgEditFormPosition = 'Widget Position';
   rsDlgWidgetOrder = 'Widget Order';
   rsDlgTabOrder = 'Tab Order';
 

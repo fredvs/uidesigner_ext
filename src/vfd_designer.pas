@@ -48,7 +48,7 @@ uses
   vfd_widgetclass,
   vfd_widgets,
   frm_multiselect,
-  frm_main_designer;
+    frm_main_designer;
 
 type
 
@@ -124,7 +124,9 @@ type
     procedure ClearForm;
     procedure DefaultHandler(var msg); override;
     procedure Show;
-    function AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent: TFormDesigner): TWidgetDesigner;
+  //  function AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent: TFormDesigner): TWidgetDesigner;
+    function    AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass): TWidgetDesigner;
+
     function WidgetDesigner(wg: TfpgWidget): TWidgetDesigner;
     function FindWidgetByName(const wgname: string): TfpgWidget;
     procedure DeSelectAll;
@@ -159,7 +161,7 @@ implementation
 
 uses
   TypInfo,
-  vfd_main,
+    vfd_main,
   vfd_utils,
   vfd_constants,
   fpg_tree;
@@ -179,12 +181,11 @@ begin
   begin
 
     if Widget.HasParent then
-      SelectedWidget := Widget
+      SelectedWidget := Widget.Parent
     else
-      SelectedWidget := Widget.Parent;
+      SelectedWidget := Widget;
 
-    if FSelected = AValue then
-      Exit;
+    if FSelected = AValue then  Exit;
     FSelected := AValue;
 
     if FSelected then
@@ -205,23 +206,31 @@ begin
 
     UpdateResizerPositions;
 
-    if FSelected and Widget.Parent.HasHandle then
+    //if FSelected and Widget.Parent.HasHandle then
+
+      if FSelected then
+
       for n := 1 to 8 do
         resizer[n].Show;
 
-    frmproperties.Show;
+  //  frmproperties.Show;
+  {
+   if (frmMultiSelect.Visible = True) then
+  begin
 
-    if (widget is Tfpgform) then
-    begin
-      if (frmMultiSelect.Visible = True) then
-        frmMultiSelect.Getwidgetlist(widget);
-    end
+    if (widget.ClassName = 'TDesignedFom') then
+           begin
+           frmMultiSelect.Getwidgetlist(widget);
+           frmMultiSelect.visible := true;
+           end
+
     else
-    if (frmMultiSelect.Visible = True) then
-      frmMultiSelect.SelectedFromDesigner(Widget);
+     frmMultiSelect.SelectedFromDesigner(Widget);
 
   end;
+   }
 
+  end;
 end;
 
 constructor TWidgetDesigner.Create(AFormDesigner: TFormDesigner; wg: TfpgWidget; wgc: TVFDWidgetClass);
@@ -305,7 +314,7 @@ begin
           rs.left := Widget.left - 2;
         end;
       end; // case
-      if rs.HasHandle then
+    //  if rs.HasHandle then
         rs.UpdateWindowPosition;
     end;
   end;
@@ -549,15 +558,15 @@ begin
   UpdatePropWin;
 end;
 
-function TFormDesigner.AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass; theParent: Tformdesigner): TWidgetDesigner;
+function TFormDesigner.AddWidget(wg: TfpgWidget; wgc: TVFDWidgetClass): TWidgetDesigner;
 var
   cd: TWidgetDesigner;
 begin
-  //  writeln('TFormDesigner.AddWidget');
-  cd := TWidgetDesigner.Create(theParent, wg, wgc);
+//  writeln('TFormDesigner.AddWidget');
+  cd     := TWidgetDesigner.Create(self, wg, wgc);
   FWidgets.Add(cd);
   if wg is TfpgForm then
-    wg.FormDesigner := theParent;
+    wg.FormDesigner := self;
   Result := cd;
 end;
 
@@ -738,7 +747,7 @@ begin
   begin
     fpgapplication.ProcessMessages;
      frmMultiSelect.Getwidgetlist(widget);
-     frmmultiselect.show;
+     frmmultiselect.visible := true;
   end;
 end;
 
@@ -1439,7 +1448,7 @@ begin
 //  frm := TEditPositionForm.Create(nil);
 
     fpgApplication.CreateForm(TEditPositionForm, frm);
-
+        frm.WindowTitle:=  wg.Name ;
 
   if Sender = frmProperties.btnLeft then
   begin
@@ -1836,7 +1845,7 @@ begin
   while TheParent.HasParent = True do
     TheParent := TheParent.Parent;
   // Is it better ? =>
-  // TheParent := WidgetParentForm(TfpgWidget(TheWidget));
+  TheParent := WidgetParentForm(TfpgWidget(TheWidget));
 
   if TDesignedForm(TheParent).Virtualprop.Count > 0 then
   begin
@@ -2087,7 +2096,7 @@ begin
     wg.Name := newname;
     if wgc.WidgetClass = TOtherWidget then
       TOtherWidget(wg).wgClassName := newclassname;
-    wgd := AddWidget(wg, wgc, TFormdesigner(wg.FormDesigner));
+    wgd := AddWidget(wg, wgc);
     wg.SetPosition(x, y, wg.Width, wg.Height);
     wg.Visible := True;
     DeSelectAll;
