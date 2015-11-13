@@ -1495,6 +1495,8 @@ begin
            frmMultiSelect.SelectedFromDesigner(Thewidget)  ;
         frmMultiSelect.Getwidgetlist(Thewidget)  ;
              end;
+
+
      end;
 
   end;
@@ -1511,14 +1513,7 @@ begin
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 1);
-    if frmMultiSelect.Visible = True then
-    begin
-      TheParent := (frmProperties.lstProps.Props.Widget);
-      if TheParent.HasParent then
-        TheParent := (frmProperties.lstProps.Props.Widget.Parent);
-      frmMultiSelect.Getwidgetlist(TheParent);
-    end;
-    calculwidget := True;
+     calculwidget := True;
   end;
 end;
 
@@ -1531,7 +1526,7 @@ begin
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 12);
     calculwidget := True;
-  end;
+   end;
 end;
 
 procedure TMainDesigner.OnAnchorChange(Sender: TObject);

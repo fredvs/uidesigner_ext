@@ -145,20 +145,19 @@ install:
       <Unit1>
         <Filename Value="frm_main_designer.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="1026"/>
-        <CursorPos X="3" Y="1483"/>
-        <UsageCount Value="58"/>
+        <TopLine Value="1468"/>
+        <CursorPos X="27" Y="1479"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="frm_vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="245"/>
+        <TopLine Value="203"/>
         <CursorPos X="33" Y="264"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -167,7 +166,7 @@ install:
         <EditorIndex Value="-1"/>
         <TopLine Value="38"/>
         <CursorPos X="99" Y="40"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="60"/>
       </Unit3>
     </Units>
   </ProjectOptions>

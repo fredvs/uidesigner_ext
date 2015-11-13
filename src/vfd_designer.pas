@@ -414,6 +414,9 @@ begin
 
   UpdatePropWin;
 
+    if frmMultiSelect.Visible = True then
+        frmMultiSelect.refreshgrid;
+
   //if msg.Params.mouse.Buttons = 3 then {right mouse button }
   //begin
   //if TfpgWidget(msg.Dest).ClassType = TfpgPageControl then
@@ -723,7 +726,7 @@ begin
 
   if frmmultiselect.Visible = true then
   begin
-    frmMultiSelect.refreshall(self);
+    frmMultiSelect.refreshall;
   end;
 
 end;
@@ -1480,6 +1483,8 @@ begin
   end; { if }
 
   UpdatePropWin;
+   if frmMultiSelect.Visible = True then
+        frmMultiSelect.refreshgrid;
 
 end;
 
@@ -2080,7 +2085,7 @@ begin
     wgd.Selected := True;
     UpdatePropWin;
     if (frmMultiSelect.Visible = True) then
-        frmMultiSelect.refreshall(self);
+        frmMultiSelect.refreshall;
 
   end;
 end;
