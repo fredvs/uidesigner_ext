@@ -1360,9 +1360,20 @@ begin                                                              //
 end;
 
 procedure TfrmMainDesigner.BeforeDestruction;
+var
+  undodir : string;
 begin
   frmmultiselect.Hide;
   // frmmultiselect.ClearAll;
+
+   undodir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) + directoryseparator + 'temp';
+
+  if DirectoryExists(PChar(undodir)) then
+  begin
+    deletefile(PChar(undodir+'*.*')) ;
+  RemoveDir(undodir);
+   end;
+
   maindsgn.OnHide(self) ;
   gINI.WriteFormState(self);
   gINI.WriteInteger('Options', 'IDE', idetemp);
