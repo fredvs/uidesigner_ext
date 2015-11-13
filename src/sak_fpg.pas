@@ -1255,7 +1255,7 @@ end;
 procedure TSAK.CheckRepeatKeyPress(Sender: TObject);
 var
   i: integer;
-  ifok: boolean = True;
+ // ifok: boolean = True;
 oldlang: string;
  oldgender, oldspeed, oldpitch, oldvolume : integer;
 begin
@@ -1505,10 +1505,9 @@ procedure TSAK.CheckRepeatKeyChar(Sender: TObject);
 var
   tempstr: string;
   i: integer;
-  ifok: boolean;
+
 begin
-  ifok := True;
-  TimerRepeat.Enabled := False;
+   TimerRepeat.Enabled := False;
     for i := 0 to (Length(sak.AssistiveData) - 1) do
   begin
     if (CheckObject = sak.AssistiveData[i].TheObject) then

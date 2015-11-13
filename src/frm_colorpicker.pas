@@ -876,8 +876,6 @@ begin
 end;
 
 procedure TfrmAbout.AfterCreate;
-var
-  y: integer;
 begin
   {%region 'Auto-generated GUI code' -fold}
 

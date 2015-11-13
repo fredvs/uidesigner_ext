@@ -684,8 +684,6 @@ end;
 
 procedure Tfrm_multiselect.btnrefreshClicked(Sender: TObject);
 begin
- // TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
-
   refreshgrid;
 end;
 
@@ -697,11 +695,11 @@ var
   wgc: TVFDWidgetClass;
   wg, theWidget: TfpgWidget;
   okname: boolean;
-  oriformdesigner: Tformdesigner;
+ // oriformdesigner: Tformdesigner;
 begin
   fpgapplication.ProcessMessages;
 
-  oriformdesigner := TformDesigner(TheSelectedForm.FormDesigner);
+  //oriformdesigner := TformDesigner(TheSelectedForm.FormDesigner);
   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
   maindsgn.SaveUndo(Sender, 9);
@@ -1277,15 +1275,16 @@ var
 begin
   grid1.rowCount := 0;
   x := 0;
+
   while x < Theobj.ComponentCount do
   begin
     if Tfpgwidget(Theobj.Components[x]).Name <> '' then
     begin
-      grid1.rowCount := x + 1;
-      grid1.Cells[0, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).left);
-      grid1.Cells[1, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).top);
-      grid1.Cells[2, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).Width);
-      grid1.Cells[3, x] := IntToStr(Tfpgwidget(Theobj.Components[x]).Height);
+      grid1.rowCount := grid1.rowCount + 1;
+      grid1.Cells[0, grid1.rowCount-1] := IntToStr(Tfpgwidget(Theobj.Components[x]).left);
+      grid1.Cells[1, grid1.rowCount-1] := IntToStr(Tfpgwidget(Theobj.Components[x]).top);
+      grid1.Cells[2, grid1.rowCount-1] := IntToStr(Tfpgwidget(Theobj.Components[x]).Width);
+      grid1.Cells[3, grid1.rowCount-1] := IntToStr(Tfpgwidget(Theobj.Components[x]).Height);
     end;
     Inc(x);
   end;
@@ -1332,14 +1331,16 @@ begin
 procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);
 var
   x, y: integer;
-  sakloaded : boolean = false;
+ // sakloaded : boolean = false;
 begin
   calculwidget := False;
- if SakIsEnabled = true then
+{
+  if SakIsEnabled = true then
  begin
  sakloaded := true ;
  // saksuspend ;
   end;
+ }
 
   if (maindsgn.selectedform <> nil) then
   begin

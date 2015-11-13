@@ -663,8 +663,8 @@ var
   n: integer;
   cd: TWidgetDesigner;
   sakenabled : boolean = false;
-  multisel : boolean = false;
-   widget :  TfpgWidget;
+ // multisel : boolean = false;
+   //widget :  TfpgWidget;
 
   procedure DeleteChildWidget(ADesignWidget: TWidgetDesigner);
   var
@@ -673,9 +673,8 @@ var
   begin
     if not Assigned(ADesignWidget.Widget) then  // safety check
       Exit;
-     widget := ADesignWidget.Widget.Parent;
-
- //   while widget.HasParent = true do
+  //   widget := ADesignWidget.Widget.Parent;
+  //   while widget.HasParent = true do
  //  widget := Widget.Parent;
 
     if (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFILENAMEEDIT') and (uppercase(ADesignWidget.Widget.ClassName) <>

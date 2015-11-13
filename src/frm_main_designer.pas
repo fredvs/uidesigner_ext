@@ -462,10 +462,9 @@ begin
     end;
 
 procedure TfrmMainDesigner.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-var
-  x: integer;
-
-begin
+//var
+//  x: integer;
+ begin
 
    {
        frmmultiselect.Hide;

@@ -1503,8 +1503,6 @@ begin
 end;
 
 procedure TMainDesigner.OnPropPosEdit(Sender: TObject);
-var
-  TheParent: Tfpgwidget;
 begin
   if (SelectedForm <> nil) and (isFileLoaded = True) and (calculwidget = True) then
   begin
