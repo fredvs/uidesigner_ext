@@ -40,6 +40,7 @@ uses
   frm_multiselect,
   SysUtils,
   Classes,
+  sak_fpg,
   fpg_base,
   fpg_main,
   fpg_widget,
@@ -106,9 +107,10 @@ type
     btnGrid: TfpgButton;
     btnToFront: TfpgButton;
     btnSelected: TfpgButton;
+    btnAssist: TfpgButton;
     wgpalette: TwgPalette;
     chlPalette: TfpgComboBox;
-    {@VFD_HEAD_END: frmMainDesigner}
+       {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -129,6 +131,7 @@ type
     procedure OnFormDesignShow(Sender: TObject);
     procedure onMultiSelect(Sender: TObject);
     procedure LoadIDEparameters(ide: integer);
+    procedure sakenable(Sender: TObject);
     procedure onMessagePost;
     procedure OnStyleChange(Sender: TObject);
     procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
@@ -823,13 +826,13 @@ begin
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(400, 10, 800, 92);
+  SetPosition(400, 10, 778, 92);
   WindowTitle := 'fpGUI designer ext';
   Hint := '';
   BackGroundColor := $80000001;
-  MinWidth := 770;
+  MinWidth := 778;
   MinHeight := 90;
-  WindowPosition := wpUser;
+  WindowPosition := wpUser;      
   //iconname := 'vfd.ideuicon' ;
  {
   panel1 := TfpgPanel.Create(self);
@@ -1011,7 +1014,7 @@ begin
     SetPosition(324, 36, 120, 20);
   end;
 
-  btnNewForm := TfpgButton.Create(self);
+   btnNewForm := TfpgButton.Create(self);
   with btnNewForm do
   begin
     Name := 'NewForm';
@@ -1070,7 +1073,7 @@ begin
   with btnGrid do
   begin
     Name := 'Grid';
-    SetPosition(96, 33, 25, 24);
+    SetPosition(94, 33, 25, 24);
     AllowAllUp := True;
     FontDesc := '#Label1';
     Hint := 'Toggle designer grid';
@@ -1089,7 +1092,7 @@ begin
   with btnToFront do
   begin
     Name := 'ToFront';
-    SetPosition(123, 33, 25, 24);
+    SetPosition(120, 33, 25, 24);
     FontDesc := '#Label1';
     Hint := 'Switch Designer Always-To-Front <> Normal';
     ImageMargin := -1;
@@ -1106,7 +1109,7 @@ begin
   with btnSelected do
   begin
     Name := 'Selected';
-    SetPosition(152, 33, 25, 24);
+    SetPosition(146, 33, 25, 24);
     FontDesc := '#Label1';
     Hint := 'Multi-Selector => Select objects and apply changes';
     ImageMargin := -1;
@@ -1119,15 +1122,34 @@ begin
     OnClick := @onmultiselect;
   end;
 
+  btnAssist := TfpgButton.Create(self);
+  with btnAssist do
+  begin
+    Name := 'Assist';
+    SetPosition(172, 33, 25, 24);
+    AllowAllUp := True;
+    FontDesc := '#Label1';
+    Hint := 'Toggle voice assistive';
+    ImageMargin := -1;
+    ImageName := 'vfd.assit';
+    ImageSpacing := 0;
+    TabOrder := 13;
+    Text := '';
+    Focusable := False;
+    AllowDown := True;
+    ShowHint := True;
+    OnClick := @sakenable;
+  end;
+
   wgpalette := TwgPalette.Create(self);
   with wgpalette do
   begin
     Name := 'wgpalette';
-    SetPosition(180, 28, 606, 62);
+    SetPosition(200, 28, 578, 62);
     Anchors := [anLeft,anRight,anTop,anBottom];
     Focusable := False;
     ShowHint := True;
-    Width := self.Width - 150;
+    Width := self.Width - 204;
     OnResize := @PaletteBarResized;
   end;
 
@@ -1135,7 +1157,7 @@ begin
   with chlPalette do
   begin
     Name := 'chlPalette';
-    SetPosition(16, 62, 156, 22);
+    SetPosition(16, 62, 181, 22);
     ExtraHint := '';
     FontDesc := '#List';
     Hint := 'Widgets list';
@@ -1143,7 +1165,7 @@ begin
     FocusItem := -1;
     TabOrder := 5;
     chlPalette.OnChange:=@OnChangeWidget;
-  end;
+  end;            
 
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
@@ -1354,9 +1376,26 @@ begin                                                              //
     sizeof(vfd_tofront), 0, 0);
   fpgImages.AddMaskedBMP('vfd.select', @vfd_select,
     sizeof(vfd_select), 0, 0);
+  fpgImages.AddMaskedBMP('vfd.assit', @vfd_assist,
+    sizeof(vfd_assist), 0, 0);        
     fpgImages.AddMaskedBMP('vfd.ideuicon', @vfd_ideuicon, sizeof(vfd_ideuicon), 0, 0);
   OnShow := @FormShow;
 end;
+
+procedure TfrmMainDesigner.sakenable(Sender: TObject);
+begin
+  if directoryexists(IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) + directoryseparator + 'sakit')
+ then if btnAssist.Tag = 1 then
+  begin
+  btnAssist.Tag := 0 ;
+  SAKUnLoadlib ;
+  end
+  else
+   begin
+  btnAssist.Tag := 1 ;
+  SAKLoadlib ;
+  end
+end;   
 
 procedure TfrmMainDesigner.BeforeDestruction;
 var
@@ -2549,7 +2588,7 @@ var
 begin
   x := 0;
   y := 0;
-  wgpalette.Width := Width - 160;
+  wgpalette.Width := Width - 200;
   for n := 0 to wgPalette.ComponentCount - 1 do
   begin
     btn := wgPalette.Components[n] as TwgPaletteButton;
@@ -2564,7 +2603,7 @@ begin
     end;
   end;
 
-end;
+end;        
 
 procedure TfrmMainDesigner.OnStyleChange(Sender: TObject);
 var
