@@ -491,18 +491,7 @@ procedure TfrmMainDesigner.FormCloseQuery(Sender: TObject; var CanClose: boolean
   else
   begin
 
-
-    {
-
-     AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
-        rewrite(f);
-        append(f);
-        writeln(f, 'quit') ;
-        Flush(f);
-        CloseFile(f);
-      }
-
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+      if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       x := 0;
 
@@ -823,7 +812,6 @@ begin
 
   {%region 'Auto-generated GUI code' -fold}
 
-
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(400, 10, 778, 92);
@@ -1074,7 +1062,6 @@ begin
   begin
     Name := 'Grid';
     SetPosition(94, 33, 25, 24);
-    AllowAllUp := True;
     FontDesc := '#Label1';
     Hint := 'Toggle designer grid';
     ImageMargin := -1;
@@ -1082,11 +1069,9 @@ begin
     ImageSpacing := 0;
     TabOrder := 13;
     Text := '';
-    Focusable := False;
-    AllowDown := True;
     ShowHint := True;
     OnClick := @ToggleDesignerGrid;
-  end;
+ end;
 
   btnToFront := TfpgButton.Create(self);
   with btnToFront do
@@ -1127,7 +1112,6 @@ begin
   begin
     Name := 'Assist';
     SetPosition(172, 33, 25, 24);
-    AllowAllUp := True;
     FontDesc := '#Label1';
     Hint := 'Toggle voice assistive';
     ImageMargin := -1;
@@ -1135,7 +1119,9 @@ begin
     ImageSpacing := 0;
     TabOrder := 13;
     Text := '';
+    groupindex := 0 ;
     Focusable := False;
+    AllowAllUp:=true;
     AllowDown := True;
     ShowHint := True;
     OnClick := @sakenable;
@@ -1378,7 +1364,7 @@ begin                                                              //
     sizeof(vfd_select), 0, 0);
   fpgImages.AddMaskedBMP('vfd.assit', @vfd_assist,
     sizeof(vfd_assist), 0, 0);        
-    fpgImages.AddMaskedBMP('vfd.ideuicon', @vfd_ideuicon, sizeof(vfd_ideuicon), 0, 0);
+  //  fpgImages.AddMaskedBMP('vfd.ideuicon', @vfd_ideuicon, sizeof(vfd_ideuicon), 0, 0);
   OnShow := @FormShow;
 end;
 
@@ -1393,7 +1379,7 @@ begin
   else
    begin
   btnAssist.Tag := 1 ;
-  SAKLoadlib ;
+   SAKLoadlib ;
   end
 end;   
 
@@ -1402,17 +1388,19 @@ var
   undodir : string;
 begin
   frmmultiselect.Hide;
-  // frmmultiselect.ClearAll;
+
+   SAKUnLoadlib ;
 
    undodir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) + directoryseparator + 'temp';
 
   if DirectoryExists(PChar(undodir)) then
   begin
-    deletefile(PChar(undodir+'*.*')) ;
+  deletefile(PChar(undodir+DirectorySeparator+'*.*')) ;
   RemoveDir(undodir);
    end;
 
   maindsgn.OnHide(self) ;
+
   gINI.WriteFormState(self);
   gINI.WriteInteger('Options', 'IDE', idetemp);
   inherited BeforeDestruction;
