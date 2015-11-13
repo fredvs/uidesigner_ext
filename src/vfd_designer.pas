@@ -213,24 +213,7 @@ begin
       for n := 1 to 8 do
         resizer[n].Show;
 
-  //  frmproperties.Show;
-  {
-   if (frmMultiSelect.Visible = True) then
-  begin
-
-    if (widget.ClassName = 'TDesignedFom') then
-           begin
-           frmMultiSelect.Getwidgetlist(widget);
-           frmMultiSelect.visible := true;
-           end
-
-    else
-     frmMultiSelect.SelectedFromDesigner(Widget);
-
-  end;
-   }
-
-  end;
+   end;
 end;
 
 constructor TWidgetDesigner.Create(AFormDesigner: TFormDesigner; wg: TfpgWidget; wgc: TVFDWidgetClass);
@@ -706,12 +689,7 @@ var
 begin
   n := 0;
 
-  if frmmultiselect.Visible = true then
-  begin
-    frmmultiselect.hide;
-    multisel := true;
-  end;
-
+  
   if SakIsEnabled() = true then begin
   saksuspend;
    sakenabled := true;
@@ -743,12 +721,11 @@ begin
      sakupdate;
     end;
 
-   if multisel = true then
+  if frmmultiselect.Visible = true then
   begin
-    fpgapplication.ProcessMessages;
-     frmMultiSelect.Getwidgetlist(widget);
-     frmmultiselect.visible := true;
+    frmMultiSelect.refreshall(self);
   end;
+
 end;
 
 
@@ -2102,6 +2079,9 @@ begin
     DeSelectAll;
     wgd.Selected := True;
     UpdatePropWin;
+    if (frmMultiSelect.Visible = True) then
+        frmMultiSelect.refreshall(self);
+
   end;
 end;
 

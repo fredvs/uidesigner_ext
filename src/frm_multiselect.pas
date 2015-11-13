@@ -77,6 +77,7 @@ type
     procedure btnApply1Clicked(Sender: TObject);
     procedure btnApply2Clicked(Sender: TObject);
     procedure btnApply3Clicked(Sender: TObject);
+    procedure refreshall(Sender: TObject);
     procedure btnunselectall(Sender: TObject);
     procedure btnselectall(Sender: TObject);
     procedure btnCopyPasteClicked(Sender: TObject);
@@ -1319,6 +1320,10 @@ begin
   calculwidget := True;
 end;
 
+procedure Tfrm_multiselect.refreshall(Sender: TObject);
+begin
+  ProcGetwidgetlist(TheSelectedForm);
+end;
 
 procedure Tfrm_multiselect.ProcGetwidgetlist(Theobjori: TfpgWidget);
 var
