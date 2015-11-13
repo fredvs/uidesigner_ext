@@ -1484,7 +1484,8 @@ begin
     begin
       Thewidget := (frmProperties.lstProps.Props.Widget);
 
-       if (Thewidget.ClassName = 'TDesignedForm') then
+              if (Thewidget.ComponentCount > 0)  then
+
            frmMultiSelect.Getwidgetlist(Thewidget)
              else
              if  isnew = false then
@@ -1493,9 +1494,7 @@ begin
           isnew := false;
            frmMultiSelect.SelectedFromDesigner(Thewidget)  ;
         frmMultiSelect.Getwidgetlist(Thewidget)  ;
-
-
-        end;
+             end;
      end;
 
   end;

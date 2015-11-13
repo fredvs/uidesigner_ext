@@ -84,7 +84,7 @@ type
     procedure btnrefreshClicked(Sender: TObject);
     procedure btnDeleteClicked(Sender: TObject);
     procedure Getwidgetlist(Theobj: TfpgWidget);
-    procedure ProcGetwidgetlist(Theobjori: TfpgWidget);
+    procedure ProcGetwidgetlist(Theobj: TfpgWidget);
     procedure ProcUpdateGrid(Theobj: TfpgWidget);
     procedure SelectedFromDesigner(TheSelected: TfpgWidget);
     procedure onScrollChange(Sender: TObject; position: integer);
@@ -1325,11 +1325,10 @@ begin
   ProcGetwidgetlist(TheSelectedForm);
 end;
 
-procedure Tfrm_multiselect.ProcGetwidgetlist(Theobjori: TfpgWidget);
+procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);
 var
   x, y: integer;
   sakloaded : boolean = false;
- Theobj: TfpgWidget ;
 begin
   calculwidget := False;
  if SakIsEnabled = true then
@@ -1361,12 +1360,7 @@ begin
     x := 0;
     y := 0 ;
 
-    if Theobjori.HasParent = true then Theobj := Theobjori.Parent  else
-    Theobj := Theobjori;
-      if Theobj.HasParent = true then Theobj := Theobj.Parent  ;
-
-
-    while x < Theobj.ComponentCount do
+     while x < Theobj.ComponentCount do
     begin
        setlength(cbSelected, length(cbSelected) + 1);
         cbSelected[x] := Tfpgcheckbox.Create(Panelscroll);

@@ -1480,10 +1480,7 @@ begin
   if (frmProperties.edName.Text <> '') and (frmProperties.lstProps.Props.Widget <> nil) and (maindsgn.selectedform <> nil) then
   begin
 
-    TheParent := frmProperties.lstProps.Props.Widget;
-
-     if TheParent.HasParent then
-     TheParent := frmProperties.lstProps.Props.Widget.Parent;
+    TheParent := WidgetParentForm(TfpgWidget(frmProperties.lstProps.Props.Widget));
 
     calculwidget := True;
 
