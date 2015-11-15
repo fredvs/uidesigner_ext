@@ -13,7 +13,7 @@ You may use designer_ext.lpi for Lazarus/Typhon or designer_ext.prj for MSEide/i
 If you want to use last fpgui-develop branch, edit => define.inc
 and uncomment {$DEFINE fpgui-develop}.
 
-If you want assistive for designer_ext => copy /src/sakit/ folder => into your main application folder (or where you want .
+If you want assistive for designer_ext => copy /src/sakit folder => into your main application folder (or where you want) .
 Then in "Settings" => choose the parent directory of /sakit.
 
 For total integation with fpc, Lazarus and Typhon, Geany, external-code-editor, ..., you may use the patches...
