@@ -3,16 +3,19 @@ designer_ext is the extended version of fpGUI uiDesigner.
 It needs the last fpGUI version =>
 https://github.com/graemeg/fpgui/
 
-With run-only-once, window list, undo feature, integration into IDE, editor launcher,...
+With run-only-once, windows list, undo feature, integration into IDE, editor launcher, multi-selection, assistive, ...
 
 How to install it ?
 
 Just compile /designer_ext/src/designer_ext.pas
 
-If you want assistive for designer_ext => copy /sakit/ folder => into your main application folder.
-Then in "Settings" => enable "Assistive".
+If you want to use last fpgui-develop branch, edit => define.inc
+and uncomment {$DEFINE fpgui-develop}.
 
-For integation with fpc, Lazarus, Typhon, Geany, external-code-editor, ..., you may use the patches...
+If you want assistive for designer_ext => copy /sakit/ folder => into your main application folder.
+Then in "Settings" => choose the parent directory of /sakit.
+
+For total integation with fpc, Lazarus and Typhon, Geany, external-code-editor, ..., you may use the patches...
 Those patches are in /designer_ext/patch.
 
 Please read the readme-patch-files before to apply patch.
