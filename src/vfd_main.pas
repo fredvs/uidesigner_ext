@@ -25,12 +25,10 @@ fiens@hotmail.com
 
 unit vfd_main;
  
-  /// for compiling into library => uncoment it in frm_main_designer too
-{.$DEFINE library}   // uncomment it for building library (native and java) 
-{.$DEFINE java}   // uncomment it for building java library
-
-
 {$mode objfpc}{$H+}
+
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
 
 interface
 
@@ -42,6 +40,7 @@ uses
   runonce_postit,
   Process,
   SysUtils,
+  sak_fpg,
   fpg_dialogs,
   fpg_base,
   fpg_main,
@@ -269,7 +268,13 @@ begin
     FFileLoaded := '';
 
       frmMainDesigner.MainMenu.Visible:=false;
+
+     {$ifdef fpgui-develop}
+     frmMainDesigner.MainMenu.UpdatePosition;
+     {$else}
      frmMainDesigner.MainMenu.UpdateWindowPosition;
+     {$endif}
+
      fpgapplication.ProcessMessages;
      frmMainDesigner.MainMenu.Visible:=true;
 
@@ -487,7 +492,11 @@ begin
   x := 0;
 
      frmMainDesigner.MainMenu.Visible:=false;
- frmMainDesigner.MainMenu.UpdateWindowPosition;
+     {$ifdef fpgui-develop}
+     frmMainDesigner.MainMenu.UpdatePosition;
+     {$else}
+     frmMainDesigner.MainMenu.UpdateWindowPosition;
+     {$endif}
   fpgapplication.ProcessMessages;
   frmMainDesigner.MainMenu.Visible:=true;
 
@@ -670,10 +679,19 @@ begin
     frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
   frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
   frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
-   frmMainDesigner.UpdateWindowPosition;
+        {$ifdef fpgui-develop}
+     frmMainDesigner.UpdatePosition;
+     {$else}
+     frmMainDesigner.UpdateWindowPosition;
+     {$endif}
 
    frmMainDesigner.MainMenu.Visible:=false;
- frmMainDesigner.MainMenu.UpdateWindowPosition;
+      {$ifdef fpgui-develop}
+     frmMainDesigner.MainMenu.UpdatePosition;
+     {$else}
+     frmMainDesigner.MainMenu.UpdateWindowPosition;
+     {$endif}
+
   fpgapplication.ProcessMessages;
   frmMainDesigner.MainMenu.Visible:=true;
     frmMainDesigner.hide;
@@ -1484,7 +1502,7 @@ begin
     begin
       Thewidget := (frmProperties.lstProps.Props.Widget);
 
-              if (Thewidget.ComponentCount > 0)  then
+       if (Thewidget.ComponentCount > 0)  then
 
            frmMultiSelect.Getwidgetlist(Thewidget)
              else
@@ -1493,16 +1511,24 @@ begin
         else begin
           isnew := false;
            frmMultiSelect.SelectedFromDesigner(Thewidget)  ;
-        frmMultiSelect.Getwidgetlist(Thewidget)  ;
+     //   frmMultiSelect.Getwidgetlist(Thewidget)  ;
              end;
-
-
      end;
 
+     if SakIsEnabled = true then
+  begin
+     SakCancel;
+     SAKSay(frmproperties.edName.Text + ' selected') ;
   end;
+
+  end;
+
+
 end;
 
 procedure TMainDesigner.OnPropPosEdit(Sender: TObject);
+var
+  TheParent: Tfpgwidget;
 begin
   if (SelectedForm <> nil) and (isFileLoaded = True) and (calculwidget = True) then
   begin
@@ -1511,7 +1537,14 @@ begin
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 1);
-     calculwidget := True;
+    if frmMultiSelect.Visible = True then
+    begin
+      TheParent := (frmProperties.lstProps.Props.Widget);
+      if TheParent.HasParent then
+        TheParent := (frmProperties.lstProps.Props.Widget.Parent);
+      frmMultiSelect.Getwidgetlist(TheParent);
+    end;
+    calculwidget := True;
   end;
 end;
 
@@ -1524,7 +1557,7 @@ begin
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 12);
     calculwidget := True;
-   end;
+  end;
 end;
 
 procedure TMainDesigner.OnAnchorChange(Sender: TObject);
@@ -1842,7 +1875,7 @@ begin
       2: AProcess.CommandLine := 'gedit ' + p + s;
       3: AProcess.CommandLine := 'geany ' + p + s;
       4: AProcess.CommandLine :=
-          gINI.ReadString('Options', 'CustomEditor', '') + ' ' + p + s;
+      gINI.ReadString('Options', 'CustomEditor', '') + ' ' + p + s;
     end;
      {$WARN SYMBOL_DEPRECATED ON}
     AProcess.Options := AProcess.Options + [poNoConsole];

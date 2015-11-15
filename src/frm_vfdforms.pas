@@ -27,6 +27,9 @@ unit frm_vfdforms;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -35,7 +38,7 @@ uses
   fpg_label, fpg_button, fpg_combobox,
   {%endunits}
   Classes,
-  sak_fpg,
+ // sak_fpg,
   SysUtils,
   fpg_base,
   fpg_form,
@@ -157,9 +160,10 @@ type
     chkAlwaystoFront: TfpgCheckBox;
     pathini: TfpgLabel;
     Label2: TfpgLabel;
-    rbTyphon: TfpgRadioButton;
-    rbLaz: TfpgRadioButton;
     rbNone: TfpgRadioButton;
+    lwarning: TfpgLabel;
+    rbLaz: TfpgRadioButton;
+    rbTyphon: TfpgRadioButton;
     WidgetOrderForm: TfpgLabel;
     rbedit0: TfpgRadioButton;
     rbedit2: TfpgRadioButton;
@@ -176,7 +180,10 @@ type
     rbideu: TfpgRadioButton;
     Label5: TfpgLabel;
     CheckAssistive: TfpgCheckBox;
-    {@VFD_HEAD_END: frmVFDSetup}
+    Label6: TfpgLabel;
+    DirectoryEdit1: TfpgDirectoryEdit;
+
+     {@VFD_HEAD_END: frmVFDSetup}
     procedure AfterCreate; override;
     // procedure BeforeDestruction; override;
   end;
@@ -354,6 +361,7 @@ begin
   Name := 'WidgetOrderForm';
   SetPosition(534, 173, 426, 398);
   WindowTitle := 'TWidgetOrderForm';
+  IconName := '';
   Hint := '';
   BackGroundColor := $80000001;
   WindowPosition := wpScreenCenter;
@@ -374,12 +382,12 @@ begin
     Name := 'btnOK';
     SetPosition(346, 24, 75, 24);
     Anchors := [anRight,anTop];
+    Text := 'OK';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.ok';
     ModalResult := mrOK;
     TabOrder := 2;
-    Text := 'OK';
   end;
 
   btnCancel := TfpgButton.Create(self);
@@ -388,12 +396,12 @@ begin
     Name := 'btnCancel';
     SetPosition(346, 52, 75, 24);
     Anchors := [anRight,anTop];
+    Text := 'Cancel';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.cancel';
     ModalResult := mrCancel;
     TabOrder := 3;
-    Text := 'Cancel';
   end;
 
   btnUp := TfpgButton.Create(self);
@@ -402,13 +410,15 @@ begin
     Name := 'btnUp';
     SetPosition(346, 108, 75, 24);
     Anchors := [anRight,anTop];
+    Text := 'Up';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := '';
     TabOrder := 4;
-    Text := 'Up';
     OnClick := @OnButtonClick;
   end;
+
+
 
   btnDown := TfpgButton.Create(self);
   with btnDown do
@@ -416,11 +426,11 @@ begin
     Name := 'btnDown';
     SetPosition(346, 136, 75, 24);
     Anchors := [anRight,anTop];
+    Text := 'Down';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := '';
     TabOrder := 5;
-    Text := 'Down';
     OnClick := @OnButtonClick;
   end;
 
@@ -496,13 +506,9 @@ end;
 { TfrmVFDSetup}
  procedure TfrmVFDSetup.onAssistive(Sender: TObject);
 begin
-  if checkassistive.Enabled = true then
-  begin
-   if checkassistive.Checked = true then
-    SAKUnLoadlib
-  else
-   SAKLoadlib;
-  end;
+    if directoryexists(DirectoryEdit1.Directory + directoryseparator +'sakit')
+  then CheckAssistive.enabled := true else  CheckAssistive.enabled := false ;
+
  end;
 
 procedure TfrmVFDSetup.UndoLook(Sender: TObject);
@@ -522,7 +528,13 @@ begin
     rbnone.Checked := True;
     frmMainDesigner.btnOpen.Visible := True;
     frmMainDesigner.btnSave.Left := 69;
-    frmMainDesigner.btnSave.UpdateWindowPosition;
+
+ {$ifdef fpgui-develop}
+ frmMainDesigner.btnSave.UpdatePosition;
+ {$else}
+ frmMainDesigner.btnSave.UpdateWindowPosition;
+ {$endif}
+
 
   //  WindowAttributes := [];
     frmMainDesigner.filemenu.MenuItem(0).Visible := True;
@@ -554,6 +566,7 @@ end;
 procedure TfrmVFDSetup.LoadSettings;
 var
   x: integer;
+  sakitd : string;
 begin
   fpgapplication.ProcessMessages;
 
@@ -577,6 +590,7 @@ begin
     4: rbedit4.Checked := True;
   end;
 
+
   TrackBarUndo.Position := gINI.ReadInteger('Options', 'MaxUndo', 10);
   CheckBox1.Checked := gINI.ReadBool('Options', 'EnableUndo', True);
   chkautounits.Checked := gINI.ReadBool('Options', 'EnableAutoUnits', True);
@@ -584,6 +598,8 @@ begin
   enableautounits :=  chkautounits.Checked ;
 
   CheckAssistive.Checked := gINI.ReadBool('Options', 'EnableAssistive', false)  ;
+
+  DirectoryEdit1.Directory := dirsakit;
 
   maxundo := TrackBarUndo.Position;
   FINIVersion := gINI.ReadInteger('Designer', 'Version', 0);
@@ -635,6 +651,9 @@ begin
   gINI.WriteBool('Options', 'AlwaystoFront', chkAlwaystoFront.Checked);
   gINI.WriteInteger('Options', 'IndentationType', cbIndentationType.FocusItem);
   gINI.WriteString('Options', 'CustomEditor', FilenameEdit1.FileName);
+
+  gINI.WriteString('Options', 'SakitDir', DirectoryEdit1.Directory );
+  dirsakit := DirectoryEdit1.Directory;
 
   if rbedit0.Checked = True then
     gINI.WriteInteger('Options', 'Editor', 0);
@@ -703,13 +722,14 @@ end;
 
 procedure TfrmVFDSetup.AfterCreate;
 var
-  dataf, ordir: string;
+  dataf: string;
 begin
   {@VFD_BODY_BEGIN: frmVFDSetup}
   Name := 'frmVFDSetup';
-  SetPosition(196, 237, 549, 365);
+  SetPosition(300, 263, 549, 365);
   WindowTitle := 'General settings';
   IconName := '';
+  Hint := '';
   ShowHint := True;
   BackGroundColor := $80000001;
   MinWidth := 549;
@@ -733,10 +753,10 @@ begin
     SetPosition(130, 20, 35, 24);
     FontDesc := '#Edit1';
     Hint := '';
-    TabOrder := 18;
-    Value := 4;
     MaxValue := 10;
     MinValue := 1;
+    TabOrder := 18;
+    Value := 4;
   end;
 
   btnOK := TfpgButton.Create(self);
@@ -745,11 +765,11 @@ begin
     Name := 'btnOK';
     SetPosition(233, 334, 75, 24);
     Anchors := [anRight,anBottom];
+    Text := 'OK';
     FontDesc := '#Label1';
     Hint := '';
     ImageName := 'stdimg.ok';
     TabOrder := 6;
-    Text := 'OK';
     OnClick := @btnOKClick;
   end;
 
@@ -812,7 +832,7 @@ begin
   with edtDefaultExt do
   begin
     Name := 'edtDefaultExt';
-    SetPosition(240, 212, 52, 24);
+    SetPosition(172, 216, 52, 24);
     ExtraHint := '';
     FontDesc := '#Edit1';
     Hint := '';
@@ -824,7 +844,7 @@ begin
   with lblName3 do
   begin
     Name := 'lblName3';
-    SetPosition(48, 200, 68, 16);
+    SetPosition(20, 200, 68, 16);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Various';
@@ -857,7 +877,7 @@ begin
   with Label1 do
   begin
     Name := 'Label1';
-    SetPosition(88, 216, 144, 16);
+    SetPosition(32, 224, 136, 16);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Default file extension:';
@@ -867,7 +887,7 @@ begin
   with chkCodeRegions do
   begin
     Name := 'chkCodeRegions';
-    SetPosition(88, 236, 328, 20);
+    SetPosition(32, 244, 328, 20);
     FontDesc := '#Label1';
     Hint := 'Applies to new form/dialogs only';
     TabOrder := 18;
@@ -878,7 +898,7 @@ begin
   with cbIndentationType do
   begin
     Name := 'cbIndentationType';
-    SetPosition(288, 256, 152, 24);
+    SetPosition(228, 264, 132, 24);
     ExtraHint := '';
     FontDesc := '#List';
     Hint := '';
@@ -892,7 +912,7 @@ begin
   with lblIndentType do
   begin
     Name := 'lblIndentType';
-    SetPosition(92, 260, 192, 16);
+    SetPosition(36, 268, 192, 16);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Indent Type for generated code:';
@@ -933,32 +953,6 @@ begin
     Text := 'IDE Integration';
   end;
 
-  rbTyphon := TfpgRadioButton.Create(self);
-  with rbTyphon do
-  begin
-    Name := 'rbTyphon';
-    SetPosition(252, 80, 120, 19);
-    FontDesc := '#Label1';
-    GroupIndex := 0;
-    Hint := '';
-    TabOrder := 21;
-    Text := 'with Typhon';
-    OnClick := @IdeIntegration;
-  end;
-
-  rbLaz := TfpgRadioButton.Create(self);
-  with rbLaz do
-  begin
-    Name := 'rbLaz';
-    SetPosition(252, 60, 104, 19);
-    FontDesc := '#Label1';
-    GroupIndex := 0;
-    Hint := '';
-    TabOrder := 22;
-    Text := 'with Lazarus';
-    OnClick := @IdeIntegration;
-  end;
-
   rbNone := TfpgRadioButton.Create(self);
   with rbNone do
   begin
@@ -969,6 +963,46 @@ begin
     Hint := '';
     TabOrder := 23;
     Text := 'None';
+    OnClick := @IdeIntegration;
+  end;
+
+  lwarning := TfpgLabel.Create(self);
+  with lwarning do
+  begin
+    Name := 'lwarning';
+    SetPosition(254, 66, 144, 20);
+    FontDesc := 'DejaVu Sans-8:italic:antialias=true';
+    Hint := '';
+    Text := 'After apply patch:';
+  end;
+
+  rbLaz := TfpgRadioButton.Create(self);
+  with rbLaz do
+  begin
+    Name := 'rbLaz';
+    SetPosition(252, 80, 104, 19);
+    FontDesc := '#Label1';
+    GroupIndex := 0;
+    Hint := 'Lazarus needs a patch for integration';
+    ParentShowHint := False;
+    ShowHint := True;
+    TabOrder := 22;
+    Text := 'with Lazarus';
+    OnClick := @IdeIntegration;
+  end;
+
+  rbTyphon := TfpgRadioButton.Create(self);
+  with rbTyphon do
+  begin
+    Name := 'rbTyphon';
+    SetPosition(252, 100, 120, 19);
+    FontDesc := '#Label1';
+    GroupIndex := 0;
+    Hint := 'Typhon needs a patch for integration';
+    ParentShowHint := False;
+    ShowHint := True;
+    TabOrder := 21;
+    Text := 'with Typhon';
     OnClick := @IdeIntegration;
   end;
 
@@ -1047,7 +1081,7 @@ begin
   with Label3 do
   begin
     Name := 'Label3';
-    SetPosition(248, 106, 116, 19);
+    SetPosition(248, 130, 116, 19);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Undo Feature';
@@ -1057,7 +1091,7 @@ begin
   with CheckBox1 do
   begin
     Name := 'CheckBox1';
-    SetPosition(248, 124, 120, 19);
+    SetPosition(248, 152, 120, 19);
     Checked := True;
     FontDesc := '#Label1';
     Hint := '';
@@ -1070,7 +1104,7 @@ begin
   with Label4 do
   begin
     Name := 'Label4';
-    SetPosition(266, 145, 76, 19);
+    SetPosition(266, 173, 76, 19);
     FontDesc := '#Label1';
     Hint := '';
     Text := 'Max Undo:';
@@ -1080,7 +1114,7 @@ begin
   with TrackBarUndo do
   begin
     Name := 'TrackBarUndo';
-    SetPosition(254, 158, 100, 30);
+    SetPosition(254, 186, 100, 30);
     Hint := '';
     Min := 10;
     Position := 20;
@@ -1115,7 +1149,7 @@ begin
   with chkautounits do
   begin
     Name := 'chkautounits';
-    SetPosition(88, 284, 224, 19);
+    SetPosition(32, 288, 224, 19);
     Checked := True;
     FontDesc := '#Label1';
     Hint := '';
@@ -1139,7 +1173,7 @@ begin
   with Label5 do
   begin
     Name := 'Label5';
-    SetPosition(384, 172, 128, 19);
+    SetPosition(384, 168, 128, 19);
     FontDesc := '#Label2';
     Hint := '';
     Text := 'Speecher Assistive';
@@ -1149,16 +1183,40 @@ begin
   with CheckAssistive do
   begin
     Name := 'CheckAssistive';
-    SetPosition(388, 192, 128, 19);
+    SetPosition(380, 232, 128, 19);
+    Enabled := False;
     FontDesc := '#Label1';
     Hint := 'If checked, speecher will assist you.';
     TabOrder := 38;
-    Text := 'Enable Assistive';
-    enabled := false;
+    Text := 'Enable at startup';
     OnClick := @onAssistive;
   end;
 
-  {@VFD_BODY_END: frmVFDSetup}
+  Label6 := TfpgLabel.Create(self);
+  with Label6 do
+  begin
+    Name := 'Label6';
+    SetPosition(376, 188, 152, 15);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Parent location of /sakit';
+  end;
+
+  DirectoryEdit1 := TfpgDirectoryEdit.Create(self);
+  with DirectoryEdit1 do
+  begin
+    Name := 'DirectoryEdit1';
+    SetPosition(376, 204, 160, 24);
+    Directory := '';
+    ExtraHint := '';
+    RootDirectory := '';
+    TabOrder := 41;
+    OnMouseExit:= @onAssistive   ;
+    OnMouseEnter:= @onAssistive   ;
+    OnButtonClick:= @onAssistive   ;
+  end;
+
+    {@VFD_BODY_END: frmVFDSetup}
 
     {$IFDEF windows}
   rbedit2.Text := 'NotePad';
@@ -1231,14 +1289,8 @@ begin
   else
     rbideu.Enabled := False;
 
-ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
-
-{$ifdef windows}
-if directoryexists(ordir + '\sakit')
-  {$else}
- if directoryexists(ordir + '/sakit')
-    {$endif}
- then CheckAssistive.enabled := true;
+ if directoryexists(dirsakit + directoryseparator +'sakit')
+ then CheckAssistive.enabled := true else  CheckAssistive.enabled := false ;
 
 {
   if gINI.ReadBool('frmVFDSetupState', 'FirstLoad', True) = False then

@@ -22,13 +22,13 @@ fiens@hotmail.com
       Essential classes used by the fpGUI Designer
  }
  
- /// for compiling into library => uncoment it in vfd_main too
- //{$DEFINE library} // uncomment it for building library (native and java)
- //{$DEFINE java}   // uncomment it for building java library
 
 unit frm_main_designer;
 
 {$mode objfpc}{$H+}
+
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
 
 interface
 
@@ -40,11 +40,11 @@ uses
   frm_multiselect,
   SysUtils,
   Classes,
-  sak_fpg,
   fpg_base,
   fpg_main,
   fpg_widget,
   fpg_edit,
+  sak_fpg,
   fpg_combobox,
   fpg_listbox,
   fpg_memo,
@@ -58,6 +58,13 @@ uses
   fpg_form, fpg_label, fpg_button, fpg_hyperlink
   {%endunits}
   ;
+
+
+  {$ifdef fpgui-develop}
+const
+  MIME_VFD_WIDGET_CLASS = 'x-object/fpgui-vfd-widgetclass';
+  {$else}
+  {$endif}
 
 type
 
@@ -76,6 +83,13 @@ type
     FFileOpenRecent: TfpgMenuItem;
     FlistUndo: TfpgMenuItem;
     procedure FormShow(Sender: TObject);
+
+    {$ifdef fpgui-develop}
+    procedure   OnPaletteDragStart(Sender: TObject);
+    procedure   PaintPaletteButtonForDrag(ASender: TfpgDrag; ACanvas: TfpgCanvas);
+ {$else}
+ {$endif}
+
     procedure PaletteBarResized(Sender: TObject);
     procedure miHelpAboutClick(Sender: TObject);
     procedure miHelpAboutGUI(Sender: TObject);
@@ -110,7 +124,7 @@ type
     btnAssist: TfpgButton;
     wgpalette: TwgPalette;
     chlPalette: TfpgComboBox;
-       {@VFD_HEAD_END: frmMainDesigner}
+    {@VFD_HEAD_END: frmMainDesigner}
     mru: TfpgMRU;
     constructor Create(AOwner: TComponent); override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -128,10 +142,11 @@ type
     procedure OnIndexRedo(Sender: TObject);
     procedure OnObjInspect(Sender: TObject);
     procedure ToFrontClick(Sender: TObject);
+    procedure sakenable(Sender: TObject);
+
     procedure OnFormDesignShow(Sender: TObject);
     procedure onMultiSelect(Sender: TObject);
     procedure LoadIDEparameters(ide: integer);
-    procedure sakenable(Sender: TObject);
     procedure onMessagePost;
     procedure OnStyleChange(Sender: TObject);
     procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
@@ -250,6 +265,7 @@ var
   bitcpu: integer;
   mayclose : boolean = false;
   ideuintegration : boolean = false ;
+  dirsakit : string;
 
 implementation
 
@@ -259,6 +275,12 @@ uses
   fpg_stylemanager,
   vfd_main,
   vfd_designer,
+
+ {$ifdef fpgui-develop}
+ fpg_window,
+ {$else}
+ {$endif}
+
   vfd_constants;
 
 // Anchor images
@@ -393,11 +415,11 @@ begin
   with lblCompiled do
   begin
     Name := 'lblCompiled';
-    SetPosition(12, 91, 188, 13);
+    SetPosition(12, 91, 290, 13);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
     Hint := '';
-    Text := 'Compiled on:  %s';
+
     TextColor := TfpgColor($FF000000);
   end;
 
@@ -467,7 +489,8 @@ begin
 procedure TfrmMainDesigner.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 //var
 //  x: integer;
- begin
+
+begin
 
    {
        frmmultiselect.Hide;
@@ -491,7 +514,18 @@ procedure TfrmMainDesigner.FormCloseQuery(Sender: TObject; var CanClose: boolean
   else
   begin
 
-      if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+
+    {
+
+     AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
+        rewrite(f);
+        append(f);
+        writeln(f, 'quit') ;
+        Flush(f);
+        CloseFile(f);
+      }
+
+    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
     begin
       x := 0;
 
@@ -551,7 +585,12 @@ begin
 
   btnOpen.Visible := False;
   btnSave.Left := btnOpen.Left;
+
+  {$ifdef fpgui-develop}
+  btnSave.UpdatePosition;
+ {$else}
   btnSave.UpdateWindowPosition;
+ {$endif}
 
   filemenu.MenuItem(0).enabled := True;
   filemenu.MenuItem(1).enabled := False;
@@ -663,7 +702,11 @@ if fileexists(pchar(dataf)) then
              top := top + 48;
 
             {$ENDIF}
-                  UpdateWindowPosition;
+            {$ifdef fpgui-develop}
+            UpdatePosition;
+            {$else}
+            UpdateWindowPosition;
+            {$endif}
             if   Pos('Width="',dataf2) > 0 then
               begin
                   dataf := copy(dataf2,Pos('Width="',dataf2)+7,6) ;
@@ -681,7 +724,12 @@ if fileexists(pchar(dataf)) then
               end;
 
          ////
-            UpdateWindowPosition;
+         {$ifdef fpgui-develop}
+         UpdatePosition;
+         {$else}
+         UpdateWindowPosition;
+         {$endif}
+
 {$IFDEF Windows}
        if  gINI.ReadBool('Options', 'AlwaystoFront', false) = true then
          begin
@@ -739,7 +787,11 @@ if fileexists(pchar(dataf)) then
  end;
    end;
       CloseFile(f);
-       UpdateWindowPosition;
+      {$ifdef fpgui-develop}
+      UpdatePosition;
+      {$else}
+      UpdateWindowPosition;
+      {$endif}
          end;
 end;
 
@@ -820,7 +872,7 @@ begin
   BackGroundColor := $80000001;
   MinWidth := 778;
   MinHeight := 90;
-  WindowPosition := wpUser;      
+  WindowPosition := wpUser;
   //iconname := 'vfd.ideuicon' ;
  {
   panel1 := TfpgPanel.Create(self);
@@ -1002,7 +1054,7 @@ begin
     SetPosition(324, 36, 120, 20);
   end;
 
-   btnNewForm := TfpgButton.Create(self);
+  btnNewForm := TfpgButton.Create(self);
   with btnNewForm do
   begin
     Name := 'NewForm';
@@ -1016,7 +1068,7 @@ begin
     Text := '';
     Visible := False;
     ShowHint := True;
-    Focusable := False;
+    Focusable := true;
     OnClick := @(OnNewForm);
   end;
 
@@ -1034,7 +1086,7 @@ begin
     Text := '';
     ShowHint := True;
     Visible := False;
-    Focusable := False;
+    Focusable := true;
     OnClick := @(maindsgn.OnLoadFile);
   end;
 
@@ -1052,7 +1104,7 @@ begin
     Text := '';
     tag := 10;
     Visible := False;
-    Focusable := False;
+    Focusable := true;
     ShowHint := True;
     OnClick := @(maindsgn.OnSaveFile);
   end;
@@ -1069,9 +1121,11 @@ begin
     ImageSpacing := 0;
     TabOrder := 13;
     Text := '';
+     tag := 0;
+    Focusable := true;
     ShowHint := True;
     OnClick := @ToggleDesignerGrid;
- end;
+  end;
 
   btnToFront := TfpgButton.Create(self);
   with btnToFront do
@@ -1085,7 +1139,7 @@ begin
     ImageSpacing := 0;
     TabOrder := 3;
     Text := '';
-    Focusable := False;
+    Focusable := true;
     ShowHint := True;
     onClick := @ToFrontClick;
   end;
@@ -1102,7 +1156,7 @@ begin
     ImageSpacing := 0;
     TabOrder := 20;
     Text := '';
-    Focusable := False;
+    Focusable := true;
     ShowHint := True;
     OnClick := @onmultiselect;
   end;
@@ -1119,9 +1173,9 @@ begin
     ImageSpacing := 0;
     TabOrder := 13;
     Text := '';
-    groupindex := 0 ;
-    Focusable := False;
-    AllowAllUp:=true;
+    tag := 0;
+    Focusable := true;
+    AllowAllUp := True;
     AllowDown := True;
     ShowHint := True;
     OnClick := @sakenable;
@@ -1151,7 +1205,7 @@ begin
     FocusItem := -1;
     TabOrder := 5;
     chlPalette.OnChange:=@OnChangeWidget;
-  end;            
+  end;
 
   {@VFD_BODY_END: frmMainDesigner}
   {%endregion}
@@ -1174,7 +1228,7 @@ begin
   x := 0;
   y := 0;
 
-  OnCloseQuery := @FormCloseQuery;
+   OnCloseQuery := @FormCloseQuery;
   OnClose := @FormClose;
   maxundo := gINI.ReadInteger('Options', 'MaxUndo', 10);
   enableundo := gINI.ReadBool('Options', 'EnableUndo', True);
@@ -1193,6 +1247,12 @@ begin
     btn.Focusable := False;
     btn.ShowHint := True;
     btn.OnClick := @OnPaletteClick;
+
+     {$ifdef fpgui-develop}
+     btn.OnDragStartDetected:=@OnPaletteDragStart;
+ {$else}
+ {$endif}
+
     btn.AllowDown := True;
     btn.AllowAllUp := True;
     chlPalette.Tag:=1 ;
@@ -1287,8 +1347,11 @@ windowtitle := MainMenu.MenuItem(8).Text;
  top := 10 ;
  width := 775 ;
  height := 92 ;
+ {$ifdef fpgui-develop}
+ UpdatePosition;
+ {$else}
  UpdateWindowPosition;
-       
+ {$endif}
 
    if gINI.ReadBool('frmMainState', 'FirstLoad', True) = False then
       gINI.ReadFormState(self)
@@ -1306,10 +1369,14 @@ fpgapplication.ProcessMessages;
   WindowType := wtwindow;  // with borders, not on front.
     btnOpen.Visible := True;
     btnSave.Left := 69;
+    {$ifdef fpgui-develop}
+    btnSave.UpdatePosition;
+   {$else}
     btnSave.UpdateWindowPosition;
+   {$endif}
    //   WindowAttributes:= [];
     //   panel1.Style := bsflat;
-    //   panel1.UpdateWindowPosition;
+    //   panel1.UpdatePosition;
       filemenu.MenuItem(1).enabled := True;
     filemenu.MenuItem(2).enabled := True;
     filemenu.MenuItem(15).enabled := true;
@@ -1320,7 +1387,7 @@ fpgapplication.ProcessMessages;
   begin
      MainMenu.MenuItem(8).Visible := true;
    //   panel1.Style := bsLowered;
-   //   panel1.UpdateWindowPosition;
+   //   panel1.UpdatePosition;
    //   WindowAttributes:= [waSizeable, waBorderless];
     //    WindowAttributes:= [];
 
@@ -1335,7 +1402,11 @@ fpgapplication.ProcessMessages;
 
    PaletteBarResized(self);
 
-     UpdateWindowPosition;
+   {$ifdef fpgui-develop}
+   UpdatePosition;
+   {$else}
+   UpdateWindowPosition;
+   {$endif}
 //  frmMultiSelect := Tfrm_multiselect.Create(nil);
       fpgApplication.CreateForm(Tfrm_multiselect, frmMultiSelect);
   chlPalette.Tag:=0;
@@ -1344,17 +1415,29 @@ end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
 begin
-  maindsgn.ShowGrid := btnGrid.Down;
+ if btnGrid.Tag = 0 then
+ begin
+ btnGrid.Tag := 1 ;
+  maindsgn.ShowGrid := true;
+ end else
+  begin
+ btnGrid.Tag := 0 ;
+  maindsgn.ShowGrid := false;
+ end
 end;
 
 procedure TfrmMainDesigner.FormShow(Sender: TObject);
 begin
   gINI.ReadFormState(self);
+  {$ifdef fpgui-develop}
+  UpdatePosition;
+  {$else}
   UpdateWindowPosition;
+  {$endif}
 end;
 
 constructor TfrmMainDesigner.Create(AOwner: TComponent);
-begin                                                              //
+begin                                                             
   inherited Create(AOwner);
   fpgImages.AddMaskedBMP('vfd.grid', @vfd_grid,
     sizeof(vfd_grid), 0, 0);
@@ -1362,26 +1445,11 @@ begin                                                              //
     sizeof(vfd_tofront), 0, 0);
   fpgImages.AddMaskedBMP('vfd.select', @vfd_select,
     sizeof(vfd_select), 0, 0);
-  fpgImages.AddMaskedBMP('vfd.assit', @vfd_assist,
-    sizeof(vfd_assist), 0, 0);        
-  //  fpgImages.AddMaskedBMP('vfd.ideuicon', @vfd_ideuicon, sizeof(vfd_ideuicon), 0, 0);
+   fpgImages.AddMaskedBMP('vfd.assit', @vfd_assist,
+    sizeof(vfd_assist), 0, 0);
+//    fpgImages.AddMaskedBMP('vfd.ideuicon', @vfd_ideuicon, sizeof(vfd_ideuicon), 0, 0);
   OnShow := @FormShow;
 end;
-
-procedure TfrmMainDesigner.sakenable(Sender: TObject);
-begin
-  if directoryexists(IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) + directoryseparator + 'sakit')
- then if btnAssist.Tag = 1 then
-  begin
-  btnAssist.Tag := 0 ;
-  SAKUnLoadlib ;
-  end
-  else
-   begin
-  btnAssist.Tag := 1 ;
-   SAKLoadlib ;
-  end
-end;   
 
 procedure TfrmMainDesigner.BeforeDestruction;
 var
@@ -1389,9 +1457,8 @@ var
 begin
   frmmultiselect.Hide;
 
-   SAKUnLoadlib ;
-
-   undodir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) + directoryseparator + 'temp';
+  SAKUnLoadlib ;
+   undodir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) + directoryseparator + 'temp'  ;
 
   if DirectoryExists(PChar(undodir)) then
   begin
@@ -1418,10 +1485,9 @@ begin
     s := TwgPaletteButton(Sender).VFDWidget.WidgetClass.ClassName;
     i := chlPalette.Items.IndexOf(s);
   end;
-  if i = -1 then
-    i := 0; // select the '-' item
   chlPalette.FocusItem := i;
   chlPalette.Tag := 0;
+
 end;
 
 procedure TfrmMainDesigner.OnSaveNewFile(Sender: TObject);
@@ -1473,6 +1539,21 @@ begin
    gINI.WriteFormState(self) ;
 end;
 
+procedure TfrmMainDesigner.sakenable(Sender: TObject);
+begin
+  if directoryexists(IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) + directoryseparator + 'sakit')
+ then if btnAssist.Tag = 1 then
+  begin
+  btnAssist.Tag := 0 ;
+  SAKUnLoadlib ;
+  end
+  else
+   begin
+  btnAssist.Tag := 1 ;
+  SAKLoadlib(dirsakit) ;
+  end
+end;
+
 procedure TfrmMainDesigner.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
 begin
   if PanelMove.Tag = 1 then
@@ -1486,7 +1567,11 @@ begin
    top := top + (AMousePos.Y - oriMousePos.y);
     left := left + (AMousePos.x - oriMousePos.X);
    end;
-   UpdateWindowPosition;
+  {$ifdef fpgui-develop}
+  UpdatePosition;
+  {$else}
+  UpdateWindowPosition;
+  {$endif}
   end;
 end;
 
@@ -1503,11 +1588,12 @@ var
   TheParent: Tfpgwidget;
 begin
 
+  if frmMultiSelect.Visible = false then
+  begin
   if (frmProperties.edName.Text <> '') and (frmProperties.lstProps.Props.Widget <> nil) and (maindsgn.selectedform <> nil) then
   begin
 
-    TheParent := WidgetParentForm(TfpgWidget(frmProperties.lstProps.Props.Widget));
-
+     TheParent := WidgetParentForm(TfpgWidget(frmProperties.lstProps.Props.Widget));
     calculwidget := True;
 
     frmMultiSelect.Getwidgetlist(TheParent);
@@ -1521,7 +1607,7 @@ begin
   end
   else
     ShowMessage('Nothing loaded or no form selected...', 'Warning', True);
-
+ end else frmMultiSelect.hide ;
 end;
 
 procedure TfrmMainDesigner.OnAlwaysToFront(Sender: TObject);
@@ -1559,14 +1645,18 @@ begin
     left := left + 8;
      {$ENDIF}
   end;
-   UpdateWindowPosition;
+  {$ifdef fpgui-develop}
+  UpdatePosition;
+  {$else}
+  UpdateWindowPosition;
+  {$endif}
 
  //    PanelMove.Visible := True;
 
       if idetemp = 0 then
   begin
   //    panel1.Style := bsLowered;
-  //    panel1.UpdateWindowPosition;
+  //    panel1.UpdatePosition;
      MainMenu.MenuItem(8).Visible := False;
 
   if trim(maindsgn.p + maindsgn.s) <> '' then
@@ -1583,7 +1673,11 @@ begin
     fpgapplication.ProcessMessages;
     frmProperties.Show;
   end;
-   UpdateWindowPosition;
+  {$ifdef fpgui-develop}
+  UpdatePosition;
+  {$else}
+  UpdateWindowPosition;
+  {$endif}
 end;
 
 procedure TfrmMainDesigner.OnNeverToFront(Sender: TObject);
@@ -1620,12 +1714,16 @@ begin
     left := left - 8;
      {$ENDIF}
   end;
+  {$ifdef fpgui-develop}
+  UpdatePosition;
+  {$else}
   UpdateWindowPosition;
+  {$endif}
 
     if idetemp = 0 then
   begin
   //    panel1.Style := bsflat;
-  //    panel1.UpdateWindowPosition;
+  //    panel1.UpdatePosition;
       MainMenu.MenuItem(8).Text := '';
       MainMenu.MenuItem(8).Visible := False;
   end;
@@ -1638,7 +1736,11 @@ begin
     fpgapplication.ProcessMessages;
     frmProperties.Show;
   end;
-   UpdateWindowPosition;
+  {$ifdef fpgui-develop}
+  UpdatePosition;
+  {$else}
+  UpdateWindowPosition;
+  {$endif}
 end;
 
 procedure TfrmMainDesigner.OnObjInspect(Sender: TObject);
@@ -1680,7 +1782,11 @@ begin
   if gINI.ReadBool('frmPropertiesState', 'FirstLoad', True) = False then
   begin
     gINI.ReadFormState(self);
+    {$ifdef fpgui-develop}
+    UpdatePosition;
+    {$else}
     UpdateWindowPosition;
+    {$endif}
   end
   else
     gINI.WriteBool('frmPropertiesState', 'FirstLoad', False);
@@ -2019,7 +2125,12 @@ end;
 procedure TfrmProperties.frmPropertiesPaint(Sender: TObject);
 begin
   edName.Width := Width - l2.Right + 28;
+
+    {$ifdef fpgui-develop}
+  edName.UpdatePosition;
+ {$else}
   edName.UpdateWindowPosition;
+ {$endif}
 
   if virtualpanel.Height < 50 then
   begin
@@ -2031,8 +2142,15 @@ begin
     lstProps.Height := 97 + frmproperties.Height - 448;
     virtualpanel.top := frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
   end;
+
+  {$ifdef fpgui-develop}
+  virtualpanel.UpdatePosition;
+  lstProps.UpdatePosition;
+ {$else}
   virtualpanel.UpdateWindowPosition;
-  lstProps.UpdateWindowPosition;
+ lstProps.UpdateWindowPosition;
+ {$endif}
+
 end;
 
 procedure TfrmProperties.Vpanelpaint(Sender: TObject);
@@ -2138,6 +2256,19 @@ begin
   cbwindowposition.Left := 105;
   cbwindowposition.Width := (virtualpanel.Width) - cbwindowposition.Left - 1;
 
+   {$ifdef fpgui-develop}
+   cbsizeable.UpdatePosition;
+     cbfocusable.UpdatePosition;
+     cbvisible.UpdatePosition;
+     cbfullscreen.UpdatePosition;
+     cbenabled.UpdatePosition;
+     edminwidth.UpdatePosition;
+     edmaxwidth.UpdatePosition;
+     edminheight.UpdatePosition;
+     edmaxheight.UpdatePosition;
+     cbwindowposition.UpdatePosition;
+     edtag.UpdatePosition;
+ {$else}
   cbsizeable.UpdateWindowPosition;
   cbfocusable.UpdateWindowPosition;
   cbvisible.UpdateWindowPosition;
@@ -2149,6 +2280,7 @@ begin
   edmaxheight.UpdateWindowPosition;
   cbwindowposition.UpdateWindowPosition;
   edtag.UpdateWindowPosition;
+ {$endif}
 
 end;
 
@@ -2569,6 +2701,41 @@ begin
   editor.SetPosition(x, editor.Top, Width - ScrollBarWidth - x, editor.Height);
 end;
 
+{$ifdef fpgui-develop}
+type
+  TDragHack = class(TfpgDrag);
+  TWidgetHack = class(TfpgWidget);
+
+
+procedure TfrmMainDesigner.OnPaletteDragStart(Sender: TObject);
+var
+  Drag: TfpgDrag;
+  Preview: TfpgWindow;
+  Button: TwgPaletteButton absolute Sender;
+  Widget: TfpgWidget;
+begin
+  Drag := TfpgDrag.Create(Sender as TfpgWidget);
+  Preview := TDragHack(Drag).FPreviewWin as TfpgWindow;
+  Widget := Button.VFDWidget.CreateWidget(Preview);
+  // set the position of the preview window
+  TWidgetHack(Button).FDragStartPos := fpgPoint(0,0);
+  Drag.MimeData := TfpgMimeData.Create;
+  Drag.MimeData.Obj[MIME_VFD_WIDGET_CLASS] := Button.VFDWidget;
+  Drag.PreviewSize := fpgSize(Widget.Width,Widget.Height);
+  Drag.OnPaintPreview:=@PaintPaletteButtonForDrag;
+
+  Drag.Execute();
+
+  SelectedWidget := nil;
+end;
+
+procedure TfrmMainDesigner.PaintPaletteButtonForDrag(ASender: TfpgDrag; ACanvas: TfpgCanvas);
+begin
+  // Do Nothing, the widget paints itself
+end;
+{$else}
+{$endif}
+
 procedure TfrmMainDesigner.PaletteBarResized(Sender: TObject);
 var
   btn: TwgPaletteButton;
@@ -2591,7 +2758,7 @@ begin
     end;
   end;
 
-end;        
+end;
 
 procedure TfrmMainDesigner.OnStyleChange(Sender: TObject);
 var
@@ -2692,8 +2859,10 @@ function TfrmMainDesigner.GetSelectedWidget: TVFDWidgetClass;
 begin
   if chlPalette.FocusItem > 0 then
     Result := TVFDWidgetClass(chlPalette.Items.Objects[chlPalette.FocusItem])
-  else
+  else begin
+    chlPalette.Text:='';
     Result := nil;
+  end;
 end;
 
 procedure TfrmMainDesigner.SetSelectedWidget(wgc: TVFDWidgetClass);

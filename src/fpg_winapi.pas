@@ -33,6 +33,9 @@ unit fpg_WinAPI;
 
 {$mode objfpc}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -85,4 +88,4 @@ begin
 end;
 
 end.
-
+

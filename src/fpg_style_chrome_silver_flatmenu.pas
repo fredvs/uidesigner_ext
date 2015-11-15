@@ -7,6 +7,9 @@ unit fpg_style_chrome_silver_flatmenu;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses

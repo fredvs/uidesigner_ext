@@ -18,6 +18,9 @@ unit vfd_props;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -598,7 +601,11 @@ begin
     Top     := 0;
     Left    := self.Width - btnEdit.Width;
     Text    := '...';
+    {$ifdef fpgui-develop}
+    UpdatePosition;
+    {$else}
     UpdateWindowPosition;
+    {$endif}
     Anchors := [anTop, anRight];
     OnClick := @OnEditClick;
     Visible := True;
@@ -873,11 +880,11 @@ end;
 
 function TPropertyColor.GetValueText(wg: TfpgWidget): string;
 var
-  //PropInfo: PPropInfo;
+ // PropInfo: PPropInfo;
   i: integer;
   c: TfpgColor;
 begin
-  //PropInfo := GetPropInfo(wg.ClassType, Name);
+ // PropInfo := GetPropInfo(wg.ClassType, Name);
   i := GetOrdProp(wg, Name);
   c := fpgColorToRGB(TfpgColor(i));
   Result := '$' + IntToHex(c, 6);
@@ -890,11 +897,11 @@ end;
 
 procedure TPropertyColor.OnExternalEdit(wg: TfpgWidget);
 var
-  // PropInfo: PPropInfo;
+ // PropInfo: PPropInfo;
   i: integer;
   c: TfpgColor;
 begin
-  //PropInfo := GetPropInfo(wg.ClassType, Name);
+ // PropInfo := GetPropInfo(wg.ClassType, Name);
   i := GetOrdProp(wg, Name);
   c := fpgColorToRGB(TfpgColor(i));
   c := fpgSelectColorDialog(c);

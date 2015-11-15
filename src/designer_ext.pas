@@ -26,6 +26,9 @@ program designer_ext;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 uses
  {$IFDEF UNIX}
   cthreads, {$ENDIF}
@@ -35,7 +38,8 @@ uses
   RunOnce_PostIt,
   sak_fpg,
   fpg_cmdlineparams,
-
+ //   fpg_style_chrome_silver_flatmenu,
+// {
   fpg_style_anim_round_silver_horz,
   fpg_style_round_silver_flat_horz,
   fpg_style_anim_round_silver_flat_horz,
@@ -70,7 +74,7 @@ uses
   fpg_style_SystemColors,
   fpg_style_SystemColorsMyStyle1,
   fpg_style_SystemColorsMyStyle2,
-
+  // }
   fpg_stylemanager,
   vfd_main,
   frm_main_designer,
@@ -154,16 +158,12 @@ uses
         maindsgn.OnLoadFile(maindsgn);
       end;
 
-      {$ifdef windows}
-   if (directoryexists(ordir + '\sakit'))and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
-     then SAKLoadlib(ordir);
-       {$else}
-   if (directoryexists(ordir + '/sakit')) and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
-      then SAKLoadlib(ordir)  else
-      if (directoryexists('/usr/local/share/sakit')) and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
-        then SAKLoadlib('/usr/local/share/');
-       {$endif}
-      fpgApplication.ShowHint:=true;
+   dirsakit := gINI.ReadString('Options', 'SakitDir', ordir);
+
+    if (directoryexists(dirsakit))and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
+     then SAKLoadlib(dirsakit);
+
+    fpgApplication.ShowHint:=true;
       fpgApplication.Run;
 
       PropList.Free;

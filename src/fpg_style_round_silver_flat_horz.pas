@@ -7,6 +7,9 @@ unit fpg_style_round_silver_flat_horz;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -93,7 +96,11 @@ var
   r: TfpgRect;
  begin
  r.SetRect(x, y, w, h);
-   if ACanvas.Window.ClassName = 'TfpgValueBar' then
+   {$ifdef fpgui-develop}
+    if ACanvas.widget.ClassName = 'TfpgValueBar' then
+    {$else}
+    if ACanvas.window.ClassName = 'TfpgValueBar' then
+    {$endif}
    begin
     ACanvas.SetColor(clblack);
    ACanvas.DrawRectangle(r);
@@ -132,7 +139,11 @@ begin
   ACanvas.SetColor(clblack);
   ACanvas.SetLineStyle(1, lsDot);
   
- if ACanvas.Window.ClassName = 'TfpgButton' then
+ {$ifdef fpgui-develop}
+ if ACanvas.widget.ClassName = 'TfpgButton' then
+ {$else}
+ if ACanvas.window.ClassName = 'TfpgButton' then
+ {$endif}
    begin
     ACanvas.DrawArc(3, 3, w div 2, h,90, 180);  /// arc left
     ACanvas.DrawArc((w div 2)+3, 3, w div 2, h,270, 180);  /// arc right
@@ -198,7 +209,11 @@ begin
     end;
     
    /// The background circle for button
-     if ACanvas.Window.ClassName = 'TfpgButton' then
+     {$ifdef fpgui-develop}
+ if ACanvas.widget.ClassName = 'TfpgButton' then
+ {$else}
+ if ACanvas.window.ClassName = 'TfpgButton' then
+ {$endif}
      begin
      ACanvas.Color := clWindowBackground;
 

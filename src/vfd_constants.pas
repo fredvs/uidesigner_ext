@@ -20,6 +20,9 @@ unit vfd_constants;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -29,7 +32,7 @@ uses
 const
   cFileFilter = '%s (%s)|%s';
   cPascalSourceFiles = '*.pp;*.pas;*.inc;*.dpr;*.lpr';
-  cAppName = 'fpGUI UI Designer';
+  cAppName = 'fpGUI designer_ext';
   cAppVersion = FPGUI_VERSION;
   cAppNameAndVersion = cAppName + ' v' + cAppVersion;
   cDesignerINIVersion = 1;
@@ -40,7 +43,14 @@ resourcestring
   rsSaveFormFile = 'Save form source';
   rsVersion = 'Version: %s';
   rsWrittenBy = 'Written by %s';
-  rsCompiledOn = 'Compiled on:  %s';
+  //rsCompiledOn = 'Compiled on:  %s';
+
+  {$ifdef fpgui-develop}
+    rsCompiledOn = 'Compiled with fpgui-develop on: %s';
+    {$else}
+    rsCompiledOn = 'Compiled with fpgui-master on: %s';
+    {$endif}
+
   rsNewUnnamedForm = 'new';
   rsDesignerHelp1 = 'F11: switch to Properties';
   rsDesignerHelp2 = 'TAB, SHIFT+TAB: select next widget';

@@ -137,37 +137,37 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="46"/>
-        <CursorPos Y="73"/>
+        <TopLine Value="139"/>
+        <CursorPos X="48" Y="160"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="frm_main_designer.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="1344"/>
-        <CursorPos X="5" Y="1367"/>
-        <UsageCount Value="63"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="254"/>
+        <CursorPos X="11" Y="268"/>
+        <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="frm_vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="1217"/>
-        <CursorPos X="34" Y="1239"/>
-        <UsageCount Value="63"/>
+        <TopLine Value="1195"/>
+        <CursorPos X="3" Y="1219"/>
+        <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="sak_fpg.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="175"/>
-        <CursorPos X="88" Y="202"/>
-        <UsageCount Value="63"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="196"/>
+        <CursorPos X="20" Y="212"/>
+        <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit3>
     </Units>
@@ -192,6 +192,7 @@ install:
       <Optimizations>
         <OptimizationLevel Value="2"/>
       </Optimizations>
+      <SmallerCode Value="True"/>
     </CodeGeneration>
     <Linking>
       <Debugging>

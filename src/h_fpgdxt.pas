@@ -9,6 +9,9 @@ With reference counter too...
 
 ////////////////////////////////////////////////////////////////////////////////
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses

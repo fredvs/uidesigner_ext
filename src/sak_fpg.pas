@@ -35,6 +35,11 @@ unit sak_fpg;
     Boston, MA  02110-1301  USA
     }
 
+{$mode objfpc}{$H+}
+
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -1075,8 +1080,8 @@ begin
     begin
       if (CheckObject = sak.AssistiveData[i].TheObject) then
       begin
-        espeak_cancel;
-        if CheckObject is TfpgForm then
+       if (CheckObject is TfpgButton) then else espeak_cancel;
+       if (CheckObject is TfpgForm) then
          begin
         lastfocused := ' ';
 
@@ -1152,7 +1157,7 @@ begin
     begin
       if (CheckObject = sak.AssistiveData[i].TheObject) then
       begin
-        espeak_cancel;
+       // espeak_cancel;
         nameobj := whatname(CheckObject);
         texttmp := sak.AssistiveData[i].Description + ' ' + nameobj + ' selected';
         espeak_Key(texttmp);
@@ -1505,9 +1510,10 @@ procedure TSAK.CheckRepeatKeyChar(Sender: TObject);
 var
   tempstr: string;
   i: integer;
-
+//  ifok: boolean;
 begin
-   TimerRepeat.Enabled := False;
+ // ifok := True;
+  TimerRepeat.Enabled := False;
     for i := 0 to (Length(sak.AssistiveData) - 1) do
   begin
     if (CheckObject = sak.AssistiveData[i].TheObject) then
@@ -1599,8 +1605,13 @@ begin
    adialog.Button1.Left:= (adialog.width div 2) - adialog.Button1.width - 30 ;
    adialog.Button2.Left:= (adialog.width div 2) + 30 ;
 
-   adialog.UpdateWindowPosition;
-   adialog.ShowModal;
+    {$ifdef fpgui-develop}
+    adialog.UpdatePosition;
+    {$else}
+    adialog.UpdateWindowPosition;
+    {$endif}
+
+   adialog.Showmodal;
 
      if  adialog.modresult = 1 then
    begin
@@ -1612,6 +1623,7 @@ begin
   end;
 end;
 {$endif}
+
 
 
 function TSAK.LoadLib: integer;
@@ -2607,6 +2619,7 @@ begin
   result := -1;
   if assigned(sak) then
   begin
+   sak.TimerRepeat.Enabled := False;
    sak.espeak_Key(Text);
    Result := 0;
    end;
@@ -2619,6 +2632,7 @@ begin
   if assigned(sak) then
   begin
   result := 0 ;
+  sak.TimerRepeat.Enabled := False;
   sak.espeak_cancel;
   end;
 end;

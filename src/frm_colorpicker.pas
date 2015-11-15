@@ -2,6 +2,9 @@ unit frm_colorpicker;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -876,6 +879,8 @@ begin
 end;
 
 procedure TfrmAbout.AfterCreate;
+//var
+ // y: integer;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
@@ -993,7 +998,13 @@ procedure TPickerButton.DoColorPicked;
 var
   pt: TPoint;
 begin
-  pt := WindowToScreen(self, FColorPos);
+
+ {$ifdef fpgui-develop}
+ pt := WidgetToScreen(self, FColorPos);
+ {$else}
+ pt := WindowToScreen(self, FColorPos);
+ {$endif}
+
   FColor := fpgApplication.GetScreenPixelColor(pt);
   if Assigned(FOnColorPicked) then
     FOnColorPicked(self, FColorPos, FColor);
@@ -1049,7 +1060,12 @@ begin
   onclose := @onclosecompare;
   left := oriWheelColorForm.X + 167;
   top := oriWheelColorForm.y + 295;
-  UpdateWindowPosition;
+
+ {$ifdef fpgui-develop}
+ UpdatePosition;
+ {$else}
+ UpdateWindowPosition;
+ {$endif}
 
 end;
 
@@ -1085,7 +1101,11 @@ begin
     fpgapplication.ProcessMessages;
     top := top + (AMousePos.Y - oriMousePos.y);
     left := left + (AMousePos.x - oriMousePos.X);
-    UpdateWindowPosition;
+ {$ifdef fpgui-develop}
+ UpdatePosition;
+ {$else}
+ UpdateWindowPosition;
+ {$endif}
   end;
 end;
 
@@ -1621,7 +1641,11 @@ begin
   for i := 0 to Pred(ColorList.Count) do
     ColorBox.Items.Add(TColor(ColorList[i]).Name);
   fbright := 1;
-  updatewindowposition;
+  {$ifdef fpgui-develop}
+   UpdatePosition;
+   {$else}
+   UpdateWindowPosition;
+   {$endif}
   oriWheelColorForm.X := left;
   oriWheelColorForm.Y := top;
 
@@ -1634,7 +1658,12 @@ begin
 
   frmcompare.left := oriWheelColorForm.X + 167;
   frmcompare.top := oriWheelColorForm.y + 295;
-  frmcompare.UpdateWindowPosition;
+
+  {$ifdef fpgui-develop}
+   frmcompare.UpdatePosition;
+   {$else}
+   frmcompare.UpdateWindowPosition;
+   {$endif}
 
   // link the two components
   ColorWheel1.ValueBar := ValueBar1;

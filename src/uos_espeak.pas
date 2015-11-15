@@ -28,6 +28,9 @@ unit uos_espeak;
    *               <http://www.gnu.org/licenses/>.                           *
    ************************************************************************** }
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
    {$PACKENUM 4}(* use 4-byte enums *)

@@ -7,6 +7,9 @@ unit fpg_style_anim_ellipse_silver_vert;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -19,7 +22,11 @@ type
     fadein: boolean;
     FTimer, FPressTimer: TfpgTimer;
     i: integer;
-    fbutton: TfpgWindowBase;
+    {$ifdef fpgui-develop}
+    fbutton: TfpgwidgetBase;
+    {$else}
+    fbutton: TfpgwindowBase;
+    {$endif}
     procedure TimerFired(Sender: TObject);
     procedure TimerPressed(Sender: TObject);
 
@@ -119,7 +126,11 @@ var
   r: TfpgRect;
 begin
    r.SetRect(x, y, w, h);
-   if ACanvas.Window.ClassName = 'TfpgValueBar' then
+   {$ifdef fpgui-develop}
+    if ACanvas.widget.ClassName = 'TfpgValueBar' then
+    {$else}
+    if ACanvas.window.ClassName = 'TfpgValueBar' then
+    {$endif}
    begin
     ACanvas.SetColor(clblack);
    ACanvas.DrawRectangle(r);
@@ -184,9 +195,17 @@ begin
   if ((btfIsPressed in AFlags) or (btfHover in AFlags)) then
   begin
     FTimer.Enabled := False;
-    if ACanvas.Window.ClassName = 'TfpgButton' then
+    {$ifdef fpgui-develop}
+ if ACanvas.widget.ClassName = 'TfpgButton' then
+ {$else}
+ if ACanvas.window.ClassName = 'TfpgButton' then
+ {$endif}
       if waspressed = False then
-        fbutton := ACanvas.Window;
+         {$ifdef fpgui-develop}
+ fbutton := ACanvas.widget;
+ {$else}
+ fbutton := ACanvas.window;
+ {$endif}
 
     if i = 0 then
       r21.SetRect(x, y, w, 1)
@@ -237,7 +256,11 @@ begin
 
   end;
   FTimer.Enabled := False;
-   if ACanvas.Window.ClassName = 'TfpgButton' then
+   {$ifdef fpgui-develop}
+ if ACanvas.widget.ClassName = 'TfpgButton' then
+ {$else}
+ if ACanvas.window.ClassName = 'TfpgButton' then
+ {$endif}
    begin
   ACanvas.SetColor(clWindowBackground);
   //  ACanvas.SetColor(cldarkgray);

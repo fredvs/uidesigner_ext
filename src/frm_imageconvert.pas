@@ -2,6 +2,9 @@ unit frm_imageconvert;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -187,7 +190,7 @@ begin
  // DNDEnabled := True;
   onclose := @onclosemain;
 
-  FilenameEdit1 := TfpgFileNameEdit.Create(self);
+   FilenameEdit1 := TfpgFileNameEdit.Create(self);
   with FilenameEdit1 do
   begin
     Name := 'FilenameEdit1';
@@ -209,7 +212,8 @@ begin
     FontDesc := '#Edit2';
     Hint := '';
     TabOrder := 5;
-  //  AcceptDrops := True;
+
+  // AcceptDrops := True;
   //  OnDragEnter := @MemoDragEnter;
   //  OnDragDrop := @MemoDragDrop;
   end;

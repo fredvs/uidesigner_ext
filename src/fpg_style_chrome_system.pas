@@ -36,6 +36,9 @@ unit fpg_style_chrome_system;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -83,7 +86,11 @@ var
   r: TfpgRect;
 begin
   r.SetRect(x, y, w, h);
-   if ACanvas.Window.ClassName = 'TfpgValueBar' then
+   {$ifdef fpgui-develop}
+    if ACanvas.widget.ClassName = 'TfpgValueBar' then
+    {$else}
+    if ACanvas.window.ClassName = 'TfpgValueBar' then
+    {$endif}
    begin
     ACanvas.SetColor(clblack);
    ACanvas.DrawRectangle(r);

@@ -10,6 +10,9 @@ unit frm_multiselect;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -69,7 +72,6 @@ type
     btUnSelectAll: TfpgButton;
     btApplyCopyPaste: TfpgButton;
     btApplyDelete: TfpgButton;
-     btrefresh: TfpgButton;
     cbSelected: array of Tfpgcheckbox;
     procedure AfterCreate; override;
     procedure onDestroyFrm(Sender: TObject);
@@ -78,11 +80,10 @@ type
     procedure btnApply2Clicked(Sender: TObject);
     procedure btnApply3Clicked(Sender: TObject);
     procedure refreshall;
-    procedure refreshgrid;
+    procedure refreshgrid;            
     procedure btnunselectall(Sender: TObject);
     procedure btnselectall(Sender: TObject);
     procedure btnCopyPasteClicked(Sender: TObject);
-    procedure btnrefreshClicked(Sender: TObject);
     procedure btnDeleteClicked(Sender: TObject);
     procedure Getwidgetlist(Theobj: TfpgWidget);
     procedure ProcGetwidgetlist(Theobj: TfpgWidget);
@@ -108,6 +109,7 @@ uses
 
 procedure Tfrm_multiselect.AfterCreate;
 begin
+
   {%region 'Auto-generated GUI code' -fold}
 
 
@@ -261,31 +263,17 @@ begin
     Name := 'PanelCopyPaste';
     SetPosition(6, 44, 114, 55);
     FontDesc := '#Label1';
-    BackgroundColor := clsilver;
+    BackgroundColor := $D9FFDC;
     Hint := '';
     Text := '';
   end;
 
-  btrefresh := TfpgButton.Create(PanelCopyPaste);
-  with btrefresh do
-  begin
-    Name := 'btrefresh';
-    SetPosition(3, 11, 56, 34);
-  //    SetPosition(6, 6, 104, 20);
-
-    FontDesc := '#Label1';
-    Hint := '';
-   // ImageName := 'stdimg.paste';
-    TabOrder := 6;
-    Text := 'Refresh';
-    OnClick := @btnrefreshClicked;
-  end;
 
   btApplyCopyPaste := TfpgButton.Create(PanelCopyPaste);
   with btApplyCopyPaste do
   begin
     Name := 'btApplyCopyPaste';
-    SetPosition(63, 6, 48, 20);
+    SetPosition(5, 11, 50, 34);
   //    SetPosition(6, 6, 104, 20);
 
     FontDesc := '#Label1';
@@ -300,7 +288,7 @@ begin
   with btApplyDelete do
   begin
     Name := 'btApplyDelete';
-    SetPosition(63, 30, 48, 20);
+    SetPosition(59, 11, 50, 34);
     FontDesc := '#Label1';
     Hint := '';
   //  ImageName := 'stdimg.delete';
@@ -317,6 +305,7 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     Text := '';
+     BackgroundColor := $FEE9ED;
   end;
 
   cbleft := TfpgCheckBox.Create(Panel1);
@@ -324,7 +313,7 @@ begin
   begin
     Name := 'cbleft';
     SetPosition(5, 6, 80, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    // BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 4;
@@ -340,6 +329,7 @@ begin
     Hint := '';
     TabOrder := 3;
     Value := 0;
+     BackgroundColor := $FEE9ED;
   end;
 
   cbwidth := TfpgCheckBox.Create(Panel1);
@@ -347,11 +337,12 @@ begin
   begin
     Name := 'cbwidth';
     SetPosition(124, 6, 80, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 4;
     Text := 'Width :=';
+    // BackgroundColor := TfpgColor($E8E8E8);
+
   end;
 
   edwidth := TfpgSpinEdit.Create(Panel1);
@@ -363,6 +354,7 @@ begin
     Hint := '';
     TabOrder := 5;
     Value := 0;
+     BackgroundColor := $FEE9ED;
   end;
 
   cbtop := TfpgCheckBox.Create(Panel1);
@@ -370,7 +362,7 @@ begin
   begin
     Name := 'cbtop';
     SetPosition(5, 30, 78, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    //  BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 7;
@@ -386,6 +378,7 @@ begin
     Hint := '';
     TabOrder := 8;
     Value := 0;
+     BackgroundColor := $FEE9ED;
   end;
 
   cbHeight := TfpgCheckBox.Create(Panel1);
@@ -393,7 +386,7 @@ begin
   begin
     Name := 'cbHeight';
     SetPosition(124, 30, 80, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    // BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 9;
@@ -409,18 +402,19 @@ begin
     Hint := '';
     TabOrder := 10;
     Value := 0;
+     BackgroundColor := $FEE9ED;
   end;
 
   btApply := TfpgButton.Create(Panel1);
   with btApply do
   begin
     Name := 'btApply';
-    SetPosition(320, 28, 55, 23);
+    SetPosition(320, 28, 50, 23);
     FontDesc := '#Label1';
     Hint := '';
   //  ImageName := 'stdimg.ok';
     TabOrder := 6;
-    Text := 'Move';
+    Text := 'Apply';
     OnClick := @btnApply1Clicked;
   end;
 
@@ -432,6 +426,7 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     Text := '';
+    BackgroundColor := $FEFFA3 ;
   end;
 
   cbleft2 := TfpgCheckBox.Create(Panel2);
@@ -439,7 +434,7 @@ begin
   begin
     Name := 'cbleft2';
     SetPosition(5, 6, 150, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+   // BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 4;
@@ -455,6 +450,7 @@ begin
     Hint := '';
     TabOrder := 3;
     Value := 0;
+    BackgroundColor := $FEFFA3 ;
   end;
 
   cbwidth2 := TfpgCheckBox.Create(Panel2);
@@ -462,7 +458,7 @@ begin
   begin
     Name := 'cbwidth2';
     SetPosition(180, 6, 150, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+   // BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 4;
@@ -478,6 +474,7 @@ begin
     Hint := '';
     TabOrder := 5;
     Value := 0;
+    BackgroundColor := $FEFFA3 ;
   end;
 
   cbtop2 := TfpgCheckBox.Create(Panel2);
@@ -485,7 +482,7 @@ begin
   begin
     Name := 'cbtop2';
     SetPosition(5, 30, 150, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    //  BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 7;
@@ -501,6 +498,7 @@ begin
     Hint := '';
     TabOrder := 8;
     Value := 0;
+     BackgroundColor := $FEFFA3 ;
   end;
 
   cbHeight2 := TfpgCheckBox.Create(Panel2);
@@ -508,7 +506,7 @@ begin
   begin
     Name := 'cbHeight2';
     SetPosition(180, 30, 150, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    // BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 9;
@@ -524,20 +522,21 @@ begin
     Hint := '';
     TabOrder := 10;
     Value := 0;
+    BackgroundColor := $FEFFA3 ;
   end;
 
   btApply2 := TfpgButton.Create(Panel2);
   with btApply2 do
   begin
     Name := 'btApply2';
-    SetPosition(320, 28, 50, 23);
+    SetPosition(320, 28, 45, 23);
   //   SetPosition(320, 28, 55, 23);
 
     FontDesc := '#Label1';
     Hint := '';
  //   ImageName := 'stdimg.ok';
     TabOrder := 6;
-    Text := 'Move';
+    Text := 'Apply';
     OnClick := @btnApply2Clicked;
   end;
 
@@ -549,6 +548,7 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     Text := '';
+    BackgroundColor := $CAE3FF ;
   end;
 
   cbleft3 := TfpgCheckBox.Create(Panel3);
@@ -556,7 +556,7 @@ begin
   begin
     Name := 'cbleft3';
     SetPosition(5, 6, 150, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    //  BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 4;
@@ -579,7 +579,7 @@ begin
   begin
     Name := 'cbwidth3';
     SetPosition(180, 6, 150, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    // BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 4;
@@ -602,7 +602,7 @@ begin
   begin
     Name := 'cbtop3';
     SetPosition(5, 30, 150, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    // BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 7;
@@ -625,7 +625,7 @@ begin
   begin
     Name := 'cbHeight3';
     SetPosition(180, 30, 150, 18);
-    BackgroundColor := TfpgColor($E8E8E8);
+    // BackgroundColor := TfpgColor($E8E8E8);
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 9;
@@ -647,13 +647,13 @@ begin
   with btApply3 do
   begin
     Name := 'btApply3';
-    SetPosition(330, 28, 50, 23);
+    SetPosition(330, 28, 45, 23);
 
     FontDesc := '#Label1';
     Hint := '';
  //   ImageName := 'stdimg.ok';
     TabOrder := 6;
-    Text := 'Move';
+    Text := 'Apply';
     OnClick := @btnApply3Clicked;
   end;
 
@@ -661,30 +661,32 @@ begin
   {@VFD_BODY_END: frm_multiselect}
   {%endregion}
   panel1.Height := 55;
-  btApply.Width := 65;
+  btApply.Width := 60;
   btApply.Height := 30;
-  btApply.Left := panel1.Width - btApply.Width - 5;
-  btApply.Top := panel1.Height - btApply.Height - 10;
+  btApply.Left := panel1.Width - btApply.Width - 10;
+  btApply.Top := ((panel1.Height - btApply.Height) div 2);
+
+  btApplyCopyPaste.Height :=  btApply.Height;
+  btApplyCopyPaste.Top := btApply.Top ;
+
+   btApplyDelete.Height :=  btApply.Height;
+  btApplyDelete.Top := btApply.Top ;
 
   panelcopypaste.Height := panel1.Height;
 
   panel2.Height := panel1.Height;
   btApply2.Width := btApply.Width;
-  btApply2.Left := panel2.Width - btApply2.Width - 5;
+  btApply2.Left := panel2.Width - btApply2.Width - 10;
   btApply2.Height := btApply.Height;
   btApply2.Top := btApply.top;
 
   panel3.Height := panel1.Height;
-  btApply3.Width := btApply2.Width;
+  btApply3.Width := btApply.Width;
   btApply3.Height := btApply.Height;
   btApply3.Left := btApply2.Left;
   btApply3.Top := btApply.top;
 
-end;
-
-procedure Tfrm_multiselect.btnrefreshClicked(Sender: TObject);
-begin
-  refreshgrid;
+   //  if sakloaded = true then sakupdate;
 end;
 
 procedure Tfrm_multiselect.btnCopyPasteClicked(Sender: TObject);
@@ -699,7 +701,7 @@ var
 begin
   fpgapplication.ProcessMessages;
 
-  //oriformdesigner := TformDesigner(TheSelectedForm.FormDesigner);
+ // oriformdesigner := TformDesigner(TheSelectedForm.FormDesigner);
   TformDesigner(TheSelectedForm.FormDesigner).DeSelectAll;
 
   maindsgn.SaveUndo(Sender, 9);
@@ -844,7 +846,11 @@ begin
             TfpgStringGrid(wg).TextColor := TfpgStringGrid(theWidget).TextColor;
           end;
 
-          wg.UpdateWindowPosition;
+ {$ifdef fpgui-develop}
+  wg.UpdatePosition;
+ {$else}
+  wg.UpdateWindowPosition;
+ {$endif}
 
        {  TODO
 
@@ -997,7 +1003,7 @@ begin
             TfpgStringGrid(wg).TextColor:= TfpgStringGrid(theWidget).TextColor;
            end;
 
-            wg.UpdateWindowPosition;
+            wg.UpdatePosition;
 
 
            inc(z);
@@ -1055,7 +1061,12 @@ end;
 procedure Tfrm_multiselect.onScrollChange(Sender: TObject; position: integer);
 begin
   PanelScroll.Top := -1 * scroll1.Position;
+
+  {$ifdef fpgui-develop}
+  PanelScroll.UpdatePosition;
+ {$else}
   PanelScroll.UpdateWindowPosition;
+ {$endif}
 end;
 
 procedure Tfrm_multiselect.btnApply1Clicked(Sender: TObject);
@@ -1085,7 +1096,13 @@ begin
             Tfpgwidget(TheSelectedForm.Components[y]).Width := edwidth.Value;
           if cbheight.Checked then
             Tfpgwidget(TheSelectedForm.Components[y]).Height := edheight.Value;
-          Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
+
+  {$ifdef fpgui-develop}
+  Tfpgwidget(TheSelectedForm.Components[y]).UpdatePosition;
+ {$else}
+  Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
+ {$endif}
+
         end;
         Inc(y);
       end;
@@ -1141,7 +1158,12 @@ begin
             if cbheight2.Checked then
               Tfpgwidget(TheSelectedForm.Components[y]).Height :=
                 firstheight + (widcheck * edheight2.Value);
-            Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
+
+  {$ifdef fpgui-develop}
+  Tfpgwidget(TheSelectedForm.Components[y]).UpdatePosition;
+ {$else}
+  Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
+ {$endif}
           end;
         end;
         Inc(y);
@@ -1186,7 +1208,13 @@ begin
             Tfpgwidget(TheSelectedForm.Components[y]).Height :=
               Tfpgwidget(TheSelectedForm.Components[y]).Height + edheight3.Value;
 
-          Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
+
+  {$ifdef fpgui-develop}
+  Tfpgwidget(TheSelectedForm.Components[y]).UpdatePosition;
+ {$else}
+  Tfpgwidget(TheSelectedForm.Components[y]).UpdateWindowPosition;
+ {$endif}
+
         end;
         Inc(y);
       end;
@@ -1246,33 +1274,29 @@ begin
 end;
 
 procedure Tfrm_multiselect.Getwidgetlist(Theobj: TfpgWidget);
-var
-   sakloaded : boolean = false;
 begin
   if ((Visible = True) and (maindsgn.selectedform <> nil)) or (calculwidget = True) then
   begin
     fpgapplication.ProcessMessages;
- if SakIsEnabled = true then
- begin
- sakloaded := true ;
- saksuspend ;
-  end;
+
     if (Tfpgwidget(TheSelectedForm) <> Tfpgwidget(Theobj)) or (Theobj.ComponentCount <> oricount) then
     begin
       oricount := Theobj.ComponentCount;
+
       TheSelectedForm := Theobj;
 
       if TheSelectedForm is tfpgpagecontrol then else   /// not working with tfpgpagecontrol
        ProcGetwidgetlist(TheSelectedForm);
-  if sakloaded = true then sakupdate;
-    end;
+     end;
+     fpgapplication.ProcessMessages;
   end;
 end;
 
 procedure Tfrm_multiselect.Procupdategrid(Theobj: TfpgWidget);
 var
   x: integer;
-begin
+ begin
+
   grid1.rowCount := 0;
   x := 0;
 
@@ -1288,14 +1312,20 @@ begin
     end;
     Inc(x);
   end;
+
+    {$ifdef fpgui-develop}
+  grid1.UpdatePosition;
+ {$else}
   grid1.UpdateWindowPosition;
+ {$endif}
 end;
 
 procedure Tfrm_multiselect.ClearAll;
 var
   x: integer;
-begin
+ begin
   calculwidget := False;
+
   hide;
   if (maindsgn.selectedform <> nil) then
   begin
@@ -1309,13 +1339,23 @@ begin
     end;
     grid1.rowCount := 0;
     grid1.Height := 1;
-    grid1.UpdateWindowPosition;
+    {$ifdef fpgui-develop}
+  grid1.UpdatePosition;
+ {$else}
+  grid1.UpdateWindowPosition;
+ {$endif}
     panelscroll.Visible := False;
     windowtitle := 'Click on one widget to load Multi-Selector';
     Height := 2;
-    UpdateWindowPosition;
+
+        {$ifdef fpgui-develop}
+  UpdatePosition;
+ {$else}
+ UpdateWindowPosition;
+ {$endif}
   end;
   calculwidget := True;
+
 end;
 
 procedure Tfrm_multiselect.refreshall;
@@ -1326,23 +1366,15 @@ begin
 procedure Tfrm_multiselect.refreshgrid;
 begin
        Procupdategrid(TheSelectedForm);
-  end;
+  end;                
 
 procedure Tfrm_multiselect.ProcGetwidgetlist(Theobj: TfpgWidget);
 var
   x, y: integer;
- // sakloaded : boolean = false;
 begin
   calculwidget := False;
-{
-  if SakIsEnabled = true then
- begin
- sakloaded := true ;
- // saksuspend ;
-  end;
- }
 
-  if (maindsgn.selectedform <> nil) then
+   if (maindsgn.selectedform <> nil) then
   begin
     fpgapplication.ProcessMessages;
     // hide;
@@ -1365,7 +1397,7 @@ begin
     x := 0;
     y := 0 ;
 
-     while x < Theobj.ComponentCount do
+      while x < Theobj.ComponentCount do
     begin
        setlength(cbSelected, length(cbSelected) + 1);
         cbSelected[x] := Tfpgcheckbox.Create(Panelscroll);
@@ -1380,7 +1412,12 @@ begin
         cbSelected[x].Top := (y * 19) + 2;
         cbSelected[x].Height := 18;
         cbSelected[x].Checked := False;
-        cbSelected[x].UpdateWindowPosition;
+
+  {$ifdef fpgui-develop}
+  cbSelected[x].UpdatePosition;
+ {$else}
+  cbSelected[x].UpdateWindowPosition;
+ {$endif}
         cbSelected[x].Visible := True;
 
         grid1.rowCount := y + 1;
@@ -1462,7 +1499,25 @@ begin
     panel2.top := Height - (2 * panel1.Height) - 3;
     panel3.top := Height - panel2.Height - 2;
 
-    panel1.UpdateWindowPosition;
+    grid1.Visible := True;
+    panelscroll.Visible := True;
+
+     {$ifdef fpgui-develop}
+     panel1.UpdatePosition;
+         panel2.UpdatePosition;
+         panel3.UpdatePosition;
+         panelcopypaste.UpdatePosition;
+         grid1.UpdatePosition;
+         panelscroll.UpdatePosition;
+         scroll1.UpdatePosition;
+         panelmain.UpdatePosition;
+         lbleft.UpdatePosition;
+         lbtop.UpdatePosition;
+         lbwidth.UpdatePosition;
+         lbheight.UpdatePosition;
+         UpdatePosition;
+ {$else}
+ panel1.UpdateWindowPosition;
     panel2.UpdateWindowPosition;
     panel3.UpdateWindowPosition;
     panelcopypaste.UpdateWindowPosition;
@@ -1470,19 +1525,17 @@ begin
     panelscroll.UpdateWindowPosition;
     scroll1.UpdateWindowPosition;
     panelmain.UpdateWindowPosition;
-
     lbleft.UpdateWindowPosition;
     lbtop.UpdateWindowPosition;
     lbwidth.UpdateWindowPosition;
     lbheight.UpdateWindowPosition;
-    grid1.Visible := True;
-    panelscroll.Visible := True;
     UpdateWindowPosition;
-    visible := true;
+ {$endif}
+
+        visible := true;
   end;
   calculwidget := True;
-//  if sakloaded = true then sakupdate;
-
+     fpgapplication.ProcessMessages;
 end;
 
 procedure Tfrm_multiselect.onDestroyFrm(Sender: TObject);

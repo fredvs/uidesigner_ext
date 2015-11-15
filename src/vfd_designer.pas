@@ -28,6 +28,9 @@ unit vfd_designer;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -101,6 +104,13 @@ type
   TFormDesigner = class(TObject)
   private
     FOneClickMove: boolean;
+
+    {$ifdef fpgui-develop}
+    procedure DropDrop(Drop: TfpgDrop; AData: Variant);
+    procedure DropEnter(Drop: TfpgDrop);
+   {$else}
+   {$endif}
+
   protected
     FWidgets: TList;
     FForm: TDesignedForm;
@@ -212,8 +222,7 @@ begin
 
       for n := 1 to 8 do
         resizer[n].Show;
-
-   end;
+  end;
 end;
 
 constructor TWidgetDesigner.Create(AFormDesigner: TFormDesigner; wg: TfpgWidget; wgc: TVFDWidgetClass);
@@ -297,8 +306,14 @@ begin
           rs.left := Widget.left - 2;
         end;
       end; // case
-    //  if rs.HasHandle then
-        rs.UpdateWindowPosition;
+
+     {$ifdef fpgui-develop}
+     rs.UpdatePosition;
+     {$else}
+     if rs.HasHandle then
+     rs.UpdateWindowPosition;
+     {$endif}
+
     end;
   end;
 
@@ -317,6 +332,7 @@ begin
   FWasDrag := False;
   FDragPosX := msg.Params.mouse.x;
   FDragPosy := msg.Params.mouse.y;
+
 
   if msg.dest = FForm then
     Exit;
@@ -339,6 +355,7 @@ begin
     wgd.Selected := True;
     UpdatePropWin;
   end;
+
 end;
 
 procedure TFormDesigner.MsgMouseUp(var msg: TfpgMessageRec);
@@ -413,10 +430,10 @@ begin
   end;
 
   UpdatePropWin;
+   
+   if frmMultiSelect.Visible = True then frmMultiSelect.refreshgrid;
 
-    if frmMultiSelect.Visible = True then
-        frmMultiSelect.refreshgrid;
-
+      frmMainDesigner.chlPalette.FocusItem := -1;
   //if msg.Params.mouse.Buttons = 3 then {right mouse button }
   //begin
   //if TfpgWidget(msg.Dest).ClassType = TfpgPageControl then
@@ -503,6 +520,10 @@ begin
   FForm.FormDesigner := self;
   FForm.Name := maindsgn.NewFormName;
   FForm.WindowTitle := FForm.Name;
+  {$ifdef fpgui-develop}
+  FForm.DropHandler   := TfpgDropEventHandler.Create(@DropEnter, nil, @DropDrop, nil);
+  {$else}
+  {$endif}
   FFormOther := '';
 
 end;
@@ -657,14 +678,15 @@ begin
   UpdatePropWin;
 end;
 
-
+  {
 procedure TFormDesigner.DeleteWidgets;
 var
   n: integer;
   cd: TWidgetDesigner;
   sakenabled : boolean = false;
+  thedeleted : string;
  // multisel : boolean = false;
-   //widget :  TfpgWidget;
+  // widget :  TfpgWidget;
 
   procedure DeleteChildWidget(ADesignWidget: TWidgetDesigner);
   var
@@ -673,8 +695,9 @@ var
   begin
     if not Assigned(ADesignWidget.Widget) then  // safety check
       Exit;
-  //   widget := ADesignWidget.Widget.Parent;
-  //   while widget.HasParent = true do
+ //    widget := ADesignWidget.Widget.Parent;
+
+ //   while widget.HasParent = true do
  //  widget := Widget.Parent;
 
     if (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFILENAMEEDIT') and (uppercase(ADesignWidget.Widget.ClassName) <>
@@ -691,9 +714,8 @@ var
 begin
   n := 0;
 
-  
   if SakIsEnabled() = true then begin
-  saksuspend;
+   saksuspend;
    sakenabled := true;
   end;
   // Pass 1: Mark widgets and children than need deletion
@@ -701,7 +723,11 @@ begin
   begin
     cd := TWidgetDesigner(FWidgets.Items[n]);
     if cd.Selected then
-      DeleteChildWidget(cd);
+    begin
+       DeleteChildWidget(cd);
+        thedeleted := thedeleted + ' ' + cd.Widget.Name ;
+
+      end;
     Inc(n);
   end;
 
@@ -723,12 +749,88 @@ begin
      sakupdate;
     end;
 
-  if frmmultiselect.Visible = true then
+ if frmmultiselect.Visible = true then
   begin
     frmMultiSelect.refreshall;
   end;
 
+  if SakIsEnabled = true then
+  begin
+     SakCancel;
+     SAKSay('widgets deleted...') ;
+  end;
 end;
+}
+
+procedure TFormDesigner.DeleteWidgets;
+var
+  n: integer;
+  cd: TWidgetDesigner;
+  sakenabled : boolean = false;
+  thedeleted : string;
+
+  procedure DeleteChildWidget(ADesignWidget: TWidgetDesigner);
+  var
+    i: integer;
+  begin
+    if not Assigned(ADesignWidget) or not Assigned(ADesignWidget.Widget) then  // safety check
+      Exit;
+    if ADesignWidget.Widget.IsContainer and (ADesignWidget.Widget.ComponentCount > 0) then
+    begin
+      for i := ADesignWidget.Widget.ComponentCount - 1 downto 0 do
+        DeleteChildWidget(WidgetDesigner(TfpgWidget(ADesignWidget.Widget.Components[i])));
+    end;
+    ADesignWidget.MarkForDeletion := True;
+  end;
+
+begin
+
+   if SakIsEnabled() = true then
+   begin
+   saksuspend;
+   sakenabled := true;
+  end;
+
+   thedeleted :=  frmproperties.edName.Text  ;
+
+   n := 0;
+  // Pass 1: Mark widgets and children than need deletion
+  while n < FWidgets.Count do
+  begin
+    cd := TWidgetDesigner(FWidgets.Items[n]);
+    if cd.Selected then
+    begin
+      DeleteChildWidget(cd);
+      end;
+    Inc(n);
+  end;
+
+  // Pass 2: free TWidgetDesigner instances that have no more Widget instances
+  for n := FWidgets.Count-1 downto 0 do
+  begin
+    cd := TWidgetDesigner(FWidgets.Items[n]);
+    if cd.MarkForDeletion then
+    begin
+      cd.Widget.Free;
+      cd.Free;
+      FWidgets.Delete(n);
+    end;
+  end;
+
+  UpdatePropWin;
+
+   if frmmultiselect.Visible = true then
+    begin
+      frmMultiSelect.refreshall;
+    end;
+
+     if sakenabled = true then begin
+       sakupdate;
+        SakCancel;
+       SAKSay(thedeleted + ' is deleted...') ;
+      end;
+
+    end;
 
 
 procedure TFormDesigner.EditWidgetOrTabOrder(AMode: TfpgEditMode);
@@ -1113,8 +1215,16 @@ begin
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
       frmproperties.virtualpanel.Height := 133;
-      frmproperties.virtualpanel.UpdateWindowPosition;
-      frmproperties.lstProps.UpdateWindowPosition;
+
+
+      {$ifdef fpgui-develop}
+      frmproperties.virtualpanel.UpdatePosition;
+      frmproperties.lstProps.UpdatePosition;
+ {$else}
+ frmproperties.virtualpanel.UpdateWindowPosition;
+ frmproperties.lstProps.UpdateWindowPosition;
+ {$endif}
+
       frmproperties.virtualpanel.Visible := True;
 
     end
@@ -1205,8 +1315,13 @@ begin
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
       frmproperties.virtualpanel.Height := 44;
-      frmproperties.virtualpanel.UpdateWindowPosition;
-      frmproperties.lstProps.UpdateWindowPosition;
+            {$ifdef fpgui-develop}
+      frmproperties.virtualpanel.UpdatePosition;
+      frmproperties.lstProps.UpdatePosition;
+ {$else}
+ frmproperties.virtualpanel.UpdateWindowPosition;
+ frmproperties.lstProps.UpdateWindowPosition;
+ {$endif}
       frmproperties.virtualpanel.Visible := True;
     end;
 
@@ -1316,6 +1431,33 @@ begin
 
 end;
 
+{$ifdef fpgui-develop}
+procedure TFormDesigner.DropEnter(Drop: TfpgDrop);
+var
+  wgd: TWidgetDesigner;
+begin
+  //if the SourceWidget is not assigned then this is a drop from another process
+  //and the object pointer is invalid to us.
+  Drop.CanDrop := Assigned(Drop.SourceWidget) and Drop.AcceptMimeType([MIME_VFD_WIDGET_CLASS]);
+  if Drop.CanDrop then
+  begin
+    wgd := WidgetDesigner(TfpgWidget(Drop.Widget));
+    if Assigned(wgd) then
+      Drop.CanDrop := wgd.FVFDClass.Container;
+  end;
+end;
+
+procedure TFormDesigner.DropDrop(Drop: TfpgDrop; AData: Variant);
+var
+  wc: TVFDWidgetClass;
+begin
+  wc := TVFDWidgetClass(PtrUInt(AData));
+  InsertWidget(TfpgWidget(Drop.Widget), Drop.MousePos.X, Drop.MousePos.Y, wc);
+end;
+
+{$else}
+{$endif}
+
 procedure TFormDesigner.OnPropTextChange(Sender: TObject);
 {
 var
@@ -1341,7 +1483,7 @@ begin
         if Font.TextWidth16(Text) > width then
         begin
           Width := Font.TextWidth16(Text);
-          UpdateWindowPosition;
+          UpdatePosition;
           cd.UpdateResizerPositions;
         end;
       end;
@@ -1469,7 +1611,12 @@ begin
       begin
         wg := cd.Widget;
         SetNewPos(wg, posval);
-        wg.UpdateWindowPosition;
+
+  {$ifdef fpgui-develop}
+  wg.UpdatePosition;
+ {$else}
+  wg.UpdateWindowPosition;
+ {$endif}
         cd.UpdateResizerPositions;
       end;
     end;
@@ -1477,14 +1624,21 @@ begin
     if wg = nil then
     begin
       SetNewPos(FForm, posval);
-      FForm.UpdateWindowPosition;
+
+ {$ifdef fpgui-develop}
+ FForm.UpdatePosition;
+ {$else}
+ FForm.UpdateWindowPosition;
+ {$endif}
+
     end;
   end; { if }
 
   UpdatePropWin;
-   if frmMultiSelect.Visible = True then
-        frmMultiSelect.refreshgrid;
 
+     if frmMultiSelect.Visible = True then
+        frmMultiSelect.refreshgrid;
+  
 end;
 
 procedure TFormDesigner.OnOtherChange(Sender: TObject);
@@ -2042,10 +2196,18 @@ procedure TFormDesigner.InsertWidget(pwg: TfpgWidget; x, y: integer; wgc: TVFDWi
   newname, newclassname: string;
   wg: TfpgWidget;
   wgd: TWidgetDesigner;
+  sakloaded : boolean = false;
 begin
+
   //  writeln('TFormDesigner.InsertWidget');
   if wgc = nil then
     Exit;
+
+   if SakIsEnabled = true then
+ begin
+ sakloaded := true ;
+ saksuspend ;
+  end;
 
   newname := '';
 
@@ -2080,11 +2242,26 @@ begin
     wgd := AddWidget(wg, wgc);
     wg.SetPosition(x, y, wg.Width, wg.Height);
     wg.Visible := True;
+
+ {$ifdef fpgui-develop}
+ wg.DropHandler := TfpgDropEventHandler.Create(@DropEnter, nil, @DropDrop, nil);
+ {$else}
+ {$endif}
+
     DeSelectAll;
     wgd.Selected := True;
     UpdatePropWin;
-    if (frmMultiSelect.Visible = True) then
+
+ if (frmMultiSelect.Visible = True) then
         frmMultiSelect.refreshall;
+
+      if sakloaded = true then begin
+       sakupdate;
+        SakCancel;
+       SAKSay(frmproperties.edName.Text + ' added') ;
+      end;
+
+      // frmMainDesigner.chlPalette.FocusItem := -1;
 
   end;
 end;

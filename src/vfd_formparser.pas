@@ -28,6 +28,9 @@ unit vfd_formparser;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -809,7 +812,14 @@ begin
       wg.Height := GetIntValue(s);
     lok := lok and CheckSymbol(s, ')');
     lok := lok and CheckSymbol(s, ';');
-    wg.UpdateWindowPosition;
+
+
+ {$ifdef fpgui-develop}
+ wg.UpdatePosition;
+ {$else}
+ wg.UpdateWindowPosition;
+ {$endif}
+
     //if lok then Writeln('sd ok.');
     //writeln('WT: ',sval);
   end
