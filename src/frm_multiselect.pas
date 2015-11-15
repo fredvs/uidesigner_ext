@@ -329,7 +329,10 @@ begin
     Hint := '';
     TabOrder := 3;
     Value := 0;
-     BackgroundColor := $FEE9ED;
+     BackgroundColor := $FEE9ED ;
+     MaxValue:=10000;
+     Minvalue:=-10000;
+
   end;
 
   cbwidth := TfpgCheckBox.Create(Panel1);
@@ -355,6 +358,8 @@ begin
     TabOrder := 5;
     Value := 0;
      BackgroundColor := $FEE9ED;
+     MaxValue:=10000;
+     Minvalue:=-10000;
   end;
 
   cbtop := TfpgCheckBox.Create(Panel1);
@@ -379,6 +384,8 @@ begin
     TabOrder := 8;
     Value := 0;
      BackgroundColor := $FEE9ED;
+     MaxValue:=10000;
+     Minvalue:=-10000;
   end;
 
   cbHeight := TfpgCheckBox.Create(Panel1);
@@ -403,6 +410,8 @@ begin
     TabOrder := 10;
     Value := 0;
      BackgroundColor := $FEE9ED;
+     MaxValue:=10000;
+     Minvalue:=-10000;
   end;
 
   btApply := TfpgButton.Create(Panel1);
@@ -450,6 +459,8 @@ begin
     Hint := '';
     TabOrder := 3;
     Value := 0;
+    MaxValue:=10000;
+     Minvalue:=-10000;
     BackgroundColor := $FEFFA3 ;
   end;
 
@@ -474,6 +485,8 @@ begin
     Hint := '';
     TabOrder := 5;
     Value := 0;
+    MaxValue:=10000;
+     Minvalue:=-10000;
     BackgroundColor := $FEFFA3 ;
   end;
 
@@ -498,6 +511,8 @@ begin
     Hint := '';
     TabOrder := 8;
     Value := 0;
+    MaxValue:=10000;
+     Minvalue:=-10000;
      BackgroundColor := $FEFFA3 ;
   end;
 
@@ -522,6 +537,8 @@ begin
     Hint := '';
     TabOrder := 10;
     Value := 0;
+    MaxValue:=10000;
+     Minvalue:=-10000;
     BackgroundColor := $FEFFA3 ;
   end;
 
@@ -572,6 +589,8 @@ begin
     Hint := '';
     TabOrder := 3;
     Value := 0;
+    MaxValue:=10000;
+     Minvalue:=-10000;
   end;
 
   cbwidth3 := TfpgCheckBox.Create(Panel3);
@@ -595,6 +614,8 @@ begin
     Hint := '';
     TabOrder := 5;
     Value := 0;
+     MaxValue:=10000;
+     Minvalue:=-10000;
   end;
 
   cbtop3 := TfpgCheckBox.Create(Panel3);
@@ -618,6 +639,8 @@ begin
     Hint := '';
     TabOrder := 8;
     Value := 0;
+    MaxValue:=10000;
+     Minvalue:=-10000;
   end;
 
   cbHeight3 := TfpgCheckBox.Create(Panel3);
@@ -641,6 +664,8 @@ begin
     Hint := '';
     TabOrder := 10;
     Value := 0;
+    MaxValue:=10000;
+     Minvalue:=-10000;
   end;
 
   btApply3 := TfpgButton.Create(Panel3);
