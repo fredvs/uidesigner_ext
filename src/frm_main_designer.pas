@@ -249,7 +249,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '1.8';
+  ext_version: string = '1.9';
 
 var
   frmProperties: TfrmProperties;
