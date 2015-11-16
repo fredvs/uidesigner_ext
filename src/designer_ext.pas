@@ -120,18 +120,22 @@ uses
       else
       begin
         { If file passed in as clasical first param, load it! }
-        if (FileExists(ParamStr(1))) or (ParamStr(1) = 'closeall') or (trim(ParamStr(1)) = 'showit') or
+        if (FileExists(ParamStr(1))) or (ParamStr(1) = 'closeall') or (trim(ParamStr(1)) = '') or (trim(ParamStr(1)) = 'showit') or
           (trim(ParamStr(1)) = 'hideit') or (ParamStr(1) = 'quit') then
-          filedir := ParamStr(1);
-
-        if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
+          begin
+          if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
         begin
           ifonlyone := True;
-          RunOnce(filedir);
+          RunOnce( ParamStr(1));
         end
         else
-          ifonlyone := False;
-      end;
+        begin
+        //  ifonlyone := False;
+          if (FileExists(ParamStr(1)))  or (trim(ParamStr(1)) = '')  then  ifonlyone := False else fpgApplication.Terminate;
+        end;
+      end
+
+         end;
      end;
 
     fpgApplication.Initialize;
