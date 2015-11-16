@@ -185,9 +185,10 @@ begin
 
   frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
+  frmMainDesigner.MainMenu.MenuItem(8).Visible := false;
 //  if frmMainDesigner.btnToFront.Tag = 1 then
-    frmMainDesigner.MainMenu.MenuItem(8).Text :=
-      'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+    frmMainDesigner.MainMenu.MenuItem(8).Text :=  '';
+  //    'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
   frmMainDesigner.windowmenu.MenuItem(0).Visible := False;
   frmMainDesigner.windowmenu.MenuItem(1).Visible := False;
@@ -305,44 +306,22 @@ procedure TMainDesigner.OnHide(Sender: TObject);
 var
 n : integer;
 begin
-  if idetemp = 0 then
-  begin
-    if assigned(ATimer) then
-   begin
-   ATimer.Enabled:=false;
-  // ATimer.Free;
-   end;
-     fpgapplication.Terminate;
+  if (idetemp = 0) or  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+   (IsRunningIDE('ideu') = False)) or
+      (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
+    begin
+  if assigned(ATimer) then  ATimer.Enabled:=false;
+      fpgapplication.Terminate;
      end else
 
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-    begin
-          if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
-          begin
-    if assigned(ATimer) then
-   begin
-   ATimer.Enabled:=false;
- //  ATimer.Free;
-   end;
-     fpgapplication.Terminate; end else
-     begin
-
-       if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+begin
        frmMainDesigner.hide;
          if assigned(FDesigners) then  if FDesigners.Count > 0 then
       for n := 0 to FDesigners.Count - 1 do  TFormDesigner(FDesigners[n]).Form.Hide;
         frmProperties.hide;
        frmmultiselect.Hide;
      end;
-     end else   begin
-    if assigned(ATimer) then
-   begin
-   ATimer.Enabled:=false;
-  // ATimer.Free;
-   end;
-     fpgapplication.Terminate;
-     end;
-end;
+ end;
 
 procedure TMainDesigner.OnLoadFile(Sender: TObject);
 var
@@ -375,7 +354,7 @@ begin
        frmMainDesigner.Show;
        end else
 
-        if (maindsgn.EditedFileName = 'hideit') then
+        if (maindsgn.EditedFileName = 'hideit') or (maindsgn.EditedFileName = 'closeall') then
        begin
      //  ifshow := true;
 
@@ -386,12 +365,26 @@ begin
         frmmultiselect.Hide;
        end else
 
+        if (maindsgn.EditedFileName = 'closeit') then
+       begin
+  // {
+    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+
+    fname := '';
+    frmMainDesigner.MainMenu.MenuItem(8).Text := '';
+    s := '';
+    p := '';
+//    }
+  //   frmMainDesigner.hide;
+          if assigned(FDesigners) then  if FDesigners.Count > 0 then
+       for n := 0 to FDesigners.Count - 1 do  TFormDesigner(FDesigners[n]).Form.Hide;
+         frmProperties.hide;
+        frmmultiselect.Hide;
+       end else
+
        begin
 
-  if maindsgn.FFileLoaded <> 'closeall' then
-  begin
-
-    fname := EditedFileName;
+     fname := EditedFileName;
     ifundo := False;
 
     if Sender <> maindsgn then
@@ -415,17 +408,6 @@ begin
         exit;
       end;
       end;
-
-  end
-  else
-  begin
-    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
-
-    fname := '';
-    frmMainDesigner.MainMenu.MenuItem(8).Text := '';
-    s := '';
-    p := '';
-  end;
 
   FFileLoaded := '';
   frmMainDesigner.MainMenu.MenuItem(1).Visible := False;
@@ -598,12 +580,12 @@ begin
   else
   begin
     frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
-
-  //  frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
+        frmMainDesigner.MainMenu.MenuItem(8).Text := '' ;
+        frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
 
   //  if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
   //  begin
-      frmMainDesigner.MainMenu.MenuItem(8).Text := ' => ' + fname;
+   //   frmMainDesigner.MainMenu.MenuItem(8).Text := ' => ' + fname;
   //    frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
    // end;
 

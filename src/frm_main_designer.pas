@@ -158,6 +158,7 @@ type
     procedure OnNewForm(Sender: TObject);
     procedure OnChangeWidget(Sender: TObject);
   end;
+
   //  TPropertyList =    class(TfpgForm)
   TPropertyList = class(TObject)
   private
@@ -475,102 +476,46 @@ begin
      frmmultiselect.Hide;
       frmmultiselect.ClearAll;
     if (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
-   (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False) ) or
+   (IsRunningIDE('ideu') = False) ) or
       (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
       begin
       if assigned(ATimer) then
       ATimer.Enabled:=false;
     CloseAction := caFree; end else CloseAction := canone ;
-    }
+     }
 
 
     end;
 
 procedure TfrmMainDesigner.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-//var
-//  x: integer;
+var
+  x: integer;
 
 begin
 
-   {
-       frmmultiselect.Hide;
-      frmmultiselect.ClearAll;
+//   {
 
  if  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
-   (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False) ) or
+   (IsRunningIDE('ideu') = False)) or
       (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
     begin
-    x := 0;
-    if assigned(frmmultiselect.cbSelected) then
-      while x < length(frmmultiselect.cbSelected) do
-      begin
-        frmmultiselect.cbSelected[x].Free;
-        Inc(x);
-      end;
-     if assigned(ATimer) then
-      ATimer.Enabled:=false;
     CanClose := True;
   end
   else
   begin
-
-
-    {
-
-     AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
-        rewrite(f);
-        append(f);
-        writeln(f, 'quit') ;
-        Flush(f);
-        CloseFile(f);
-      }
-
-    if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-    begin
-      x := 0;
-
-      if assigned(frmmultiselect.cbSelected) then
-        while x < length(frmmultiselect.cbSelected) do
-        begin
-          frmmultiselect.cbSelected[x].Free;
-          Inc(x);
-        end;
-
-       x := 0 ;
+       CanClose := false;
+      frmProperties.hide;
+      frmMainDesigner.hide;
+      frmmultiselect.hide;
+     x := 0 ;
       while x < length(ArrayFormDesign) do
       begin
         ArrayFormDesign[x].Form.Close;
         Inc(x);
       end;
 
-     if   (gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) then
-     begin
-      frmProperties.Close;
-      frmMainDesigner.hide;
-      frmmultiselect.hide;
-      CanClose := false;
-     end else
-     begin
-       if assigned(ATimer) then
-      ATimer.Enabled:=false;
-      CanClose := True;
-     end;
-     end
-    else
-    begin
-      x := 0;
-      if assigned(frmmultiselect.cbSelected) then
-        while x < length(frmmultiselect.cbSelected) do
-        begin
-          frmmultiselect.cbSelected[x].Free;
-          Inc(x);
-        end;
-       if assigned(ATimer) then
-      ATimer.Enabled:=false;
-      CanClose := True;
-    end;
   end;
-    }
+//    }
 
 end;
 
@@ -809,7 +754,7 @@ begin
     end
   else
   // or (theMessage = 'closeall')
-  if  ( (FileExists(theMessage)) or  (theMessage = 'showit') or (theMessage = 'hideit') ) then
+  if  ( (FileExists(theMessage)) or (theMessage = 'closeall') or (theMessage = 'showit') or (theMessage = 'hideit') ) then
   begin
     maindsgn.EditedFileName := theMessage;
     maindsgn.OnLoadFile(maindsgn);
@@ -1306,7 +1251,7 @@ begin
  MainMenu.MenuItem(2).Visible:=false;
  MainMenu.MenuItem(5).Visible:=false;
 
-// MainMenu.MenuItem(8).Visible := False;
+ MainMenu.MenuItem(8).Visible := False;
  MainMenu.MenuItem(8).Text :=
       'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
@@ -1385,7 +1330,7 @@ fpgapplication.ProcessMessages;
    end
   else
   begin
-     MainMenu.MenuItem(8).Visible := true;
+     MainMenu.MenuItem(8).Visible := false;
    //   panel1.Style := bsLowered;
    //   panel1.UpdatePosition;
    //   WindowAttributes:= [waSizeable, waBorderless];
@@ -1466,7 +1411,7 @@ begin
   RemoveDir(undodir);
    end;
 
-  maindsgn.OnHide(self) ;
+ // maindsgn.OnHide(self) ;
 
   gINI.WriteFormState(self);
   gINI.WriteInteger('Options', 'IDE', idetemp);
@@ -1498,7 +1443,7 @@ end;
 
 procedure TfrmMainDesigner.OnCloseAll(Sender: TObject);
 begin
-  maindsgn.FFileLoaded := 'closeall';
+  maindsgn.EditedFileName := 'closeit';
   maindsgn.OnLoadFile(Sender);
 end;
 

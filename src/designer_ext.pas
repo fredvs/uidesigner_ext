@@ -170,13 +170,7 @@ uses
 
     finally
 
-         {$ifdef windows}
-   if (directoryexists(ordir + '\sakit')) and
-     {$else}
-    if ((directoryexists(ordir + '/sakit')) or (directoryexists('/usr/local/share/sakit'))) and
-     {$endif}
-       (gINI.ReadBool('Options', 'EnableAssistive', false) = True) then
-     SAKUnLoadLib;
+        if SakIsEnabled = true then SAKUnLoadLib;
         maindsgn.Free;
     end;
 
