@@ -229,7 +229,8 @@ begin
     frmMainDesigner.btnNewForm.Visible := True;
     frmMainDesigner.btnSave.Visible := True;
 
-    frmMainDesigner.filemenu.MenuItem(4).enabled := True;
+    {$ifdef fpgui-develop}
+   frmMainDesigner.filemenu.MenuItem(4).enabled := True;
     frmMainDesigner.filemenu.MenuItem(5).enabled := True;
     frmMainDesigner.filemenu.MenuItem(6).enabled := false;
     frmMainDesigner.filemenu.MenuItem(7).enabled := false;
@@ -240,6 +241,21 @@ begin
     frmMainDesigner.filemenu.MenuItem(12).enabled := True;
     frmMainDesigner.filemenu.MenuItem(13).enabled := True;
     frmMainDesigner.filemenu.MenuItem(14).enabled := True;
+ {$else}
+   frmMainDesigner.filemenu.MenuItem(4).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(5).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(6).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(7).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(8).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(9).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(10).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(11).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(12).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(13).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(14).Visible := True;
+ {$endif}
+
+
 
     frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
     frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
@@ -287,6 +303,8 @@ begin
 
     frmMainDesigner.btnNewForm.Visible := False;
     frmMainDesigner.btnSave.Visible := False;
+
+     {$ifdef fpgui-develop}
     frmMainDesigner.filemenu.MenuItem(4).enabled := False;
     frmMainDesigner.filemenu.MenuItem(5).enabled := False;
     frmMainDesigner.filemenu.MenuItem(6).enabled := False;
@@ -298,6 +316,19 @@ begin
     frmMainDesigner.filemenu.MenuItem(12).enabled := False;
     frmMainDesigner.filemenu.MenuItem(13).enabled := False;
     frmMainDesigner.filemenu.MenuItem(14).enabled := False;
+ {$else}
+   frmMainDesigner.filemenu.MenuItem(4).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(5).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(6).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(7).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(8).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(9).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(10).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(11).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(12).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(13).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(14).Visible := false;
+ {$endif}
 
   end;
  end;
@@ -423,19 +454,32 @@ begin
   frmMainDesigner.btnNewForm.Visible := False;
   frmMainDesigner.btnSave.Visible := False;
 
-  // frmMainDesigner.filemenu.MenuItem(5).visible := true;
 
-  frmMainDesigner.filemenu.MenuItem(4).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(5).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(6).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(7).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(8).enabled := false;
-  frmMainDesigner.filemenu.MenuItem(9).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(10).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(11).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(12).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(13).enabled := False;
-  frmMainDesigner.filemenu.MenuItem(14).enabled := False;
+      {$ifdef fpgui-develop}
+    frmMainDesigner.filemenu.MenuItem(4).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(5).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(6).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(7).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(8).enabled := false;
+    frmMainDesigner.filemenu.MenuItem(9).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(10).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(11).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(12).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(13).enabled := False;
+    frmMainDesigner.filemenu.MenuItem(14).enabled := False;
+ {$else}
+   frmMainDesigner.filemenu.MenuItem(4).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(5).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(6).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(7).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(8).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(9).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(10).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(11).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(12).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(13).Visible := false;
+    frmMainDesigner.filemenu.MenuItem(14).Visible := false;
+ {$endif}
 
    if assigned(FDesigners) then
        if FDesigners.Count > 0 then
@@ -643,7 +687,8 @@ begin
   frmMainDesigner.btnNewForm.Visible := True;
   frmMainDesigner.btnSave.Visible := True;
 
-  frmMainDesigner.filemenu.MenuItem(4).enabled := True;
+       {$ifdef fpgui-develop}
+ frmMainDesigner.filemenu.MenuItem(4).enabled := True;
   frmMainDesigner.filemenu.MenuItem(5).enabled := True;
   frmMainDesigner.filemenu.MenuItem(6).enabled := True;
   frmMainDesigner.filemenu.MenuItem(7).enabled := True;
@@ -653,7 +698,20 @@ begin
   frmMainDesigner.filemenu.MenuItem(11).enabled := True;
   frmMainDesigner.filemenu.MenuItem(12).enabled := True;
   frmMainDesigner.filemenu.MenuItem(13).enabled := True;
-  frmMainDesigner.filemenu.MenuItem(14).enabled := True;
+  frmMainDesigner.filemenu.MenuItem(14).enabled := True ;
+  {$else}
+   frmMainDesigner.filemenu.MenuItem(4).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(5).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(6).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(7).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(8).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(9).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(10).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(11).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(12).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(13).Visible := True;
+    frmMainDesigner.filemenu.MenuItem(14).Visible := True;
+ {$endif}
 
   isFileLoaded := True;
 
@@ -1201,8 +1259,15 @@ begin
     end;
     // if (enableundo = True) then SaveUndo(Sender, 6);
 
-    frmMainDesigner.filemenu.MenuItem(6).enabled := true;
+
+
+     {$ifdef fpgui-develop}
+  frmMainDesigner.filemenu.MenuItem(6).enabled := true;
     frmMainDesigner.filemenu.MenuItem(7).enabled := true;
+ {$else}
+ frmMainDesigner.filemenu.MenuItem(6).visible := true;
+    frmMainDesigner.filemenu.MenuItem(7).visible := true;
+ {$endif}
 
     isfilenew := false;
 

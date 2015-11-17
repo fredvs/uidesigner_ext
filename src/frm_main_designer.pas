@@ -537,9 +537,16 @@ begin
   btnSave.UpdateWindowPosition;
  {$endif}
 
-  filemenu.MenuItem(0).enabled := True;
-  filemenu.MenuItem(1).enabled := False;
-  filemenu.MenuItem(2).enabled := False;
+    {$ifdef fpgui-develop}
+    filemenu.MenuItem(0).enabled := True;
+     filemenu.MenuItem(1).enabled := False;
+     filemenu.MenuItem(2).enabled := False;
+  {$else}
+
+  filemenu.MenuItem(0).visible := True;
+  filemenu.MenuItem(1).visible := False;
+  filemenu.MenuItem(2).visible := False;
+  {$endif}
 
   /// => This code gives problem to JEDI code-formater
  if ide = 3 then
@@ -1257,8 +1264,7 @@ begin
 
 windowtitle := MainMenu.MenuItem(8).Text;
 
-   //filemenu.MenuItem(5).visible := false;
-
+{$ifdef fpgui-develop}
   filemenu.MenuItem(4).enabled := False;
   filemenu.MenuItem(5).enabled := False;
   filemenu.MenuItem(6).enabled := False;
@@ -1274,7 +1280,23 @@ windowtitle := MainMenu.MenuItem(8).Text;
   filemenu.MenuItem(1).enabled := False;
   filemenu.MenuItem(2).enabled := False;
   filemenu.MenuItem(15).enabled := False;
+{$else}
+  filemenu.MenuItem(4).visible := False;
+  filemenu.MenuItem(5).visible := False;
+  filemenu.MenuItem(6).visible := False;
+  filemenu.MenuItem(7).visible := False;
+  filemenu.MenuItem(8).visible := false;
+  filemenu.MenuItem(9).visible := False;
+  filemenu.MenuItem(10).visible := False;
+  filemenu.MenuItem(11).visible := False;
+  filemenu.MenuItem(12).visible := False;
+  filemenu.MenuItem(13).visible := False;
+  filemenu.MenuItem(14).visible := False;
 
+  filemenu.MenuItem(1).visible := False;
+  filemenu.MenuItem(2).visible := False;
+  filemenu.MenuItem(15).visible := False;
+{$endif}
 
   if ideuintegration = false then
   begin
@@ -1322,9 +1344,17 @@ fpgapplication.ProcessMessages;
    //   WindowAttributes:= [];
     //   panel1.Style := bsflat;
     //   panel1.UpdatePosition;
-      filemenu.MenuItem(1).enabled := True;
+
+     {$ifdef fpgui-develop}
+   filemenu.MenuItem(1).enabled := True;
     filemenu.MenuItem(2).enabled := True;
     filemenu.MenuItem(15).enabled := true;
+ {$else}
+  filemenu.MenuItem(1).Visible := True;
+    filemenu.MenuItem(2).Visible := True;
+    filemenu.MenuItem(15).Visible := true;
+ {$endif}
+
     indexundo := 0;
      MainMenu.MenuItem(8).Visible := false;
    end

@@ -537,11 +537,20 @@ begin
 
 
   //  WindowAttributes := [];
-    frmMainDesigner.filemenu.MenuItem(0).Visible := True;
-    frmMainDesigner.filemenu.MenuItem(1).Visible := True;
-    // frmMainDesigner.filemenu.MenuItem(8).Visible:=true;
+
+     {$ifdef fpgui-develop}
+   frmMainDesigner.filemenu.MenuItem(0).Enabled := True;
+    frmMainDesigner.filemenu.MenuItem(1).Enabled := True;
+     frmMainDesigner.filemenu.MenuItem(2).Enabled := True;
+          frmMainDesigner.filemenu.MenuItem(15).Enabled := True;
+ {$else}
+ frmMainDesigner.filemenu.MenuItem(0).Visible := True;
+   frmMainDesigner.filemenu.MenuItem(1).Visible := True;
     frmMainDesigner.filemenu.MenuItem(2).Visible := True;
-    // frmMainDesigner.filemenu.MenuItem(9).Visible:=true;
+     frmMainDesigner.filemenu.MenuItem(15).Visible := True;
+
+ {$endif}
+
   end;
 
   if Sender = rbideu then
@@ -566,8 +575,7 @@ end;
 procedure TfrmVFDSetup.LoadSettings;
 var
   x: integer;
-  sakitd : string;
-begin
+ begin
   fpgapplication.ProcessMessages;
 
   idetemp := gINI.ReadInteger('Options', 'IDE', 0);
