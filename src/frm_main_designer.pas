@@ -334,6 +334,7 @@ procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
 
+
   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(464, 277, 278, 195);
