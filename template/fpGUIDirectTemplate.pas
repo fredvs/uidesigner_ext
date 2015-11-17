@@ -19,7 +19,7 @@ type
   end;
 
 {@VFD_NEWFORM_DECL}
-{@VFD_NEWFORM_IMPL}
+{@VFD_NEWFORM_IMPL} 
 
 procedure Tform1.AfterCreate;
 begin
