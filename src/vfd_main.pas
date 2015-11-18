@@ -134,6 +134,7 @@ type
 var
   maindsgn: TMainDesigner;
     isnew : boolean = false;
+     isdeloradd : boolean = false;
   ArrayFormDesign: array of TFormDesigner;
   ArrayUndo: array of TUndo;
   dob: string;
@@ -1538,6 +1539,12 @@ var
 begin
   if (SelectedForm <> nil) and (isfpguifile = True) and (isFileLoaded = True) then
   begin
+      if  SakIsEnabled = true then
+  begin
+     SakCancel;
+      SAKPause();
+      end;
+
     calculwidget := False;
     SelectedForm.OnPropNameChange(Sender);
     if (ifundo = False) and (enableundo = True) then
@@ -1564,10 +1571,9 @@ begin
 
      if SakIsEnabled = true then
   begin
-     SakCancel;
-      SAKPause();
-     SAKSay(frmproperties.edName.Text + ' selected') ;
-  // sleep(1500);
+  if   isdeloradd = false then
+    SAKSay(frmproperties.edName.Text + ' selected') ;
+   isdeloradd := false;
     SAKUnPause();
    end;
 

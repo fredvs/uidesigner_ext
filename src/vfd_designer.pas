@@ -788,7 +788,9 @@ begin
    if SakIsEnabled() = true then
    begin
    saksuspend;
+   SAKPause();
    sakenabled := true;
+   isdeloradd := true;
   end;
 
    thedeleted :=  frmproperties.edName.Text  ;
@@ -826,11 +828,8 @@ begin
 
      if sakenabled = true then begin
        sakupdate;
-        SakCancel;
-        SAKPause();
        SAKSay(thedeleted + ' is deleted...') ;
- //      sleep(1500);
-    SAKUnPause();
+      SAKUnPause();
       end;
 
     end;
@@ -2209,8 +2208,11 @@ begin
    if SakIsEnabled = true then
  begin
  sakloaded := true ;
+ isdeloradd := true;
  saksuspend ;
-  end;
+  SakCancel;
+  SAKPause();
+ end;
 
   newname := '';
 
