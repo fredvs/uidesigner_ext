@@ -827,7 +827,10 @@ begin
      if sakenabled = true then begin
        sakupdate;
         SakCancel;
+        SAKPause();
        SAKSay(thedeleted + ' is deleted...') ;
+ //      sleep(1500);
+    SAKUnPause();
       end;
 
     end;
@@ -2258,7 +2261,10 @@ begin
       if sakloaded = true then begin
        sakupdate;
         SakCancel;
-       SAKSay(frmproperties.edName.Text + ' added') ;
+        SAKPause();
+      SAKSay(frmproperties.edName.Text + ' was added...') ;
+  //     sleep(1500);
+    SAKUnPause();
       end;
 
       // frmMainDesigner.chlPalette.FocusItem := -1;

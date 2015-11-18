@@ -1565,8 +1565,11 @@ begin
      if SakIsEnabled = true then
   begin
      SakCancel;
+      SAKPause();
      SAKSay(frmproperties.edName.Text + ' selected') ;
-  end;
+  // sleep(1500);
+    SAKUnPause();
+   end;
 
   end;
 

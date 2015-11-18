@@ -148,7 +148,7 @@ install:
         <EditorIndex Value="-1"/>
         <TopLine Value="339"/>
         <CursorPos X="2" Y="365"/>
-        <UsageCount Value="90"/>
+        <UsageCount Value="91"/>
       </Unit1>
       <Unit2>
         <Filename Value="frm_vfdforms.pas"/>
@@ -156,15 +156,16 @@ install:
         <EditorIndex Value="-1"/>
         <TopLine Value="526"/>
         <CursorPos X="92" Y="540"/>
-        <UsageCount Value="90"/>
+        <UsageCount Value="91"/>
       </Unit2>
       <Unit3>
         <Filename Value="sak_fpg.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="197"/>
-        <CursorPos X="22" Y="224"/>
-        <UsageCount Value="90"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="2635"/>
+        <CursorPos X="7" Y="2648"/>
+        <UsageCount Value="91"/>
+        <Loaded Value="True"/>
       </Unit3>
     </Units>
   </ProjectOptions>
