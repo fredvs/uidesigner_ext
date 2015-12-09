@@ -101,9 +101,10 @@ type
 
   public
     {@VFD_HEAD_BEGIN: frmMainDesigner}
-  //  panel1: TfpgPanel;
+  panel1: TfpgPanel;
     PanelMove: TfpgPanel;
     xicon: TfpgLabel;
+    micon: TfpgLabel;
     MainMenu: TfpgMenuBar;
     filemenu: TfpgPopupMenu;
     formmenu: TfpgPopupMenu;
@@ -152,6 +153,7 @@ type
     procedure onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
     procedure onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
+
     procedure OnSaveNewFile(Sender: TObject);
     procedure OnCloseAll(Sender: TObject);
     procedure OnSaveAs(Sender: TObject);
@@ -454,6 +456,7 @@ begin
   FImage := fpgImages.AddBMP('fpgui_logo1', @extimg_fpgui_logo1, sizeof(extimg_fpgui_logo1));
 
   WindowTitle := WindowTitle + ' ' + IntToStr(bitcpu) + ' bit';
+
 
   RePaint;
 end;
@@ -817,6 +820,8 @@ begin
 
   {%region 'Auto-generated GUI code' -fold}
 
+
+
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(400, 10, 778, 92);
@@ -826,8 +831,9 @@ begin
   MinWidth := 778;
   MinHeight := 90;
   WindowPosition := wpUser;
+
   //iconname := 'vfd.ideuicon' ;
- {
+
   panel1 := TfpgPanel.Create(self);
   with panel1 do
   begin
@@ -836,11 +842,12 @@ begin
     Anchors := [anLeft,anRight,anTop,anBottom];
     Align := alClient;
     FontDesc := '#Label1';
+    //BackgroundColor := clblack;
     Hint := '';
     Text := '';
   end;
-// }
-  PanelMove := TfpgPanel.Create(self);
+
+  PanelMove := TfpgPanel.Create(panel1);
   with PanelMove do
   begin
     Name := 'PanelMove';
@@ -861,24 +868,43 @@ begin
   with xicon do
   begin
     Name := 'xicon';
-    SetPosition(1, 1, 11, 14);
+    SetPosition(2, 1, 8, 14);
     BackgroundColor := TfpgColor($BED9BE);
-    FontDesc := '#Label1';
+    FontDesc := '#Label2';
     Hint := 'Quit';
     ShowHint := True;
+    Textcolor := clgray;
     Text := 'X';
     OnClick := @maindsgn.OnHide;
   end;
 
-  MainMenu := TfpgMenuBar.Create(self);
+  micon := TfpgLabel.Create(PanelMove);
+  with micon do
+  begin
+    Name := 'micon';
+    SetPosition(2, 71, 8, 14);
+    BackgroundColor := TfpgColor($BED9BE);
+    FontDesc := '#Label2';
+    Hint := 'Minimize';
+    ShowHint := True;
+    Textcolor := clgray;
+    Text := '¬';
+    OnClick := @maindsgn.OnMini;
+  end;
+
+  MainMenu := TfpgMenuBar.Create(panel1);
   with MainMenu do
   begin
     Name := 'MainMenu';
     SetPosition(0, 0, 753, 24);
     Align := alTop;
+
+    OnMouseMove := @onMovemovepanel;
+    OnMouseDown := @onClickDownPanel;
+    OnMouseUp := @onClickUpPanel;
   end;
 
-  filemenu := TfpgPopupMenu.Create(self);
+  filemenu := TfpgPopupMenu.Create(panel1);
   with filemenu do
   begin
     Name := 'filemenu';
@@ -906,7 +932,7 @@ begin
     AddMenuItem('Exit', 'Ctrl+Q', @maindsgn.OnHide);
   end;
 
-  formmenu := TfpgPopupMenu.Create(self);
+  formmenu := TfpgPopupMenu.Create(panel1);
   with formmenu do
   begin
     Name := 'formmenu';
@@ -917,14 +943,14 @@ begin
     AddMenuItem('Edit special...', '', nil).Enabled := False; // TODO
   end;
 
-  miOpenRecentMenu := TfpgPopupMenu.Create(self);
+  miOpenRecentMenu := TfpgPopupMenu.Create(panel1);
   with miOpenRecentMenu do
   begin
     Name := 'miOpenRecentMenu';
     SetPosition(336, 68, 128, 20);
   end;
 
-  setmenu := TfpgPopupMenu.Create(self);
+  setmenu := TfpgPopupMenu.Create(panel1);
   with setmenu do
   begin
     Name := 'setmenu';
@@ -932,7 +958,7 @@ begin
     AddMenuItem('General Settings', '', @(maindsgn.OnOptionsClick));
   end;
 
-  undomenu := TfpgPopupMenu.Create(self);
+  undomenu := TfpgPopupMenu.Create(panel1);
   with undomenu do
   begin
     Name := 'undomenu';
@@ -946,7 +972,7 @@ begin
     MenuItem(3).Enabled := False;
   end;
 
-  toolsmenu := TfpgPopupMenu.Create(self);
+  toolsmenu := TfpgPopupMenu.Create(panel1);
   with toolsmenu do
   begin
     Name := 'toolsmenu';
@@ -955,7 +981,7 @@ begin
     AddMenuItem('Image Convertor', '', @miimageconv);
   end;
 
-  helpmenu := TfpgPopupMenu.Create(self);
+  helpmenu := TfpgPopupMenu.Create(panel1);
   with helpmenu do
   begin
     Name := 'helpmenu';
@@ -964,14 +990,14 @@ begin
     AddMenuItem('About designer_ext...', '', @miHelpAboutClick);
   end;
 
-  listundomenu := TfpgPopupMenu.Create(self);
+  listundomenu := TfpgPopupMenu.Create(panel1);
   with listundomenu do
   begin
     Name := 'listundomenu';
     SetPosition(328, 52, 120, 20);
   end;
 
-  windowmenu := TfpgPopupMenu.Create(self);
+  windowmenu := TfpgPopupMenu.Create(panel1);
   with windowmenu do
   begin
     Name := 'windowmenu';
@@ -1000,14 +1026,14 @@ begin
     MenuItem(11).Tag := 9;
   end;
 
-  previewmenu := TfpgPopupMenu.Create(self);
+  previewmenu := TfpgPopupMenu.Create(panel1);
   with previewmenu do
   begin
     Name := 'previewmenu';
     SetPosition(324, 36, 120, 20);
   end;
 
-  btnNewForm := TfpgButton.Create(self);
+  btnNewForm := TfpgButton.Create(panel1);
   with btnNewForm do
   begin
     Name := 'NewForm';
@@ -1025,7 +1051,7 @@ begin
     OnClick := @(OnNewForm);
   end;
 
-  btnOpen := TfpgButton.Create(self);
+  btnOpen := TfpgButton.Create(panel1);
   with btnOpen do
   begin
     Name := 'Open';
@@ -1043,7 +1069,7 @@ begin
     OnClick := @(maindsgn.OnLoadFile);
   end;
 
-  btnSave := TfpgButton.Create(self);
+  btnSave := TfpgButton.Create(panel1);
   with btnSave do
   begin
     Name := 'Save';
@@ -1062,7 +1088,7 @@ begin
     OnClick := @(maindsgn.OnSaveFile);
   end;
 
-  btnGrid := TfpgButton.Create(self);
+  btnGrid := TfpgButton.Create(panel1);
   with btnGrid do
   begin
     Name := 'Grid';
@@ -1080,7 +1106,7 @@ begin
     OnClick := @ToggleDesignerGrid;
   end;
 
-  btnToFront := TfpgButton.Create(self);
+  btnToFront := TfpgButton.Create(panel1);
   with btnToFront do
   begin
     Name := 'ToFront';
@@ -1097,7 +1123,7 @@ begin
     onClick := @ToFrontClick;
   end;
 
-  btnSelected := TfpgButton.Create(self);
+  btnSelected := TfpgButton.Create(panel1);
   with btnSelected do
   begin
     Name := 'Selected';
@@ -1114,7 +1140,7 @@ begin
     OnClick := @onmultiselect;
   end;
 
-  btnAssist := TfpgButton.Create(self);
+  btnAssist := TfpgButton.Create(panel1);
   with btnAssist do
   begin
     Name := 'Assist';
@@ -1134,7 +1160,7 @@ begin
     OnClick := @sakenable;
   end;
 
-  wgpalette := TwgPalette.Create(self);
+  wgpalette := TwgPalette.Create(panel1);
   with wgpalette do
   begin
     Name := 'wgpalette';
@@ -1146,7 +1172,7 @@ begin
     OnResize := @PaletteBarResized;
   end;
 
-  chlPalette := TfpgComboBox.Create(self);
+  chlPalette := TfpgComboBox.Create(panel1);
   with chlPalette do
   begin
     Name := 'chlPalette';
@@ -1337,14 +1363,18 @@ fpgapplication.ProcessMessages;
   WindowType := wtwindow;  // with borders, not on front.
     btnOpen.Visible := True;
     btnSave.Left := 69;
-    {$ifdef fpgui-develop}
+
+    WindowAttributes:= [];
+      panel1.Style := bsflat;
+
+
+       {$ifdef fpgui-develop}
     btnSave.UpdatePosition;
+     panel1.UpdatePosition;
    {$else}
     btnSave.UpdateWindowPosition;
+     panel1.UpdateWindowPosition;
    {$endif}
-   //   WindowAttributes:= [];
-    //   panel1.Style := bsflat;
-    //   panel1.UpdatePosition;
 
      {$ifdef fpgui-develop}
    filemenu.MenuItem(1).enabled := True;
@@ -1361,14 +1391,60 @@ fpgapplication.ProcessMessages;
    end
   else
   begin
-     MainMenu.MenuItem(8).Visible := false;
-   //   panel1.Style := bsLowered;
-   //   panel1.UpdatePosition;
-   //   WindowAttributes:= [waSizeable, waBorderless];
-    //    WindowAttributes:= [];
 
-     LoadIDEparameters(x);
+
+     if ((IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+     (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False)) or
+  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
+     begin
+  btnToFront.tag := 0;
+  WindowType := wtwindow;  // with borders, not on front.
+    btnOpen.Visible := True;
+    btnSave.Left := 69;
+
+    WindowAttributes:= [];
+      panel1.Style := bsflat;
+        MainMenu.MenuItem(8).Visible := false;
+
+          {$ifdef fpgui-develop}
+    btnSave.UpdatePosition;
+     panel1.UpdatePosition;
+   {$else}
+    btnSave.UpdateWindowPosition;
+     panel1.UpdateWindowPosition;
+   {$endif}
+
+
+          {$ifdef fpgui-develop}
+   filemenu.MenuItem(1).enabled := True;
+    filemenu.MenuItem(2).enabled := True;
+    filemenu.MenuItem(15).enabled := true;
+ {$else}
+  filemenu.MenuItem(1).Visible := True;
+    filemenu.MenuItem(2).Visible := True;
+    filemenu.MenuItem(15).Visible := true;
+ {$endif}
+     indexundo := 0;
+     MainMenu.MenuItem(8).Visible := false;
+     end else begin
+
+     MainMenu.MenuItem(8).Visible := true;
+      panel1.Style := bsLowered;
+      panel1.BorderStyle:=bsdouble;
+       WindowAttributes:= [waSizeable, waBorderless];
+        LoadIDEparameters(x);
+      end;
+
+      {$ifdef fpgui-develop}
+   panel1.UpdatePosition;
+ {$else}
+     panel1.UpdateWindowPosition;
+ {$endif}
+
+
   end;
+
+
 
   if ifonlyone = True then
   begin
@@ -1386,7 +1462,7 @@ fpgapplication.ProcessMessages;
 //  frmMultiSelect := Tfrm_multiselect.Create(nil);
       fpgApplication.CreateForm(Tfrm_multiselect, frmMultiSelect);
   chlPalette.Tag:=0;
-
+   //   WindowAttributes:= [waSizeable, waBorderless];
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);

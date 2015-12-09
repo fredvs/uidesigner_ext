@@ -133,40 +133,52 @@ install:
         <PackageName Value="fpgui_toolkit"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="5">
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="20"/>
-        <CursorPos X="105" Y="20"/>
+        <TopLine Value="74"/>
+        <CursorPos X="67" Y="97"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="frm_main_designer.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="339"/>
-        <CursorPos X="2" Y="365"/>
-        <UsageCount Value="92"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="861"/>
+        <CursorPos X="22" Y="885"/>
+        <UsageCount Value="97"/>
+        <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="frm_vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="526"/>
-        <CursorPos X="92" Y="540"/>
-        <UsageCount Value="92"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="535"/>
+        <CursorPos X="2" Y="542"/>
+        <UsageCount Value="97"/>
+        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="sak_fpg.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="2635"/>
-        <CursorPos X="7" Y="2648"/>
-        <UsageCount Value="92"/>
+        <CursorPos X="31" Y="2660"/>
+        <UsageCount Value="97"/>
         <Loaded Value="True"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="vfd_main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="174"/>
+        <CursorPos X="80" Y="174"/>
+        <UsageCount Value="25"/>
+        <Loaded Value="True"/>
+      </Unit4>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

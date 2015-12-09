@@ -111,6 +111,7 @@ type
     procedure SaveUndo(Sender: TObject; typeundo: integer);
     procedure LoadUndo(undoindex: integer);
     procedure OnHide(Sender: TObject);
+    procedure OnMini(Sender: TObject);
     function AddUnits(filedata: string): string;
     function OnNewForm(Sender: TObject): boolean;
     procedure OnNewFile(Sender: TObject);
@@ -334,14 +335,24 @@ begin
   end;
  end;
 
+
+procedure TMainDesigner.OnMini(Sender: TObject);
+var
+n : integer;
+begin
+
+end;
+
 procedure TMainDesigner.OnHide(Sender: TObject);
 var
 n : integer;
 begin
-  if (idetemp = 0) or  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
-   (IsRunningIDE('ideu') = False)) or
-      (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
-    begin
+
+ if (idetemp = 0) or  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or
+ ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+ (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False)) or
+  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
+     begin
   if assigned(ATimer) then  ATimer.Enabled:=false;
       fpgapplication.Terminate;
      end else
