@@ -18,6 +18,9 @@ unit vfd_widgetclass;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -68,6 +71,8 @@ type
   TVFDPropertyClass = class of TVFDWidgetProperty;
 
 
+  { TVFDWidgetClass }
+
   TVFDWidgetClass = class(TObject)
   private
     FProps: TList;
@@ -77,7 +82,6 @@ type
     Description: string;
     WidgetIconName: string;
     NameBase: string;
-    { Can it accept other widgets on a drop }
     Container: boolean;
     BlockMouseMsg: boolean;
     constructor Create(aClass: TWidgetClass);

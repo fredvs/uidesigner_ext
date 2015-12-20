@@ -14,11 +14,11 @@
       Setting up of widgets, properties and images.
 }
 
-
 unit vfd_widgets;
 
 {$mode objfpc}{$H+}
 
+/// for custom compil, like using fpgui-dvelop =>  edit define.inc
 {$I define.inc}
 
 interface
@@ -71,8 +71,6 @@ uses
   fpg_hyperlink,
   fpg_toggle,
   fpg_dialogs,
-  fpg_hexview,
-  fpg_spinedit,
   vfd_propeditgrid,
   vfd_main;
 
@@ -358,16 +356,6 @@ begin
     sizeof(stdimg_vfd_toggle),
     0, 0);
 
-  fpgImages.AddMaskedBMP(
-    'vfd.hexview', @stdimg_vfd_hexview,
-    sizeof(stdimg_vfd_hexview),
-    0, 0);
-
-  fpgImages.AddMaskedBMP(
-    'vfd.hexpanel', @stdimg_vfd_hexpanel,
-    sizeof(stdimg_vfd_hexpanel),
-    0, 0);
-   
 end;
 
 procedure AddWidgetPosProps(wgc: TVFDWidgetClass);
@@ -385,20 +373,13 @@ begin
   LoadIcons;
 
   wc          := TVFDWidgetClass.Create(TfpgForm);
-  wc.NameBase := 'frm';
-  wc.AddProperty('WindowTitle', TPropertyString, '');
+ wc.AddProperty('WindowTitle', TPropertyString, '');
   wc.AddProperty('IconName', TPropertyString, 'Image name to change window icon');
   wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
   wc.AddProperty('ShowHint', TPropertyBoolean, '');
-  wc.AddProperty('Sizeable', TPropertyBoolean, 'Can the form be resized at runtime');
-  //wc.AddProperty('BackgroundColor', TPropertyColor, '');
-  //wc.AddProperty('TextColor', TPropertyColor, '');
-  //wc.AddProperty('MaxHeight', TPropertyInteger, '');
-  //wc.AddProperty('MaxWidth', TPropertyInteger, '');
-  //wc.AddProperty('MinHeight', TPropertyInteger, '');
-  //wc.AddProperty('MinWidth', TPropertyInteger, '');
-  //wc.AddProperty('FullScreen', TPropertyBoolean, '');
-  //wc.AddProperty('WindowPosition', TPropertyEnum, '');
+  wc.AddProperty('BackgroundColor', TPropertyColor, '');
+  wc.AddProperty('WindowPosition', TPropertyInteger, '');
+
   FVFDFormWidget := wc;
 
   // Label
@@ -897,40 +878,40 @@ begin
 
   { TODO : UI Designer still has problems with components that have child components. }
   // Spin Edit
-  wc          := TVFDWidgetClass.Create(TfpgSpinEdit);
-  wc.NameBase := 'SpinEdit';
-  wc.AddProperty('ButtonWidth', TPropertyInteger, 'Spin button width');
-  wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the text');
-  wc.Addproperty('Hint', TPropertyString, '');
-  wc.AddProperty('Increment', TPropertyInteger, 'Increment value on short press');
-  wc.AddProperty('LargeIncrement', TPropertyInteger, 'Large increment value on long press');
-  wc.AddProperty('MaxValue', TPropertyInteger, 'Maximum value');
-  wc.AddProperty('MinValue', TPropertyInteger, 'Minimum value');
-  wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
-  wc.AddProperty('ShowHint', TPropertyBoolean, '');
-  wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
-  wc.AddProperty('Value', TPropertyInteger, 'Initial value');
-  wc.WidgetIconName := 'vfd.editinteger';
-  RegisterVFDWidget(wc);
+  //wc          := TVFDWidgetClass.Create(TfpgSpinEdit);
+  //wc.NameBase := 'SpinEdit';
+  //wc.AddProperty('ButtonWidth', TPropertyInteger, 'Spin button width');
+  //wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the text');
+  //wc.Addproperty('Hint', TPropertyString, '');
+  //wc.AddProperty('Increment', TPropertyInteger, 'Increment value on short press');
+  //wc.AddProperty('LargeIncrement', TPropertyInteger, 'Large increment value on long press');
+  //wc.AddProperty('MaxValue', TPropertyInteger, 'Maximum value');
+  //wc.AddProperty('MinValue', TPropertyInteger, 'Minimum value');
+  //wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
+  //wc.AddProperty('ShowHint', TPropertyBoolean, '');
+  //wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
+  //wc.AddProperty('Value', TPropertyInteger, 'Initial value');
+  //wc.WidgetIconName := 'vfd.editinteger';
+  //RegisterVFDWidget(wc);
 
   // Spin Edit Float
-  wc          := TVFDWidgetClass.Create(TfpgSpinEditFloat);
-  wc.NameBase := 'SpinEditFloat';
-  wc.AddProperty('ButtonWidth', TPropertyInteger, 'Spin button width');
-  wc.Addproperty('Decimals', TPropertyInteger, '');
-  wc.Addproperty('FixedDecimals', TPropertyBoolean, '');
-  wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the text');
-  wc.Addproperty('Hint', TPropertyString, '');
-  wc.AddProperty('Increment', TPropertyFloat, 'Increment value on short press');
-  wc.AddProperty('LargeIncrement', TPropertyFloat, 'Large increment value on long press');
-  wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
-  wc.AddProperty('MaxValue', TPropertyFloat, 'Maximum value');
-  wc.AddProperty('MinValue', TPropertyFloat, 'Minimum value');
-  wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
-  wc.AddProperty('ShowHint', TPropertyBoolean, '');
-  wc.AddProperty('Value', TPropertyFloat, 'Initial value');
-  wc.WidgetIconName := 'vfd.editfloat';
-  RegisterVFDWidget(wc);
+  //wc          := TVFDWidgetClass.Create(TfpgSpinEditFloat);
+  //wc.NameBase := 'SpinEditFloat';
+  //wc.AddProperty('ButtonWidth', TPropertyInteger, 'Spin button width');
+  //wc.Addproperty('Decimals', TPropertyInteger, '');
+  //wc.Addproperty('FixedDecimals', TPropertyBoolean, '');
+  //wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the text');
+  //wc.Addproperty('Hint', TPropertyString, '');
+  //wc.AddProperty('Increment', TPropertyFloat, 'Increment value on short press');
+  //wc.AddProperty('LargeIncrement', TPropertyFloat, 'Large increment value on long press');
+  //wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
+  //wc.AddProperty('MaxValue', TPropertyFloat, 'Maximum value');
+  //wc.AddProperty('MinValue', TPropertyFloat, 'Minimum value');
+  //wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
+  //wc.AddProperty('ShowHint', TPropertyBoolean, '');
+  //wc.AddProperty('Value', TPropertyFloat, 'Initial value');
+  //wc.WidgetIconName := 'vfd.editfloat';
+  //RegisterVFDWidget(wc);
 
   // Filename Edit
   wc          := TVFDWidgetClass.Create(TfpgFileNameEdit);
@@ -1057,27 +1038,6 @@ begin
   wc.WidgetIconName := 'vfd.toggle';
   RegisterVFDWidget(wc);
 
- {$ifdef fpgui-develop}
-  // hexview
-  wc          := TVFDWidgetClass.Create(TfpgHexView);
-  wc.NameBase := 'HexView';
-  wc.AddProperty('Align', TPropertyEnum, '');
-  wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
-  wc.AddProperty('OwnsStream', TPropertyBoolean, 'If true the Stream property will be freed when changed or set to nil.');
-  wc.WidgetIconName := 'vfd.hexview';
-  RegisterVFDWidget(wc);
-
-  // hexpanel
-  wc          := TVFDWidgetClass.Create(TfpgHexPanel);
-  wc.NameBase := 'HexPanel';
-  wc.AddProperty('Align', TPropertyEnum, '');
-  wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
-  wc.AddProperty('HexView', TPropertyInterface, 'The view that updates our values');
-  wc.WidgetIconName := 'vfd.hexpanel';
-  RegisterVFDWidget(wc);  
-    {$else}
-   {$endif}
- 
   // Other - do not delete!!! this should be the last...
   wc          := TVFDWidgetClass.Create(TOtherWidget);
   wc.NameBase := 'Custom';

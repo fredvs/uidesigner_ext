@@ -108,11 +108,10 @@ type
     {$ifdef fpgui-develop}
     procedure DropDrop(Drop: TfpgDrop; AData: Variant);
     procedure DropEnter(Drop: TfpgDrop);
-    {$else}
+    function FindDesignerWidget(wg: TfpgWidget): TWidgetDesigner;
+   {$else}
    {$endif}
 
-   function FindDesignerWidget(wg: TfpgWidget): TWidgetDesigner;
-  
   protected
     FWidgets: TList;
     FForm: TDesignedForm;
@@ -142,9 +141,12 @@ type
     function WidgetDesigner(wg: TfpgWidget): TWidgetDesigner;
     function    FindWidgetByName(const wgname: string): TfpgWidget;
  
+   {$ifdef fpgui-develop}
     function    FindWidgetsByClass(const aclass: TClass; out AList: TList): Boolean;
     function    FindWidgetsByInterface(const AIID: String; AGUID:TGuid; out AList: TList): Boolean;
-  
+   {$else}
+   {$endif}
+
     procedure DeSelectAll;
     procedure SelectAll;
     procedure SelectNextWidget(fw: boolean);
@@ -172,8 +174,6 @@ type
     property Form: TDesignedForm read FForm;
     property FormOther: string read FFormOther write FFormOther;
   end;
- 
- function GetFormDesigner(wg: TfpgWidget): TFormDesigner;
 
 implementation
 
@@ -188,11 +188,6 @@ uses
 
 const
   cEditOrder: array[TfpgEditMode] of string = (rsDlgWidgetOrder, rsDlgTabOrder);
-
-function GetFormDesigner(wg: TfpgWidget): TFormDesigner;
-begin
-  Result := wg.FormDesigner as TFormDesigner;
-end;
 
 { TWidgetDesigner }
 
@@ -251,7 +246,6 @@ begin
   FSelected := False;
   wg.MouseCursor := mcDefault;
   other := TStringList.Create;
-   MarkForDeletion := False;
 end;
 
 destructor TWidgetDesigner.Destroy;
@@ -351,17 +345,6 @@ begin
   end;
 end;
 
-procedure TFormDesigner.DropDrop(Drop: TfpgDrop; AData: Variant);
-var
-  wc: TVFDWidgetClass;
-begin
-  wc := TVFDWidgetClass(PtrUInt(AData));
-  InsertWidget(TfpgWidget(Drop.Widget), Drop.MousePos.X, Drop.MousePos.Y, wc);
-end;
-
-{$else}
-{$endif}
-
 function TFormDesigner.FindDesignerWidget(wg: TfpgWidget): TWidgetDesigner;
 var
   w: TfpgWidget;
@@ -374,6 +357,18 @@ begin
 //  if Result = nil then
 //    debugln('NOTE #2: Still couldn''t find Designer Widget - lets give up');
 end;
+
+procedure TFormDesigner.DropDrop(Drop: TfpgDrop; AData: Variant);
+var
+  wc: TVFDWidgetClass;
+begin
+  wc := TVFDWidgetClass(PtrUInt(AData));
+  InsertWidget(TfpgWidget(Drop.Widget), Drop.MousePos.X, Drop.MousePos.Y, wc);
+end;
+
+{$else}
+{$endif}
+
 
 procedure TFormDesigner.MsgMouseDown(var msg: TfpgMessageRec);
 var
@@ -390,9 +385,11 @@ begin
 
   if msg.dest = FForm then
     Exit;
-
+{$ifdef fpgui-develop}
   wgd := FindDesignerWidget(TfpgWidget(msg.dest));
-
+{$else}
+  wgd := WidgetDesigner(TfpgWidget(msg.dest));
+{$endif}
   if wgd = nil then
     Exit;
 
@@ -429,7 +426,11 @@ begin
   wgc := frmMainDesigner.SelectedWidget;
   pwg := TfpgWidget(msg.dest);
  
+{$ifdef fpgui-develop}
   wgd := FindDesignerWidget(TfpgWidget(msg.dest));
+{$else}
+  wgd := WidgetDesigner(TfpgWidget(msg.dest));
+{$endif}
 
   if wgd = nil then
     pwg := FForm
@@ -468,8 +469,11 @@ begin
   end
   else
   begin
-   wgd := FindDesignerWidget(TfpgWidget(msg.dest));
-
+ {$ifdef fpgui-develop}
+  wgd := FindDesignerWidget(TfpgWidget(msg.dest));
+{$else}
+  wgd := WidgetDesigner(TfpgWidget(msg.dest));
+{$endif}
     if wgd = nil then
     begin
       DeSelectAll;
@@ -511,7 +515,7 @@ var
   dx, dy: integer;
   wgd: TWidgetDesigner;
 begin
-  msg.Stop  := True;
+  msg.Stop := True;
   if not FDragging then
     Exit;
 
@@ -520,8 +524,7 @@ begin
   dx := msg.Params.mouse.x - FDragPosX;
   dy := msg.Params.mouse.y - FDragPosY;
 
-  wgd := FindDesignerWidget(TfpgWidget(msg.dest));
-   
+  wgd := WidgetDesigner(TfpgWidget(msg.dest));
   if (wgd = nil) or (not wgd.Selected) then
     Exit;
 
@@ -533,7 +536,6 @@ begin
 
   MoveResizeWidgets(dx, dy, 0, 0);
 end;
-
 
 procedure TFormDesigner.MsgKeyPress(var msg: TfpgMessageRec);
 var
@@ -737,7 +739,91 @@ begin
   end;
   UpdatePropWin;
 end;
- 
+
+  {
+procedure TFormDesigner.DeleteWidgets;
+var
+  n: integer;
+  cd: TWidgetDesigner;
+  sakenabled : boolean = false;
+  thedeleted : string;
+ // multisel : boolean = false;
+  // widget :  TfpgWidget;
+
+  procedure DeleteChildWidget(ADesignWidget: TWidgetDesigner);
+  var
+    i: integer;
+
+  begin
+    if not Assigned(ADesignWidget.Widget) then  // safety check
+      Exit;
+ //    widget := ADesignWidget.Widget.Parent;
+
+ //   while widget.HasParent = true do
+ //  widget := Widget.Parent;
+
+    if (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFILENAMEEDIT') and (uppercase(ADesignWidget.Widget.ClassName) <>
+      'TFPGDIRECTORYEDIT') and (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGFONTEDIT') and
+      (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGEDITBUTTON') and (uppercase(ADesignWidget.Widget.ClassName) <> 'TFPGPAGECONTROL') and
+      (ADesignWidget.Widget.IsContainer) and (ADesignWidget.Widget.ComponentCount > 0) then
+    begin
+      for i := ADesignWidget.Widget.ComponentCount - 1 downto 0 do
+        DeleteChildWidget(WidgetDesigner(TfpgWidget(ADesignWidget.Widget.Components[i])));
+    end;
+    ADesignWidget.MarkForDeletion := True;
+  end;
+
+begin
+  n := 0;
+
+  if SakIsEnabled() = true then begin
+   saksuspend;
+   sakenabled := true;
+  end;
+  // Pass 1: Mark widgets and children than need deletion
+  while n < FWidgets.Count do
+  begin
+    cd := TWidgetDesigner(FWidgets.Items[n]);
+    if cd.Selected then
+    begin
+       DeleteChildWidget(cd);
+        thedeleted := thedeleted + ' ' + cd.Widget.Name ;
+
+      end;
+    Inc(n);
+  end;
+
+  // Pass 2: free TWidgetDesigner instances that have no more Widget instances
+  for n := FWidgets.Count - 1 downto 0 do
+  begin
+    cd := TWidgetDesigner(FWidgets.Items[n]);
+    if cd.MarkForDeletion then
+    begin
+      cd.Widget.Free;
+      cd.Free;
+      FWidgets.Delete(n);
+    end;
+  end;
+
+  UpdatePropWin;
+
+  if sakenabled = true then begin
+     sakupdate;
+    end;
+
+ if frmmultiselect.Visible = true then
+  begin
+    frmMultiSelect.refreshall;
+  end;
+
+  if SakIsEnabled = true then
+  begin
+     SakCancel;
+     SAKSay('widgets deleted...') ;
+  end;
+end;
+}
+
 procedure TFormDesigner.DeleteWidgets;
 var
   n: integer;
@@ -2242,6 +2328,7 @@ begin
   end;
 end;
 
+{$ifdef fpgui-develop}
  function TFormDesigner.FindWidgetsByClass(const aclass: TClass; out AList: TList): Boolean;
 var
   n: integer;
@@ -2287,7 +2374,9 @@ begin
     end;
   end;
 end;
- 
+   {$else}
+   {$endif}
+
 { TDesignedForm }
 
 procedure TDesignedForm.SetShowGrid(AValue: boolean);

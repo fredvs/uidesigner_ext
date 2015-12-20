@@ -1364,23 +1364,18 @@ fpgapplication.ProcessMessages;
     btnOpen.Visible := True;
     btnSave.Left := 69;
 
-    WindowAttributes:= [];
-      panel1.Style := bsflat;
-
-
-       {$ifdef fpgui-develop}
-    btnSave.UpdatePosition;
-     panel1.UpdatePosition;
-   {$else}
-    btnSave.UpdateWindowPosition;
-     panel1.UpdateWindowPosition;
-   {$endif}
+     panel1.Style := bsflat;
 
      {$ifdef fpgui-develop}
+      btnSave.UpdatePosition;
+     panel1.UpdatePosition;
    filemenu.MenuItem(1).enabled := True;
     filemenu.MenuItem(2).enabled := True;
     filemenu.MenuItem(15).enabled := true;
  {$else}
+  WindowAttributes:= [];
+    btnSave.UpdateWindowPosition;
+     panel1.UpdateWindowPosition;
   filemenu.MenuItem(1).Visible := True;
     filemenu.MenuItem(2).Visible := True;
     filemenu.MenuItem(15).Visible := true;
@@ -1402,7 +1397,7 @@ fpgapplication.ProcessMessages;
     btnOpen.Visible := True;
     btnSave.Left := 69;
 
-    WindowAttributes:= [];
+   
       panel1.Style := bsflat;
         MainMenu.MenuItem(8).Visible := false;
 
@@ -1410,6 +1405,7 @@ fpgapplication.ProcessMessages;
     btnSave.UpdatePosition;
      panel1.UpdatePosition;
    {$else}
+    WindowAttributes:= [];
     btnSave.UpdateWindowPosition;
      panel1.UpdateWindowPosition;
    {$endif}
@@ -1431,7 +1427,12 @@ fpgapplication.ProcessMessages;
      MainMenu.MenuItem(8).Visible := true;
       panel1.Style := bsLowered;
       panel1.BorderStyle:=bsdouble;
-       WindowAttributes:= [waSizeable, waBorderless];
+  
+    {$ifdef fpgui-develop}
+ {$else}
+     WindowAttributes:= [waSizeable, waBorderless];
+ {$endif}
+      
         LoadIDEparameters(x);
       end;
 
