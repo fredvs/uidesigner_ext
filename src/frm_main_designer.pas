@@ -1332,10 +1332,9 @@ windowtitle := MainMenu.MenuItem(8).Text;
   end
   else
     begin
-  idetemp := 3;
+ x := gINI.ReadInteger('Options', 'IDE', 3)  ;
    x := idetemp  ;
     end;
-
 
  left := 400;
  top := 10 ;
@@ -1441,11 +1440,7 @@ fpgapplication.ProcessMessages;
  {$else}
      panel1.UpdateWindowPosition;
  {$endif}
-
-
   end;
-
-
 
   if ifonlyone = True then
   begin
