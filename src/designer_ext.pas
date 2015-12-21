@@ -89,7 +89,7 @@ uses
      ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
 
     // ideu custom plugin => uncomment it for ideU integration
-   ideuintegration := True;
+   // ideuintegration := True;
 
      if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
     begin
