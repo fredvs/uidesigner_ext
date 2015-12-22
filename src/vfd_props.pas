@@ -265,17 +265,20 @@ var
   N: String;
   I: IInterface;
 begin
+  // fred
+  result := '' ;
   PropInfo := GetPropInfo(wg.ClassType, Name);
   if PropInfo^.Default <> GetOrdProp(wg, Name) then
   begin
     I := GetInterfaceProp(wg, Name);
+      if assigned(I) then
+    begin
     N := TComponent(I as TComponent).Name;
-    if N = Name then
+       if N = Name then
        N := 'Self.'+N;
     Result := ident + Name + ' := ' + N + ';' + LineEnding;
-  end
-  else
-    Result := '';
+  end;
+  end;
 end;
 
 function TPropertyInterface.GetValueText(wg: TfpgWidget): string;

@@ -359,6 +359,7 @@ begin
   InsertWidget(TfpgWidget(Drop.Widget), Drop.MousePos.X, Drop.MousePos.Y, wc);
 end;
 
+
 {$else}
 {$endif}
 
@@ -380,19 +381,17 @@ var
   wgd: TWidgetDesigner;
   shift: boolean;
 begin
-  //  writeln('TFormDesigner.MsgMouseDown');
-  msg.Stop := True;
+//  writeln('TFormDesigner.MsgMouseDown');
+  msg.Stop  := True;
   FDragging := True;
-  FWasDrag := False;
+  FWasDrag  := False;
   FDragPosX := msg.Params.mouse.x;
   FDragPosy := msg.Params.mouse.y;
-
 
   if msg.dest = FForm then
     Exit;
 
   wgd := FindDesignerWidget(TfpgWidget(msg.dest));
-
   if wgd = nil then
     Exit;
 
@@ -410,8 +409,8 @@ begin
     wgd.Selected := True;
     UpdatePropWin;
   end;
-
 end;
+
 
 procedure TFormDesigner.MsgMouseUp(var msg: TfpgMessageRec);
 var
@@ -421,16 +420,14 @@ var
   shift: boolean;
   x, y: integer;
 begin
-  //  writeln('TFormDesigner.MsgMouseUp');
+//  writeln('TFormDesigner.MsgMouseUp');
   FDragging := False;
 
   shift := (ssShift in msg.Params.mouse.shiftstate);
 
   wgc := frmMainDesigner.SelectedWidget;
   pwg := TfpgWidget(msg.dest);
- 
   wgd := FindDesignerWidget(TfpgWidget(msg.dest));
-
   if wgd = nil then
     pwg := FForm
   else if not wgd.FVFDClass.Container then
@@ -461,15 +458,14 @@ begin
 
       if not shift then
       begin
-        FForm.MouseCursor := mcDefault;
+        FForm.MouseCursor      := mcDefault;
         frmMainDesigner.SelectedWidget := nil;
       end;
     end;
   end
   else
   begin
-   wgd := FindDesignerWidget(TfpgWidget(msg.dest));
-
+    wgd := FindDesignerWidget(TfpgWidget(msg.dest));
     if wgd = nil then
     begin
       DeSelectAll;
@@ -521,7 +517,6 @@ begin
   dy := msg.Params.mouse.y - FDragPosY;
 
   wgd := FindDesignerWidget(TfpgWidget(msg.dest));
-   
   if (wgd = nil) or (not wgd.Selected) then
     Exit;
 
@@ -1403,7 +1398,7 @@ begin
       btnAnBottom.Down := anBottom in wg.Anchors;
     end;
 
-    UpdateVirtualPropWin(wg);
+   UpdateVirtualPropWin(wg);
 
   end;
 

@@ -760,7 +760,8 @@ var
   funit, fdata1, fdata2, fdata3, fdata31, fdata32, fdata4, datatmp: string;
   cns_label, cns_edit, cns_combobox, cns_checkbox, cns_gauge, cns_button, cns_radiobutton, cns_listbox, cns_panel,
   cns_memo, cns_menu, cns_calendar, cns_grid, cns_progressbar, cns_trackbar, cns_listview, cns_tree, cns_tab,
-  cns_editbtn, cns_colorwheel, cns_splitter, cns_hyperlink, cns_toggle, cns_nicegrid, cns_editgrid: boolean;
+  cns_editbtn, cns_colorwheel, cns_splitter, cns_hyperlink, cns_toggle, cns_nicegrid, cns_editgrid, cns_hexview,
+  cns_spinedit: boolean;
 begin
 
   filedata := AdjustLineBreaks(filedata);
@@ -825,7 +826,7 @@ begin
       cns_label := True
     else
       cns_label := False;
-
+      
      if pos('FPG_BUTTON', uppercase(fdata3)) > 0 then
       cns_button := True
     else
@@ -945,6 +946,17 @@ begin
       cns_editgrid := True
     else
       cns_editgrid := False;
+      
+   if pos('FPG_SPINEDIT', uppercase(fdata3)) > 0 then
+      cns_spinedit := True
+    else
+      cns_spinedit := False;
+      
+   if pos('FPG_HEXVIEW', uppercase(fdata3)) > 0 then
+      cns_hexview := True
+    else
+      cns_hexview := False;
+
 
 
     //////////// get the classname of each object and add his unit.
@@ -1022,11 +1034,25 @@ begin
           cns_listbox := True;
         end
         else
-        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPANET') or
+        if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGPANEL') or
           (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGBEVEL') or
           (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGGROUPBOX')) and (cns_panel = False) then
         begin
           funit := funit + ' fpg_panel,';
+          cns_panel := True;
+        end
+        else
+         if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGHEXPANEL') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGHEXVIEW')) and (cns_hexview = False) then
+        begin
+          funit := funit + ' fpg_hexview,';
+          cns_panel := True;
+        end
+        else
+         if ((uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGSPINEDIT') or
+          (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGSPINEDITFLOAT')) and (cns_spinedit = False) then
+        begin
+          funit := funit + ' fpg_spinedit,';
           cns_panel := True;
         end
         else

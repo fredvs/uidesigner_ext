@@ -821,7 +821,6 @@ begin
   {%region 'Auto-generated GUI code' -fold}
 
 
-
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   SetPosition(400, 10, 778, 92);
@@ -899,9 +898,9 @@ begin
     SetPosition(0, 0, 753, 24);
     Align := alTop;
 
-    OnMouseMove := @onMovemovepanel;
-    OnMouseDown := @onClickDownPanel;
-    OnMouseUp := @onClickUpPanel;
+  //  OnMouseMove := @onMovemovepanel;
+  //  OnMouseDown := @onClickDownPanel;
+  //  OnMouseUp := @onClickUpPanel;
   end;
 
   filemenu := TfpgPopupMenu.Create(panel1);

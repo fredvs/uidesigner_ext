@@ -59,6 +59,7 @@ uses
 procedure TItemEditorForm.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
+
   inherited;
   WindowTitle := 'Items';
   SetPosition(0, 0, 360, 230);
