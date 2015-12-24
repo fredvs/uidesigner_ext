@@ -578,8 +578,11 @@ var
  begin
   fpgapplication.ProcessMessages;
 
-  idetemp := gINI.ReadInteger('Options', 'IDE', 0);
-
+   {$ifdef ideu}
+  idetemp := gINI.ReadInteger('Options', 'IDE', 3);
+ {$else}
+ idetemp := gINI.ReadInteger('Options', 'IDE', 0);
+ {$endif}
   changeIde := idetemp;
 
   case idetemp of

@@ -71,7 +71,11 @@ uses
   fpg_hyperlink,
   fpg_toggle,
   fpg_dialogs,
+  
+ // {$ifdef fpgui-develop}
   fpg_hexview,
+ // {$endif}
+    
   fpg_spinedit,
   vfd_propeditgrid,
   vfd_main;
@@ -1057,7 +1061,7 @@ begin
   wc.WidgetIconName := 'vfd.toggle';
   RegisterVFDWidget(wc);
 
- {$ifdef fpgui-develop}
+// {$ifdef fpgui-develop}
   // hexview
   wc          := TVFDWidgetClass.Create(TfpgHexView);
   wc.NameBase := 'HexView';
@@ -1075,8 +1079,7 @@ begin
   wc.AddProperty('HexView', TPropertyInterface, 'The view that updates our values');
   wc.WidgetIconName := 'vfd.hexpanel';
   RegisterVFDWidget(wc);  
-    {$else}
-   {$endif}
+  //   {$endif}
  
   // Other - do not delete!!! this should be the last...
   wc          := TVFDWidgetClass.Create(TOtherWidget);

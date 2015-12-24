@@ -16,6 +16,7 @@
 
 unit vfd_editors;
 
+
 {$mode objfpc}{$H+}
 
 /// for custom compil, like using fpgui-dvelop =>  edit define.inc

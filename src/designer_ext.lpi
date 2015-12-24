@@ -137,8 +137,8 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="74"/>
-        <CursorPos X="67" Y="97"/>
+        <TopLine Value="15"/>
+        <CursorPos X="56" Y="102"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -146,36 +146,36 @@ install:
         <Filename Value="frm_main_designer.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="763"/>
-        <CursorPos X="5" Y="903"/>
-        <UsageCount Value="100"/>
+        <TopLine Value="1410"/>
+        <CursorPos X="23" Y="1414"/>
+        <UsageCount Value="102"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="frm_vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="522"/>
-        <CursorPos X="2" Y="542"/>
-        <UsageCount Value="100"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="193"/>
+        <CursorPos X="3" Y="206"/>
+        <UsageCount Value="102"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="sak_fpg.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
-        <TopLine Value="2635"/>
-        <CursorPos X="31" Y="2660"/>
-        <UsageCount Value="100"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="2636"/>
+        <CursorPos X="64" Y="2637"/>
+        <UsageCount Value="102"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="vfd_main.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="174"/>
-        <CursorPos X="80" Y="174"/>
-        <UsageCount Value="28"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="752"/>
+        <CursorPos X="59" Y="763"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit4>
     </Units>
@@ -203,6 +203,10 @@ install:
       <SmallerCode Value="True"/>
     </CodeGeneration>
     <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <StripSymbols Value="True"/>
+      </Debugging>
       <LinkSmart Value="True"/>
       <Options>
         <Win32>

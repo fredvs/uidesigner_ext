@@ -4,7 +4,7 @@ With window list, undo feature, integration into IDE, editor launcher, extra-pro
 
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2014
+2013 - 2015
 }
 {
     fpGUI  -  Free Pascal GUI Toolkit
@@ -315,6 +315,7 @@ procedure TVFDFormParser.ParseFormWidgets;
 var
   n: integer;
   lok: boolean;
+  handled: boolean;
   s: string;
   ident: string;
   wgname, wgclass, wgclassuc, wgparent: string;
@@ -322,17 +323,39 @@ var
   wgother: string;
   wd: TWidgetDesigner;
   wgc: TVFDWidgetClass;
+  saveline: String;
 begin
   while not eob do
   begin
     //s := UpperCase(line);
     s := line;
+    handled := False;
 
     wgname := GetIdentifier(s);
     //writeln('wg: ',wgname);
     lok    := CheckSymbol(s, ':=');
     if lok then
-      wgclass := GetIdentifier(s);
+      wgclass := GetIdentifier(s)
+    else begin
+      wg := ffd.FindWidgetByName(wgname);
+      if wg <> nil then
+      begin
+        // wd and wgc are good since wg was found.
+        wd := ffd.WidgetDesigner(wg);
+        wgc := wd.FVFDClass;
+        saveline:=s;
+        if CheckSymbol(saveline, '.')
+        and (wgc.HasProperty(GetIdentifier(saveline)))
+        and CheckSymbol(saveline, ':=') then
+        begin
+           CheckSymbol(s, '.');
+           handled := ReadWGProperty(s, wg, wgc);
+           if handled then
+             NextLine;
+        end;
+
+      end;
+    end;
     lok := lok and CheckSymbol(s, '.');
     lok := lok and (UpperCase(GetIdentifier(s)) = 'CREATE');
     lok := lok and CheckSymbol(s, '(');
@@ -414,7 +437,7 @@ begin
       wd.other.Text := wgother;
 
     end
-    else
+    else if not handled then
     begin
       ffd.FormOther := ffd.FormOther + line + LineEnding;
       NextLine;
@@ -422,6 +445,7 @@ begin
 
   end;
 end;
+
 
 function  TVFDFormParser.ReadWGVirtualProperty(s: String; s2: String; ident: String; wg: TfpgWidget) : boolean;
 var

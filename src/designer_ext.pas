@@ -88,8 +88,11 @@ uses
     filedir := '';
      ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
 
-    // ideu custom plugin => uncomment it for ideU integration
-   // ideuintegration := True;
+ {$ifdef ideu}
+  idetemp := gINI.ReadInteger('Options', 'IDE', 3)  ;
+ {$else}
+  idetemp := gINI.ReadInteger('Options', 'IDE', 0) ;
+ {$endif}
 
      if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
     begin
@@ -105,7 +108,7 @@ uses
     end
     else
      begin
-        if (gINI.ReadInteger('Options', 'IDE', 0) = 0) or ((gINI.ReadInteger('Options', 'IDE', 0) > 0) and
+        if (idetemp = 0) or ((idetemp > 0) and
         (isrunningIDE('typhon') = False) and (isrunningIDE('ideu') = False) and (isrunningIDE('ideU') = False) and (isrunningIDE('lazarus') = False)) then
       begin
         if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
@@ -164,7 +167,7 @@ uses
 
    dirsakit := gINI.ReadString('Options', 'SakitDir', ordir);
 
-    if (directoryexists(dirsakit))and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
+    if (directoryexists(dirsakit + directoryseparator +'sakit'))and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
      then SAKLoadlib(dirsakit);
 
     fpgApplication.ShowHint:=true;

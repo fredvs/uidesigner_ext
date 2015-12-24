@@ -16,10 +16,11 @@
 
 unit vfd_props;
 
+{$mode objfpc}{$H+}
+
 /// for custom compil, like using fpgui-dvelop =>  edit define.inc
 {$I define.inc}
 
-{$mode objfpc}{$H+}
 
 interface
 
@@ -112,7 +113,7 @@ type
   TPropertyObject = class(TVFDWidgetProperty)
     function  CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
     function  ParseSourceLine(wg: TfpgWidget; const line: string): boolean; override;
-    function  GetPropertySource(wg: TfpgWidget; const ident: string): string; override;
+    function  GetPropertySource(wg: TfpgWidget; const ident: string; out afterObject: TObject): string; override;
     function  GetValueText(wg: TfpgWidget): string; override;
   end;
 
@@ -120,7 +121,7 @@ type
 
   TPropertyInterface = class(TPropertyObject)
     function  CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
-    function  GetPropertySource(wg: TfpgWidget; const ident: string): string; override;
+    function  GetPropertySource(wg: TfpgWidget; const ident: string; out afterObject: TObject): string; override;
     function  GetValueText(wg: TfpgWidget): string; override;
   end;
 
@@ -259,25 +260,26 @@ begin
 end;
 
 function TPropertyInterface.GetPropertySource(wg: TfpgWidget;
-  const ident: string): string;
+  const ident: string; out afterObject: TObject): string;
 var
-  PropInfo: PPropInfo;
   N: String;
   I: IInterface;
+  O: TComponent;
 begin
-  // fred
-  result := '' ;
-  PropInfo := GetPropInfo(wg.ClassType, Name);
-  if PropInfo^.Default <> GetOrdProp(wg, Name) then
+  I := GetInterfaceProp(wg, Name);
+  if Assigned(I) then
   begin
-    I := GetInterfaceProp(wg, Name);
-      if assigned(I) then
-    begin
-    N := TComponent(I as TComponent).Name;
-       if N = Name then
+    O := TComponent(I as TComponent);
+    N := O.Name;
+    if N = Name then
        N := 'Self.'+N;
     Result := ident + Name + ' := ' + N + ';' + LineEnding;
-  end;
+    afterObject := O;
+  end
+  else
+  begin
+    Result := '';
+    afterObject := nil;
   end;
 end;
 
@@ -412,21 +414,26 @@ begin
     end;
 end;
 
-function TPropertyObject.GetPropertySource(wg: TfpgWidget; const ident: string): string;
+function TPropertyObject.GetPropertySource(wg: TfpgWidget; const ident: string;
+  out afterObject: TObject): string;
 var
-  PropInfo: PPropInfo;
   N: String;
+  O: TObject;
 begin
-  PropInfo := GetPropInfo(wg.ClassType, Name);
-  if PropInfo^.Default <> GetOrdProp(wg, Name) then
+  O := GetObjectProp(wg, Name);
+  if Assigned(O) then
   begin
-    N := TComponent(GetObjectProp(wg, Name)).Name;
+    N := TComponent(O).Name;
     if N = Name then
-       N := 'Self.'+N;
+      N := 'Self.'+N;
     Result := ident + Name + ' := ' + N + ';' + LineEnding;
+    afterObject := O;
   end
   else
+  begin
     Result := '';
+    afterObject := nil;
+  end;
 end;
 
 function TPropertyObject.GetValueText(wg: TfpgWidget): string;
@@ -878,13 +885,13 @@ begin
     Top     := 0;
     Left    := self.Width - btnEdit.Width;
     Text    := '...';
-   
-    {$ifdef fpgui-develop}
-      UpdatePosition;
-     {$else}
-    UpdateWindowPosition;
-     {$endif}
     
+     {$ifdef fpgui-develop}
+     UpdatePosition;
+    {$else}
+     UpdateWindowPosition;
+   {$endif}
+   
     Anchors := [anTop, anRight];
     OnClick := @OnEditClick;
     Visible := True;

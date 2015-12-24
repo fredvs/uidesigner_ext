@@ -348,7 +348,14 @@ var
 n : integer;
 begin
 
- if (idetemp = 0) or  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or
+
+ {$ifdef ideu}
+ if   (gINI.ReadInteger('Options', 'IDE', 3) = 0)
+ {$else}
+ if   (gINI.ReadInteger('Options', 'IDE', 0) = 0)
+ {$endif}
+
+ or (mayclose = true) or
  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
  (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False)) or
   (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
@@ -544,10 +551,12 @@ begin
       frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
  //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text := '';
-
-
-     if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-     begin
+  {$ifdef ideu}
+  if gINI.ReadInteger('Options', 'IDE', 3) > 0 then
+ {$else}
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+ {$endif}
+       begin
      if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
        begin
     if assigned(ATimer) then
@@ -573,8 +582,12 @@ begin
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => file does not exist';
 
+     {$ifdef ideu}
+  if gINI.ReadInteger('Options', 'IDE', 3) > 0 then
+ {$else}
   if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-     begin
+ {$endif}
+        begin
      if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
        begin
     if assigned(ATimer) then
@@ -597,9 +610,12 @@ begin
  //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => file does not load';
-
-   if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
-        begin
+    {$ifdef ideu}
+  if gINI.ReadInteger('Options', 'IDE', 3) > 0 then
+ {$else}
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+ {$endif}
+         begin
         if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
         begin
     if assigned(ATimer) then
@@ -622,8 +638,11 @@ begin
  //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => not a fpGUI form-file';
-
+    {$ifdef ideu}
+  if gINI.ReadInteger('Options', 'IDE', 3) > 0 then
+ {$else}
   if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+ {$endif}
      begin
      if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = false then
      fpgapplication.Terminate else
@@ -636,7 +655,7 @@ begin
   else
   begin
     frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
-        frmMainDesigner.MainMenu.MenuItem(8).Text := '' ;
+        frmMainDesigner.MainMenu.MenuItem(8).Text := fname;   ;
         frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
 
   //  if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
@@ -727,22 +746,28 @@ begin
 
   isFileLoaded := True;
 
+
   if enableundo = True then
     frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
   frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
   frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
-        {$ifdef fpgui-develop}
-     frmMainDesigner.UpdatePosition;
-     {$else}
-     frmMainDesigner.UpdateWindowPosition;
-     {$endif}
 
    frmMainDesigner.MainMenu.Visible:=false;
       {$ifdef fpgui-develop}
+       frmMainDesigner.UpdatePosition;
      frmMainDesigner.MainMenu.UpdatePosition;
      {$else}
+      frmMainDesigner.UpdateWindowPosition;
      frmMainDesigner.MainMenu.UpdateWindowPosition;
      {$endif}
+  // frmMainDesigner.MainMenu.MenuItem(8).enabled := false ;
+      {$ifdef ideu}
+  if gINI.ReadInteger('Options', 'IDE', 3) > 0 then
+ {$else}
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+ {$endif}
+  frmMainDesigner.MainMenu.MenuItem(8).Visible := true else
+frmMainDesigner.MainMenu.MenuItem(8).Visible := false;
 
   fpgapplication.ProcessMessages;
   frmMainDesigner.MainMenu.Visible:=true;

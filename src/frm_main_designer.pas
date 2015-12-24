@@ -267,7 +267,6 @@ var
   numstyle: integer;
   bitcpu: integer;
   mayclose : boolean = false;
-  ideuintegration : boolean = false ;
   dirsakit : string;
 
 implementation
@@ -499,7 +498,13 @@ begin
 
 //   {
 
- if  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+   {$ifdef ideu}
+  if  (gINI.ReadInteger('Options', 'IDE', 3) = 0) or
+ {$else}
+   if  (gINI.ReadInteger('Options', 'IDE', 0) = 0) or
+ {$endif}
+
+  (mayclose = true) or  ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
    (IsRunningIDE('ideu') = False)) or
       (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
     begin
@@ -535,13 +540,9 @@ begin
   btnOpen.Visible := False;
   btnSave.Left := btnOpen.Left;
 
-  {$ifdef fpgui-develop}
-  btnSave.UpdatePosition;
- {$else}
-  btnSave.UpdateWindowPosition;
- {$endif}
 
     {$ifdef fpgui-develop}
+     btnSave.UpdatePosition;
     filemenu.MenuItem(0).enabled := True;
      filemenu.MenuItem(1).enabled := False;
      filemenu.MenuItem(2).enabled := False;
@@ -550,6 +551,7 @@ begin
   filemenu.MenuItem(0).visible := True;
   filemenu.MenuItem(1).visible := False;
   filemenu.MenuItem(2).visible := False;
+    btnSave.UpdateWindowPosition;
   {$endif}
 
   /// => This code gives problem to JEDI code-formater
@@ -815,8 +817,8 @@ var
   n, x, y: integer;
   wgc: TVFDWidgetClass;
   btn: TwgPaletteButton;
-  mi, mi2, mi3, mi4, mi5: TfpgMenuItem;
-begin
+  mi, mi2, mi3, mi4, mi5, mi8: TfpgMenuItem;
+begin 
 
   {%region 'Auto-generated GUI code' -fold}
 
@@ -898,9 +900,9 @@ begin
     SetPosition(0, 0, 753, 24);
     Align := alTop;
 
-  //  OnMouseMove := @onMovemovepanel;
-  //  OnMouseDown := @onClickDownPanel;
-  //  OnMouseUp := @onClickUpPanel;
+   OnMouseMove := @onMovemovepanel;
+   OnMouseDown := @onClickDownPanel;
+   OnMouseUp := @onClickUpPanel;
   end;
 
   filemenu := TfpgPopupMenu.Create(panel1);
@@ -1269,6 +1271,7 @@ begin
   MainMenu.AddMenuItem('&Tools', nil).SubMenu := toolsmenu;
   MainMenu.AddMenuItem('&Help', nil).SubMenu := helpmenu;
   MainMenu.AddMenuItem('', nil);
+  MainMenu.MenuItem(8).Tag := 88;
 
   FFileOpenRecent.SubMenu := miOpenRecentMenu;
   FlistUndo.SubMenu := listundomenu;
@@ -1324,16 +1327,13 @@ windowtitle := MainMenu.MenuItem(8).Text;
   filemenu.MenuItem(15).visible := False;
 {$endif}
 
-  if ideuintegration = false then
-  begin
- x := gINI.ReadInteger('Options', 'IDE', 0)  ;
- idetemp := x ;
-  end
-  else
-    begin
- x := gINI.ReadInteger('Options', 'IDE', 3)  ;
+      {$ifdef ideu}
+  x := gINI.ReadInteger('Options', 'IDE', 3)  ;
    x := idetemp  ;
-    end;
+ {$else}
+  x := gINI.ReadInteger('Options', 'IDE', 0)  ;
+ idetemp := x ;
+ {$endif}
 
  left := 400;
  top := 10 ;
@@ -1381,6 +1381,7 @@ fpgapplication.ProcessMessages;
 
     indexundo := 0;
      MainMenu.MenuItem(8).Visible := false;
+           
    end
   else
   begin
@@ -1421,11 +1422,10 @@ fpgapplication.ProcessMessages;
      indexundo := 0;
      MainMenu.MenuItem(8).Visible := false;
      end else begin
-
-     MainMenu.MenuItem(8).Visible := true;
+     
+       MainMenu.MenuItem(8).Visible := true;
       panel1.Style := bsLowered;
-      panel1.BorderStyle:=bsdouble;
-  
+
     {$ifdef fpgui-develop}
  {$else}
      WindowAttributes:= [waSizeable, waBorderless];
@@ -1576,8 +1576,13 @@ end;
 
 procedure TfrmMainDesigner.onClickDownPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
 begin
+PanelMove.Tag := 0;
   oriMousePos := AMousePos;
-  PanelMove.Tag := 1;
+  if (Sender is TfpgMenuItem) then if TfpgMenuItem(Sender).Tag = 88 
+  then PanelMove.Tag := 1;
+ 
+ if(Sender is Tfpgpanel) then PanelMove.Tag := 1;
+
 end;
 
 procedure TfrmMainDesigner.onClickUpPanel(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
@@ -1588,7 +1593,7 @@ end;
 
 procedure TfrmMainDesigner.sakenable(Sender: TObject);
 begin
-  if directoryexists(IncludeTrailingBackslash(ExtractFilePath(ParamStr(0))) + directoryseparator + 'sakit')
+  if directoryexists(dirsakit + directoryseparator +'sakit')
  then if btnAssist.Tag = 1 then
   begin
   btnAssist.Tag := 0 ;
@@ -1602,7 +1607,10 @@ begin
 end;
 
 procedure TfrmMainDesigner.onMoveMovePanel(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint);
+var
+isok : boolean = false; 
 begin
+ 
   if PanelMove.Tag = 1 then
   begin
     fpgapplication.ProcessMessages;
@@ -1620,6 +1628,7 @@ begin
   UpdateWindowPosition;
   {$endif}
   end;
+
 end;
 
 procedure TfrmMainDesigner.ToFrontClick(Sender: TObject);
@@ -1773,7 +1782,7 @@ begin
   //    panel1.UpdatePosition;
       MainMenu.MenuItem(8).Text := '';
       MainMenu.MenuItem(8).Visible := False;
-  end;
+  end else MainMenu.MenuItem(8).Visible := true;
 
    Show;
 

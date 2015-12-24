@@ -165,9 +165,11 @@ type
     function GetFormSourceDecl: string;
     function GetVirtualFormSourceImpl(TheForm: TDesignedForm; s: TfpgString): TfpgString;
     function GetFormSourceImpl: string;
-    function GetWidgetSourceImpl(wd: TWidgetDesigner; ident: string): string;
+    // fred
     function GetVirtualWidgetSourceImpl(TheWidget: TfpgWidget): string;
-    // The widgets can be selected and dragged within one click
+    
+     function    GetWidgetSourceImpl(wd: TWidgetDesigner; ident: string; processed: TList; afterobjects: TStrings): string;
+ // The widgets can be selected and dragged within one click
     property OneClickMove: boolean read FOneClickMove write FOneClickMove;
     property Form: TDesignedForm read FForm;
     property FormOther: string read FFormOther write FFormOther;
@@ -1818,27 +1820,41 @@ var
 
   t: TfpgString;
   i: integer;
-  // ok: boolean;
   PropInfo: PPropInfo;
+  ProcessedObjects: TList;
+  AfterObjects: TStringList;
 begin
   s := '';
 
   if maindsgn.SaveComponentNames then
     s := s + Ind(1) + 'Name := ' + QuotedStr(FForm.Name) + ';' + LineEnding;
 
-  s := s + Ind(1) + 'SetPosition(' + IntToStr(FForm.Left) + ', ' + IntToStr(FForm.Top) + ', ' + IntToStr(FForm.Width) +
-    ', ' + IntToStr(FForm.Height) + ');' + LineEnding;
+  s := s + Ind(1) + 'SetPosition('
+      + IntToStr(FForm.Left) + ', '
+      + IntToStr(FForm.Top) + ', '
+      + IntToStr(FForm.Width) + ', '
+      + IntToStr(FForm.Height) + ');' + LineEnding;
 
-
+{
+  // Extend this and the Form Parser to handle WindowPosition, Width and Height
+  case FForm.WindowPosition of
+    wpUser:
+        begin
+          s := s + '  SetPosition('
+              + IntToStr(FForm.Left) + ', '
+              + IntToStr(FForm.Top) + ', '
+              + IntToStr(FForm.Width) + ', '
+              + IntToStr(FForm.Height) + ');' + LineEnding;
+        end;
+    else
+        begin
+          s := s + 'WindowPosition := wpScreenCenter;' + LineEnding;
+          s := s + 'Width := ' + IntToStr(FForm.Width) + ';' + LineEnding
+              + 'Height := ' + IntToStr(FForm.Height) + ';' + LineEnding;
+        end;
+  end;
+}
   s := s + Ind(1) + 'WindowTitle := ' + QuotedStr(FForm.WindowTitle) + ';' + LineEnding;
-
-   // IconName property - This is ugly, Form's properties are not handled well!!
- PropInfo := GetPropInfo(FForm.ClassType, 'IconName');
-  t := GetStrProp(FForm, 'IconName');
- if IsStoredProp(FForm, PropInfo) then
- begin
-  s := s + Ind(1) + 'IconName := ' + QuotedStr(t) + ';' + LineEnding;
- end;
 
   // Hint property - This is ugly, Form's properties are not handled well!!
   PropInfo := GetPropInfo(FForm.ClassType, 'Hint');
@@ -1848,7 +1864,15 @@ begin
     s := s + Ind(1) + 'Hint := ' + QuotedStr(t) + ';' + LineEnding;
   end;
 
-   // ShowHint property - This is ugly, Form's properties are not handled well!!
+  // IconName property - This is ugly, Form's properties are not handled well!!
+  PropInfo := GetPropInfo(FForm.ClassType, 'IconName');
+  t := GetStrProp(FForm, 'IconName');
+  if IsStoredProp(FForm, PropInfo) then
+  begin
+    s := s + Ind(1) + 'IconName := ' + QuotedStr(t) + ';' + LineEnding;
+  end;
+
+  // ShowHint property - This is ugly, Form's properties are not handled well!!
   PropInfo := GetPropInfo(FForm.ClassType, 'ShowHint');
   i := GetOrdProp(FForm, 'ShowHint');
   if IsStoredProp(FForm, PropInfo) then
@@ -1863,7 +1887,7 @@ begin
     end;
   end;
 
-  // BackGroundColor property
+// BackGroundColor property
   PropInfo := GetPropInfo(FForm.ClassType, 'BackGroundColor');
   i := GetOrdProp(FForm, 'BackGroundColor');
   if IsStoredProp(FForm, PropInfo) then
@@ -1873,7 +1897,7 @@ begin
 
 
   //adding other form properties, idented
-  sl := TStringList.Create;
+  sl      := TStringList.Create;
   sl.Text := FFormOther;
   for n := 0 to sl.Count - 1 do
     s := s + Ind(1) + sl.Strings[n] + LineEnding;
@@ -1883,6 +1907,9 @@ begin
 
   // FORM WIDGETS
 
+  ProcessedObjects := TList.Create;
+  AfterObjects := TStringList.Create;
+
   for n := 0 to FWidgets.Count - 1 do
   begin
     wd := TWidgetDesigner(FWidgets.Items[n]);
@@ -1890,26 +1917,38 @@ begin
     if wg.Parent = FForm then
       pwgname := 'self'
     else
+      pwgname := wg.Parent.Name;
+    if wg is TOtherWidget then
+      wgclass := TOtherWidget(wg).wgClassName
+    else
+      wgclass := wg.ClassName;
+
+    s := s + Ind(1) + wg.Name + ' := ' + wgclass + '.Create(' + pwgname + ');' + LineEnding +
+      Ind(1) + 'with ' + wg.Name + ' do' + LineEnding +
+      Ind(1) + 'begin' + LineEnding +
+      GetWidgetSourceImpl(wd, Ind(2), ProcessedObjects, AfterObjects) +
+      Ind(1) + 'end;' + LineEnding;
+
+    ProcessedObjects.Add(wg);
+
+    i := 0;
+    while i < AfterObjects.Count do
     begin
-      if wg.HasParent then
-        pwgname := wg.Parent.Name
-      else
-        pwgname := '';
+      if AfterObjects.Objects[i] = wg then
+      begin
+        s := s + Ind(1) + Trim(AfterObjects.Strings[i])+ LineEnding;
+        AfterObjects.Delete(i);
+        continue;
+      end;
+      inc(i);
     end;
 
-    if pwgname <> '' then
-    begin
-      if wg is TOtherWidget then
-        wgclass := TOtherWidget(wg).wgClassName
-      else
-        wgclass := wg.ClassName;
-
-      s := s + Ind(1) + wg.Name + ' := ' + wgclass + '.Create(' + pwgname + ');' + LineEnding + Ind(1) + 'with ' +
-        wg.Name + ' do' + LineEnding + Ind(1) + 'begin' + LineEnding + GetWidgetSourceImpl(wd, Ind(2)) + Ind(1) +
-        'end;' + LineEnding + LineEnding;
-    end;
+    s := s + LineEnding;
 
   end;
+
+  ProcessedObjects.Free;
+  AfterObjects.Free;
 
   Result := s;
 end;
@@ -1963,13 +2002,16 @@ begin
   Result := s;
 end;
 
-function TFormDesigner.GetWidgetSourceImpl(wd: TWidgetDesigner; ident: string): string;
+function TFormDesigner.GetWidgetSourceImpl(wd: TWidgetDesigner; ident: string;
+  processed: TList; afterobjects: TStrings): string;
 var
   ts, cs: string;
   s: string;
+  l: string;
   wg: TfpgWidget;
   wgc: TVFDWidgetClass;
   n: integer;
+  afterobject: TObject;
 
   procedure SaveItems(Name: string; sl: TStringList);
   var
@@ -2000,15 +2042,18 @@ var
   end;
 }
 begin
-  wg := wd.Widget;
+  wg  := wd.Widget;
   wgc := wd.FVFDClass;
-  s := '';
+  s   := '';
 
   if maindsgn.SaveComponentNames then
     s := s + ident + 'Name := ' + QuotedStr(wg.Name) + ';' + LineEnding;
 
-  s := s + ident + 'SetPosition(' + IntToStr(wg.Left) + ', ' + IntToStr(wg.Top) + ', ' + IntToStr(wg.Width) +
-    ', ' + IntToStr(wg.Height) + ');' + LineEnding;
+  s := s + ident + 'SetPosition('
+      + IntToStr(wg.Left) + ', '
+      + IntToStr(wg.Top) + ', '
+      + IntToStr(wg.Width) + ', '
+      + IntToStr(wg.Height) + ');' + LineEnding;
 
   if wg.Anchors <> [anLeft, anTop] then
   begin
@@ -2038,9 +2083,19 @@ begin
     s := s + ident + 'Anchors := ' + ts + LineEnding;
   end;
 
-  for n := 0 to wgc.PropertyCount - 1 do
-    s := s + wgc.GetProperty(n).GetPropertySource(wg, ident);
+  for n := 0 to wgc.PropertyCount-1 do
+  begin
+    l := wgc.GetProperty(n).GetPropertySource(wg, ident, afterobject);
+    if (afterobject <> nil) and (processed.IndexOf(afterobject) = -1)then
+    begin
+      l := wg.Name+'.'+Trim(l); // it's not going to be within 'with' so we need to use the name
+      afterobjects.AddObject(l, afterobject);
+    end
+    else
+      s := s + l;
+  end;
 
+// fred
   s := s + GetVirtualWidgetSourceImpl(wg);
 
   {
@@ -2068,7 +2123,7 @@ begin
 }
 
   for n := 0 to wd.other.Count - 1 do
-    if (trim(wd.other.Strings[n]) <> '') and (pos('VISIBLE :=', uppercase(wd.other.Strings[n])) = 0) then
+    if trim(wd.other.Strings[n]) <> '' then
       s := s + ident + wd.other.Strings[n] + LineEnding;
 
   Result := s;
