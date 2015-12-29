@@ -155,6 +155,7 @@ uses
 
       maindsgn.CreateWindows;
 
+      if SakIsEnabled = true then SAKUnLoadLib;   
       fpgApplication.MainForm := frmMainDesigner;
 
       frmProperties.hide;
@@ -175,10 +176,8 @@ uses
 
       PropList.Free;
 
-    finally
-
-        if SakIsEnabled = true then SAKUnLoadLib;
-        maindsgn.Free;
+   finally
+          maindsgn.Free;
     end;
 
 

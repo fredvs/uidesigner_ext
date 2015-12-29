@@ -18,7 +18,7 @@ order15=0
 order16=0
 [projectoptions]
 projectdir=/home/fred/designer_ext/src
-projectfilename=/home/fred/designer_ext/src/designer_ext.prj
+projectfilename=/home/fred/designer_ext/src/designer_ext_lib.prj
 findinfiledialog=46
  [findinfileadialogfo.subdirs]
  value=0
@@ -168,7 +168,7 @@ options=110
  sortdescend7=0
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=2
+ index=1
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=742
  width0=47
@@ -235,8 +235,8 @@ settings=13
  wsize=0
  active=1
  visible=1
-mainfile=${PROJECTDIR}designer_ext.pas
-targetfile=${PROJECTDIR}/designer_ext
+mainfile=${PROJECTDIR}fpgdxt.pas
+targetfile=${PROJECTDIR}/libfpgdxt.so
 messageoutputfile=
 makecommand=${COMPILER}
 makedir=
@@ -446,7 +446,8 @@ toolparse=1
  0
 toolmessages=1
  0
-toolshortcuts=0
+toolshortcuts=1
+ -1
 fontalias=0
 fontancestors=0
 fontheights=0
@@ -499,7 +500,7 @@ gridsizex=8
 gridsizey=8
 autoindent=1
 blockindent=2
-linenumberson=0
+linenumberson=1
 rightmarginon=1
 rightmarginchars=80
 scrollheight=0
@@ -626,9 +627,9 @@ units=
   a=0,4100,0,define.inc
   )
   (
-  file=${PROJECTDIR}/designer_ext.pas
+  file=${PROJECTDIR}/fpgdxt.pas
   kind=1
-  a=0,4100,0,designer_ext.pas
+  a=0,4100,0,fpgdxt.pas
   )
   (
   file=${PROJECTDIR}/frm_main_designer.pas
@@ -722,8 +723,9 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=38
-finddtext=> 7
+finddtext=library
 findhistory=10
+ library
  > 7
  MainMenu.MenuItem(8)
  onMovemovepanel
@@ -733,10 +735,8 @@ findhistory=10
  88
  move
  tfpgmenuitem
- if sender
 findoptions=1
-editpos=10
- 55,2
+editpos=11
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -744,6 +744,8 @@ editpos=10
  0,-1073741823
  0,-1073741823
  0,-1073741823
+ 0,-1073741823
+ 0,0
  0,-1073741823
  0,-1073741823
 bookmarks0=0
@@ -756,29 +758,33 @@ bookmarks6=0
 bookmarks7=0
 bookmarks8=0
 bookmarks9=0
-sourcefiles=10
+bookmarks10=0
+sourcefiles=11
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
  ${PROJECTDIR}/vfd_widgets.pas
  ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/designer_ext.pas
+ ${PROJECTDIR}/fpgdxt.pas
  ${PROJECTDIR}/frm_main_designer.pas
+ ${PROJECTDIR}/vfd_props.pas
+ ${PROJECTDIR}/fpgdxt.pas
  ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/define.inc
-relpaths=10
+ ${PROJECTDIR}/fpgdxt.pas
+relpaths=11
  frm_main_designer.pas
  frm_vfdforms.pas
  vfd_editors.pas
  vfd_widgets.pas
  define.inc
- designer_ext.pas
+ fpgdxt.pas
  frm_main_designer.pas
+ vfd_props.pas
+ fpgdxt.pas
  vfd_main.pas
- designer_ext.pas
- define.inc
-ismoduletexts=10
+ fpgdxt.pas
+ismoduletexts=11
+ 0
  0
  0
  0
@@ -794,9 +800,21 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
+order=11
+ 0
+ 10
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
 tabsize=60
-firsttab=0
-index=0
+firsttab=4
+index=9
 [layout]
 windowlayout=499
  [mainfo.basedock]

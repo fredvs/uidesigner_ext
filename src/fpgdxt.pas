@@ -3,11 +3,12 @@ This library is the extended version of fpGUI uidesigner.
 With  window list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
+2013 - 2015
 }
 {
     fpGUI  -  Free Pascal GUI Library
 
-    Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2015 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
@@ -23,16 +24,20 @@ fiens@hotmail.com
 
 library fpgdxt ;
 
-// WARNING => => uncoment {$DEFINE library} in vfd_main.pas + frm_main_designer.pas.
+/// for custom compil, like using fpgui-dvelop, Java library =>  edit define.inc
+{$I define.inc}
 
 {$mode objfpc}{$H+}
 
-uses {$IFDEF UNIX}
+uses{$IFDEF UNIX}
   cthreads, {$ENDIF}
+  fpg_main,
   fpg_iniutils,
-  sysutils,
-   RunOnce_PostIt,
+  SysUtils,
+  RunOnce_PostIt,
+  sak_fpg,
   fpg_cmdlineparams,
+
   fpg_style_anim_round_silver_horz,
   fpg_style_round_silver_flat_horz,
   fpg_style_anim_round_silver_flat_horz,
@@ -67,45 +72,58 @@ uses {$IFDEF UNIX}
   fpg_style_SystemColors,
   fpg_style_SystemColorsMyStyle1,
   fpg_style_SystemColorsMyStyle2,
+
   fpg_stylemanager,
-  fpg_main,
   vfd_main,
   frm_main_designer,
   vfd_widgets;
- 
-//procedure fpgdxthide(PEnv: pointer; Obj: pointer); cdecl; // Java 
- procedure fpgdxthide(); cdecl; // native
+
+{$IFDEF java}
+procedure fpgdxthide(PEnv: pointer; Obj: pointer); cdecl; // Java
+ {$ELSE}
+procedure fpgdxthide(); cdecl; // native
+ {$ENDIF}
  begin
    frmMainDesigner.hide;
    frmProperties.hide;
  end;
- 
-//procedure fpgdxtclose(PEnv: pointer; Obj: pointer); cdecl; // Java 
- procedure fpgdxtclose(); cdecl; // native
+
+{$IFDEF java}
+procedure fpgdxtclose(PEnv: pointer; Obj: pointer); cdecl; // Java
+ {$ELSE}
+procedure fpgdxtclose(); cdecl; // native
+ {$ENDIF}
  begin
    frmMainDesigner.hide;
    frmProperties.hide;
  end;
- 
-//function fpgdxtloadfile(PEnv: pointer; Obj: pointer; afilename : PChar); cdecl; // Java 
+
+{$IFDEF java}
+function fpgdxtloadfile(PEnv: pointer; Obj: pointer; afilename : PChar); cdecl; // Java
+ {$ELSE}
  function fpgdxtloadfile(afilename : PChar) : integer ; cdecl; // native
- begin
+ {$ENDIF}
+begin
   if FileExists(afilename) then
   begin
     maindsgn.EditedFileName := afilename;
     maindsgn.OnLoadFile(maindsgn);
   end;
   end;
- 
-//procedure fpgdxtmainproc(PEnv: pointer; Obj: pointer); cdecl; // Java
-  procedure fpgdxtmainproc(); cdecl; // native
+
+ {$IFDEF java}
+procedure fpgdxtmainproc(PEnv: pointer; Obj: pointer); cdecl; // Java
+ {$ELSE}
+procedure fpgdxtmainproc(); cdecl; // native
+ {$ENDIF}
    var
-    filedir: string;
+    filedir, ordir: string;
   begin
     ifonlyone := false;
     filedir := '';
-
-    if (isrunningIDE('typhon') = False) and (isrunningIDE('lazarus') = False) then
+      ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
+    if (isrunningIDE('typhon') = False) and (isrunningIDE('lazarus') = False) and
+      (isrunningIDE('ideu') = False) and (isrunningIDE('ideU') = False) then
     begin
         if  gINI.ReadBool('Options', 'RunOnlyOnce', true) = true then
       begin
@@ -147,29 +165,38 @@ uses {$IFDEF UNIX}
       fpgApplication.MainForm := frmMainDesigner;
 
      frmProperties.hide;
+       dirsakit := gINI.ReadString('Options', 'SakitDir', ordir);
+
+    if (directoryexists(dirsakit + directoryseparator +'sakit'))and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
+     then SAKLoadlib(dirsakit);
+
+    fpgApplication.ShowHint:=true;
+
       fpgApplication.Run;
 
       PropList.Free;
 
     finally
+         if SakIsEnabled = true then SAKUnLoadLib;
       maindsgn.Free;
     end;
   end;
   
   
 exports
-  //{  // native
-  fpgdxtmainproc name 'fpgdxtmainproc',
+
+{$IFDEF java}
+// Java
+fpgdxtmainproc name 'Java_fpgdxt_mainproc',
+fpgdxtclose name 'Java_fpgdxt_close',
+fpgdxthide name 'Java_fpgdxt_loadfile',
+fpgdxtloadfile name  'Java_fpgdxt_loadfile' ;
+ {$ELSE}
+// native
+ fpgdxtmainproc name 'fpgdxtmainproc',
   fpgdxtclose name 'fpgdxtclose',
   fpgdxtloadfile name 'fpgdxtloadfile',
   fpgdxthide name 'fpgdxthide';
-  //}
- 
- { // Java
- fpgdxtmainproc name 'Java_fpgdxt_mainproc',
- fpgdxtclose name 'Java_fpgdxt_close',
- fpgdxthide name 'Java_fpgdxt_loadfile',
- fpgdxtloadfile name  'Java_fpgdxt_loadfile' ;
-}
+ {$ENDIF}
 
 end.

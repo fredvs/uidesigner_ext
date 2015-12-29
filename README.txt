@@ -1,6 +1,7 @@
 designer_ext is the extended version of fpGUI uiDesigner.
 
 With : 
+voice assisted,
 auto-add units in uses section,
 run-only-once option, window list,
 undo's feature,
@@ -12,6 +13,9 @@ and much more...
 There are also patches for integration with fpc, Lazarus, Typhon, Geany,...
 
 Added /sakit (speecher assistive kit) => to make designer_ext "assistivized".
+
+Here compiled release with sakit included:
+=> https://github.com/fredvs/uidesigner_ext/releases/tag/1.9
 
 Designer_ext needs fpGUI =>
 https://github.com/graemeg/fpgui/
