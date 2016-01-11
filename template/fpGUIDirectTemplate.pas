@@ -45,7 +45,6 @@ end;
     fpgApplication.MainForm := frm;
     try
       frm.Show;
-      frm.UpdateWindowPosition;
       fpgApplication.Run;
     finally
       frm.Free;

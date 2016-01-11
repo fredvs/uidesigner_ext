@@ -8,7 +8,7 @@ unit plugmanager ;
 ////////////////////////////////////////////////////////////////////////////////
 
 /// for custom compil, like using fpgui-dvelop =>  edit define.inc
-{$I define.inc}
+// {$I define.inc}
 
 interface
 
@@ -61,15 +61,15 @@ implementation
 
  procedure TPlugin.execute;
   begin
-if fpgdlib_isloaded then
- h_fpgdxt.fpgdxtmainproc() ;
-  end;  
+   fpgdxtloadlib('/home/fred/designer_ext/src/libfpgdxt.so')  ;
+   fpgdxtmainproc() ;
+    end;
 
 function fpgd_loadlib(const libfilename: string): boolean;
 begin
- fpgdlib_isloaded := h_fpgdxt.fpgdxtloadlib(libfilename);
- result := fpgdlib_isloaded ;
- fpgplug  := TPlugin.Create(true) ;
+// fpgdlib_isloaded := h_fpgdxt.fpgdxtloadlib(libfilename);
+// result := fpgdlib_isloaded ;
+fpgplug  := TPlugin.Create(true) ;
 end;
 
 procedure fpgd_unloadlib();
@@ -99,7 +99,7 @@ function fpgd_loadfile(afilename : PChar) : integer ;
  
   procedure fpgd_mainproc(); 
   begin
-      fpgplug.execute;
+     fpgplug.execute;
     end;
     
 end.

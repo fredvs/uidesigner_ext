@@ -28,7 +28,8 @@ var
   fpgdxtloadfile: function(afilename : PChar) : integer ; cdecl;
   fpgdxtclose : procedure(); cdecl;
   fpgdxthide : procedure(); cdecl;
-
+  fpgdxtshow : procedure(); cdecl;
+  fpgdxtprocessmessages : procedure(); cdecl;
  LibHandle:TLibHandle=dynlibs.NilHandle; // this will hold our handle for the lib
  ReferenceCounter : cardinal = 0;  // Reference counter
          
@@ -65,6 +66,10 @@ end  else begin
         GetProcAddress(LibHandle, 'fpgdxtloadfile');
       Pointer(fpgdxthide) :=
         GetProcAddress(LibHandle, 'fpgdxthide');
+       Pointer(fpgdxthide) :=
+        GetProcAddress(LibHandle, 'fpgdxtshow');
+        Pointer(fpgdxtprocessmessages) :=
+        GetProcAddress(LibHandle, 'fpgdxtprocessmessages');
      
     Result := fpgdxtisLoaded;
     ReferenceCounter:=1;   

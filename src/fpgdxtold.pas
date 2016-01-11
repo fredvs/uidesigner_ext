@@ -31,7 +31,6 @@ library fpgdxt ;
 
 uses{$IFDEF UNIX}
   cthreads, {$ENDIF}
-  classes,
   fpg_main,
   fpg_iniutils,
   SysUtils,
@@ -79,23 +78,44 @@ uses{$IFDEF UNIX}
   frm_main_designer,
   vfd_widgets;
 
-type
-   TgraoutThread= class(TThread)
-  protected
-   // maindsgn : TMainDesigner;
-   // frm: TGraout;
-   // evPause: PRTLEvent;  // for pausing   
-    procedure Execute; override;
-    public
-  constructor Create(CreateSuspended: boolean;
-      const StackSize: SizeUInt = DefaultStackSize);
-end;
+{$IFDEF java}
+procedure fpgdxthide(PEnv: pointer; Obj: pointer); cdecl; // Java
+ {$ELSE}
+procedure fpgdxthide(); cdecl; // native
+ {$ENDIF}
+ begin
+   frmMainDesigner.hide;
+   frmProperties.hide;
+ end;
 
-var
-   graoutThread : TgraoutThread;
-   FCrit : TRTLCriticalSection;
-   
-procedure themainproc(); cdecl; 
+{$IFDEF java}
+procedure fpgdxtclose(PEnv: pointer; Obj: pointer); cdecl; // Java
+ {$ELSE}
+procedure fpgdxtclose(); cdecl; // native
+ {$ENDIF}
+ begin
+   frmMainDesigner.hide;
+   frmProperties.hide;
+ end;
+
+{$IFDEF java}
+function fpgdxtloadfile(PEnv: pointer; Obj: pointer; afilename : PChar); cdecl; // Java
+ {$ELSE}
+ function fpgdxtloadfile(afilename : PChar) : integer ; cdecl; // native
+ {$ENDIF}
+begin
+  if FileExists(afilename) then
+  begin
+    maindsgn.EditedFileName := afilename;
+    maindsgn.OnLoadFile(maindsgn);
+  end;
+  end;
+
+ {$IFDEF java}
+procedure fpgdxtmainproc(PEnv: pointer; Obj: pointer); cdecl; // Java
+ {$ELSE}
+procedure fpgdxtmainproc(); cdecl; // native
+ {$ENDIF}
    var
     filedir, ordir: string;
   begin
@@ -129,7 +149,7 @@ procedure themainproc(); cdecl;
       end;
 
     fpgApplication.Initialize;
- //   try
+    try
       RegisterWidgets;
       if not gCommandLineParams.IsParam('style') then
       begin
@@ -142,142 +162,41 @@ procedure themainproc(); cdecl;
 
       maindsgn.CreateWindows;
 
-  fpgApplication.MainForm :=  frmMainDesigner;
-   frmProperties.hide;
- 
+      fpgApplication.MainForm := frmMainDesigner;
+
+     frmProperties.hide;
        dirsakit := gINI.ReadString('Options', 'SakitDir', ordir);
 
     if (directoryexists(dirsakit + directoryseparator +'sakit'))and (gINI.ReadBool('Options', 'EnableAssistive', false) = True)
      then SAKLoadlib(dirsakit);
 
     fpgApplication.ShowHint:=true;
-    fpgApplication.processmessages;
 
-    fpgApplication.Run;
- //LeaveCriticalSection(FCrit);
- //    PropList.Free;
+      fpgApplication.Run;
 
-   // finally
-  //       if SakIsEnabled = true then SAKUnLoadLib;
-  //    maindsgn.Free;
-  //  end;
- 
+      PropList.Free;
+
+    finally
+         if SakIsEnabled = true then SAKUnLoadLib;
+      maindsgn.Free;
+    end;
   end;
-
-constructor TgraoutThread.Create(CreateSuspended: boolean;
-  const StackSize: SizeUInt);
-  begin
-   inherited Create(CreateSuspended, StackSize);
-  FreeOnTerminate := true;
-  Priority :=  tpTimeCritical;
-end;
-
-   procedure TgraoutThread.execute();
-begin
-  InitCriticalSection(FCrit);
-//  EnterCriticalSection(FCrit); // not really needed in this proc but it doesn't hurt
-   // try
-       themainproc();
- //  finally
- // LeaveCriticalSection(FCrit); // not really needed in this proc but it doesn't hurt
-//  end;
-end;
-
- {$IFDEF java}
-procedure fpgdxtmainproc(PEnv: pointer; Obj: pointer); cdecl; // Java
- {$ELSE}
-procedure fpgdxtmainproc(); cdecl; // native
- {$ENDIF}
-
-begin
-  graoutthread := TgraoutThread.create(true); // create the thread
-  graoutthread.execute ; // start ?   /// run main graphical procedure of library via thread.execute
-end;
-
-
-{$IFDEF java}
-procedure fpgdxthide(PEnv: pointer; Obj: pointer); cdecl; // Java
- {$ELSE}
-procedure fpgdxthide(); cdecl; // native
- {$ENDIF}
- begin
-EnterCriticalSection(FCrit);
-  frmMainDesigner.hide;
-   frmProperties.hide;
- LeaveCriticalSection(FCrit);
- fpgapplication.processmessages;
- end;
-
- {$IFDEF java}
-procedure fpgdxtprocessmessages(PEnv: pointer; Obj: pointer); cdecl; // Java
- {$ELSE}
- procedure fpgdxtprocessmessages() ; cdecl; // native
- {$ENDIF}
-  begin
-    EnterCriticalSection(FCrit);
- fpgapplication.processmessages;
- LeaveCriticalSection(FCrit);
-  end;
- 
-
-{$IFDEF java}
-procedure fpgdxtclose(PEnv: pointer; Obj: pointer); cdecl; // Java
- {$ELSE}
-procedure fpgdxtclose(); cdecl; // native
- {$ENDIF}
- begin
-EnterCriticalSection(FCrit);
-  fpgapplication.terminate;
- LeaveCriticalSection(FCrit);
- end;
-
-{$IFDEF java}
-procedure fpgdxtshow(PEnv: pointer; Obj: pointer); cdecl; // Java
- {$ELSE}
-procedure fpgdxtshow(); cdecl; // native
- {$ENDIF}
- begin
-EnterCriticalSection(FCrit);
-   frmMainDesigner.show;
-   frmProperties.show;
-LeaveCriticalSection(FCrit);
- fpgapplication.processmessages;
- end;
-
-{$IFDEF java}
-function fpgdxtloadfile(PEnv: pointer; Obj: pointer; afilename : PChar); cdecl; // Java
- {$ELSE}
- function fpgdxtloadfile(afilename : PChar) : integer ; cdecl; // native
- {$ENDIF}
-begin
-  if FileExists(afilename) then
-  begin
-EnterCriticalSection(FCrit);
-    maindsgn.EditedFileName := afilename;
-    maindsgn.OnLoadFile(maindsgn);
-LeaveCriticalSection(FCrit);
- fpgapplication.processmessages;
-  end;
-  end;
-
+  
+  
 exports
 
 {$IFDEF java}
 // Java
 fpgdxtmainproc name 'Java_fpgdxt_mainproc',
 fpgdxtclose name 'Java_fpgdxt_close',
-fpgdxthide name 'Java_fpgdxt_hide',
-fpgdxtshow name 'Java_fpgdxt_show',
-fpgdxtloadfile name  'Java_fpgdxt_loadfile' ,
-fpgdxtprocessmessages name 'Java_fpgdxt_processmessages';
+fpgdxthide name 'Java_fpgdxt_loadfile',
+fpgdxtloadfile name  'Java_fpgdxt_loadfile' ;
  {$ELSE}
 // native
  fpgdxtmainproc name 'fpgdxtmainproc',
   fpgdxtclose name 'fpgdxtclose',
   fpgdxtloadfile name 'fpgdxtloadfile',
-  fpgdxtshow name 'fpgdxtshow',
-  fpgdxthide name 'fpgdxthide',
-  fpgdxtprocessmessages name 'fpgdxt_processmessages';
+  fpgdxthide name 'fpgdxthide';
  {$ENDIF}
 
 end.

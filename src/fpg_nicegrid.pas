@@ -2635,7 +2635,7 @@ var
   ax, ay: Integer;
   ColCnt: Integer;
 
-begin
+ begin
   FUpdating := True;  
   tr := TStringList.Create;
   tc := TStringList.Create;
@@ -2643,8 +2643,8 @@ begin
   TabCnt := 1;
 
   for y := 0 to tr.Count-1 do
-  begin
-    n := 1;
+  begin 
+      n := 1;
     s := tr[y];
     for x := 1 to Length(s) do
       if (s[x] = #9)
@@ -2655,43 +2655,43 @@ begin
   ColCnt := ColCount; // Just to make it fast
 
   if (FSelectArea.Left = FSelectArea.Width) and (FSelectArea.Top = FSelectArea.Height) then
-  begin
+  begin  
 
     for y := 0 to tr.Count-1 do
-    begin
-      tc.Text := StringReplace(tr[y], #9, #13#10, [rfReplaceAll]);
+    begin  
+       tc.Text := StringReplace(tr[y], #9, #13#10, [rfReplaceAll]);
       while (tc.Count < TabCnt)
         do tc.Add('');
       x := 0;
       ax := FCol;
       while (x < tc.Count) do
-      begin
+      begin  
         ay := FRow + y;
         if FColumns[ax].FVisible then
-        begin
+        begin  
           if (ax < ColCnt) and (ay < FRowCount)
             then InternalSetCell(ax, ay, tc[x], True);
           Inc(x);
-        end;
+        end;  
         Inc(ax);
-      end;
-    end;
+      end;  
+    end;   
 
   end else
   begin
 
     ay := FSelectArea.Top;
     while (ay <= FSelectArea.Height) do
-    begin
+    begin 
       tc.Text := StringReplace(tr[(ay - FSelectArea.Top) mod tr.Count], #9, #13#10, [rfReplaceAll]);
       while (tc.Count < TabCnt)
         do tc.Add('');
       ax := FSelectArea.Left;
       x := 0;
       while (ax <= FSelectArea.Width) do
-      begin
+      begin 
         if FColumns[ax].FVisible then
-        begin
+        begin 
           InternalSetCell(ax, ay, tc[x], True);
           Inc(x);
           if (x = tc.Count)
@@ -2717,22 +2717,22 @@ begin
 end;
 
 procedure TfpgNiceGrid.SetGutterFont(const Value: string);
-begin
+ begin  
   if FGutterFont <> Value then
-  begin
+  begin 
     FGutterFont:= Value;
     Invalidate; 
   end;	    
-end;
+ end;
 
 procedure TfpgNiceGrid.SetGutterFontColor(Value: TfpgColor);
-begin
+ begin
   if FGutterFontColor <> Value then
   begin	  
     FGutterFontColor:= Value;
     Invalidate; 
   end;	    
-end;
+ end;
 
 procedure TfpgNiceGrid.SetHeaderFont(Value: string);
 begin

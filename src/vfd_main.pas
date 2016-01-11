@@ -133,8 +133,10 @@ type
   end;
 
 var
+
   maindsgn: TMainDesigner;
-    isnew : boolean = false;
+  
+     isnew : boolean = false;
      isdeloradd : boolean = false;
   ArrayFormDesign: array of TFormDesigner;
   ArrayUndo: array of TUndo;
@@ -352,13 +354,12 @@ begin
  {$ifdef ideu}
  if   (gINI.ReadInteger('Options', 'IDE', 3) = 0)
  {$else}
- if   (gINI.ReadInteger('Options', 'IDE', 0) = 0)
+ if   (gINI.ReadInteger('Options', 'IDE', 0) = 0) or
+ ((IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+ (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False))  or (mayclose = true)
  {$endif}
 
- or (mayclose = true) or
- ((gINI.ReadBool('Options', 'RunOnlyOnce', true) = true) and (IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
- (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False)) or
-  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
+ then
      begin
   if assigned(ATimer) then  ATimer.Enabled:=false;
       fpgapplication.Terminate;

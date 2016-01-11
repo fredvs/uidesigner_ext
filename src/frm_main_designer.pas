@@ -255,6 +255,7 @@ const
   ext_version: string = '1.9';
 
 var
+
   frmProperties: TfrmProperties;
   frmMainDesigner: TfrmMainDesigner;
   ifonlyone: boolean;
@@ -312,7 +313,7 @@ begin
   lblVersion.Text := 'Version: ' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
   lblURL.URL := fpGUIWebsite;
   lblURL.Text := fpGUIWebsite;
-
+ 
   /// => This code gives problem to JEDI code-formater
   lblCompiled.Text := Format(rsCompiledOn, [{$I %date%} + ' ' + {$I %time%}]);
   //
@@ -890,6 +891,7 @@ begin
     ShowHint := True;
     Textcolor := clgray;
     Text := '¬';
+    visible := false;
     OnClick := @maindsgn.OnMini;
   end;
 
@@ -1329,11 +1331,11 @@ windowtitle := MainMenu.MenuItem(8).Text;
 
       {$ifdef ideu}
   x := gINI.ReadInteger('Options', 'IDE', 3)  ;
-   x := idetemp  ;
- {$else}
+  {$else}
   x := gINI.ReadInteger('Options', 'IDE', 0)  ;
- idetemp := x ;
  {$endif}
+ 
+  idetemp := x ;
 
  left := 400;
  top := 10 ;
@@ -1385,18 +1387,22 @@ fpgapplication.ProcessMessages;
    end
   else
   begin
+  
+{$ifdef ideu}
+// if  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
+if 1 = 2 then
+{$else}
+// if  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) or 
+if  ((IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+   (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False)) then
+ {$endif}
 
-
-     if ((IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
-     (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False)) or
-  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
-     begin
+    begin
   btnToFront.tag := 0;
   WindowType := wtwindow;  // with borders, not on front.
     btnOpen.Visible := True;
     btnSave.Left := 69;
-
-   
+  
       panel1.Style := bsflat;
         MainMenu.MenuItem(8).Visible := false;
 
@@ -1425,13 +1431,14 @@ fpgapplication.ProcessMessages;
      
        MainMenu.MenuItem(8).Visible := true;
       panel1.Style := bsLowered;
+      panel1.BorderStyle := bsdouble;
 
     {$ifdef fpgui-develop}
  {$else}
      WindowAttributes:= [waSizeable, waBorderless];
  {$endif}
       
-        LoadIDEparameters(x);
+     if x < 3 then LoadIDEparameters(x);
       end;
 
       {$ifdef fpgui-develop}
@@ -1454,10 +1461,14 @@ fpgapplication.ProcessMessages;
    {$else}
    UpdateWindowPosition;
    {$endif}
-//  frmMultiSelect := Tfrm_multiselect.Create(nil);
+
       fpgApplication.CreateForm(Tfrm_multiselect, frmMultiSelect);
   chlPalette.Tag:=0;
-   //   WindowAttributes:= [waSizeable, waBorderless];
+  
+ {$ifdef ideu}
+
+ {$endif}
+ 
 end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
@@ -1710,17 +1721,17 @@ begin
  //    PanelMove.Visible := True;
 
       if idetemp = 0 then
-  begin
+  begin  
   //    panel1.Style := bsLowered;
   //    panel1.UpdatePosition;
      MainMenu.MenuItem(8).Visible := False;
 
   if trim(maindsgn.p + maindsgn.s) <> '' then
-  begin
+  begin 
     MainMenu.MenuItem(8).Text := '=> ' + maindsgn.p + maindsgn.s;
     MainMenu.MenuItem(8).Visible := True;
-  end;
-  end;
+  end; 
+  end; 
 
    Show;
   if frmisvisible = True then
@@ -2212,7 +2223,7 @@ end;
 procedure TfrmProperties.Vpanelpaint(Sender: TObject);
 var
   y: integer;
-begin
+ begin
 
   virtualpanel.Canvas.SetColor(clblack);
   virtualpanel.Canvas.DrawText(4, 2, 60, 20, 'Visible');
@@ -2267,7 +2278,7 @@ begin
     cbvisible.Width := (virtualpanel.Width div 4) - 1;
     cbenabled.Left := (3 * (virtualpanel.Width div 4)) + 1;
     cbenabled.Width := (virtualpanel.Width div 4) - 1;
-  end
+  end 
   else
   begin
     cbenabled.Visible := False;
@@ -2559,7 +2570,7 @@ begin
 
     ok := False;
     for x := 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do
-    begin
+    begin 
       if pos(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'foc=', TDesignedForm(TheParent).Virtualprop[x]) > 0 then
       begin
         ok := True;

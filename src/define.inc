@@ -2,7 +2,7 @@
 {.$DEFINE fpgui-develop} // uncomment for building with fpgui-develop
 
 // for compiling into library 
-{.$DEFINE library} // uncomment for building library (native and java)
+{.$DEFINE islibrary} // uncomment for building library (native and java)
 {.$DEFINE java}   // uncomment for building java library
 
 // for integration into ideU

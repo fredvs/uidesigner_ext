@@ -48,24 +48,24 @@ findinfiledialog=46
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=MainMenu.MenuItem(8)
+ value=vfd_designer
  history=10
+  vfd_designer
+  vfd_main
+  frmMainDesigner
+  frm_main_designer
+  maindsgn
   MainMenu.MenuItem(8)
   fpg_form
   ideuintegration
   spinedit
   OneClickMove
-  SpinEdit
-  SpinEditFloat
-  HexPanel
-  GetFormDesigner
-  
  [findinfileadialogfo]
  stackedunder=
- x=386
- y=189
- cx=339
- cy=251
+ x=819
+ y=158
+ cx=413
+ cy=247
 finddialog=8
  [finddialogfo.selectedonly]
  value=0
@@ -75,20 +75,32 @@ finddialog=8
  y=205
  cx=331
  cy=116
-replacedialog=15
+replacedialog=27
  [replacedialogfo.promptonreplace]
  value=1
  [replacedialogfo.selectedonly]
  value=0
  [replacedialogfo.replacetext]
- value=DocView
- history=2
+ value=TfrmProperties
+ history=10
+  TfrmProperties
+  TfrmMainDesigner.
+  graoutThread.frmProperties
+  graoutThread.frmMainDesigner
+  graoutThread.TfrmMainDesigner
+  graoutThread.graoutThread.
+  graoutThread.maindsgn
+   {$ifdef islibrary}
+ +   graoutThread.maindsgn.
+ + {$else}
+ +  maindsgn.
+ +  {$endif}
   DocView
   
  [replacedialogfo]
  stackedunder=
- x=142
- y=302
+ x=771
+ y=281
  cx=437
  cy=171
 options=110
@@ -109,7 +121,7 @@ options=110
  sortdescend5=0
  width6=162
  sortdescend6=0
- width7=52
+ width7=53
  sortdescend7=0
  width8=1
  sortdescend8=0
@@ -603,13 +615,41 @@ sigsettings=27
  30,30,T,F
 defaultmake=4
 [breakpoints]
-on=0
-path=0
-line=0
-address=0
-addbkpt=0
-ignore=0
-condition=0
+on=4
+ 0
+ 0
+ -1
+ 0
+path=4
+ /home/fred/designer_ext/src/vfd_main.pas
+ /home/fred/designer_ext/src/fpgdxt.pas
+ /home/fred/designer_ext/src/frm_multiselect.pas
+ /home/fred/designer_ext/src/vfd_main_lib.pas
+line=4
+ 206
+ 93
+ 1520
+ 2265
+address=4
+ 0
+ 0
+ 0
+ 0
+addbkpt=4
+ 0
+ 0
+ 0
+ 0
+ignore=4
+ 0
+ 0
+ 0
+ 0
+condition=4
+ 
+ 
+ 
+ 
 panels=1
  panel1
 units=
@@ -722,75 +762,40 @@ workdirparamhistory=0
 envvarons=0
 [edit]
 hintwidth=462
-hintheight=38
-finddtext=library
+hintheight=200
+finddtext=CreateWindows
 findhistory=10
- library
- > 7
- MainMenu.MenuItem(8)
- onMovemovepanel
- mosemove
- ).enabled
- MenuItem(8)
- 88
- move
- tfpgmenuitem
+ CreateWindows
+ paint
+ TgraoutThread.frmProperties
+ TgraoutThread.frmMainDesigner.
+ frmProperties
+ frmMainDesigner
+ {$ifdef islibrary}
+ TfrmMainDesigner
+ themainproc();
+ execute
 findoptions=1
-editpos=11
+editpos=4
  0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,0
+ 0,4
  0,-1073741823
  0,-1073741823
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
-bookmarks4=0
-bookmarks5=0
-bookmarks6=0
-bookmarks7=0
-bookmarks8=0
-bookmarks9=0
-bookmarks10=0
-sourcefiles=11
- ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/frm_vfdforms.pas
- ${PROJECTDIR}/vfd_editors.pas
- ${PROJECTDIR}/vfd_widgets.pas
+sourcefiles=4
  ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/fpgdxt.pas
- ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/vfd_props.pas
- ${PROJECTDIR}/fpgdxt.pas
- ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/fpgdxt.pas
-relpaths=11
- frm_main_designer.pas
- frm_vfdforms.pas
- vfd_editors.pas
- vfd_widgets.pas
- define.inc
- fpgdxt.pas
- frm_main_designer.pas
+ ${PROJECTDIR}/frm_multiselect.pas
+ ${PROJECTDIR}/vfd_designer_lib.pas
+relpaths=4
+ designer_ext/src/define.inc
  vfd_props.pas
- fpgdxt.pas
- vfd_main.pas
- fpgdxt.pas
-ismoduletexts=11
- 0
- 0
- 0
- 0
- 0
- 0
- 0
+ frm_multiselect.pas
+ vfd_designer_lib.pas
+ismoduletexts=4
  0
  0
  0
@@ -800,21 +805,9 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=11
- 0
- 10
- 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
 tabsize=60
-firsttab=4
-index=9
+firsttab=0
+index=1
 [layout]
 windowlayout=499
  [mainfo.basedock]
@@ -836,7 +829,7 @@ windowlayout=499
  cy=654
  rcx=0
  rcy=0
- wsize=0
+ wsize=4
  active=1
  visible=1
  [targetconsolefo]
@@ -856,7 +849,7 @@ windowlayout=499
  rcy=0
  wsize=0
  active=0
- visible=0
+ visible=1
  [threadsfo]
  splitdir=0
  useroptions=268451945
@@ -924,7 +917,7 @@ windowlayout=499
  [findinfilefo]
  splitdir=0
  useroptions=268451947
- stackedunder=mainfo
+ stackedunder=targetconsolefo
  parent=
  mdistate=0
  nx=0
@@ -949,19 +942,19 @@ windowlayout=499
  ncy=0
  x=0
  y=0
- cx=159
- cy=484
+ cx=189
+ cy=534
  rcx=0
  rcy=0
  [projecttreefo.grid]
- propcolwidthref=1
- width0=170
+ propcolwidthref=4
+ width0=185
  sortdescend0=0
  width1=1
  sortdescend1=0
  sorted=0
  col=0
- row=2
+ row=4
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1159,9 +1152,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=529
- cx=1133
- cy=90
+ y=584
+ cx=1356
+ cy=99
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1260,8 +1253,8 @@ windowlayout=499
  ncy=0
  x=0
  y=0
- cx=1133
- cy=39
+ cx=1356
+ cy=44
  rcx=0
  rcy=0
  [sourcefo]
@@ -1274,10 +1267,10 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=162
+ x=192
  y=0
- cx=971
- cy=484
+ cx=1164
+ cy=534
  rcx=0
  rcy=0
  [cpuc86_64fo]
@@ -1311,9 +1304,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=42
- cx=1133
- cy=484
+ y=47
+ cx=1356
+ cy=534
  rcx=0
  rcy=0
 [targetconsole]

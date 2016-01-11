@@ -1,0 +1,63 @@
+object Form1: TForm1
+  Left = 458
+  Height = 240
+  Top = 217
+  Width = 320
+  Caption = 'Form1'
+  ClientHeight = 240
+  ClientWidth = 320
+  OnActivate = FormActivate
+  OnClick = FormClick
+  OnCreate = FormCreate
+  OnResize = FormResize
+  LCLVersion = '1.5'
+  object Button1: TButton
+    Left = 56
+    Height = 25
+    Top = 16
+    Width = 208
+    Caption = 'Load libfpgdxt library'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object Button2: TButton
+    Left = 56
+    Height = 25
+    Top = 80
+    Width = 208
+    Caption = 'Run Designer_ext from library'
+    OnClick = Button2Click
+    TabOrder = 1
+  end
+  object Button3: TButton
+    Left = 112
+    Height = 25
+    Top = 139
+    Width = 75
+    Caption = 'Button3'
+    OnClick = Button3Click
+    TabOrder = 2
+  end
+  object Button4: TButton
+    Left = 138
+    Height = 25
+    Top = 186
+    Width = 75
+    Caption = 'Button4'
+    TabOrder = 3
+  end
+  object Label1: TLabel
+    Left = 96
+    Height = 15
+    Top = 48
+    Width = 24
+    Caption = '      '
+    ParentColor = False
+  end
+  object Timer1: TTimer
+    Enabled = False
+    OnTimer = Timer1Timer
+    left = 44
+    top = 126
+  end
+end

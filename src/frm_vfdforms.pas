@@ -600,9 +600,17 @@ var
     3: rbedit3.Checked := True;
     4: rbedit4.Checked := True;
   end;
-
-
-  TrackBarUndo.Position := gINI.ReadInteger('Options', 'MaxUndo', 10);
+  
+   {$ifdef ideu}
+ rbideu.top := rbnone.top;
+ rbideu.enabled := false;
+ rbnone.visible := false;
+ rblaz.visible := false;
+ rbtyphon.visible := false;
+ lwarning.visible := false;
+  {$endif}
+ 
+   TrackBarUndo.Position := gINI.ReadInteger('Options', 'MaxUndo', 10);
   CheckBox1.Checked := gINI.ReadBool('Options', 'EnableUndo', True);
   chkautounits.Checked := gINI.ReadBool('Options', 'EnableAutoUnits', True);
 
