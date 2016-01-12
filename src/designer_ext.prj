@@ -19,12 +19,14 @@ order16=0
 [projectoptions]
 projectdir=/home/fred/designer_ext/src
 projectfilename=/home/fred/designer_ext/src/designer_ext.prj
-findinfiledialog=46
+findinfiledialog=48
  [findinfileadialogfo.subdirs]
  value=0
  [findinfileadialogfo.inopenfiles]
  value=0
  [findinfileadialogfo.wholeword]
+ value=0
+ [findinfileadialogfo.inprojectdir]
  value=0
  [findinfileadialogfo.casesensitive]
  value=0
@@ -48,8 +50,9 @@ findinfiledialog=46
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=IsRunningIDE
+ value=fpgui-d
  history=10
+  fpgui-d
   IsRunningIDE
   WindowAttributes
   idetemp
@@ -59,13 +62,12 @@ findinfiledialog=46
   MainMenu.MenuItem(8)
   fpg_form
   ideuintegration
-  spinedit
  [findinfileadialogfo]
  stackedunder=
  x=386
  y=189
- cx=339
- cy=251
+ cx=375
+ cy=276
 finddialog=8
  [finddialogfo.selectedonly]
  value=0
@@ -168,7 +170,7 @@ options=104
  sortdescend7=0
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=1
+ index=2
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=752
  width0=47
@@ -626,7 +628,7 @@ panels=1
 units=
  (
  a=0,4149,6,Pascal Units
- c=15
+ c=16
   (
   file=${PROJECTDIR}/anchors.inc
   kind=1
@@ -656,6 +658,11 @@ units=
   file=/home/fred/designer_ext/src/icons.inc
   kind=1
   a=0,4100,0,icons.inc
+  )
+  (
+  file=vfd_designer.pas
+  kind=1
+  a=0,4100,0,vfd_designer.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_editors.pas
@@ -734,22 +741,20 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=38
-finddtext=ideu
+finddtext=hint
 findhistory=10
+ hint
+ WidgetDesigner
+ acanvas
+ DrawValue
+ showhint
  ideu
  double
  LoadIDEparameters
  WindowAttributes
  wtwindow
- micon
- islibrary
- > 7
- MainMenu.MenuItem(8)
- onMovemovepanel
 findoptions=1
-editpos=14
- 0,-1073741823
- 0,1334
+editpos=22
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -762,6 +767,16 @@ editpos=14
  0,-1073741823
  0,-1073741823
  0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,202
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,257
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -776,37 +791,69 @@ bookmarks10=0
 bookmarks11=0
 bookmarks12=0
 bookmarks13=0
-sourcefiles=14
+bookmarks14=0
+bookmarks15=0
+bookmarks16=0
+bookmarks17=0
+bookmarks18=0
+bookmarks19=0
+bookmarks20=0
+bookmarks21=0
+sourcefiles=22
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
  ${PROJECTDIR}/vfd_widgets.pas
  ${PROJECTDIR}/designer_ext.pas
+ ${PROJECTDIR}/vfd_formparser.pas
+ ${PROJECTDIR}/vfd_resizer.pas
  ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/fpg_nicegrid.pas
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/frm_vfdforms.pas
- ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/vfd_designer.pas
  /home/fred/fpgui/src/gui/fpg_panel.pas
  ${PROJECTDIR}/vfd_main.pas
-relpaths=14
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/vfd_widgets.pas
+ ${PROJECTDIR}/vfd_widgetclass.pas
+ /home/fred/fpgui/src/gui/fpg_label.pas
+ ${PROJECTDIR}/vfd_props.pas
+ ${PROJECTDIR}/vfd_props.pas
+ /home/fred/fpgui/src/corelib/fpg_widget.pas
+ ${PROJECTDIR}/vfd_designer.pas
+relpaths=22
  frm_main_designer.pas
  frm_vfdforms.pas
  vfd_editors.pas
  vfd_widgets.pas
  designer_ext.pas
+ vfd_formparser.pas
+ vfd_resizer.pas
  vfd_main.pas
- define.inc
- fpg_nicegrid.pas
  define.inc
  define.inc
  frm_vfdforms.pas
- define.inc
+ vfd_designer.pas
  fpgui/src/gui/fpg_panel.pas
  vfd_main.pas
-ismoduletexts=14
+ define.inc
+ vfd_widgets.pas
+ vfd_widgetclass.pas
+ fpgui/src/gui/fpg_label.pas
+ vfd_props.pas
+ vfd_props.pas
+ fpgui/src/corelib/fpg_widget.pas
+ vfd_designer.pas
+ismoduletexts=22
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -826,24 +873,32 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=14
+order=22
  0
- 13
- 12
- 10
- 8
  1
  2
- 9
  3
  4
- 11
  5
  6
  7
+ 8
+ 9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 21
+ 16
+ 17
+ 18
+ 19
+ 20
 tabsize=60
-firsttab=1
-index=5
+firsttab=13
+index=17
 [layout]
 windowlayout=499
  [mainfo.basedock]
@@ -859,13 +914,13 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=314
- y=32
+ x=210
+ y=57
  cx=961
  cy=621
  rcx=0
  rcy=0
- wsize=4
+ wsize=0
  active=1
  visible=1
  [targetconsolefo]
@@ -907,7 +962,7 @@ windowlayout=499
  [memoryfo]
  splitdir=0
  useroptions=268451963
- stackedunder=cpuc86_64fo
+ stackedunder=cpui386fo
  parent=
  mdistate=0
  nx=0
@@ -934,7 +989,7 @@ windowlayout=499
  [disassfo]
  splitdir=0
  useroptions=268451947
- stackedunder=componentstorefo
+ stackedunder=
  parent=
  mdistate=0
  nx=0
@@ -953,7 +1008,7 @@ windowlayout=499
  [findinfilefo]
  splitdir=0
  useroptions=268451947
- stackedunder=mainfo
+ stackedunder=
  parent=
  mdistate=0
  nx=0
@@ -979,7 +1034,7 @@ windowlayout=499
  x=0
  y=0
  cx=189
- cy=535
+ cy=458
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -989,8 +1044,8 @@ windowlayout=499
  width1=1
  sortdescend1=0
  sorted=0
- col=1
- row=2
+ col=0
+ row=-1073741823
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1096,7 +1151,7 @@ windowlayout=499
  [symbolfo]
  splitdir=0
  useroptions=268451963
- stackedunder=findinfilefo
+ stackedunder=
  parent=
  mdistate=0
  nx=0
@@ -1188,15 +1243,15 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=584
- cx=1356
- cy=98
+ y=501
+ cx=951
+ cy=84
  rcx=0
  rcy=0
  [componentstorefo]
  splitdir=0
  useroptions=268460155
- stackedunder=symbolfo
+ stackedunder=
  parent=
  mdistate=0
  nx=0
@@ -1259,7 +1314,7 @@ windowlayout=499
  [componentpalettefo]
  splitdir=0
  useroptions=268460139
- stackedunder=disassfo
+ stackedunder=mainfo
  parent=
  mdistate=0
  nx=0
@@ -1289,8 +1344,8 @@ windowlayout=499
  ncy=0
  x=0
  y=0
- cx=1356
- cy=43
+ cx=951
+ cy=37
  rcx=0
  rcy=0
  [sourcefo]
@@ -1305,11 +1360,11 @@ windowlayout=499
  ncy=0
  x=192
  y=0
- cx=1164
- cy=535
+ cx=759
+ cy=458
  rcx=0
  rcy=0
- [cpuc86_64fo]
+ [cpui386fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
@@ -1320,10 +1375,10 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=183
- y=113
- cx=352
- cy=277
+ x=337
+ y=295
+ cx=273
+ cy=207
  rcx=0
  rcy=0
  wsize=0
@@ -1340,9 +1395,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=46
- cx=1356
- cy=535
+ y=40
+ cx=951
+ cy=458
  rcx=0
  rcy=0
 [targetconsole]

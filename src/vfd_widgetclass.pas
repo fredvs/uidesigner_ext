@@ -50,7 +50,9 @@ type
   end;
 
 
-  TVFDWidgetProperty = class(TObject)
+ TVFDWidgetProperty = class(TObject)
+  
+ //  TVFDWidgetProperty = class(TfpgWidget)
   public
     Name: string;
     Description: string;
@@ -63,6 +65,7 @@ type
     procedure   DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas; rect: TfpgRect; flags: integer); virtual;
     function    CreateEditor(AOwner: TComponent): TVFDPropertyEditor; virtual;
     procedure   OnExternalEdit(wg: TfpgWidget); virtual;
+   
   end;
 
 

@@ -252,6 +252,11 @@ begin
     resizer[n] := nil;
   FSelected := False;
   wg.MouseCursor := mcDefault;
+ 
+  // fred hint
+  wg.hint := wg.name;
+  wg.showhint := true;
+  
   other := TStringList.Create;
    MarkForDeletion := False;
 end;
