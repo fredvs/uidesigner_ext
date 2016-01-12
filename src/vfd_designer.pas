@@ -1475,7 +1475,11 @@ begin
 
   try
     if SelectedWidget = wg then
-      wg.Name := s
+    begin
+      wg.Name := s;
+      // fred hint
+      wg.Hint := wg.Name;
+      end
     else
       SelectedWidget := wg;
   except

@@ -628,7 +628,7 @@ panels=1
 units=
  (
  a=0,4149,6,Pascal Units
- c=16
+ c=17
   (
   file=${PROJECTDIR}/anchors.inc
   kind=1
@@ -643,6 +643,11 @@ units=
   file=${PROJECTDIR}/designer_ext.pas
   kind=1
   a=0,4100,0,designer_ext.pas
+  )
+  (
+  file=frm_main_designer.pas
+  kind=1
+  a=0,4100,0,frm_main_designer.pas
   )
   (
   file=${PROJECTDIR}/frm_main_designer.pas
@@ -741,8 +746,11 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=38
-finddtext=hint
+finddtext=PropNameChange
 findhistory=10
+ PropNameChange
+ OnPropNameChange
+ afterc
  hint
  WidgetDesigner
  acanvas
@@ -750,11 +758,8 @@ findhistory=10
  showhint
  ideu
  double
- LoadIDEparameters
- WindowAttributes
- wtwindow
 findoptions=1
-editpos=22
+editpos=26
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -776,7 +781,11 @@ editpos=22
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,257
+ 0,-1073741823
+ 0,1909
+ 0,1611
+ 0,1475
+ 0,167
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -799,7 +808,11 @@ bookmarks18=0
 bookmarks19=0
 bookmarks20=0
 bookmarks21=0
-sourcefiles=22
+bookmarks22=0
+bookmarks23=0
+bookmarks24=0
+bookmarks25=0
+sourcefiles=26
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
@@ -822,7 +835,11 @@ sourcefiles=22
  ${PROJECTDIR}/vfd_props.pas
  /home/fred/fpgui/src/corelib/fpg_widget.pas
  ${PROJECTDIR}/vfd_designer.pas
-relpaths=22
+ ${PROJECTDIR}/frm_main_designer.pas
+ ${PROJECTDIR}/vfd_main.pas
+ ${PROJECTDIR}/vfd_designer.pas
+ ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
+relpaths=26
  frm_main_designer.pas
  frm_vfdforms.pas
  vfd_editors.pas
@@ -845,7 +862,15 @@ relpaths=22
  vfd_props.pas
  fpgui/src/corelib/fpg_widget.pas
  vfd_designer.pas
-ismoduletexts=22
+ frm_main_designer.pas
+ vfd_main.pas
+ vfd_designer.pas
+ fpg_style_anim_round_silver_horz.pas
+ismoduletexts=26
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -873,7 +898,7 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=22
+order=26
  0
  1
  2
@@ -892,13 +917,17 @@ order=22
  15
  21
  16
+ 22
+ 23
+ 24
+ 25
  17
  18
  19
  20
 tabsize=60
 firsttab=13
-index=17
+index=21
 [layout]
 windowlayout=499
  [mainfo.basedock]
@@ -915,12 +944,12 @@ windowlayout=499
  ncx=0
  ncy=0
  x=210
- y=57
+ y=58
  cx=961
  cy=621
  rcx=0
  rcy=0
- wsize=0
+ wsize=4
  active=1
  visible=1
  [targetconsolefo]
@@ -962,7 +991,7 @@ windowlayout=499
  [memoryfo]
  splitdir=0
  useroptions=268451963
- stackedunder=cpui386fo
+ stackedunder=cpuc86_64fo
  parent=
  mdistate=0
  nx=0
@@ -1034,7 +1063,7 @@ windowlayout=499
  x=0
  y=0
  cx=189
- cy=458
+ cy=535
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1243,9 +1272,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=501
- cx=951
- cy=84
+ y=584
+ cx=1356
+ cy=98
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1344,8 +1373,8 @@ windowlayout=499
  ncy=0
  x=0
  y=0
- cx=951
- cy=37
+ cx=1356
+ cy=43
  rcx=0
  rcy=0
  [sourcefo]
@@ -1360,11 +1389,11 @@ windowlayout=499
  ncy=0
  x=192
  y=0
- cx=759
- cy=458
+ cx=1164
+ cy=535
  rcx=0
  rcy=0
- [cpui386fo]
+ [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
@@ -1375,10 +1404,10 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=337
- y=295
- cx=273
- cy=207
+ x=183
+ y=113
+ cx=352
+ cy=277
  rcx=0
  rcy=0
  wsize=0
@@ -1395,9 +1424,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=40
- cx=951
- cy=458
+ y=46
+ cx=1356
+ cy=535
  rcx=0
  rcy=0
 [targetconsole]

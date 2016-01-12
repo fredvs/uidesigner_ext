@@ -1607,7 +1607,7 @@ begin
      SakCancel;
       SAKPause();
       end;
-
+      
     calculwidget := False;
     SelectedForm.OnPropNameChange(Sender);
     if (ifundo = False) and (enableundo = True) then
