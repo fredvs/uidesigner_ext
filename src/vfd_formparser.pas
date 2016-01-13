@@ -453,6 +453,7 @@ var
   ival: longint;
   bval: boolean;
    TheParent : TfpgWidget ;
+   stemp : string;
   Begin
     {
     TheParent := wg ;
@@ -463,6 +464,49 @@ var
   TheParent := WidgetParentForm(TfpgWidget(wg));
 
     result := false ;
+     if ident = 'SHOWHINT' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'shi=True');
+       frmProperties.cbshowhint.Items[0] ;
+                   end else  begin
+       frmProperties.cbshowhint.Items[1] ;
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' +'shi=False');
+       end;
+       end;
+      end else  ///// other widget
+      begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+        bval := GetBoolValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      if bval = true then
+      begin
+        TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  wg.Name + '.' + 'shi=True');
+       frmProperties.cbshowhint.Items[0] ;
+            end else  begin
+       frmProperties.cbshowhint.Items[1] ;
+       TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +  wg.Name + '.'  + 'shi=False');
+       end;
+       end;
+      end;
+        ///////////////
+       end
+     else
    if ident = 'SIZEABLE' then
   begin
     result := (wg is TfpgForm);
@@ -687,7 +731,40 @@ var
        frmProperties.edmaxheight.Text := inttostr(ival) ;
       end;
      end;
-    end    else if ident = 'TAG' then
+    end  
+     else if ident = 'HINT' then
+  begin
+    result := (wg is TfpgForm);
+    if result then
+    begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+       stemp := GetStringValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then
+      begin
+       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'hin=' + stemp);  ///
+      frmProperties.edhint.Text := stemp ;
+     end;
+     end else  ///// other widget
+      begin
+      result := CheckSymbol(s, ':=');
+      if result then
+      begin
+       // ival := GetIntValue(s);
+      stemp := GetStringValue(s);
+        result  := CheckSymbol(s, ';');
+      end;
+      if result then begin
+      TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' + wg.Name + '.' + 'hin=' + stemp);  ///
+      frmProperties.edhint.Text := stemp ;
+       end;
+      end;
+        ///////////////
+    end
+      else if ident = 'TAG' then
   begin
     result := (wg is TfpgForm);
     if result then

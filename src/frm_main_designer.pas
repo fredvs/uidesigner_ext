@@ -217,8 +217,8 @@ type
     btnAnLeft, btnAnTop, btnAnRight, btnAnBottom: TfpgButton;
     lstProps: TwgPropertyList;
     virtualpanel: Tfpgpanel;
-    cbsizeable, cbfullscreen, cbvisible, cbenabled, cbWindowPosition, cbFocusable: TfpgCombobox;
-    edmaxheight, edminheight, edmaxwidth, edminwidth, edTag: Tfpgedit;
+    cbsizeable, cbfullscreen, cbvisible, cbenabled, cbWindowPosition, cbFocusable, cbshowhint: TfpgCombobox;
+    edmaxheight, edminheight, edmaxwidth, edminwidth, edTag, edhint: Tfpgedit;
 
     procedure AfterCreate; override;
     procedure BeforeDestruction; override;
@@ -1728,7 +1728,7 @@ begin
 
   if trim(maindsgn.p + maindsgn.s) <> '' then
   begin 
-    MainMenu.MenuItem(8).Text := '=> ' + maindsgn.p + maindsgn.s;
+    MainMenu.MenuItem(8).Text := '   ' + maindsgn.p + maindsgn.s;
     MainMenu.MenuItem(8).Visible := True;
   end; 
   end; 
@@ -1956,6 +1956,16 @@ begin
   cbsizeable.BackgroundColor := $E0E0E0;
   cbsizeable.Height := 21;
   cbsizeable.OnExit := @VirtualPropertiesUpdate;
+  
+  cbshowhint := TfpgCombobox.Create(virtualpanel);
+  cbshowhint.Items.Add('True');
+  cbshowhint.Items.Add('False');
+  cbshowhint.FocusItem := 0;
+  cbshowhint.Text := 'True';
+  cbshowhint.name := 'showhint';
+  cbshowhint.BackgroundColor := $E0E0E0;
+  cbshowhint.Height := 21;
+  cbshowhint.OnExit := @VirtualPropertiesUpdate;
 
   cbvisible := TfpgCombobox.Create(virtualpanel);
   cbvisible.Items.Add('True');
@@ -2038,6 +2048,13 @@ begin
   edTag.Height := 21;
   edTag.OnExit := @VirtualPropertiesUpdate;
    edTag.name := 'Tag';
+   
+   edhint := TfpgEdit.Create(virtualpanel);
+  edhint.Text := '';
+  edhint.BackgroundColor := $E0E0E0;
+  edhint.Height := 21;
+  edhint.OnExit := @VirtualPropertiesUpdate;
+   edhint.name := 'Hint';
 
   y := virtualpanel.Bottom + 5;
 
@@ -2199,16 +2216,19 @@ begin
   edName.UpdateWindowPosition;
  {$endif}
 
-  if virtualpanel.Height < 50 then
+  if virtualpanel.Height < 70 then
   begin
-    lstProps.Height := 186 + frmproperties.Height - 448;
-    virtualpanel.top := frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
+      frmproperties.lstProps.Height := frmproperties.Height - 294;
+      frmproperties.virtualpanel.top :=
+        frmproperties.lstProps.Height + frmproperties.lstProps.top +1;
+     
   end
   else
   begin
-    lstProps.Height := 97 + frmproperties.Height - 448;
-    virtualpanel.top := frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
-  end;
+     frmproperties.lstProps.Height := 53;
+      frmproperties.virtualpanel.top :=
+        frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
+     end;
 
   {$ifdef fpgui-develop}
   virtualpanel.UpdatePosition;
@@ -2222,35 +2242,67 @@ end;
 
 procedure TfrmProperties.Vpanelpaint(Sender: TObject);
 var
-  y: integer;
+  y, z: integer;
  begin
+ {
+     cbsizeable.visible := false;
+     cbfocusable.visible := false;
+     cbvisible.visible := false;
+     cbfullscreen.visible := false;
+     cbenabled.visible := false;
+     edminwidth.visible := false;
+     edmaxwidth.visible := false;
+     edminheight.visible := false;
+     edmaxheight.visible := false;
+     cbwindowposition.visible := false;
+     edtag.visible := false;
+      edhint.visible := false;
+       cbshowhint.visible := false;
+       }
+       
+  
 
   virtualpanel.Canvas.SetColor(clblack);
   virtualpanel.Canvas.DrawText(4, 2, 60, 20, 'Visible');
-  if virtualpanel.Height > 66 then
-    virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2, 60, 20, 'Enabled');
+ // if virtualpanel.Height > 68 then
+   // virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2, 60, 20, 'Enabled') else
+     virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2, 60, 20, 'ShowHint') ;
 
-  y := 22;
+ y := 22;
+ z := 1 ;
+ 
+  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'Hint');
+  
+  inc(z);
+  y := 22*z;
+  
   virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'Focusable');
-  if virtualpanel.Height > 66 then
+    if virtualpanel.Height > 70 then
     virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'Tag')
   else
     virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 35, 2 + y, 60, 20, 'Tag');
 
-  y := 22 * 2;
+if virtualpanel.Height > 70 then 
+begin
+  inc(z);
+  y := 22*z;
   virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'FullScreen');
   virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'Sizable');
 
-  y := 22 * 3;
+  inc(z);
+  y := 22*z;
   virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'MinWidth');
   virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'MaxWidth');
 
-  y := 22 * 4;
+  inc(z);
+  y := 22*z;
   virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'MinHeight');
   virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'MaxHeight');
 
-  y := 22 * 5;
+ inc(z);
+  y := 22*z;
   virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'WindowPosition');
+end;
 
   y := 22;
   virtualpanel.Canvas.SetColor(clgray);
@@ -2260,69 +2312,95 @@ var
     y := y + 22;
   end;
 
-  virtualpanel.Canvas.DrawLine(0, 0, virtualpanel.Width - 1, 0);   //top
-  virtualpanel.Canvas.DrawLine(0, virtualpanel.Height - 1, virtualpanel.Width - 1, virtualpanel.Height - 1);  //bottom
-  virtualpanel.Canvas.DrawLine(virtualpanel.Width - 1, 0, virtualpanel.Width - 1, virtualpanel.Height - 1);  //right
-  virtualpanel.Canvas.DrawLine(0, 0, 0, virtualpanel.Height - 1);   // left
+  virtualpanel.Canvas.DrawLine(0, 0, virtualpanel.Width -1, 0);   //top
+  virtualpanel.Canvas.DrawLine(0, virtualpanel.Height, virtualpanel.Width - 1, virtualpanel.Height);  //bottom
+  virtualpanel.Canvas.DrawLine(virtualpanel.Width - 1, 0, virtualpanel.Width - 1, virtualpanel.Height);  //right
+  virtualpanel.Canvas.DrawLine(0, 0, 0, virtualpanel.Height );   // left
 
   y := 22;
+  z := 1;
 
   cbvisible.top := 1;
-  cbenabled.top := 1;
+  cbshowhint.top := 1;
 
-  if virtualpanel.Height > 66 then
-  begin
-    cbenabled.Visible := True;
+    cbenabled.Visible := false;
+     cbshowhint.Visible := true;
+    
     cbvisible.Left := (virtualpanel.Width div 4) + 1;
-    ;
+   
     cbvisible.Width := (virtualpanel.Width div 4) - 1;
-    cbenabled.Left := (3 * (virtualpanel.Width div 4)) + 1;
-    cbenabled.Width := (virtualpanel.Width div 4) - 1;
-  end 
-  else
-  begin
-    cbenabled.Visible := False;
-    cbvisible.Width := (virtualpanel.Width div 4) - 1;
-    cbvisible.Left := 82;
-    cbvisible.Width := (virtualpanel.Width) - cbvisible.Left - 1;
-  end;
-
-  cbfocusable.top := y + 1;
-  cbfocusable.Left := (virtualpanel.Width div 4) + 1;
+    cbshowhint.Left := (3 * (virtualpanel.Width div 4)) + 1;
+    cbshowhint.Width := (virtualpanel.Width div 4) - 1;
+    
+    
+   edhint.top := y +1;
+   edhint.left := (virtualpanel.Width div 4) + 1;
+   edhint.width := (3 * (virtualpanel.Width div 4))  ;
+     edhint.visible := true;
+ 
+   inc(z);
+  y := 22*z;
+     cbfocusable.top := y + 1;
+   cbfocusable.Left := (virtualpanel.Width div 4) + 1;
   cbfocusable.Width := (virtualpanel.Width div 4) - 1;
-
+ cbfocusable.visible := true;
+ 
   edtag.top := y + 1;
   edtag.Left := (3 * (virtualpanel.Width div 4)) + 1;
   edtag.Width := (virtualpanel.Width div 4) - 1;
-
-  cbfullscreen.top := (y * 2) + 1;
+ edtag.visible := true;
+ 
+if virtualpanel.Height > 70 then 
+begin
+    inc(z);
+  y := 22*z;
+  cbfullscreen.top := y +1;
   cbfullscreen.Left := (virtualpanel.Width div 4) + 1;
   cbfullscreen.Width := (virtualpanel.Width div 4) - 1;
 
-  cbsizeable.top := (y * 2) + 1;
+  cbsizeable.top := y + 1;
   cbsizeable.Left := (3 * (virtualpanel.Width div 4)) + 1;
   cbsizeable.Width := (virtualpanel.Width div 4) - 1;
 
-  edminwidth.top := (y * 3) + 1;
+   inc(z);
+  y := 22*z;
+  edminwidth.top := y + 1;
   edminwidth.Left := (virtualpanel.Width div 4) + 1;
   edminwidth.Width := (virtualpanel.Width div 4) - 1;
 
-  edmaxwidth.top := (y * 3) + 1;
+  edmaxwidth.top := y + 1;
   edmaxwidth.Left := (3 * (virtualpanel.Width div 4)) + 1;
   edmaxwidth.Width := (virtualpanel.Width div 4) - 1;
 
-  edminheight.top := (y * 4) + 1;
+   inc(z);
+  y := 22*z;
+  edminheight.top :=y+ 1;
   edminheight.Left := (virtualpanel.Width div 4) + 1;
   edminheight.Width := (virtualpanel.Width div 4) - 1;
 
-  edmaxheight.top := (y * 4) + 1;
+  edmaxheight.top := y + 1;
   edmaxheight.Left := (3 * (virtualpanel.Width div 4)) + 1;
   edmaxheight.Width := (virtualpanel.Width div 4) - 1;
 
-  cbwindowposition.top := (y * 5) + 1;
+ inc(z);
+  y := 22*z;
+  cbwindowposition.top := y + 1;
   cbwindowposition.Left := 105;
   cbwindowposition.Width := (virtualpanel.Width) - cbwindowposition.Left - 1;
-
+     
+   {
+     cbsizeable.visible := true;
+     cbfocusable.visible := true;
+     cbvisible.visible := true;
+     cbfullscreen.visible := true;
+     cbenabled.visible := true;
+     edminwidth.visible := true;
+     edmaxwidth.visible := true;
+     edminheight.visible := true;
+     edmaxheight.visible := true;
+     cbwindowposition.visible := true;
+}
+end;
    {$ifdef fpgui-develop}
    cbsizeable.UpdatePosition;
      cbfocusable.UpdatePosition;
@@ -2335,6 +2413,8 @@ var
      edmaxheight.UpdatePosition;
      cbwindowposition.UpdatePosition;
      edtag.UpdatePosition;
+      edhint.UpdatePosition;
+       cbshowhint.UpdatePosition;
  {$else}
   cbsizeable.UpdateWindowPosition;
   cbfocusable.UpdateWindowPosition;
@@ -2347,6 +2427,8 @@ var
   edmaxheight.UpdateWindowPosition;
   cbwindowposition.UpdateWindowPosition;
   edtag.UpdateWindowPosition;
+   edhint.UpdateWindowPosition;
+   cbshowhint.UpdateWindowPosition;
  {$endif}
 
 end;
@@ -2457,6 +2539,18 @@ begin
     if ok = False then
       TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'ena=' + cbenabled.Text);
 
+   ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'shi=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'shi=' + cbshowhint.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'shi=' + cbshowhint.Text);
+
     ok := False;
     for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
     begin
@@ -2529,6 +2623,17 @@ begin
     if ok = False then
       TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'tag=' + edtag.Text);
 
+    ok := False;
+    for x := 0 to TDesignedForm(TheWidget).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheWidget).Name + '.' + 'hin=', TDesignedForm(TheWidget).Virtualprop[x]) > 0 then
+      begin
+        TDesignedForm(TheWidget).Virtualprop[x] := TDesignedForm(TheWidget).Name + '.' + 'hin=' + edhint.Text;
+        ok := True;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheWidget).Virtualprop.Add(TDesignedForm(TheWidget).Name + '.' + 'hin=' + edhint.Text);
   end
   else
 
@@ -2555,6 +2660,32 @@ begin
     end;
     if ok = False then
       TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'vis=' + cbvisible.Text);
+
+ ok := False;
+    for x := 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'shi=', TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+      begin
+        ok := True;
+        TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'shi=' + cbshowhint.Text;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' +
+       TheWidget.Name + '.' + 'shi=' + cbshowhint.Text);
+ 
+ ok := False;
+ 
+    for x := 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do
+    begin
+      if pos(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'hin=', TDesignedForm(TheParent).Virtualprop[x]) > 0 then
+      begin
+        ok := True;
+        TDesignedForm(TheParent).Virtualprop[x] := TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'hin=' + edhint.Text;
+      end;
+    end;
+    if ok = False then
+      TDesignedForm(TheParent).Virtualprop.Add(TDesignedForm(TheParent).Name + '.' + TheWidget.Name + '.' + 'hin=' + edhint.Text);
 
     ok := False;
     for x := 0 to TDesignedForm(TheParent).Virtualprop.Count - 1 do

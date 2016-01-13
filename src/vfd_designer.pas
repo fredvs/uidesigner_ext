@@ -255,7 +255,7 @@ begin
  
   // fred hint
   wg.hint := wg.name  + ' (L=' + inttostr(wg.left) + ' T=' + inttostr(wg.top)
-   + ' W=' + inttostr(wg.width) + ' H=' + inttostr(wg.height) + ')';
+   + ' W=' + inttostr(wg.width) + ' H=' + inttostr(wg.height) + ') ';
   wg.showhint := true;
   
   other := TStringList.Create;
@@ -739,7 +739,7 @@ begin
 
       // fred hint
  cd.Widget.hint := cd.Widget.name  + ' (L=' + inttostr(cd.Widget.left) + ' T=' + inttostr(cd.Widget.top)
-   + ' W=' + inttostr(cd.Widget.width) + ' H=' + inttostr(cd.Widget.height) + ')';
+   + ' W=' + inttostr(cd.Widget.width) + ' H=' + inttostr(cd.Widget.height) + ') ';
  
 
     end;
@@ -1019,6 +1019,26 @@ begin
           frmProperties.cbvisible.Text := 'True';
           frmProperties.cbvisible.FocusItem := 0;
         end;
+        
+        // showhint
+        i := 0;
+        ok := False;
+        while i < TDesignedForm(TheWidget).Virtualprop.Count do
+        begin
+          if pos(TDesignedForm(TheWidget).Name + '.' + 'shi=False', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+
+          begin
+            frmProperties.cbshowhint.Text := 'False';
+            frmProperties.cbshowhint.FocusItem := 1;
+            ok := True;
+          end;
+          Inc(i);
+        end;
+        if ok = False then
+        begin
+          frmProperties.cbshowhint.Text := 'True';
+          frmProperties.cbshowhint.FocusItem := 0;
+        end;
 
         // FULLSCREEN
         i := 0;
@@ -1160,7 +1180,7 @@ begin
           frmProperties.cbWindowPosition.FocusItem := 2;
           ok := True;
         end
-        else
+         else
         if pos(TDesignedForm(TheWidget).Name + '.' + 'wip=wpOneThirdDown', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
         begin
           frmProperties.cbWindowPosition.Text := 'wpOneThirdDown';
@@ -1196,12 +1216,33 @@ begin
       begin
         frmProperties.edtag.Text := '0';
       end;
+      
+      // Hint
+      ok := False;
+      while i < TDesignedForm(TheWidget).Virtualprop.Count do
+      begin
+        if pos(TDesignedForm(TheWidget).Name + '.' + 'hin=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) > 0 then
+
+        begin
+          frmProperties.edhint.Text :=
+            copy(TDesignedForm(TheWidget).Virtualprop.Strings[i], pos('hin=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) +
+            4, length(TDesignedForm(TheWidget).Virtualprop.Strings[i]) - pos('hin=', TDesignedForm(TheWidget).Virtualprop.Strings[i]) - 3);
+          ok := True;
+        end;
+        Inc(i);
+      end;
+
+      if ok = False then
+      begin
+        frmProperties.edhint.Text := '';
+      end;
+          
       frmproperties.lstProps.Anchors := [anLeft, anRight, antop];
       frmproperties.virtualpanel.Anchors := [anLeft, anRight, anbottom];
-      frmproperties.lstProps.Height := 97 + frmproperties.Height - 448;
+      frmproperties.lstProps.Height := 53;
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
-      frmproperties.virtualpanel.Height := 133;
+      frmproperties.virtualpanel.Height := 154 ;
 
 
       {$ifdef fpgui-develop}
@@ -1246,6 +1287,8 @@ begin
             frmProperties.cbvisible.FocusItem := 0;
           end;
         end;
+        
+        // focusable
 
       i := 0;
       ok := False;
@@ -1294,14 +1337,63 @@ begin
             frmProperties.edtag.Text := '0';
           end;
         end;
+        
+ // hint
+      i := 0;
+      ok := False;
+
+      if (TheParent) is TDesignedForm then
+        if TDesignedForm(TheParent).Virtualprop.Count > 0 then
+        begin
+          while i < TDesignedForm(TheParent).Virtualprop.Count do
+          begin
+            if pos(TheParent.Name + '.' + (TheWidget).Name + '.' + 'hin=', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
+            begin
+              frmProperties.edhint.Text :=
+                copy(TDesignedForm(TheParent).Virtualprop.Strings[i], pos('hin=', TDesignedForm(TheParent).Virtualprop.Strings[i]) +
+                4, length(TDesignedForm(TheParent).Virtualprop.Strings[i]) - pos('hin=',
+                TDesignedForm(TheParent).Virtualprop.Strings[i]) - 3);
+              ok := True;
+            end;
+            Inc(i);
+          end;
+
+          if ok = False then
+          begin
+            frmProperties.edhint.Text := '';
+          end;
+        end;
+
+ // showhint
+      i := 0;
+      ok := False;
+      if (TheParent) is TDesignedForm then
+        if TDesignedForm(TheParent).Virtualprop.Count > 0 then
+        begin
+          while i < TDesignedForm(TheParent).Virtualprop.Count do
+          begin
+            if pos(TheParent.Name + '.' + (TheWidget).Name + '.' + 'shi=False', TDesignedForm(TheParent).Virtualprop.Strings[i]) > 0 then
+            begin
+              frmProperties.cbshowhint.Text := 'False';
+              frmProperties.cbshowhint.FocusItem := 1;
+              ok := True;
+            end;
+            Inc(i);
+          end;
+          if ok = False then
+          begin
+            frmProperties.cbshowhint.Text := 'True';
+            frmProperties.cbshowhint.FocusItem := 0;
+          end;
+        end;
 
       //////
       frmproperties.lstProps.Anchors := [anLeft, anRight, antop];
       frmproperties.virtualpanel.Anchors := [anLeft, anRight, anbottom];
-      frmproperties.lstProps.Height := 186 + frmproperties.Height - 448;
+      frmproperties.lstProps.Height := frmproperties.Height - 294;
       frmproperties.virtualpanel.top :=
-        frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
-      frmproperties.virtualpanel.Height := 44;
+        frmproperties.lstProps.Height + frmproperties.lstProps.top +1;
+      frmproperties.virtualpanel.Height := 66;
             {$ifdef fpgui-develop}
       frmproperties.virtualpanel.UpdatePosition;
       frmproperties.lstProps.UpdatePosition;
@@ -1368,7 +1460,9 @@ begin
       PropList.Widget := wg;
       for n := 0 to wgc.PropertyCount - 1 do
       begin
-        if not (UpperCase(wgc.GetProperty(n).Name) = 'WINDOWPOSITION') then
+        if (UpperCase(wgc.GetProperty(n).Name) = 'WINDOWPOSITION') or 
+        (UpperCase(wgc.GetProperty(n).Name) = 'SHOWHINT') or
+        (UpperCase(wgc.GetProperty(n).Name) = 'HINT') then else
         begin
           PropList.AddItem(wgc.GetProperty(n));
           if UpperCase(wgc.GetProperty(n).Name) = UpperCase(lastPropName) then
@@ -1486,7 +1580,7 @@ begin
       wg.Name := s;
       // fred hint
   wg.hint := wg.name  + ' (L=' + inttostr(wg.left) + ' T=' + inttostr(wg.top)
-   + ' W=' + inttostr(wg.width) + ' H=' + inttostr(wg.height) + ')';
+   + ' W=' + inttostr(wg.width) + ' H=' + inttostr(wg.height) + ') ';
      end
     else
       SelectedWidget := wg;
@@ -1722,7 +1816,7 @@ begin
     while x < TheForm.Virtualprop.Count do
     begin
       if pos(TheForm.Name + '.' + 'siz=False', TheForm.Virtualprop.Strings[x]) > 0 then
-        s := s + Ind(1) + 'Sizeable := False' + ';' + LineEnding;
+        s := s + Ind(1) + 'Sizeable := False;' + LineEnding;
       Inc(x);
     end;
 
@@ -1734,6 +1828,26 @@ begin
         s := s + Ind(1) + 'Visible := False' + ';' + LineEnding;
       Inc(x);
     end;
+    
+    // showhint
+    x := 0;
+    while x < TheForm.Virtualprop.Count do
+    begin
+      if pos(TheForm.Name + '.' + 'shi=False', TheForm.Virtualprop.Strings[x]) > 0 then
+        s := s + Ind(1) + 'ShowHint := False' + ';' + LineEnding;
+      Inc(x);
+    end;
+    
+     // hint
+    x := 0;
+    while x < TheForm.Virtualprop.Count do
+    begin
+      if pos(TheForm.Name + '.' + 'hin=', TheForm.Virtualprop.Strings[x]) > 0 then
+       s := s + Ind(1) + 'Hint := ' +  QuotedStr(copy(TheForm.Virtualprop.Strings[x], pos('hin=', TheForm.Virtualprop.Strings[x]) +
+            4, length(TheForm.Virtualprop.Strings[x]) - pos('hin=', TheForm.Virtualprop.Strings[x]) - 3)) + ';' + LineEnding;
+      Inc(x);
+    end;
+    
     // Focusable
     x := 0;
     while x < TheForm.Virtualprop.Count do
@@ -1875,6 +1989,7 @@ begin
 }
   s := s + Ind(1) + 'WindowTitle := ' + QuotedStr(FForm.WindowTitle) + ';' + LineEnding;
 
+{
   // Hint property - This is ugly, Form's properties are not handled well!!
   PropInfo := GetPropInfo(FForm.ClassType, 'Hint');
   t := GetStrProp(FForm, 'Hint');
@@ -1882,16 +1997,8 @@ begin
   begin
     s := s + Ind(1) + 'Hint := ' + QuotedStr(t) + ';' + LineEnding;
   end;
-
-  // IconName property - This is ugly, Form's properties are not handled well!!
-  PropInfo := GetPropInfo(FForm.ClassType, 'IconName');
-  t := GetStrProp(FForm, 'IconName');
-  if IsStoredProp(FForm, PropInfo) then
-  begin
-    s := s + Ind(1) + 'IconName := ' + QuotedStr(t) + ';' + LineEnding;
-  end;
-
-  // ShowHint property - This is ugly, Form's properties are not handled well!!
+  
+    // ShowHint property - This is ugly, Form's properties are not handled well!!
   PropInfo := GetPropInfo(FForm.ClassType, 'ShowHint');
   i := GetOrdProp(FForm, 'ShowHint');
   if IsStoredProp(FForm, PropInfo) then
@@ -1904,6 +2011,16 @@ begin
         t := 'False';
       s := s + Ind(1) + 'ShowHint := ' + t + ';' + LineEnding;
     end;
+  end;
+
+
+}
+  // IconName property - This is ugly, Form's properties are not handled well!!
+  PropInfo := GetPropInfo(FForm.ClassType, 'IconName');
+  t := GetStrProp(FForm, 'IconName');
+  if IsStoredProp(FForm, PropInfo) then
+  begin
+    s := s + Ind(1) + 'IconName := ' + QuotedStr(t) + ';' + LineEnding;
   end;
 
 // BackGroundColor property
@@ -1996,7 +2113,28 @@ begin
         s := s + '    Visible := False' + ';' + LineEnding;
       Inc(x);
     end;
+       // showhint
     x := 0;
+    while x < TDesignedForm(TheParent).Virtualprop.Count do
+    begin
+      if pos(TheParent.Name + '.' + TheWidget.Name + '.' + 'shi=False', TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
+        s := s + '    ShowHint := False' + ';' + LineEnding;
+      Inc(x);
+    end;
+  
+     // hint
+    x := 0;
+    while x < TDesignedForm(TheParent).Virtualprop.Count do
+    begin
+      if pos(TheParent.Name + '.' + TheWidget.Name + '.' + 'hin=', TDesignedForm(TheParent).Virtualprop.Strings[x]) > 0 then
+          s := s + '    Hint := ' + QuotedStr(copy(TDesignedForm(TheParent).Virtualprop.Strings[x], pos(
+            'hin=', TDesignedForm(TheParent).Virtualprop.Strings[x]) + 4, length(TDesignedForm(TheParent).Virtualprop.Strings[x]) -
+            pos('hin=', TDesignedForm(TheParent).Virtualprop.Strings[x]) - 3)) + ';' + LineEnding;
+      Inc(x);
+    end;
+
+    x := 0; 
+    
     // Focusable
     while x < TDesignedForm(TheParent).Virtualprop.Count do
     begin
