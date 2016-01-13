@@ -50,13 +50,13 @@ findinfiledialog=48
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=fpgui-d
+ value=#13
  history=10
+  #13
   fpgui-d
   IsRunningIDE
   WindowAttributes
   idetemp
-  #13
   islibrary
   library
   MainMenu.MenuItem(8)
@@ -746,18 +746,18 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=38
-finddtext=PropNameChange
+finddtext=hint
 findhistory=10
+ hint
+ moveresi
+ constructor
  PropNameChange
  OnPropNameChange
  afterc
- hint
  WidgetDesigner
  acanvas
  DrawValue
  showhint
- ideu
- double
 findoptions=1
 editpos=26
  0,-1073741823
@@ -776,15 +776,15 @@ editpos=26
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,202
  0,-1073741823
  0,-1073741823
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,1909
- 0,1611
- 0,1475
+ 0,1488
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
  0,167
 bookmarks0=0
 bookmarks1=0
@@ -926,8 +926,8 @@ order=26
  19
  20
 tabsize=60
-firsttab=13
-index=21
+firsttab=16
+index=16
 [layout]
 windowlayout=499
  [mainfo.basedock]

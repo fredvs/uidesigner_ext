@@ -254,7 +254,8 @@ begin
   wg.MouseCursor := mcDefault;
  
   // fred hint
-  wg.hint := wg.name;
+  wg.hint := wg.name  + ' (L=' + inttostr(wg.left) + ' T=' + inttostr(wg.top)
+   + ' W=' + inttostr(wg.width) + ' H=' + inttostr(wg.height) + ')';
   wg.showhint := true;
   
   other := TStringList.Create;
@@ -734,7 +735,13 @@ begin
     begin
       //      if maindsgn.GridResolution > 1 then;
       cd.Widget.MoveAndResizeBy(dx, dy, dw, dh);
-      cd.UpdateResizerPositions;
+     cd.UpdateResizerPositions;
+
+      // fred hint
+ cd.Widget.hint := cd.Widget.name  + ' (L=' + inttostr(cd.Widget.left) + ' T=' + inttostr(cd.Widget.top)
+   + ' W=' + inttostr(cd.Widget.width) + ' H=' + inttostr(cd.Widget.height) + ')';
+ 
+
     end;
   end;
   UpdatePropWin;
@@ -1478,8 +1485,9 @@ begin
     begin
       wg.Name := s;
       // fred hint
-      wg.Hint := wg.Name;
-      end
+  wg.hint := wg.name  + ' (L=' + inttostr(wg.left) + ' T=' + inttostr(wg.top)
+   + ' W=' + inttostr(wg.width) + ' H=' + inttostr(wg.height) + ')';
+     end
     else
       SelectedWidget := wg;
   except
@@ -1574,7 +1582,9 @@ begin
  {$else}
   wg.UpdateWindowPosition;
  {$endif}
-        cd.UpdateResizerPositions;
+  cd.UpdateResizerPositions;
+  
+  
       end;
     end;
 
@@ -1592,8 +1602,8 @@ begin
   end; { if }
 
   UpdatePropWin;
-
-     if frmMultiSelect.Visible = True then
+  
+       if frmMultiSelect.Visible = True then
         frmMultiSelect.refreshgrid;
   
 end;
