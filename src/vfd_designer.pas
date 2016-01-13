@@ -1218,6 +1218,7 @@ begin
       end;
       
       // Hint
+        i := 0;
       ok := False;
       while i < TDesignedForm(TheWidget).Virtualprop.Count do
       begin
@@ -1243,7 +1244,7 @@ begin
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
       frmproperties.virtualpanel.Height := 154 ;
-
+     frmproperties.virtualpanel.tag := 0 ;
 
       {$ifdef fpgui-develop}
       frmproperties.virtualpanel.UpdatePosition;
@@ -1394,6 +1395,9 @@ begin
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top +1;
       frmproperties.virtualpanel.Height := 66;
+      frmproperties.virtualpanel.tag := 1 ;
+      
+      
             {$ifdef fpgui-develop}
       frmproperties.virtualpanel.UpdatePosition;
       frmproperties.lstProps.UpdatePosition;

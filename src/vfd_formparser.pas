@@ -745,7 +745,7 @@ var
       end;
       if result then
       begin
-       TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'hin=' + stemp);  ///
+      TDesignedForm(wg).Virtualprop.Add(TDesignedForm(wg).Name + '.' + 'hin=' + stemp);  ///
       frmProperties.edhint.Text := stemp ;
      end;
      end else  ///// other widget
@@ -753,8 +753,7 @@ var
       result := CheckSymbol(s, ':=');
       if result then
       begin
-       // ival := GetIntValue(s);
-      stemp := GetStringValue(s);
+        stemp := GetStringValue(s);
         result  := CheckSymbol(s, ';');
       end;
       if result then begin

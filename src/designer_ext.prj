@@ -50,22 +50,22 @@ findinfiledialog=48
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=virtualpanel.top
+ value=1.9
  history=10
-  virtualpanel.top
-  lstProps.Height
-  lstProps.Height :=
-  virtualpanel.Height :=
-   cbWindowPosition.top :=
-   cbWindowPosition :=
-   cbWindowPosition
-  ident
-  hint :=
+  1.9
+  designer_ext v
+  =>
+  virtualpanel.Height
+  virtualpanel.height :=
+  virtualpanel.tag
+   while x < TDesignedForm
+  // hint
   hin=
+  virtualpanel.top
  [findinfileadialogfo]
  stackedunder=
- x=715
- y=194
+ x=914
+ y=195
  cx=375
  cy=276
 finddialog=8
@@ -493,6 +493,7 @@ showgrid=1
 snaptogrid=1
 moveonfirstclick=1
 noformdesignerdocking=0
+componenthints=1
 gridsizex=8
 gridsizey=8
 autoindent=1
@@ -742,8 +743,9 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=38
-finddtext=windowposit
+finddtext=panel.h
 findhistory=10
+ panel.h
  windowposit
   virtualpanel.Height :=
   virtualpanel.Height
@@ -753,9 +755,8 @@ findhistory=10
  hint :=
  name :=
  cbenabled
- position
 findoptions=1
-editpos=38
+editpos=11
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -763,37 +764,10 @@ editpos=38
  0,-1073741823
  0,-1073741823
  0,-1073741823
+ 0,254
  0,-1073741823
  0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 15,1243
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
+ 0,0
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -805,35 +779,7 @@ bookmarks7=0
 bookmarks8=0
 bookmarks9=0
 bookmarks10=0
-bookmarks11=0
-bookmarks12=0
-bookmarks13=0
-bookmarks14=0
-bookmarks15=0
-bookmarks16=0
-bookmarks17=0
-bookmarks18=0
-bookmarks19=0
-bookmarks20=0
-bookmarks21=0
-bookmarks22=0
-bookmarks23=0
-bookmarks24=0
-bookmarks25=0
-bookmarks26=0
-bookmarks27=0
-bookmarks28=0
-bookmarks29=0
-bookmarks30=0
-bookmarks31=0
-bookmarks32=0
-bookmarks33=0
-bookmarks34=0
-bookmarks35=0
-bookmarks36=0
-bookmarks37=0
-sourcefiles=38
- ${PROJECTDIR}/frm_main_designer.pas
+sourcefiles=11
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
  ${PROJECTDIR}/vfd_widgets.pas
@@ -841,38 +787,11 @@ sourcefiles=38
  ${PROJECTDIR}/vfd_formparser.pas
  ${PROJECTDIR}/vfd_resizer.pas
  ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/frm_vfdforms.pas
+ ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/vfd_designer.pas
- /home/fred/fpgui/src/gui/fpg_panel.pas
  ${PROJECTDIR}/vfd_main.pas
  ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/vfd_widgetclass.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/vfd_formparser.pas
- ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/vfd_formparser.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/vfd_file.pas
- ${PROJECTDIR}/vfd_props.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/vfd_designer.pas
- /home/fred/fpgui/src/corelib/fpg_base.pas
- ${PROJECTDIR}/frm_main_designer.pas
-relpaths=38
- frm_main_designer.pas
+relpaths=11
  frm_vfdforms.pas
  vfd_editors.pas
  vfd_widgets.pas
@@ -880,64 +799,11 @@ relpaths=38
  vfd_formparser.pas
  vfd_resizer.pas
  vfd_main.pas
- define.inc
- define.inc
- frm_vfdforms.pas
+ frm_main_designer.pas
  vfd_designer.pas
- fpgui/src/gui/fpg_panel.pas
  vfd_main.pas
  define.inc
- vfd_widgets.pas
- vfd_widgetclass.pas
- vfd_designer.pas
- frm_main_designer.pas
- vfd_main.pas
- vfd_designer.pas
- fpg_style_anim_round_silver_horz.pas
- vfd_widgets.pas
- vfd_formparser.pas
- frm_main_designer.pas
- vfd_formparser.pas
- vfd_designer.pas
- vfd_file.pas
- vfd_props.pas
- vfd_designer.pas
- vfd_designer.pas
- vfd_widgets.pas
- vfd_designer.pas
- frm_main_designer.pas
- vfd_designer.pas
- vfd_designer.pas
- fpgui/src/corelib/fpg_base.pas
- frm_main_designer.pas
-ismoduletexts=38
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
+ismoduletexts=11
  0
  0
  0
@@ -954,9 +820,7 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=38
- 34
- 37
+order=11
  0
  1
  2
@@ -965,45 +829,20 @@ order=38
  5
  6
  7
- 8
  9
  10
- 11
- 12
- 13
- 14
- 15
- 16
- 17
- 18
- 19
- 32
- 33
- 36
- 35
- 20
- 21
- 22
- 23
- 24
- 25
- 26
- 27
- 28
- 29
- 30
- 31
+ 8
 tabsize=60
-firsttab=0
-index=0
+firsttab=5
+index=7
 [layout]
 windowlayout=499
  [mainfo.basedock]
  splitdir=2
- useroptions=15488
+ useroptions=1879063680
  [mainfo]
  splitdir=0
- useroptions=33554555
+ useroptions=1912733819
  stackedunder=
  parent=
  mdistate=0
@@ -1104,17 +943,17 @@ windowlayout=499
  visible=0
  [findinfilefo]
  splitdir=0
- useroptions=268451947
- stackedunder=
+ useroptions=268517483
+ stackedunder=mainfo
  parent=
  mdistate=0
  nx=0
  ny=0
  ncx=0
  ncy=0
- x=277
- y=354
- cx=911
+ x=161
+ y=175
+ cx=1084
  cy=414
  rcx=0
  rcy=0
@@ -1142,7 +981,7 @@ windowlayout=499
  sortdescend1=0
  sorted=0
  col=0
- row=7
+ row=2
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1431,7 +1270,7 @@ windowlayout=499
  activetab=0
  [debuggerfo]
  splitdir=0
- useroptions=24683
+ useroptions=1879072875
  parent=mainfo.basedock
  visible=1
  mdistate=0
@@ -1447,7 +1286,7 @@ windowlayout=499
  rcy=0
  [sourcefo]
  splitdir=0
- useroptions=16489
+ useroptions=1879064681
  parent=mainfo.panel1.container
  visible=1
  mdistate=0
@@ -1483,7 +1322,7 @@ windowlayout=499
  visible=0
  [mainfo.panel1]
  splitdir=1
- useroptions=838958571
+ useroptions=1375829483
  parent=mainfo.basedock
  visible=1
  mdistate=0

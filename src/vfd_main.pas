@@ -578,7 +578,7 @@ begin
   if not fpgFileExists(fname) then
   begin
     FFileLoaded := '';
-     frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => file does not exist';
+     frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit    File does not exist...';
  //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => file does not exist';
@@ -607,7 +607,7 @@ begin
   if FFile.LoadFile(fname) = False then
   begin
     FFileLoaded := '';
-      frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => file does not load';
+      frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit    File does not load...';
  //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => file does not load';
@@ -635,7 +635,7 @@ begin
   if FFile.GetBlocks = 0 then
   begin
     FFileLoaded := '';
-      frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => not a fpGUI form-file';
+      frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit    not a fpGUI form-file';
  //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=
       '  => not a fpGUI form-file';
@@ -655,7 +655,7 @@ begin
    end
   else
   begin
-    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
+    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  ' + fname;
         frmMainDesigner.MainMenu.MenuItem(8).Text := fname;   ;
         frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
 
@@ -1335,13 +1335,13 @@ begin
 
     isfilenew := false;
 
-    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit  => ' + fname;
+    frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit   ' + fname;
 
   //  frmMainDesigner.MainMenu.MenuItem(8).Visible := False;
 
    // if (frmMainDesigner.btnToFront.Tag = 1) and (trim(fname) <> '') then
   //  begin
-      frmMainDesigner.MainMenu.MenuItem(8).Text := ' => ' + fname;
+      frmMainDesigner.MainMenu.MenuItem(8).Text := '  ' + fname;
    //   frmMainDesigner.MainMenu.MenuItem(8).Visible := True;
    // end;
 

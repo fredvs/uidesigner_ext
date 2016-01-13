@@ -252,7 +252,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '1.9';
+  ext_version: string = '1.9.1';
 
 var
 
@@ -2216,7 +2216,7 @@ begin
   edName.UpdateWindowPosition;
  {$endif}
 
-  if virtualpanel.Height < 70 then
+  if virtualpanel.tag = 1 then
   begin
       frmproperties.lstProps.Height := frmproperties.Height - 294;
       frmproperties.virtualpanel.top :=
@@ -2264,7 +2264,7 @@ var
 
   virtualpanel.Canvas.SetColor(clblack);
   virtualpanel.Canvas.DrawText(4, 2, 60, 20, 'Visible');
- // if virtualpanel.Height > 68 then
+ // if virtualpanel.tag = 0 then
    // virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2, 60, 20, 'Enabled') else
      virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2, 60, 20, 'ShowHint') ;
 
@@ -2277,12 +2277,12 @@ var
   y := 22*z;
   
   virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'Focusable');
-    if virtualpanel.Height > 70 then
+    if virtualpanel.tag = 0 then
     virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'Tag')
   else
     virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 35, 2 + y, 60, 20, 'Tag');
 
-if virtualpanel.Height > 70 then 
+if virtualpanel.tag = 0 then 
 begin
   inc(z);
   y := 22*z;
@@ -2350,7 +2350,7 @@ end;
   edtag.Width := (virtualpanel.Width div 4) - 1;
  edtag.visible := true;
  
-if virtualpanel.Height > 70 then 
+if virtualpanel.tag = 0 then 
 begin
     inc(z);
   y := 22*z;
