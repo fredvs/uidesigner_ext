@@ -171,7 +171,7 @@ options=104
  sortdescend7=0
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=1
+ index=2
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=752
  width0=47
@@ -630,7 +630,13 @@ panels=1
 units=
  (
  a=0,4149,6,Pascal Units
- c=16
+ c=18
+  (
+  capt=
+  file=./
+  kind=4
+  a=0,4096,6,./
+  )
   (
   file=${PROJECTDIR}/anchors.inc
   kind=1
@@ -660,6 +666,11 @@ units=
   file=/home/fred/designer_ext/src/icons.inc
   kind=1
   a=0,4100,0,icons.inc
+  )
+  (
+  file=runonce_postit.pas
+  kind=1
+  a=0,4100,0,runonce_postit.pas
   )
   (
   file=vfd_designer.pas
@@ -756,7 +767,7 @@ findhistory=10
  name :=
  cbenabled
 findoptions=1
-editpos=11
+editpos=12
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -764,10 +775,11 @@ editpos=11
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,254
  0,-1073741823
  0,-1073741823
- 0,0
+ 0,-1073741823
+ 0,186
+ 0,296
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -779,7 +791,8 @@ bookmarks7=0
 bookmarks8=0
 bookmarks9=0
 bookmarks10=0
-sourcefiles=11
+bookmarks11=0
+sourcefiles=12
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
  ${PROJECTDIR}/vfd_widgets.pas
@@ -789,9 +802,10 @@ sourcefiles=11
  ${PROJECTDIR}/vfd_main.pas
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/vfd_main.pas
  ${PROJECTDIR}/define.inc
-relpaths=11
+ ${PROJECTDIR}/designer_ext.pas
+ ${PROJECTDIR}/runonce_postit.pas
+relpaths=12
  frm_vfdforms.pas
  vfd_editors.pas
  vfd_widgets.pas
@@ -801,9 +815,11 @@ relpaths=11
  vfd_main.pas
  frm_main_designer.pas
  vfd_designer.pas
- vfd_main.pas
  define.inc
-ismoduletexts=11
+ designer_ext.pas
+ runonce_postit.pas
+ismoduletexts=12
+ 0
  0
  0
  0
@@ -820,21 +836,22 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=11
+order=12
  0
  1
  2
  3
  4
+ 10
+ 11
  5
  6
  7
- 9
- 10
  8
+ 9
 tabsize=60
-firsttab=5
-index=7
+firsttab=4
+index=6
 [layout]
 windowlayout=499
  [mainfo.basedock]
@@ -842,7 +859,7 @@ windowlayout=499
  useroptions=1879063680
  [mainfo]
  splitdir=0
- useroptions=1912733819
+ useroptions=1912602747
  stackedunder=
  parent=
  mdistate=0
@@ -850,9 +867,9 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=317
- y=25
- cx=961
+ x=191
+ y=47
+ cx=959
  cy=621
  rcx=0
  rcy=0
@@ -876,7 +893,7 @@ windowlayout=499
  rcy=0
  wsize=0
  active=0
- visible=1
+ visible=0
  [threadsfo]
  splitdir=0
  useroptions=268451945
@@ -944,7 +961,7 @@ windowlayout=499
  [findinfilefo]
  splitdir=0
  useroptions=268517483
- stackedunder=mainfo
+ stackedunder=
  parent=
  mdistate=0
  nx=0
@@ -981,7 +998,7 @@ windowlayout=499
  sortdescend1=0
  sorted=0
  col=0
- row=2
+ row=21
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1250,7 +1267,7 @@ windowlayout=499
  [componentpalettefo]
  splitdir=0
  useroptions=268460139
- stackedunder=targetconsolefo
+ stackedunder=mainfo
  parent=
  mdistate=0
  nx=0

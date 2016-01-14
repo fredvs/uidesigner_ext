@@ -231,7 +231,19 @@ begin
 {$IFDEF UNIX}
   VOldNameValueSeparator := AProcess.NameValueSeparator;
   AProcess.NameValueSeparator := CLSUtilsProcessNameValueSeparator;
-  AProcess.Text := ExecProcess('sh -c "ps -A | awk ''{ print $4 "=" $1 }''"');
+ 
+  {$IFDEF FREEBSD}
+     AProcess.Text := ExecProcess('sh -c "ps -A | awk ''{ print $5 "=" $1 }''"');
+  {$ELSE}
+     AProcess.Text := ExecProcess('sh -c "ps -A | awk ''{ print $4 "=" $1 }''"');
+  {$ENDIF}
+  
+  // debug
+  // writeln('Application list ');
+  // writeln('---------------------------------');
+  // writeln(AProcess.Text);
+  // writeln('---------------------------------');
+    
   J := AProcess.Count;
   for I := AProcess.Count downto 1 do
   begin
@@ -285,6 +297,13 @@ begin
       Inc(y);
     if y > 1 then
     begin
+ 
+  // debug
+  // writeln('Application name');
+  // writeln('---------------------------------');
+  // writeln(VProcess.Strings[x]);
+  // writeln('-----------------------------------');
+     
       if AMessage <> '' then
       begin
         AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
