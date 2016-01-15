@@ -192,7 +192,7 @@ options=104
  index=1
  [projectoptionsfo.tabwidget]
  firsttab=0
- index=2
+ index=1
  [projectoptionsfo]
  stackedunder=
  x=376
@@ -611,7 +611,7 @@ path=2
  /home/fred/designer_ext/src/frm_main_designer.pas
  /home/fred/designer_ext/src/frm_vfdforms.pas
 line=2
- 1401
+ 1399
  624
 address=2
  0
@@ -757,6 +757,8 @@ hintheight=38
 finddtext=.afte
 findhistory=10
  .afte
+ frmProperties.left
+ frmProperties
  .aftc
  TfrmProperties.aft
  TfrmProperties.
@@ -764,10 +766,8 @@ findhistory=10
  virtualpanel.top
  virtualpanel
  cbfocusable.v
- cbfocusable :=
- cbpos
 findoptions=1
-editpos=14
+editpos=11
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -775,13 +775,10 @@ editpos=14
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,1339
  0,-1073741823
+ 0,1842
  0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,7
+ 0,251
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -793,43 +790,31 @@ bookmarks7=0
 bookmarks8=0
 bookmarks9=0
 bookmarks10=0
-bookmarks11=0
-bookmarks12=0
-bookmarks13=0
-sourcefiles=14
+sourcefiles=11
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
  ${PROJECTDIR}/vfd_widgets.pas
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/vfd_formparser.pas
- ${PROJECTDIR}/vfd_resizer.pas
- ${PROJECTDIR}/vfd_main.pas
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/runonce_postit.pas
- ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/frm_main_designer.pas
  /home/fred/fpgui/src/corelib/gdi/fpg_impl.pas
-relpaths=14
+ ${PROJECTDIR}/fpg_iniutils.pas
+relpaths=11
  frm_vfdforms.pas
  vfd_editors.pas
  vfd_widgets.pas
  designer_ext.pas
  vfd_formparser.pas
- vfd_resizer.pas
- vfd_main.pas
  frm_main_designer.pas
  vfd_designer.pas
- define.inc
  designer_ext.pas
- runonce_postit.pas
- define.inc
- ../fpgui/src/corelib/gdi/fpg_impl.pas
-ismoduletexts=14
- 0
- 0
- 0
+ frm_main_designer.pas
+ fpgui/src/corelib/gdi/fpg_impl.pas
+ fpg_iniutils.pas
+ismoduletexts=11
  0
  0
  0
@@ -846,24 +831,9 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=14
- 8
- 7
- 13
- 0
- 1
- 2
- 3
- 4
- 10
- 11
- 12
- 5
- 6
- 9
 tabsize=60
-firsttab=0
-index=1
+firsttab=6
+index=8
 [layout]
 windowlayout=499
  [mainfo.basedock]
@@ -879,13 +849,13 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=189
- y=43
+ x=252
+ y=24
  cx=959
  cy=621
  rcx=0
  rcy=0
- wsize=4
+ wsize=0
  active=1
  visible=1
  [targetconsolefo]
@@ -999,7 +969,7 @@ windowlayout=499
  x=0
  y=0
  cx=189
- cy=534
+ cy=457
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1010,7 +980,7 @@ windowlayout=499
  sortdescend1=0
  sorted=0
  col=0
- row=3
+ row=5
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1208,9 +1178,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=584
- cx=1356
- cy=98
+ y=501
+ cx=949
+ cy=84
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1309,8 +1279,8 @@ windowlayout=499
  ncy=0
  x=0
  y=0
- cx=1356
- cy=44
+ cx=949
+ cy=38
  rcx=0
  rcy=0
  [sourcefo]
@@ -1325,8 +1295,8 @@ windowlayout=499
  ncy=0
  x=192
  y=0
- cx=1164
- cy=534
+ cx=757
+ cy=457
  rcx=0
  rcy=0
  [cpuc86_64fo]
@@ -1360,9 +1330,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=47
- cx=1356
- cy=534
+ y=41
+ cx=949
+ cy=457
  rcx=0
  rcy=0
 [targetconsole]

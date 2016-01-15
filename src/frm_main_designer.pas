@@ -826,13 +826,17 @@ begin
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(400, 10, 900, 92);
+ // SetPosition(400, 10, 900, 92);
   WindowTitle := 'fpGUI designer ext';
   Hint := '';
   BackGroundColor := $80000001;
- // MinWidth := 778;
- // MinHeight := 90;
+  MinWidth := 840;
+  MinHeight := 90;
   WindowPosition := wpUser;
+  left := 10;
+  top := 10 ;
+  width := 842 ;
+  height := 92 ;
 
   //iconname := 'vfd.ideuicon' ;
 
@@ -1336,13 +1340,7 @@ windowtitle := MainMenu.MenuItem(8).Text;
  {$endif}
  
   idetemp := x ;
-
- left := 10;
- top := 10 ;
- width := 842 ;
- height := 92 ;
- 
- 
+  
  {$ifdef fpgui-develop}
  UpdatePosition;
  {$else}
@@ -1839,12 +1837,12 @@ begin
   inherited;
   Name := 'frmProperties';
   WindowTitle := 'Properties';
-  left := 200;
-  top := 240;
+  left := 10;
+  top := 110;
   Width := 270;
-  Height := 480;
-  // MinWidth := 268;
-  // MinHeight := 448;
+  Height := 484;
+  MinWidth := 268;
+  MinHeight := 482;
   OnResize := @frmPropertiesPaint;
   Visible := False;
 
