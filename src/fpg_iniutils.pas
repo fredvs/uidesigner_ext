@@ -194,20 +194,18 @@ begin
       LWidth  := AForm.Width
     else
       LWidth  := AWidth;
-    
+   
     // fred  
-      if (readInteger(LINISection, 'Height', LHeight) >= AForm.MinHeight) and 
-      (readInteger(LINISection, 'Height', LHeight) <= AForm.MaxHeight) then      
+ 
+      if (readInteger(LINISection, 'Height', LHeight) >= AForm.MinHeight)      
+       then      
     AForm.Height := readInteger(LINISection, 'Height', LHeight) else
-     if (readInteger(LINISection, 'Height', LHeight) < AForm.MinHeight) then
-     AForm.Height := AForm.MinHeight else AForm.Height := AForm.MaxHeight ;
+    AForm.Height := AForm.MinHeight;
     
-      if (readInteger(LINISection, 'Width', LWidth) >= AForm.MinWidth) and
-      (readInteger(LINISection, 'Width', LWidth) <= AForm.MaxWidth) then 
+      if (readInteger(LINISection, 'Width', LWidth) >= AForm.MinWidth) then 
     AForm.Width := readInteger(LINISection, 'Width', LWidth) else
-     if (readInteger(LINISection, 'Width', LWidth) < AForm.MinWidth) then
-      AForm.Width := AForm.MinWidth else AForm.Width := AForm.MaxWidth ;
-    
+      AForm.Width := AForm.MinWidth  ;
+  
   end;
   AForm.UpdateWindowPosition;
 
