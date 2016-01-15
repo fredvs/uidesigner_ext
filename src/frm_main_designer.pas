@@ -826,12 +826,12 @@ begin
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
-  SetPosition(400, 10, 778, 92);
+  SetPosition(400, 10, 900, 92);
   WindowTitle := 'fpGUI designer ext';
   Hint := '';
   BackGroundColor := $80000001;
-  MinWidth := 778;
-  MinHeight := 90;
+ // MinWidth := 778;
+ // MinHeight := 90;
   WindowPosition := wpUser;
 
   //iconname := 'vfd.ideuicon' ;
@@ -1337,10 +1337,12 @@ windowtitle := MainMenu.MenuItem(8).Text;
  
   idetemp := x ;
 
- left := 400;
+ left := 10;
  top := 10 ;
- width := 775 ;
+ width := 842 ;
  height := 92 ;
+ 
+ 
  {$ifdef fpgui-develop}
  UpdatePosition;
  {$else}
@@ -1840,7 +1842,7 @@ begin
   left := 200;
   top := 240;
   Width := 270;
-  Height := 450;
+  Height := 480;
   // MinWidth := 268;
   // MinHeight := 448;
   OnResize := @frmPropertiesPaint;
