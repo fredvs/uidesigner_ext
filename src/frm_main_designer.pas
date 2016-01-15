@@ -1945,6 +1945,7 @@ begin
   cbfocusable.name := 'focusable';
   cbfocusable.BackgroundColor := $E0E0E0;
   cbfocusable.Height := 21;
+  
   cbfocusable.OnExit := @VirtualPropertiesUpdate;
 
   cbsizeable := TfpgCombobox.Create(virtualpanel);
@@ -2040,7 +2041,7 @@ begin
   cbWindowPosition.BackgroundColor := $E0E0E0;
   cbWindowPosition.Height := 21;
   cbWindowPosition.OnExit := @VirtualPropertiesUpdate;
-   cbWindowPosition.name := 'WindowPosition';
+  cbWindowPosition.name := 'WindowPosition';
 
   edTag := TfpgEdit.Create(virtualpanel);
   edTag.Text := '0';
@@ -2055,6 +2056,20 @@ begin
   edhint.Height := 21;
   edhint.OnExit := @VirtualPropertiesUpdate;
    edhint.name := 'Hint';
+   
+    cbsizeable.visible := false;
+     cbfocusable.visible := false;
+     cbvisible.visible := false;
+     cbfullscreen.visible := false;
+     cbenabled.visible := false;
+     edminwidth.visible := false;
+     edmaxwidth.visible := false;
+     edminheight.visible := false;
+     edmaxheight.visible := false;
+     cbwindowposition.visible := false;
+     edtag.visible := false;
+      edhint.visible := false;
+       cbshowhint.visible := false;
 
   y := virtualpanel.Bottom + 5;
 
@@ -2218,16 +2233,17 @@ begin
 
   if virtualpanel.tag = 1 then
   begin
-      frmproperties.lstProps.Height := frmproperties.Height - 294;
+      frmproperties.lstProps.Height := frmproperties.Height - 310;
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top +1;
+    
      
   end
   else
   begin
-     frmproperties.lstProps.Height := 53;
+     frmproperties.lstProps.Height := 97;
       frmproperties.virtualpanel.top :=
-        frmproperties.lstProps.Height + frmproperties.lstProps.top - 4;
+        frmproperties.lstProps.Height + frmproperties.lstProps.top - 2;
      end;
 
   {$ifdef fpgui-develop}
@@ -2243,24 +2259,7 @@ end;
 procedure TfrmProperties.Vpanelpaint(Sender: TObject);
 var
   y, z: integer;
- begin
- {
-     cbsizeable.visible := false;
-     cbfocusable.visible := false;
-     cbvisible.visible := false;
-     cbfullscreen.visible := false;
-     cbenabled.visible := false;
-     edminwidth.visible := false;
-     edmaxwidth.visible := false;
-     edminheight.visible := false;
-     edmaxheight.visible := false;
-     cbwindowposition.visible := false;
-     edtag.visible := false;
-      edhint.visible := false;
-       cbshowhint.visible := false;
-       }
-       
-  
+ begin  
 
   virtualpanel.Canvas.SetColor(clblack);
   virtualpanel.Canvas.DrawText(4, 2, 60, 20, 'Visible');
@@ -2323,28 +2322,29 @@ end;
   cbvisible.top := 1;
   cbshowhint.top := 1;
 
-    cbenabled.Visible := false;
-     cbshowhint.Visible := true;
+   // cbenabled.Visible := false;
     
     cbvisible.Left := (virtualpanel.Width div 4) + 1;
-   
+     
     cbvisible.Width := (virtualpanel.Width div 4) - 1;
     cbshowhint.Left := (3 * (virtualpanel.Width div 4)) + 1;
     cbshowhint.Width := (virtualpanel.Width div 4) - 1;
     
-    
+    cbshowhint.Visible := true;
+    cbvisible.Visible := true;
+       
    edhint.top := y +1;
    edhint.left := (virtualpanel.Width div 4) + 1;
-   edhint.width := (3 * (virtualpanel.Width div 4))  ;
-     edhint.visible := true;
+   edhint.width := (3 * (virtualpanel.Width div 4)) -1 ;
+   edhint.visible := true;
  
    inc(z);
   y := 22*z;
      cbfocusable.top := y + 1;
    cbfocusable.Left := (virtualpanel.Width div 4) + 1;
   cbfocusable.Width := (virtualpanel.Width div 4) - 1;
- cbfocusable.visible := true;
- 
+  cbfocusable.visible := true;
+  
   edtag.top := y + 1;
   edtag.Left := (3 * (virtualpanel.Width div 4)) + 1;
   edtag.Width := (virtualpanel.Width div 4) - 1;
@@ -2387,19 +2387,17 @@ begin
   cbwindowposition.top := y + 1;
   cbwindowposition.Left := 105;
   cbwindowposition.Width := (virtualpanel.Width) - cbwindowposition.Left - 1;
-     
-   {
+  cbWindowPosition.visible := true;    
+  
      cbsizeable.visible := true;
-     cbfocusable.visible := true;
-     cbvisible.visible := true;
      cbfullscreen.visible := true;
-     cbenabled.visible := true;
+   //  cbenabled.visible := true;
      edminwidth.visible := true;
      edmaxwidth.visible := true;
      edminheight.visible := true;
      edmaxheight.visible := true;
      cbwindowposition.visible := true;
-}
+
 end;
    {$ifdef fpgui-develop}
    cbsizeable.UpdatePosition;

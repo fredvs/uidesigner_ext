@@ -17,11 +17,11 @@ order14=0
 order15=0
 order16=0
 [projectoptions]
-projectdir=/home/fred/designer_ext/src
-projectfilename=/home/fred/designer_ext/src/designer_ext.prj
+projectdir=/Z:/home/fred/designer_ext/src
+projectfilename=/Z:/home/fred/designer_ext/src/designer_ext.prj
 findinfiledialog=48
  [findinfileadialogfo.subdirs]
- value=0
+ value=1
  [findinfileadialogfo.inopenfiles]
  value=0
  [findinfileadialogfo.wholeword]
@@ -50,18 +50,18 @@ findinfiledialog=48
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=1.9
+ value=virtualpanel.height
  history=10
+  virtualpanel.height
+  frmproperties.lstProps.Height
+  edhint.w
+  cbWindowPosition
+  virtual
+  cbtag
   1.9
   designer_ext v
   =>
   virtualpanel.Height
-  virtualpanel.height :=
-  virtualpanel.tag
-   while x < TDesignedForm
-  // hint
-  hin=
-  virtualpanel.top
  [findinfileadialogfo]
  stackedunder=
  x=914
@@ -404,9 +404,9 @@ aftcommandon=0
 unitdirson=7
  196671
  196671
+ 196671
+ 196671
  0
- 196671
- 196671
  196671
  196671
 macroon=5
@@ -493,7 +493,6 @@ showgrid=1
 snaptogrid=1
 moveonfirstclick=1
 noformdesignerdocking=0
-componenthints=1
 gridsizex=8
 gridsizey=8
 autoindent=1
@@ -738,7 +737,7 @@ files=
   )
  )
 [componentstore]
-storedir=/home/fred/msegui/apps/ide/compstore/
+storedir=/Z:/home/fred/msegui/apps/mse/compstore/
 filename=
 [components]
 [selecteditpage]
@@ -754,20 +753,20 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=38
-finddtext=panel.h
+finddtext=.tag =
 findhistory=10
+ .tag =
+ virtualpanel.top
+ virtualpanel
+ cbfocusable.v
+ cbfocusable :=
+ cbpos
  panel.h
  windowposit
   virtualpanel.Height :=
   virtualpanel.Height
- GetStringValue
- GetIntValue
- VirtualPropertiesUpdate
- hint :=
- name :=
- cbenabled
 findoptions=1
-editpos=12
+editpos=13
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -775,11 +774,12 @@ editpos=12
  0,-1073741823
  0,-1073741823
  0,-1073741823
+ 0,2245
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,186
- 0,296
+ 0,-1073741823
+ 0,-1073741823
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -792,7 +792,8 @@ bookmarks8=0
 bookmarks9=0
 bookmarks10=0
 bookmarks11=0
-sourcefiles=12
+bookmarks12=0
+sourcefiles=13
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
  ${PROJECTDIR}/vfd_widgets.pas
@@ -800,12 +801,13 @@ sourcefiles=12
  ${PROJECTDIR}/vfd_formparser.pas
  ${PROJECTDIR}/vfd_resizer.pas
  ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/frm_main_designer.pas
+ /Z:/home/fred/designer_ext/src/frm_main_designer.pas
  ${PROJECTDIR}/vfd_designer.pas
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/runonce_postit.pas
-relpaths=12
+ ${PROJECTDIR}/define.inc
+relpaths=13
  frm_vfdforms.pas
  vfd_editors.pas
  vfd_widgets.pas
@@ -818,7 +820,9 @@ relpaths=12
  define.inc
  designer_ext.pas
  runonce_postit.pas
-ismoduletexts=12
+ define.inc
+ismoduletexts=13
+ 0
  0
  0
  0
@@ -836,7 +840,9 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=12
+order=13
+ 8
+ 7
  0
  1
  2
@@ -844,22 +850,21 @@ order=12
  4
  10
  11
+ 12
  5
  6
- 7
- 8
  9
 tabsize=60
-firsttab=4
-index=6
+firsttab=0
+index=1
 [layout]
 windowlayout=499
  [mainfo.basedock]
  splitdir=2
- useroptions=1879063680
+ useroptions=15488
  [mainfo]
  splitdir=0
- useroptions=1912602747
+ useroptions=33554555
  stackedunder=
  parent=
  mdistate=0
@@ -867,8 +872,8 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=191
- y=47
+ x=189
+ y=43
  cx=959
  cy=621
  rcx=0
@@ -915,7 +920,7 @@ windowlayout=499
  [memoryfo]
  splitdir=0
  useroptions=268451963
- stackedunder=cpuc86_64fo
+ stackedunder=cpui386fo
  parent=
  mdistate=0
  nx=0
@@ -942,7 +947,7 @@ windowlayout=499
  [disassfo]
  splitdir=0
  useroptions=268451947
- stackedunder=
+ stackedunder=findinfilefo
  parent=
  mdistate=0
  nx=0
@@ -961,17 +966,17 @@ windowlayout=499
  [findinfilefo]
  splitdir=0
  useroptions=268517483
- stackedunder=
+ stackedunder=symbolfo
  parent=
  mdistate=0
  nx=0
  ny=0
  ncx=0
  ncy=0
- x=161
- y=175
- cx=1084
- cy=414
+ x=3
+ y=24
+ cx=1360
+ cy=716
  rcx=0
  rcy=0
  [projecttreefo]
@@ -987,7 +992,7 @@ windowlayout=499
  x=0
  y=0
  cx=189
- cy=535
+ cy=536
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -998,8 +1003,8 @@ windowlayout=499
  sortdescend1=0
  sorted=0
  col=0
- row=21
- rowheight=17
+ row=3
+ rowheight=16
  [stackfo]
  splitdir=0
  useroptions=268460137
@@ -1104,7 +1109,7 @@ windowlayout=499
  [symbolfo]
  splitdir=0
  useroptions=268451963
- stackedunder=
+ stackedunder=componentstorefo
  parent=
  mdistate=0
  nx=0
@@ -1196,7 +1201,7 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=584
+ y=586
  cx=1356
  cy=98
  rcx=0
@@ -1204,7 +1209,7 @@ windowlayout=499
  [componentstorefo]
  splitdir=0
  useroptions=268460155
- stackedunder=
+ stackedunder=mainfo
  parent=
  mdistate=0
  nx=0
@@ -1267,7 +1272,7 @@ windowlayout=499
  [componentpalettefo]
  splitdir=0
  useroptions=268460139
- stackedunder=mainfo
+ stackedunder=disassfo
  parent=
  mdistate=0
  nx=0
@@ -1287,7 +1292,7 @@ windowlayout=499
  activetab=0
  [debuggerfo]
  splitdir=0
- useroptions=1879072875
+ useroptions=24683
  parent=mainfo.basedock
  visible=1
  mdistate=0
@@ -1298,12 +1303,12 @@ windowlayout=499
  x=0
  y=0
  cx=1356
- cy=43
+ cy=44
  rcx=0
  rcy=0
  [sourcefo]
  splitdir=0
- useroptions=1879064681
+ useroptions=16489
  parent=mainfo.panel1.container
  visible=1
  mdistate=0
@@ -1314,10 +1319,10 @@ windowlayout=499
  x=192
  y=0
  cx=1164
- cy=535
+ cy=536
  rcx=0
  rcy=0
- [cpuc86_64fo]
+ [cpui386fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
@@ -1328,10 +1333,10 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=183
- y=113
- cx=352
- cy=277
+ x=337
+ y=295
+ cx=273
+ cy=207
  rcx=0
  rcy=0
  wsize=0
@@ -1339,7 +1344,7 @@ windowlayout=499
  visible=0
  [mainfo.panel1]
  splitdir=1
- useroptions=1375829483
+ useroptions=838958571
  parent=mainfo.basedock
  visible=1
  mdistate=0
@@ -1348,9 +1353,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=46
+ y=47
  cx=1356
- cy=535
+ cy=536
  rcx=0
  rcy=0
 [targetconsole]

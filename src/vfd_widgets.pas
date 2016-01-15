@@ -395,8 +395,8 @@ begin
  // wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
  // wc.AddProperty('ShowHint', TPropertyBoolean, '');
   // wc.AddProperty('Sizeable', TPropertyBoolean, 'Can the form be resized at runtime');
-  //wc.AddProperty('BackgroundColor', TPropertyColor, '');
-  //wc.AddProperty('TextColor', TPropertyColor, '');
+  wc.AddProperty('BackgroundColor', TPropertyColor, '');
+  wc.AddProperty('TextColor', TPropertyColor, '');
   //wc.AddProperty('MaxHeight', TPropertyInteger, '');
   //wc.AddProperty('MaxWidth', TPropertyInteger, '');
   //wc.AddProperty('MinHeight', TPropertyInteger, '');
