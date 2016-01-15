@@ -778,7 +778,7 @@ editpos=11
  0,-1073741823
  0,1842
  0,-1073741823
- 0,251
+ 0,208
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -833,7 +833,7 @@ nomenumodules=0
 [sourcefo.files_tab]
 tabsize=60
 firsttab=6
-index=8
+index=10
 [layout]
 windowlayout=499
  [mainfo.basedock]
@@ -850,12 +850,12 @@ windowlayout=499
  ncx=0
  ncy=0
  x=252
- y=24
+ y=25
  cx=959
  cy=621
  rcx=0
  rcy=0
- wsize=0
+ wsize=4
  active=1
  visible=1
  [targetconsolefo]
@@ -969,7 +969,7 @@ windowlayout=499
  x=0
  y=0
  cx=189
- cy=457
+ cy=534
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1178,9 +1178,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=501
- cx=949
- cy=84
+ y=584
+ cx=1356
+ cy=98
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1279,8 +1279,8 @@ windowlayout=499
  ncy=0
  x=0
  y=0
- cx=949
- cy=38
+ cx=1356
+ cy=44
  rcx=0
  rcy=0
  [sourcefo]
@@ -1295,8 +1295,8 @@ windowlayout=499
  ncy=0
  x=192
  y=0
- cx=757
- cy=457
+ cx=1164
+ cy=534
  rcx=0
  rcy=0
  [cpuc86_64fo]
@@ -1330,9 +1330,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=41
- cx=949
- cy=457
+ y=47
+ cx=1356
+ cy=534
  rcx=0
  rcy=0
 [targetconsole]
