@@ -3,12 +3,12 @@ This is the extended version of fpGUI uidesigner.
 With run-only-once, window list, undo feature, integration into IDE, editor launcher,...
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2015
+2013 - 2016
 }
 {
     fpGUI  -  Free Pascal GUI Library
 
-    Copyright (C) 2006 - 2013 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2016 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,

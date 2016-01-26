@@ -21,7 +21,7 @@ projectdir=/home/fred/designer_ext/src
 projectfilename=/home/fred/designer_ext/src/designer_ext.prj
 findinfiledialog=48
  [findinfileadialogfo.subdirs]
- value=1
+ value=0
  [findinfileadialogfo.inopenfiles]
  value=0
  [findinfileadialogfo.wholeword]
@@ -50,22 +50,22 @@ findinfiledialog=48
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=virtualpanel.height
+ value=hint :=
  history=10
-  virtualpanel.height
-  frmproperties.lstProps.Height
-  edhint.w
-  cbWindowPosition
-  virtual
-  cbtag
-  1.9
-  designer_ext v
-  =>
-  virtualpanel.Height
+  hint :=
+  #13
+  fpgui-d
+  IsRunningIDE
+  WindowAttributes
+  idetemp
+  islibrary
+  library
+  MainMenu.MenuItem(8)
+  fpg_form
  [findinfileadialogfo]
  stackedunder=
- x=914
- y=195
+ x=386
+ y=189
  cx=375
  cy=276
 finddialog=8
@@ -77,15 +77,14 @@ finddialog=8
  y=205
  cx=372
  cy=122
-replacedialog=16
+replacedialog=15
  [replacedialogfo.promptonreplace]
  value=1
  [replacedialogfo.selectedonly]
  value=0
  [replacedialogfo.replacetext]
- value=22*z
- history=3
-  22*z
+ value=DocView
+ history=2
   DocView
   
  [replacedialogfo]
@@ -94,40 +93,40 @@ replacedialog=16
  y=302
  cx=437
  cy=171
-options=104
+options=108
  [projectoptionsfo.toolshortcuts]
  dropdowncolwidths=3
   70
   70
   70
  [projectoptionsfo.twidgetgrid3]
- propcolwidthref=768
+ propcolwidthref=744
  sortdescend0=0
  sortdescend1=0
  sortdescend2=0
  sortdescend3=0
- width4=357
+ width4=346
  sortdescend4=0
- width5=195
+ width5=188
  sortdescend5=0
- width6=164
+ width6=159
  sortdescend6=0
- width7=53
+ width7=51
  sortdescend7=0
  width8=1
  sortdescend8=0
- width9=313
+ width9=303
  sortdescend9=0
  [projectoptionsfo.twidgetgrid4]
- propcolwidthref=592
+ propcolwidthref=568
  width0=96
  sortdescend0=0
  sortdescend1=0
  width2=73
  sortdescend2=0
- width3=285
+ width3=274
  sortdescend3=0
- width4=297
+ width4=284
  sortdescend4=0
  sorted=0
  col=0
@@ -137,10 +136,10 @@ options=104
  firsttab=0
  index=0
  [projectoptionsfo.fontaliasgrid]
- propcolwidthref=451
+ propcolwidthref=427
  width0=98
  sortdescend0=0
- width1=440
+ width1=416
  sortdescend1=0
  width2=30
  sortdescend2=0
@@ -154,51 +153,55 @@ options=104
  sortdescend6=0
  [projectoptionsfo.macrosplitter]
  x=0
- y=152
+ y=190
  xprop=1
- yprop=0.32838983050848
+ yprop=0.39830508474576
  [projectoptionsfo.macrogrid]
- propcolwidthref=575
+ propcolwidthref=499
  sortdescend0=0
  sortdescend1=0
  sortdescend2=0
  sortdescend3=0
  sortdescend4=0
  sortdescend5=0
- width6=146
  sortdescend6=0
- width7=563
  sortdescend7=0
+ sortdescend8=0
+ sortdescend9=0
+ width10=146
+ sortdescend10=0
+ width11=483
+ sortdescend11=0
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=2
+ index=1
  [projectoptionsfo.exceptionsgrid]
- propcolwidthref=752
+ propcolwidthref=728
  width0=47
  sortdescend0=0
- width1=746
+ width1=722
  sortdescend1=0
  [projectoptionsfo.ttabwidget1]
  firsttab=0
  index=0
  [projectoptionsfo.filefiltergrid]
- propcolwidthref=660
+ propcolwidthref=636
  width0=112
  sortdescend0=0
- width1=653
+ width1=629
  sortdescend1=0
  [projectoptionsfo.ttabwidget2]
  firsttab=0
  index=1
  [projectoptionsfo.tabwidget]
  firsttab=0
- index=1
+ index=2
  [projectoptionsfo]
  stackedunder=
- x=376
- y=97
- cx=801
- cy=524
+ x=219
+ y=160
+ cx=777
+ cy=536
 programparameters=18
  [programparametersfo.grid]
  propcolwidthref=304
@@ -220,9 +223,9 @@ programparameters=18
  cy=348
 settings=13
  [settingsfo.tsplitter2]
- x=192
+ x=193
  y=16
- xprop=0.5906432748538
+ xprop=0.59763313609468
  yprop=0.97297297297297
  [settingsfo]
  x=410
@@ -260,6 +263,50 @@ makeoptions=7
  -B
  -O3 -XX -Xs -CX
  -vewnhibq
+compilerused=21
+  Default Compiler
+  Pascal 1
+  Pascal 2
+  Pascal 3
+  Pascal 4
+  C 1
+  C 2
+  C 3
+  C 4
+  Java 1
+  Java 2
+  Java 3
+  Java 4
+  Python 1
+  Python 2
+  Python 3
+  Python 4
+  Other 1
+  Other 2
+  Other 3
+  Other 4
+debuggerused=6
+  Default Debugger
+  Debugger 1
+  Debugger 2
+  Debugger 3
+  Debugger 4
+  None
+exeused=14
+ ${EXEEXT}
+ No Extension
+ .exe
+ .com
+ .bin
+ .prog
+ .pyc
+ .class
+ .so
+ .dll
+ .lib
+ .o
+ .res
+ .inf
 codetemplatedirs=1
  ${TEMPLATEDIR}
 toolmenus=1
@@ -400,38 +447,92 @@ makeoptionson=7
  50
  48
  63
+compilerusedon=21
+ 4095
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+debuggerusedon=6
+ 4095
+ 0
+ 0
+ 0
+ 0
+ 0
+exeusedon=14
+ 4095
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
 aftcommandon=0
 unitdirson=7
  196671
  196671
- 0
+ 196608
  196671
  196671
  196671
  196671
-macroon=5
- 1
+macroon=7
+ 21
+ 42
  3
- 6
- 4
+ 48
+ 12
+ 0
  63
-macronames=5
+macronames=7
  TargetCPU
+ 
  TargetOS
- TargetCPU
  TargetOS
+ TargetOS
+ 
  HelpPath
-macrovalues=5
+macrovalues=7
  x86_64
- linux
  i386
- win32
+ Linux
+ freeBSD
+ Windows
+ Mac
  /opt/FPC_Docs/inf/
 macrogroup=0
-groupcomments=6
+groupcomments=10
  Linux 64-bit
  Linux 32-bit
+ Windows 64-bit
  Windows 32-bit
+ FreeBSD 64-bit
+ FreeBSD 32-bit
+ 
  
  
  
@@ -630,13 +731,7 @@ panels=1
 units=
  (
  a=0,4149,6,Pascal Units
- c=18
-  (
-  capt=
-  file=./
-  kind=4
-  a=0,4096,6,./
-  )
+ c=17
   (
   file=${PROJECTDIR}/anchors.inc
   kind=1
@@ -658,6 +753,11 @@ units=
   a=0,4100,0,frm_main_designer.pas
   )
   (
+  file=${PROJECTDIR}/frm_main_designer.pas
+  kind=1
+  a=0,4100,0,frm_main_designer.pas
+  )
+  (
   file=${PROJECTDIR}/frm_vfdforms.pas
   kind=1
   a=0,4100,0,frm_vfdforms.pas
@@ -666,11 +766,6 @@ units=
   file=/home/fred/designer_ext/src/icons.inc
   kind=1
   a=0,4100,0,icons.inc
-  )
-  (
-  file=runonce_postit.pas
-  kind=1
-  a=0,4100,0,runonce_postit.pas
   )
   (
   file=vfd_designer.pas
@@ -753,32 +848,29 @@ workdirparamhistory=0
 envvarons=0
 [edit]
 hintwidth=462
-hintheight=38
-finddtext=.afte
+hintheight=19
+finddtext=hint
 findhistory=10
- .afte
- frmProperties.left
- frmProperties
- .aftc
- TfrmProperties.aft
- TfrmProperties.
- .tag =
- virtualpanel.top
- virtualpanel
- cbfocusable.v
+ hint
+ moveresi
+ constructor
+ PropNameChange
+ OnPropNameChange
+ afterc
+ WidgetDesigner
+ acanvas
+ DrawValue
+ showhint
 findoptions=1
-editpos=11
+editpos=8
+ 0,0
  0,-1073741823
  0,-1073741823
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 23,213
+ 0,4
+ 0,0
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -787,37 +879,25 @@ bookmarks4=0
 bookmarks5=0
 bookmarks6=0
 bookmarks7=0
-bookmarks8=0
-bookmarks9=0
-bookmarks10=0
-sourcefiles=11
+sourcefiles=8
+ ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
  ${PROJECTDIR}/vfd_widgets.pas
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/vfd_formparser.pas
- ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/frm_main_designer.pas
- /home/fred/fpgui/src/corelib/gdi/fpg_impl.pas
- ${PROJECTDIR}/fpg_iniutils.pas
-relpaths=11
+ ${PROJECTDIR}/define.inc
+relpaths=8
+ frm_main_designer.pas
  frm_vfdforms.pas
  vfd_editors.pas
  vfd_widgets.pas
  designer_ext.pas
  vfd_formparser.pas
- frm_main_designer.pas
  vfd_designer.pas
- designer_ext.pas
- frm_main_designer.pas
- fpgui/src/corelib/gdi/fpg_impl.pas
- fpg_iniutils.pas
-ismoduletexts=11
- 0
- 0
- 0
+ define.inc
+ismoduletexts=8
  0
  0
  0
@@ -832,16 +912,16 @@ visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
 tabsize=60
-firsttab=6
-index=10
+firsttab=1
+index=7
 [layout]
-windowlayout=499
+windowlayout=503
  [mainfo.basedock]
  splitdir=2
- useroptions=1879063680
+ useroptions=15488
  [mainfo]
  splitdir=0
- useroptions=1912602747
+ useroptions=838860927
  stackedunder=
  parent=
  mdistate=0
@@ -849,13 +929,17 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=252
- y=25
- cx=959
+ x=109
+ y=55
+ cx=1022
  cy=621
  rcx=0
  rcy=0
- wsize=4
+ children=2
+  statdisp,0,1,1012,18
+  basedock,0,19,1012,585
+ focusedchild=1
+ wsize=0
  active=1
  visible=1
  [targetconsolefo]
@@ -867,8 +951,8 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=817
- y=157
+ x=495
+ y=172
  cx=497
  cy=314
  rcx=0
@@ -942,7 +1026,7 @@ windowlayout=499
  visible=0
  [findinfilefo]
  splitdir=0
- useroptions=268517483
+ useroptions=268451947
  stackedunder=
  parent=
  mdistate=0
@@ -950,10 +1034,10 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=3
- y=24
- cx=1360
- cy=716
+ x=239
+ y=115
+ cx=678
+ cy=414
  rcx=0
  rcy=0
  [projecttreefo]
@@ -968,19 +1052,19 @@ windowlayout=499
  ncy=0
  x=0
  y=0
- cx=189
- cy=522
+ cx=139
+ cy=451
  rcx=0
  rcy=0
- [projecttreefo.grid]
- propcolwidthref=2
- width0=187
+ [projecttreefo.project_tree]
+ propcolwidthref=1
+ width0=141
  sortdescend0=0
  width1=1
  sortdescend1=0
  sorted=0
- col=0
- row=5
+ col=-1073741823
+ row=-1073741823
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1057,7 +1141,7 @@ windowlayout=499
  active=0
  visible=0
  [breakpointsfo.bkptson]
- value=1
+ value=0
  [objectinspectorfo]
  splitdir=0
  useroptions=268451947
@@ -1166,10 +1250,10 @@ windowlayout=499
  [watchfo.watchon]
  [watchfo.expression]
  [watchfo.watcheson]
- value=1
+ value=0
  [messagefo]
  splitdir=0
- useroptions=268517483
+ useroptions=114795
  parent=mainfo.basedock
  visible=1
  mdistate=0
@@ -1178,9 +1262,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=584
- cx=1356
- cy=98
+ y=497
+ cx=1012
+ cy=88
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1266,10 +1350,10 @@ windowlayout=499
  active=0
  visible=0
  [componentpalettefo.componentpages]
- activetab=0
+ activetab=1
  [debuggerfo]
  splitdir=0
- useroptions=1879072875
+ useroptions=90219
  parent=mainfo.basedock
  visible=1
  mdistate=0
@@ -1279,8 +1363,8 @@ windowlayout=499
  ncy=0
  x=0
  y=0
- cx=1356
- cy=56
+ cx=1012
+ cy=40
  rcx=0
  rcy=0
  [sourcefo]
@@ -1293,10 +1377,10 @@ windowlayout=499
  ny=0
  ncx=0
  ncy=0
- x=192
+ x=142
  y=0
- cx=1164
- cy=522
+ cx=870
+ cy=451
  rcx=0
  rcy=0
  [cpuc86_64fo]
@@ -1321,7 +1405,7 @@ windowlayout=499
  visible=0
  [mainfo.panel1]
  splitdir=1
- useroptions=1375829483
+ useroptions=838893035
  parent=mainfo.basedock
  visible=1
  mdistate=0
@@ -1330,9 +1414,9 @@ windowlayout=499
  ncx=0
  ncy=0
  x=0
- y=59
- cx=1356
- cy=522
+ y=43
+ cx=1012
+ cy=451
  rcx=0
  rcy=0
 [targetconsole]

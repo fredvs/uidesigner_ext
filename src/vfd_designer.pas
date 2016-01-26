@@ -4,12 +4,12 @@ With window list, undo feature, integration into IDE, editor launcher, extra-pro
 
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2015
+2013 - 2016
 }
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
-    Copyright (C) 2006 - 2014 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2016 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
@@ -254,7 +254,7 @@ begin
   wg.MouseCursor := mcDefault;
  
   // fred hint
-  wg.hint := wg.name  + ' (L=' + inttostr(wg.left) + ' T=' + inttostr(wg.top)
+  wg.hint := wg.name  + ' (' + wg.classname + ' : L=' + inttostr(wg.left) + ' T=' + inttostr(wg.top)
    + ' W=' + inttostr(wg.width) + ' H=' + inttostr(wg.height) + ') ';
   wg.showhint := true;
   
@@ -738,7 +738,8 @@ begin
      cd.UpdateResizerPositions;
 
       // fred hint
- cd.Widget.hint := cd.Widget.name  + ' (L=' + inttostr(cd.Widget.left) + ' T=' + inttostr(cd.Widget.top)
+     
+ cd.Widget.hint := cd.Widget.name + ' (' + cd.Widget.classname + ' : L=' + inttostr(cd.Widget.left) + ' T=' + inttostr(cd.Widget.top)
    + ' W=' + inttostr(cd.Widget.width) + ' H=' + inttostr(cd.Widget.height) + ') ';
  
 
@@ -1583,7 +1584,7 @@ begin
     begin
       wg.Name := s;
       // fred hint
-  wg.hint := wg.name  + ' (L=' + inttostr(wg.left) + ' T=' + inttostr(wg.top)
+  wg.hint := wg.name  +  ' (' + wg.classname + ' : L=' + inttostr(wg.left) + ' T=' + inttostr(wg.top)
    + ' W=' + inttostr(wg.width) + ' H=' + inttostr(wg.height) + ') ';
      end
     else
