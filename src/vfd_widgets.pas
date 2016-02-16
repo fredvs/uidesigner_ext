@@ -650,23 +650,6 @@ begin
   wc.WidgetIconName := 'vfd.stringgrid';
   RegisterVFDWidget(wc);
 
-  // Bevel
-  wc           := TVFDWidgetClass.Create(TfpgBevel);
-  wc.NameBase  := 'Bevel';
-  wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
-  wc.AddProperty('BackgroundColor', TPropertyColor, '');
-  wc.AddProperty('BorderStyle', TPropertyEnum, 'Single or Double');
-  wc.AddProperty('Enabled', TPropertyBoolean, '');
-//  wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
-  wc.AddProperty('ParentBackgroundColor', TPropertyBoolean, '');
-  wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
-  wc.AddProperty('Shape', TPropertyEnum, 'Box, Frame, TopLine, Spacer etc..');
- // wc.AddProperty('ShowHint', TPropertyBoolean, '');
-  wc.AddProperty('Style', TPropertyEnum, 'Raised or Lower look');
-  wc.WidgetIconName := 'vfd.bevel';
-  wc.Container := True;
-  RegisterVFDWidget(wc);
-
   // Panel
   wc           := TVFDWidgetClass.Create(TfpgPanel);
   wc.NameBase  := 'Panel';
@@ -690,6 +673,23 @@ begin
   wc.WidgetIconName := 'vfd.panel';
   wc.Container := True;
   RegisterVFDWidget(wc);
+  
+   // Bevel
+  wc           := TVFDWidgetClass.Create(TfpgBevel);
+  wc.NameBase  := 'Bevel';
+  wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
+  wc.AddProperty('BackgroundColor', TPropertyColor, '');
+  wc.AddProperty('BorderStyle', TPropertyEnum, 'Single or Double');
+  wc.AddProperty('Enabled', TPropertyBoolean, '');
+  //  wc.AddProperty('Hint', TPropertyString, 'Tooltip hint');
+  wc.AddProperty('ParentBackgroundColor', TPropertyBoolean, '');
+  wc.AddProperty('ParentShowHint', TPropertyBoolean, '');
+  wc.AddProperty('Shape', TPropertyEnum, 'Box, Frame, TopLine, Spacer etc..');
+  // wc.AddProperty('ShowHint', TPropertyBoolean, '');
+  wc.AddProperty('Style', TPropertyEnum, 'Raised or Lower look')  ;
+  wc.WidgetIconName := 'vfd.bevel';
+  wc.Container := True;
+  RegisterVFDWidget(wc);
 
   // GroupBox
   wc           := TVFDWidgetClass.Create(TfpgGroupBox);
@@ -710,8 +710,8 @@ begin
   wc.WidgetIconName := 'vfd.groupbox';
   wc.Container := True;
   RegisterVFDWidget(wc);
-
-  // ProgressBar
+  
+   // ProgressBar
   wc          := TVFDWidgetClass.Create(TfpgProgressBar);
   wc.NameBase := 'ProgressBar';
   wc.AddProperty('Align', TPropertyEnum, 'Component alignment');

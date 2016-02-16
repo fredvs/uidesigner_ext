@@ -19,49 +19,50 @@ order16=0
 [projectoptions]
 projectdir=/home/fred/designer_ext/src
 projectfilename=/home/fred/designer_ext/src/designer_ext.prj
-findinfiledialog=48
+findinfiledialog=49
  [findinfileadialogfo.subdirs]
- value=0
+ value=1
  [findinfileadialogfo.inopenfiles]
  value=0
  [findinfileadialogfo.wholeword]
  value=0
  [findinfileadialogfo.inprojectdir]
- value=0
+ value=1
  [findinfileadialogfo.casesensitive]
  value=0
  [findinfileadialogfo.indirectories]
- value=1
+ value=0
  [findinfileadialogfo.mask]
  value="*.pas" "*.pp" "*.inc"
  history=1
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
  filenames=1
-  /home/fred/designer_ext/src/
+  /home/fred/fpGUI-develop/
  filecolwidth=174
  x=0
  y=0
  cx=0
  cy=0
- filehistory=2
-  /home/fred/designer_ext/src/
+ filehistory=3
+  /home/fred/fpGUI-develop/
   /home/fred/fpGUI-develop/uidesigner/
+  /home/fred/designer_ext/src/
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=hint :=
+ value=chlPalette
  history=10
+  chlPalette
+  bevel
+  TFPGBEVEL
+  ProgressBar
+  fpgui-develop
   hint :=
   #13
   fpgui-d
   IsRunningIDE
   WindowAttributes
-  idetemp
-  islibrary
-  library
-  MainMenu.MenuItem(8)
-  fpg_form
  [findinfileadialogfo]
  stackedunder=
  x=386
@@ -153,9 +154,9 @@ options=108
  sortdescend6=0
  [projectoptionsfo.macrosplitter]
  x=0
- y=190
+ y=189
  xprop=1
- yprop=0.39830508474576
+ yprop=0.39751552795031
  [projectoptionsfo.macrogrid]
  propcolwidthref=499
  sortdescend0=0
@@ -174,7 +175,7 @@ options=108
  sortdescend11=0
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=1
+ index=5
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=728
  width0=47
@@ -255,45 +256,46 @@ objpref=-Fo
 targpref=-o
 befcommand=0
 aftcommand=0
-makeoptions=7
+makeoptions=8
  -fPIC
  -l -Mobjfpc -Schi
  -FE.
  -FUunits
+ -WG
  -B
  -O3 -XX -Xs -CX
- -vewnhibq
+ -vewnhibqw
 compilerused=21
-  Default Compiler
-  Pascal 1
-  Pascal 2
-  Pascal 3
-  Pascal 4
-  C 1
-  C 2
-  C 3
-  C 4
-  Java 1
-  Java 2
-  Java 3
-  Java 4
-  Python 1
-  Python 2
-  Python 3
-  Python 4
-  Other 1
-  Other 2
-  Other 3
-  Other 4
+ ${COMPILER} (Default)
+ Pascal 1
+ Pascal 2
+ Pascal 3
+ Pascal 4
+ C 1
+ C 2
+ C 3
+ C 4
+ Java 1
+ Java 2
+ Java 3
+ Java 4
+ Python 1
+ Python 2
+ Python 3
+ Python 4
+ Other 1
+ Other 2
+ Other 3
+ Other 4
 debuggerused=6
-  Default Debugger
-  Debugger 1
-  Debugger 2
-  Debugger 3
-  Debugger 4
-  None
+ ${DEBUGGER} (Default)
+ Debugger 1
+ Debugger 2
+ Debugger 3
+ Debugger 4
+ None
 exeused=14
- ${EXEEXT}
+ ${EXEEXT} (Default)
  No Extension
  .exe
  .com
@@ -439,20 +441,21 @@ modulenames=0
 moduletypes=0
 modulefiles=0
 befcommandon=0
-makeoptionson=7
+makeoptionson=8
  0
- 63
- 63
- 63
- 50
- 48
- 63
+ 447
+ 447
+ 447
+ 384
+ 434
+ 432
+ 447
 compilerusedon=21
- 4095
+ 3711
  0
  0
- 0
- 0
+ 128
+ 256
  0
  0
  0
@@ -477,9 +480,9 @@ debuggerusedon=6
  0
  0
 exeusedon=14
- 4095
+ 3711
  0
- 0
+ 384
  0
  0
  0
@@ -493,13 +496,13 @@ exeusedon=14
  0
 aftcommandon=0
 unitdirson=7
+ 197055
+ 197055
+ 196992
+ 197055
  196671
- 196671
- 196608
- 196671
- 196671
- 196671
- 196671
+ 197055
+ 197055
 macroon=7
  21
  42
@@ -849,8 +852,11 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=hint
+finddtext=bevel
 findhistory=10
+ bevel
+ OnPaletteClick
+ OnPaletteDragStart
  hint
  moveresi
  constructor
@@ -858,19 +864,29 @@ findhistory=10
  OnPropNameChange
  afterc
  WidgetDesigner
- acanvas
- DrawValue
- showhint
 findoptions=1
-editpos=8
+editpos=21
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,0
  0,0
  0,-1073741823
  0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,4
- 0,0
+ 0,176
+ 0,3055
+ 0,695
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -879,7 +895,20 @@ bookmarks4=0
 bookmarks5=0
 bookmarks6=0
 bookmarks7=0
-sourcefiles=8
+bookmarks8=0
+bookmarks9=0
+bookmarks10=0
+bookmarks11=0
+bookmarks12=0
+bookmarks13=0
+bookmarks14=0
+bookmarks15=0
+bookmarks16=0
+bookmarks17=0
+bookmarks18=0
+bookmarks19=0
+bookmarks20=0
+sourcefiles=21
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
@@ -888,7 +917,20 @@ sourcefiles=8
  ${PROJECTDIR}/vfd_formparser.pas
  ${PROJECTDIR}/vfd_designer.pas
  ${PROJECTDIR}/define.inc
-relpaths=8
+ ${PROJECTDIR}/designer_ext.pas
+ ${PROJECTDIR}/vfd_widgetclass.pas
+ ${PROJECTDIR}/vfd_widgets.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/vfd_formparser.pas
+ ${PROJECTDIR}/frm_main_designer.pas
+ ${PROJECTDIR}/vfd_widgetclass.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/vfd_widgetclass.pas
+ ${PROJECTDIR}/vfd_main.pas
+ ${PROJECTDIR}/vfd_designer.pas
+ ${PROJECTDIR}/frm_main_designer.pas
+ ${PROJECTDIR}/vfd_widgets.pas
+relpaths=21
  frm_main_designer.pas
  frm_vfdforms.pas
  vfd_editors.pas
@@ -897,7 +939,33 @@ relpaths=8
  vfd_formparser.pas
  vfd_designer.pas
  define.inc
-ismoduletexts=8
+ designer_ext.pas
+ vfd_widgetclass.pas
+ vfd_widgets.pas
+ define.inc
+ vfd_formparser.pas
+ frm_main_designer.pas
+ vfd_widgetclass.pas
+ define.inc
+ vfd_widgetclass.pas
+ vfd_main.pas
+ vfd_designer.pas
+ frm_main_designer.pas
+ vfd_widgets.pas
+ismoduletexts=21
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -911,9 +979,31 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
+order=21
+ 0
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 9
+ 10
+ 17
+ 16
+ 15
+ 20
+ 14
+ 11
+ 12
+ 18
+ 19
+ 13
+ 8
 tabsize=60
-firsttab=1
-index=7
+firsttab=12
+index=13
 [layout]
 windowlayout=503
  [mainfo.basedock]
@@ -929,15 +1019,15 @@ windowlayout=503
  ny=0
  ncx=0
  ncy=0
- x=109
- y=55
+ x=195
+ y=70
  cx=1022
  cy=621
  rcx=0
  rcy=0
  children=2
   statdisp,0,1,1012,18
-  basedock,0,19,1012,585
+  basedock,0,0,1012,604
  focusedchild=1
  wsize=0
  active=1
@@ -1027,15 +1117,15 @@ windowlayout=503
  [findinfilefo]
  splitdir=0
  useroptions=268451947
- stackedunder=
+ stackedunder=mainfo
  parent=
  mdistate=0
  nx=0
  ny=0
  ncx=0
  ncy=0
- x=239
- y=115
+ x=385
+ y=343
  cx=678
  cy=414
  rcx=0
@@ -1053,7 +1143,7 @@ windowlayout=503
  x=0
  y=0
  cx=139
- cy=451
+ cy=468
  rcx=0
  rcy=0
  [projecttreefo.project_tree]
@@ -1063,8 +1153,8 @@ windowlayout=503
  width1=1
  sortdescend1=0
  sorted=0
- col=-1073741823
- row=-1073741823
+ col=0
+ row=17
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1262,7 +1352,7 @@ windowlayout=503
  ncx=0
  ncy=0
  x=0
- y=497
+ y=516
  cx=1012
  cy=88
  rcx=0
@@ -1333,7 +1423,7 @@ windowlayout=503
  [componentpalettefo]
  splitdir=0
  useroptions=268460139
- stackedunder=mainfo
+ stackedunder=findinfilefo
  parent=
  mdistate=0
  nx=0
@@ -1364,7 +1454,7 @@ windowlayout=503
  x=0
  y=0
  cx=1012
- cy=40
+ cy=42
  rcx=0
  rcy=0
  [sourcefo]
@@ -1380,7 +1470,7 @@ windowlayout=503
  x=142
  y=0
  cx=870
- cy=451
+ cy=468
  rcx=0
  rcy=0
  [cpuc86_64fo]
@@ -1414,9 +1504,9 @@ windowlayout=503
  ncx=0
  ncy=0
  x=0
- y=43
+ y=45
  cx=1012
- cy=451
+ cy=468
  rcx=0
  rcy=0
 [targetconsole]

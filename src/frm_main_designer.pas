@@ -3053,7 +3053,7 @@ end;
 
 function TfrmMainDesigner.GetSelectedWidget: TVFDWidgetClass;
 begin
-  if chlPalette.FocusItem > 0 then
+  if chlPalette.FocusItem > -1 then
     Result := TVFDWidgetClass(chlPalette.Items.Objects[chlPalette.FocusItem])
   else begin
     chlPalette.Text:='';
