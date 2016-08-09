@@ -175,7 +175,7 @@ options=108
  sortdescend11=0
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=5
+ index=2
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=728
  width0=47
@@ -715,7 +715,7 @@ path=2
  /home/fred/designer_ext/src/frm_main_designer.pas
  /home/fred/designer_ext/src/frm_vfdforms.pas
 line=2
- 1399
+ 1403
  624
 address=2
  0
@@ -852,8 +852,11 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=bevel
+finddtext=WindowAttributes
 findhistory=10
+ WindowAttributes
+ islinux
+ ide
  bevel
  OnPaletteClick
  OnPaletteDragStart
@@ -861,11 +864,16 @@ findhistory=10
  moveresi
  constructor
  PropNameChange
- OnPropNameChange
- afterc
- WidgetDesigner
 findoptions=1
-editpos=21
+editpos=23
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -881,12 +889,6 @@ editpos=21
  0,-1073741823
  0,-1073741823
  0,0
- 0,0
- 0,-1073741823
- 0,-1073741823
- 0,176
- 0,3055
- 0,695
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -908,7 +910,9 @@ bookmarks17=0
 bookmarks18=0
 bookmarks19=0
 bookmarks20=0
-sourcefiles=21
+bookmarks21=0
+bookmarks22=0
+sourcefiles=23
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
@@ -930,7 +934,9 @@ sourcefiles=21
  ${PROJECTDIR}/vfd_designer.pas
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/vfd_widgets.pas
-relpaths=21
+ ${PROJECTDIR}/deviceinfos_fpGUI.pas
+ /home/fred/designer_ext/src/define.inc
+relpaths=23
  frm_main_designer.pas
  frm_vfdforms.pas
  vfd_editors.pas
@@ -952,7 +958,11 @@ relpaths=21
  vfd_designer.pas
  frm_main_designer.pas
  vfd_widgets.pas
-ismoduletexts=21
+ uos/examples/deviceinfos_fpGUI.pas
+ define.inc
+ismoduletexts=23
+ 0
+ 0
  0
  0
  0
@@ -979,7 +989,7 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=21
+order=23
  0
  1
  2
@@ -1000,10 +1010,12 @@ order=21
  18
  19
  13
+ 21
  8
+ 22
 tabsize=60
-firsttab=12
-index=13
+firsttab=18
+index=22
 [layout]
 windowlayout=503
  [mainfo.basedock]
@@ -1019,16 +1031,16 @@ windowlayout=503
  ny=0
  ncx=0
  ncy=0
- x=195
- y=70
+ x=90
+ y=73
  cx=1022
  cy=621
  rcx=0
  rcy=0
  children=2
-  statdisp,0,1,1012,18
   basedock,0,0,1012,604
- focusedchild=1
+  statdisp,0,1,1012,18
+ focusedchild=0
  wsize=0
  active=1
  visible=1
@@ -1117,7 +1129,7 @@ windowlayout=503
  [findinfilefo]
  splitdir=0
  useroptions=268451947
- stackedunder=mainfo
+ stackedunder=
  parent=
  mdistate=0
  nx=0
@@ -1154,7 +1166,7 @@ windowlayout=503
  sortdescend1=0
  sorted=0
  col=0
- row=17
+ row=2
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1423,7 +1435,7 @@ windowlayout=503
  [componentpalettefo]
  splitdir=0
  useroptions=268460139
- stackedunder=findinfilefo
+ stackedunder=mainfo
  parent=
  mdistate=0
  nx=0

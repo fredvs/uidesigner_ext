@@ -816,6 +816,7 @@ end;
 procedure TfrmMainDesigner.AfterCreate;
 var
   n, x, y: integer;
+  islinux : boolean;
   wgc: TVFDWidgetClass;
   btn: TwgPaletteButton;
   mi, mi2, mi3, mi4, mi5, mi8: TfpgMenuItem;
@@ -1354,10 +1355,14 @@ windowtitle := MainMenu.MenuItem(8).Text;
    hide;
     fpgapplication.ProcessMessages;
 
+   islinux := false ;
+  {$IFDEF linux}
+   islinux := true ;
+   {$ENDIF}
 
 fpgapplication.ProcessMessages;
 
-  if x = 0 then
+  if x = 0  then
   begin
    btnToFront.tag := 0;
   WindowType := wtwindow;  // with borders, not on front.
@@ -1389,11 +1394,10 @@ fpgapplication.ProcessMessages;
   begin
   
 {$ifdef ideu}
-// if  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
-if 1 = 2 then
+if  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
 {$else}
-// if  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) or 
-if  ((IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
+ if  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) or 
+ ((IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
    (IsRunningIDE('ideu') = False) and (IsRunningIDE('ideU') = False)) then
  {$endif}
 
@@ -1428,15 +1432,23 @@ if  ((IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
      indexundo := 0;
      MainMenu.MenuItem(8).Visible := false;
      end else begin
-     
+     if islinux = true then begin
        MainMenu.MenuItem(8).Visible := true;
       panel1.Style := bsLowered;
       panel1.BorderStyle := bsdouble;
-
-    {$ifdef fpgui-develop}
+        {$ifdef fpgui-develop}
  {$else}
      WindowAttributes:= [waSizeable, waBorderless];
  {$endif}
+      end else
+      begin
+       MainMenu.MenuItem(8).Visible := false;
+       panel1.Style := bsflat;
+      {$ifdef fpgui-develop}
+     {$else}
+     WindowAttributes:= [];
+      {$endif}
+      end;
       
      if x < 3 then LoadIDEparameters(x);
       end;
@@ -1462,14 +1474,10 @@ if  ((IsRunningIDE('typhon') = False) and (IsRunningIDE('lazarus') = False) and
    UpdateWindowPosition;
    {$endif}
 
-      fpgApplication.CreateForm(Tfrm_multiselect, frmMultiSelect);
+  fpgApplication.CreateForm(Tfrm_multiselect, frmMultiSelect);
   chlPalette.Tag:=0;
   
- {$ifdef ideu}
-
- {$endif}
- 
-end;
+ end;
 
 procedure TfrmMainDesigner.ToggleDesignerGrid(Sender: TObject);
 begin

@@ -13,6 +13,8 @@ fiens@hotmail.com
 
 unit RunOnce_PostIt;
 
+
+
 /// for custom compil, like using fpgui-dvelop =>  edit define.inc
 {$I define.inc}
 
