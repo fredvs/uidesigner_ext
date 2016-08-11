@@ -20,6 +20,10 @@ Here compiled release with sakit included:
 Designer_ext needs fpGUI =>
 https://github.com/graemeg/fpgui/
 
+If you use the develop branch of fpGUI, please uncomment, in define.inc
+{$DEFINE fpgui-develop} // uncomment for building with fpgui-develop
+->
+
 Fred van Stappen => fiens@hotmail.com  
 
 

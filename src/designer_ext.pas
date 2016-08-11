@@ -26,7 +26,7 @@ program designer_ext;
 
 {$mode objfpc}{$H+}
 
-/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+/// for custom compil, like using fpgui-develop =>  edit define.inc
 {$I define.inc}
 
 uses

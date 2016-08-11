@@ -137,14 +137,14 @@ install:
       <Unit0>
         <Filename Value="designer_ext.pas"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="85" Y="171"/>
+        <CursorPos X="43" Y="29"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="frm_main_designer.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="1410"/>
         <CursorPos X="23" Y="1414"/>
         <UsageCount Value="103"/>
@@ -153,7 +153,7 @@ install:
       <Unit2>
         <Filename Value="frm_vfdforms.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="193"/>
         <CursorPos X="3" Y="206"/>
         <UsageCount Value="103"/>
@@ -162,7 +162,7 @@ install:
       <Unit3>
         <Filename Value="sak_fpg.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="2635"/>
         <CursorPos X="75" Y="2643"/>
         <UsageCount Value="103"/>
@@ -171,7 +171,7 @@ install:
       <Unit4>
         <Filename Value="vfd_main.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="752"/>
         <CursorPos X="59" Y="763"/>
         <UsageCount Value="31"/>
