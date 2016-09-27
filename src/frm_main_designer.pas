@@ -252,7 +252,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '1.9.2';
+  ext_version: string = '1.9.3';
 
 var
 

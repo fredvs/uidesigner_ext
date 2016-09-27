@@ -53,8 +53,10 @@ findinfiledialog=61
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=outer rectangle
+ value=About
  history=20
+  About
+  About fpgui toolkit
   outer rectangle
   RecreateHintWindow
   wtPopup
@@ -73,8 +75,6 @@ findinfiledialog=61
   fpgui-develop
   hint :=
   #13
-  fpgui-d
-  IsRunningIDE
  [findinfileadialogfo]
  stackedunder=
  x=386
@@ -208,7 +208,7 @@ options=108
  index=1
  [projectoptionsfo.tabwidget]
  firsttab=0
- index=1
+ index=2
  [projectoptionsfo]
  stackedunder=
  x=219
@@ -274,7 +274,7 @@ makeoptions=8
  -FE.
  -FUunits
  -WG
- -B -gl
+ -B
  -O2 -XX -Xs -CX
  -vewnhibqw
 compilerused=21
@@ -878,8 +878,9 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=UpdatePosition
+finddtext=lblName1
 findhistory=20
+ lblName1
  UpdatePosition
  XMoveResizeWindow
  dodrag
@@ -899,9 +900,8 @@ findhistory=20
  islinux
  ide
  bevel
- OnPaletteClick
 findoptions=1
-editpos=75
+editpos=80
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -909,6 +909,7 @@ editpos=75
  0,-1073741823
  0,-1073741823
  0,-1073741823
+ 0,1
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -975,8 +976,12 @@ editpos=75
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,167
- 0,17
+ 0,-1073741823
+ 0,-1073741823
+ 0,3034
+ 0,568
+ 0,59
+ 0,1660
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -1052,7 +1057,12 @@ bookmarks71=0
 bookmarks72=0
 bookmarks73=0
 bookmarks74=0
-sourcefiles=75
+bookmarks75=0
+bookmarks76=0
+bookmarks77=0
+bookmarks78=0
+bookmarks79=0
+sourcefiles=80
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
@@ -1128,7 +1138,12 @@ sourcefiles=75
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
  ${PROJECTDIR}/vfd_widgets.pas
-relpaths=75
+ ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
+ ${PROJECTDIR}/frm_main_designer.pas
+ ${PROJECTDIR}/messagedialog.inc
+ /home/fred/fpGUI-develop/src/gui/messagedialog.inc
+ ${PROJECTDIR}/sak_fpg.pas
+relpaths=80
  frm_main_designer.pas
  frm_vfdforms.pas
  vfd_editors.pas
@@ -1204,7 +1219,17 @@ relpaths=75
  define.inc
  fpg_style_anim_round_silver_horz.pas
  vfd_widgets.pas
-ismoduletexts=75
+ fpg_style_anim_round_silver_horz.pas
+ frm_main_designer.pas
+ messagedialog.inc
+ ../fpGUI-develop/src/gui/messagedialog.inc
+ sak_fpg.pas
+ismoduletexts=80
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1285,7 +1310,7 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=75
+order=80
  0
  1
  2
@@ -1294,10 +1319,15 @@ order=75
  5
  6
  7
+ 76
+ 79
+ 78
+ 77
  8
  72
  73
  74
+ 75
  9
  10
  11
@@ -1363,7 +1393,7 @@ order=75
  38
 tabsize=60
 firsttab=6
-index=11
+index=7
 [layout]
 windowlayout=502
  [mainfo.basedock]
@@ -1386,7 +1416,7 @@ windowlayout=502
  rcy=0
  children=2
   statdisp,0,1,1356,18
-  basedock,0,19,1356,682
+  basedock,0,0,1356,701
  focusedchild=1
  wsize=6
  active=0
@@ -1407,7 +1437,7 @@ windowlayout=502
  rcx=0
  rcy=0
  wsize=0
- active=0
+ active=1
  visible=1
  [threadsfo]
  splitdir=0
@@ -1502,7 +1532,7 @@ windowlayout=502
  x=0
  y=0
  cx=139
- cy=542
+ cy=561
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1513,7 +1543,7 @@ windowlayout=502
  sortdescend1=0
  sorted=0
  col=0
- row=17
+ row=4
  rowheight=18
  [stackfo]
  splitdir=0
@@ -1711,7 +1741,7 @@ windowlayout=502
  ncx=0
  ncy=0
  x=0
- y=594
+ y=613
  cx=1356
  cy=88
  rcx=0
@@ -1829,7 +1859,7 @@ windowlayout=502
  x=142
  y=0
  cx=1214
- cy=542
+ cy=561
  rcx=0
  rcy=0
  [cpuc86_64fo]
@@ -1865,7 +1895,7 @@ windowlayout=502
  x=0
  y=49
  cx=1356
- cy=542
+ cy=561
  rcx=0
  rcy=0
 [targetconsole]
