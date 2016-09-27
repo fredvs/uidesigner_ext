@@ -115,11 +115,7 @@ begin
   if (btfFlat in AFlags) and not (btfIsPressed in AFlags) then
     Exit; // no need to go further
 
-  // outer rectangle
-  ACanvas.SetLineStyle(1, lsSolid);
-      ACanvas.SetColor(clblack);
-        ACanvas.DrawRectangle(r);
-
+  
   // so we don't paint over the border
   InflateRect(r, -1, -1);
   // now paint the face of the button

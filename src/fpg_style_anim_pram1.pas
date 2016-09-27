@@ -1,9 +1,9 @@
-{Animated Ellipse Style
+{Annimated Chrome Style
 by Fred van Stappen
 fiens@hotmail.com
 }
 
-unit fpg_style_anim_ellipse_silver_vert;
+unit fpg_style_anim_pram1 ;
 
 {$mode objfpc}{$H+}
 
@@ -41,11 +41,12 @@ type
     { Menus }
     procedure DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
       AFlags: TfpgMenuItemFlags); override;
-    procedure DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
-      ABackgroundColor: TfpgColor); override;
     function HasButtonHoverEffect: boolean; override;
+
   end;
 
+  var
+   param1 : real = 2 ;
 
 implementation
 
@@ -53,18 +54,17 @@ uses
   fpg_stylemanager,
   fpg_widget;
 
-{ TExtStyle }
-
 var
   waspressed: boolean;
+
+{ TExtStyle }
 
 constructor TExtStyle.Create;
 begin
   inherited Create;
-  fpgSetNamedColor(clWindowBackground, TfpgColor($eeeeec));
+  fpgSetNamedColor(clWindowBackground, clLightGray);
   FTimer := TfpgTimer.Create(200);
   FTimer.OnTimer := @TimerFired;
-  FTimer.Enabled := False;
 
   FPressTimer := TfpgTimer.Create(1500);
   FPressTimer.OnTimer := @TimerPressed;
@@ -109,8 +109,10 @@ begin
         fadein := True;
       end;
     end;
+
     if fbutton <> nil then
       if Assigned(fbutton) then
+
         TfpgWidget(fbutton).Invalidate;
 
   end;
@@ -135,11 +137,11 @@ begin
     ACanvas.SetColor(clblack);
    ACanvas.DrawRectangle(r);
 
-   r.SetRect(x+1, y+1, w-2, h-2);
+   r.SetRect(x+1, y+1, w-round(param1), h-round(param1));
     ACanvas.SetColor(cllime);
       ACanvas.DrawRectangle(r);
 
-     r.SetRect(x+2, y+2, w-4, h-4);
+     r.SetRect(x+round(param1), y+round(param1), w-4, h-4);
     ACanvas.SetColor(clwhite);
       ACanvas.DrawRectangle(r);
 
@@ -160,13 +162,12 @@ begin
   FTimer.Enabled := False;
   r.SetRect(x, y, w, h);
 
-  r21.SetRect(x, y, w, h div 2);
+  r21.SetRect(x, y, w, h div round(param1));
 
-  r22.SetRect(x, y + (h div 2), w, h div 2);
+  r22.SetRect(x, y + (h div round(param1)), w, h div round(param1));
 
   if btfIsDefault in AFlags then
   begin
-    FTimer.Enabled := False;
     ACanvas.SetColor(TfpgColor($7b7b7b));
     ACanvas.SetLineStyle(1, lsSolid);
     ACanvas.DrawRectangle(r);
@@ -183,13 +184,11 @@ begin
   if (btfFlat in AFlags) and not (btfIsPressed in AFlags) then
     Exit; // no need to go further
 
-   // so we don't paint over the border
+    // so we don't paint over the border
   InflateRect(r, -1, -1);
-
   // now paint the face of the button
-  if ((btfIsPressed in AFlags) or (btfHover in AFlags)) then
+  if (btfIsPressed in AFlags) or (btfHover in AFlags) then
   begin
-    FTimer.Enabled := False;
     {$ifdef fpgui-develop}
  if ACanvas.widget.ClassName = 'TfpgButton' then
  {$else}
@@ -237,82 +236,21 @@ begin
     else
       ACanvas.SetColor(cllime);
     ACanvas.DrawRectangle(r);
-  end
+    if (waspressed = False) and (btfHover in AFlags) then
+      FTimer.Enabled := True;
+    end
   else
   begin
     FTimer.Enabled := False;
     i := 2;
     fadein := True;
-    ACanvas.GradientFill(r21, clsilver, clwhite, gdVertical);
-    ACanvas.GradientFill(r22, clwhite, clsilver, gdVertical);
-
+    ACanvas.GradientFill(r21, clsilver, $E6E6E6, gdVertical);
+    ACanvas.GradientFill(r22, $E6E6E6, clsilver, gdVertical);
+    //    ACanvas.SetColor(clblack);
     ACanvas.SetColor(cldarkgray);
     ACanvas.DrawRectangle(r);
 
   end;
-  FTimer.Enabled := False;
-   {$ifdef fpgui-develop}
- if ACanvas.widget.ClassName = 'TfpgButton' then
- {$else}
- if ACanvas.window.ClassName = 'TfpgButton' then
- {$endif}
-   begin
-  ACanvas.SetColor(clWindowBackground);
-  //  ACanvas.SetColor(cldarkgray);
-  acanvas.DrawLine(0, 1, 1, 0);
-  acanvas.DrawLine(0, 2, 2, 0);
-  // ACanvas.SetColor(clgray);
-  acanvas.DrawLine(0, 3, 3, 0);
-  acanvas.DrawLine(0, 4, 4, 0);
-  //  ACanvas.SetColor(clgray);
-  acanvas.DrawLine(0, 5, 5, 0);
-  ACanvas.SetColor(cldarkgray);
-  acanvas.DrawLine(0, 6, 6, 0);
-
-  ACanvas.SetColor(clWindowBackground);
-  //  ACanvas.SetColor(cldarkgray);
-  acanvas.DrawLine(w, 1, w - 1, 0);
-  acanvas.DrawLine(w, 2, w - 2, 0);
-  // ACanvas.SetColor(clgray);
-  acanvas.DrawLine(w, 3, w - 3, 0);
-  acanvas.DrawLine(w, 4, w - 4, 0);
-  // ACanvas.SetColor(clgray);
-  acanvas.DrawLine(w, 5, w - 5, 0);
-  ACanvas.SetColor(cldarkgray);
-  acanvas.DrawLine(w, 6, w - 6, 0);
-
-  ACanvas.SetColor(clWindowBackground);
-  acanvas.DrawLine(0, h - 1, 1, h);
-  acanvas.DrawLine(0, h - 2, 2, h);
-  // ACanvas.SetColor(clgray);
-  acanvas.DrawLine(0, h - 3, 3, h);
-  acanvas.DrawLine(0, h - 4, 4, h);
-  //ACanvas.SetColor(clgray);
-  acanvas.DrawLine(0, h - 5, 5, h);
-  ACanvas.SetColor(cldarkgray);
-  acanvas.DrawLine(0, h - 6, 6, h);
-
-  ACanvas.SetColor(clgray);
-  acanvas.DrawLine(w, h - 6, w - 6, h);
-  ACanvas.SetColor(clWindowBackground);
-  acanvas.DrawLine(w, h - 5, w - 5, h);
-  acanvas.DrawLine(w - 4, h, w, h - 4);
-  acanvas.DrawLine(w - 3, h, w, h - 3);
-  ACanvas.SetColor(clgray);
-  acanvas.DrawLine(w - 2, h, w, h - 2);
-  acanvas.DrawLine(w - 1, h, w, h - 1);
-
-  InflateRect(r, 1, 1);
-  ACanvas.SetColor(clWindowBackground);
-  ACanvas.DrawRectangle(r);
-  end else
-  begin
-   ACanvas.SetColor(clgray);
-   ACanvas.DrawRectangle(r);
-  end;
-
-  if (waspressed = False) and (btfHover in AFlags) then
-    FTimer.Enabled := True;
 
 end;
 
@@ -321,12 +259,12 @@ procedure TExtStyle.DrawMenuRow(ACanvas: TfpgCanvas; r: TfpgRect;
 var
   r21, r22: TfpgRect;
 begin
-  r21.Height := r.Height div 2;
+  r21.Height := r.Height div round(param1);
   r21.Width := r.Width;
   r21.Top := r.top;
   r21.Left := r.Left;
 
-  r22.Height := r.Height div 2;
+  r22.Height := r.Height div round(param1);
   r22.Width := r.Width;
   r22.Top := r.top + r22.Height;
   r22.Left := r.Left;
@@ -346,27 +284,8 @@ begin
   end;
 end;
 
-procedure TExtStyle.DrawMenuBar(ACanvas: TfpgCanvas; r: TfpgRect;
-  ABackgroundColor: TfpgColor);
-var
-  FLightColor: TfpgColor;
-  FDarkColor: TfpgColor;
-begin
-
-  FLightColor := TfpgColor($f0ece3);  // color at top of menu bar
-  FDarkColor := TfpgColor($beb8a4);  // color at bottom of menu bar
-  ACanvas.GradientFill(r, FLightColor, FDarkColor, gdVertical);
-
-  // inner bottom line
-  ACanvas.SetColor(clShadow1);
-  ACanvas.DrawLine(r.Left, r.Bottom - 1, r.Right + 1, r.Bottom - 1);   // bottom
-  // outer bottom line
-  ACanvas.SetColor(clWhite);
-  ACanvas.DrawLine(r.Left, r.Bottom, r.Right + 1, r.Bottom);   // bottom
-end;
-
 
 initialization
-  fpgStyleManager.RegisterClass('Anim Ellipse Silver vert', TExtStyle);
+  fpgStyleManager.RegisterClass('Anim param1', TExtStyle);
 
 end.

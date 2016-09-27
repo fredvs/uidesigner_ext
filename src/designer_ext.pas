@@ -38,8 +38,9 @@ uses
   RunOnce_PostIt,
   sak_fpg,
   fpg_cmdlineparams,
- //   fpg_style_chrome_silver_flatmenu,
+
 // {
+ // fpg_style_anim_pram1,
   fpg_style_anim_round_silver_horz,
   fpg_style_round_silver_flat_horz,
   fpg_style_anim_round_silver_flat_horz,
@@ -83,7 +84,14 @@ uses
   procedure MainProc;
   var
     filedir, ordir : string;
+
+    {$ifdef fpgui-develop}
+  //   cmd: ICmdLineParams;
+    {$endif}
+
   begin
+ // param1 := 2;
+
     ifonlyone := True;
     filedir := '';
      ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
@@ -144,7 +152,16 @@ uses
     fpgApplication.Initialize;
     try
       RegisterWidgets;
-      if not gCommandLineParams.IsParam('style') then
+
+    {$ifdef fpgui-develop}
+
+  if not gCommandLineParams.IsParam('style') then
+// cmd := fpgApplication as ICmdLineParams;
+// if not cmd.HasOption('style') then
+      {$else}
+     if not gCommandLineParams.IsParam('style') then
+    {$endif}
+
       begin
         if fpgStyleManager.SetStyle('Chrome silver flat menu') then
           fpgStyle := fpgStyleManager.Style;

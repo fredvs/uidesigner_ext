@@ -101,13 +101,7 @@ begin
   if (btfIsPressed in AFlags) or (btfHover in AFlags) then
   begin
 
-    // outer rectangle
-    ACanvas.SetLineStyle(1, lsSolid);
-   // ACanvas.SetColor(TfpgColor($a6a6a6));
-     ACanvas.SetColor(clblack);
-    ACanvas.DrawRectangle(r);
-
-    // so we don't paint over the border
+      // so we don't paint over the border
     InflateRect(r, -1, -1);
     ACanvas.GradientFill(r21, clHilite1, clwhite, gdVertical);
     ACanvas.GradientFill(r22, clwhite, clHilite1, gdVertical);

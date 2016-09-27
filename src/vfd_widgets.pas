@@ -71,10 +71,11 @@ uses
   fpg_hyperlink,
   fpg_toggle,
   fpg_dialogs,
-  
- // {$ifdef fpgui-develop}
   fpg_hexview,
- // {$endif}
+  
+ {$ifdef fpgui-develop}
+  fpg_ledmatrix,
+ {$endif}
     
   fpg_spinedit,
   vfd_propeditgrid,
@@ -371,6 +372,14 @@ begin
     'vfd.hexpanel', @stdimg_vfd_hexpanel,
     sizeof(stdimg_vfd_hexpanel),
     0, 0);
+
+  {$ifdef fpgui-develop}
+   fpgImages.AddMaskedBMP(
+    'vfd.ledmatrix', @stdimg_vfd_ledmatrix,
+    sizeof(stdimg_vfd_ledmatrix),
+    0, 0);
+ {$endif}
+
    
 end;
 
@@ -410,6 +419,7 @@ begin
   wc.NameBase := 'Label';
   wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
   wc.AddProperty('Alignment', TPropertyEnum, 'Horizontal text alignment');
+  wc.AddProperty('AutoSize', TPropertyBoolean, '');
   wc.AddProperty('BackgroundColor', TPropertyColor, '');
   wc.AddProperty('Enabled', TPropertyBoolean, '');
   wc.AddProperty('FontDesc', TPropertyFontDesc, 'The font used for displaying the label text');
@@ -964,7 +974,7 @@ wc.AddProperty('DropDownCount', TPropertyInteger, 'Number of visible items is th
 
   // Font Edit
   wc          := TVFDWidgetClass.Create(TfpgFontEdit);
-  wc.NameBase := 'DirectoryEdit';
+  wc.NameBase := 'FontEdit';
   wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
   wc.AddProperty('Enabled', TPropertyBoolean, '');
   wc.AddProperty('ExtraHint', TPropertyString, '');
@@ -1062,7 +1072,6 @@ wc.AddProperty('DropDownCount', TPropertyInteger, 'Number of visible items is th
   wc.WidgetIconName := 'vfd.toggle';
   RegisterVFDWidget(wc);
 
-// {$ifdef fpgui-develop}
   // hexview
   wc          := TVFDWidgetClass.Create(TfpgHexView);
   wc.NameBase := 'HexView';
@@ -1079,8 +1088,26 @@ wc.AddProperty('DropDownCount', TPropertyInteger, 'Number of visible items is th
   wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
   wc.AddProperty('HexView', TPropertyInterface, 'The view that updates our values');
   wc.WidgetIconName := 'vfd.hexpanel';
-  RegisterVFDWidget(wc);  
-  //   {$endif}
+  RegisterVFDWidget(wc);
+
+  {$ifdef fpgui-develop}
+   // LEDMatrix
+  wc          := TVFDWidgetClass.Create(TfpgLEDMatrix);
+  wc.NameBase := 'LEDMatrix';
+  wc.AddProperty('Align', TPropertyEnum, '');
+  wc.AddProperty('TabOrder', TPropertyInteger, 'The tab order');
+  wc.AddProperty('LEDOnColor', TPropertyColor, '');
+  wc.AddProperty('LEDOffColor', TPropertyColor, '');
+  wc.AddProperty('LEDGap', TPropertyInteger, '');
+  wc.AddProperty('LEDSize', TPropertyInteger, '');
+  wc.AddProperty('Width', TPropertyInteger, '');
+  wc.AddProperty('Height', TPropertyInteger, '');
+  wc.AddProperty('BackgroundColor', TPropertyColor, '');
+  wc.AddProperty('Text', TPropertyString, 'Initial text');
+  wc.AddProperty('Scrolling', TPropertyBoolean, '');
+  wc.WidgetIconName := 'vfd.ledmatrix';
+  RegisterVFDWidget(wc);
+   {$endif}
  
   // Other - do not delete!!! this should be the last...
   wc          := TVFDWidgetClass.Create(TOtherWidget);
