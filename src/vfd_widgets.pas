@@ -579,7 +579,7 @@ wc.AddProperty('DropDownCount', TPropertyInteger, 'Number of visible items is th
 
   // Calendar ComboBox Checkbox
   wc          := TVFDWidgetClass.Create(TfpgCalendarCheckCombo);
-  wc.NameBase := 'CalendarCombo';
+  wc.NameBase := 'CalendarCheckCombo';
   wc.AddProperty('Align', TPropertyEnum, 'Component alignment');
   wc.AddProperty('BackgroundColor', TPropertyColor, '');
   wc.AddProperty('Checked', TPropertyBoolean, 'Boolean value');
