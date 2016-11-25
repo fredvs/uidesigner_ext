@@ -209,6 +209,7 @@ type
     procedure   FormShow(Sender: TObject);
     procedure   FormResized(Sender: TObject);
     procedure   SetHierarchyMaxHeight;
+    procedure   TreeSelect(Sender: TObject);
   protected
     procedure HandleKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean); override;
   public
@@ -1857,6 +1858,26 @@ begin
   frmPropertiesPaint(sender);
 end;
 
+procedure TfrmProperties.TreeSelect(Sender: TObject);
+var
+aObj: TfpgWidget;
+aName: string;
+begin
+if (maindsgn.selectedform <> nil) then
+aName :=  copy(TreeView1.selection.text,1, pos(':',TreeView1.selection.text)-1);
+maindsgn.selectedform.deselectall; 
+  begin
+if (maindsgn.selectedform.form.name <> aName) then
+begin
+  aObj := maindsgn.selectedform.FindWidgetByName(aName);
+  if aObj <> nil then
+  maindsgn.selectedform.WidgetDesigner(aObj).selected := true;
+ 
+end else edName.Text := aname; 
+ maindsgn.selectedform.UpdatePropWin;
+end;
+end;
+
 procedure TfrmProperties.SetHierarchyMaxHeight;
 begin
   Bevel1.MaxHeight := Round(Height * 0.4); // no more than 40% of window height
@@ -1899,6 +1920,7 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     TabOrder := 1;
+    OnChange := @TreeSelect;
   end;
 
   Splitter1 := TfpgSplitter.Create(self);
@@ -1957,8 +1979,7 @@ begin
 
   Inc(y, gap + 5);
 
-   //  fpgApplication.CreateForm(TwgPropertyList, lstProps);
-
+  
   lstProps := TwgPropertyList.Create(bvlOI);
   lstProps.SetPosition(0, y, Width-20, (bvlOI.Height - y - 150) div 2);
   lstProps.Anchors := AllAnchors;

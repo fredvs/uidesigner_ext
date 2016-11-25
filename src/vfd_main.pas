@@ -245,7 +245,7 @@ frmMainDesigner.MainMenu.MenuItem(8).Visible := false;
     frmMainDesigner.btnSave.Visible := True;
 
     {$ifdef fpgui-develop}
-   frmMainDesigner.filemenu.MenuItem(4).enabled := True;
+    frmMainDesigner.filemenu.MenuItem(4).enabled := True;
     frmMainDesigner.filemenu.MenuItem(5).enabled := True;
     frmMainDesigner.filemenu.MenuItem(6).enabled := false;
     frmMainDesigner.filemenu.MenuItem(7).enabled := false;
