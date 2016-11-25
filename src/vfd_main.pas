@@ -175,7 +175,7 @@ begin
   frmProperties.Hide;
   frmmultiselect.Hide;
   frmmultiselect.ClearAll;
-
+  frmMainDesigner.MainMenu.Visible:=false;
   if assigned(FDesigners) then
        if FDesigners.Count > 0 then
   for n := 0 to FDesigners.Count - 1 do
@@ -189,7 +189,7 @@ begin
 
   frmMainDesigner.WindowTitle := 'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
 
-  frmMainDesigner.MainMenu.MenuItem(8).Visible := false;
+ 
 //  if frmMainDesigner.btnToFront.Tag = 1 then
     frmMainDesigner.MainMenu.MenuItem(8).Text :=  '';
   //    'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
@@ -219,7 +219,18 @@ begin
   SetLength(ArrayUndo, 0);
 
   ifundo := False;
+  
+   if enableundo = True then
+  frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
+  frmMainDesigner.MainMenu.MenuItem(2).Visible := True;
+  frmMainDesigner.MainMenu.MenuItem(5).Visible := True;
 
+  if gINI.ReadInteger('Options', 'IDE', 0) > 0 then
+
+  frmMainDesigner.MainMenu.MenuItem(8).Visible := true else
+frmMainDesigner.MainMenu.MenuItem(8).Visible := false;
+
+ 
   frmMainDesigner.undomenu.MenuItem(0).Visible := False;
   frmMainDesigner.undomenu.MenuItem(1).Visible := False;
   frmMainDesigner.undomenu.MenuItem(3).Visible := False;
@@ -272,9 +283,9 @@ begin
       frmMainDesigner.MainMenu.MenuItem(1).Visible := True;
      isFileLoaded := True;
     isFileNew := True;
-
+     frmMainDesigner.MainMenu.Visible:=true;
      TFormDesigner(selectedform).Form.Hide;
-
+   
         fpgapplication.ProcessMessages;
         TFormDesigner(selectedform).Form.Show;
          frmproperties.Show;
