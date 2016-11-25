@@ -1248,7 +1248,7 @@ begin
    {$if defined(cpu64)}
  {$IFDEF Windows}
 
-  dataf := copy(GetAppConfigDir(False), 1, pos('Local\designer_ext',
+ dataf := copy(GetAppConfigDir(False), 1, pos('Local\designer_ext',
     GetAppConfigDir(False)) - 1) + 'Roaming\typhon64\environmentoptions.xml';
 
   if fileexists(PChar(dataf)) then
@@ -1295,13 +1295,24 @@ begin
   else
     rblaz.Enabled := False;
 
+ {$ifdef ideu}
 {$IFDEF Windows}
+  dataf := copy(GetAppConfigDir(False), 1, pos('designer_ext_ideu', GetAppConfigDir(False)) -
+    1) + 'ideU\ideU.ini';
+   {$ENDIF}
+ {$IFDEF unix}
+  dataf := GetUserDir + '.config/ideU/ideU.ini';
+{$ENDIF}
+ {$else}
+ {$IFDEF Windows}
   dataf := copy(GetAppConfigDir(False), 1, pos('designer_ext', GetAppConfigDir(False)) -
     1) + 'ideU\ideU.ini';
    {$ENDIF}
  {$IFDEF unix}
   dataf := GetUserDir + '.config/ideU/ideU.ini';
 {$ENDIF}
+
+ {$endif}
 
   if fileexists(PChar(dataf)) then
     rbideu.Enabled := True

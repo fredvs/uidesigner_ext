@@ -53,8 +53,13 @@ findinfiledialog=61
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=About
+ value=edName.Width
  history=20
+  edName.Width
+  UpdateWidgetHierachyTreeview
+  designer_ext
+  hideit
+  {$ifdef ideu}
   About
   About fpgui toolkit
   outer rectangle
@@ -70,11 +75,6 @@ findinfiledialog=61
   HintTimerFired
   chlPalette
   bevel
-  TFPGBEVEL
-  ProgressBar
-  fpgui-develop
-  hint :=
-  #13
  [findinfileadialogfo]
  stackedunder=
  x=386
@@ -106,7 +106,7 @@ replacedialog=15
  y=302
  cx=437
  cy=171
-options=108
+options=114
  [projectoptionsfo.toolshortcuts]
  dropdowncolwidths=3
   70
@@ -142,8 +142,8 @@ options=108
  width4=284
  sortdescend4=0
  sorted=0
- col=0
- row=0
+ col=-1073741823
+ row=-1073741823
  rowheight=17
  [projectoptionsfo.newfile]
  firsttab=0
@@ -185,6 +185,12 @@ options=108
  sortdescend10=0
  width11=483
  sortdescend11=0
+ [projectoptionsfo.comment_1]
+ value=
+ [projectoptionsfo.comment_B]
+ value=
+ [projectoptionsfo.comment_M]
+ value=
  [projectoptionsfo.makegroupbox]
  firsttab=0
  index=2
@@ -234,12 +240,7 @@ programparameters=18
  y=243
  cx=328
  cy=348
-settings=13
- [settingsfo.tsplitter2]
- x=171
- y=16
- xprop=0.54010695187166
- yprop=0.97297297297297
+settings=8
  [settingsfo]
  x=410
  y=41
@@ -268,7 +269,7 @@ objpref=-Fo
 targpref=-o
 befcommand=0
 aftcommand=0
-makeoptions=8
+makeoptions=9
  -fPIC
  -l -Mobjfpc -Schi
  -FE.
@@ -276,17 +277,36 @@ makeoptions=8
  -WG
  -B
  -O2 -XX -Xs -CX
+ -s
  -vewnhibqw
-compilerused=21
+makeoptpurpose=9
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+compilerused=29
  ${COMPILER} (Default)
  Pascal 1
  Pascal 2
  Pascal 3
  Pascal 4
+ Pascal 5
+ Pascal 6
+ Pascal 7
+ Pascal 8
  C 1
  C 2
  C 3
  C 4
+ C 5
+ C 6
+ C 7
+ C 8
  Java 1
  Java 2
  Java 3
@@ -453,17 +473,26 @@ modulenames=0
 moduletypes=0
 modulefiles=0
 befcommandon=0
-makeoptionson=8
+makeoptionson=9
  0
  447
  447
  447
- 384
- 434
- 432
+ 48
+ 446
  447
-compilerusedon=21
+ 0
+ 447
+compilerusedon=29
  4095
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -492,9 +521,7 @@ debuggerusedon=6
  0
  0
 exeusedon=14
- 3711
- 0
- 384
+ 4095
  0
  0
  0
@@ -506,13 +533,34 @@ exeusedon=14
  0
  0
  0
+ 0
+ 0
+comment_M=
+comment_B=
+comment_1=
+comment_2=
+comment_3=
+comment_4=
+comment_5=
+comment_6=
+comment_7=
+comment_8=
+comment_9=
+comment_0=
+project_name=
+project_creator=
+project_copyright=
+project_license=
+project_time=18:08:31
+project_date=25/11/2016
+project_comment=
 aftcommandon=0
 unitdirson=7
  197055
  197055
- 196992
+ 197040
  197055
- 196671
+ 196623
  197055
  197055
 macroon=7
@@ -731,7 +779,7 @@ path=4
  /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
  /home/fred/fpGUI-develop/src/gui/fpg_hint.pas
 line=4
- 1403
+ 1405
  624
  43
  228
@@ -878,8 +926,16 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=lblName1
+finddtext=frmpro
 findhistory=20
+ frmpro
+ lstProps.h
+ btnLeft
+ frmMainDesigner
+ UpdatePropWin
+ UpdateWidgetHierachyTreeview
+ TreeView1
+ OnPropNameChange
  lblName1
  UpdatePosition
  XMoveResizeWindow
@@ -892,16 +948,8 @@ findhistory=20
  hint
  onshowhint
  assigned
- showhint
- FormShow
- DoUpdatePosition
- upda
- WindowAttributes
- islinux
- ide
- bevel
 findoptions=1
-editpos=80
+editpos=98
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -909,7 +957,6 @@ editpos=80
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,1
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -978,10 +1025,29 @@ editpos=80
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,3034
- 0,568
- 0,59
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,0
+ 0,10
+ 0,167
+ 0,266
+ 0,181
+ 0,1592
+ 0,270
  0,1660
+ 0,947
+ 0,1244
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -1062,7 +1128,25 @@ bookmarks76=0
 bookmarks77=0
 bookmarks78=0
 bookmarks79=0
-sourcefiles=80
+bookmarks80=0
+bookmarks81=0
+bookmarks82=0
+bookmarks83=0
+bookmarks84=0
+bookmarks85=0
+bookmarks86=0
+bookmarks87=0
+bookmarks88=0
+bookmarks89=0
+bookmarks90=0
+bookmarks91=0
+bookmarks92=0
+bookmarks93=0
+bookmarks94=0
+bookmarks95=0
+bookmarks96=0
+bookmarks97=0
+sourcefiles=98
  ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/frm_vfdforms.pas
  ${PROJECTDIR}/vfd_editors.pas
@@ -1143,7 +1227,25 @@ sourcefiles=80
  ${PROJECTDIR}/messagedialog.inc
  /home/fred/fpGUI-develop/src/gui/messagedialog.inc
  ${PROJECTDIR}/sak_fpg.pas
-relpaths=80
+ ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/vfd_main.pas
+ ${PROJECTDIR}/designer_ext.pas
+ ${PROJECTDIR}/frm_vfdforms.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/designer_ext.pas
+ ${PROJECTDIR}/vfd_main.pas
+ ${PROJECTDIR}/runonce_postit.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
+ ${PROJECTDIR}/frm_main_designer.pas
+ /home/fred/fpGUI-develop/uidesigner/frm_main.pas
+ ${PROJECTDIR}/vfd_main.pas
+ /home/fred/fpGUI-develop/uidesigner/vfd_main.pas
+ ${PROJECTDIR}/sak_fpg.pas
+ /home/fred/fpGUI-develop/uidesigner/vfd_designer.pas
+ ${PROJECTDIR}/vfd_designer.pas
+relpaths=98
  frm_main_designer.pas
  frm_vfdforms.pas
  vfd_editors.pas
@@ -1222,9 +1324,45 @@ relpaths=80
  fpg_style_anim_round_silver_horz.pas
  frm_main_designer.pas
  messagedialog.inc
- ../fpGUI-develop/src/gui/messagedialog.inc
+ fpGUI-develop/src/gui/messagedialog.inc
  sak_fpg.pas
-ismoduletexts=80
+ fpg_style_anim_round_silver_horz.pas
+ define.inc
+ vfd_main.pas
+ designer_ext.pas
+ frm_vfdforms.pas
+ define.inc
+ designer_ext.pas
+ vfd_main.pas
+ runonce_postit.pas
+ define.inc
+ fpg_style_anim_round_silver_horz.pas
+ frm_main_designer.pas
+ ../fpGUI-develop/uidesigner/frm_main.pas
+ vfd_main.pas
+ ../fpGUI-develop/uidesigner/vfd_main.pas
+ sak_fpg.pas
+ ../fpGUI-develop/uidesigner/vfd_designer.pas
+ vfd_designer.pas
+ismoduletexts=98
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1310,8 +1448,18 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=80
+order=98
  0
+ 88
+ 89
+ 91
+ 97
+ 92
+ 96
+ 95
+ 93
+ 94
+ 90
  1
  2
  3
@@ -1319,15 +1467,7 @@ order=80
  5
  6
  7
- 76
- 79
- 78
- 77
  8
- 72
- 73
- 74
- 75
  9
  10
  11
@@ -1356,9 +1496,22 @@ order=80
  34
  35
  36
- 40
+ 37
+ 38
  39
+ 40
  41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
  53
  54
  55
@@ -1378,27 +1531,43 @@ order=80
  69
  70
  71
- 42
- 43
- 44
- 45
- 46
- 49
- 50
- 51
- 52
- 47
- 48
- 37
- 38
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
 tabsize=60
-firsttab=6
-index=7
+firsttab=0
+index=3
 [layout]
-windowlayout=502
+windowlayout=530
  [mainfo.basedock]
  splitdir=2
- useroptions=15488
+ useroptions=11395
+ parent=mainfo.container
+ visible=1
+ mdistate=0
+ nx=0
+ ny=19
+ ncx=956
+ ncy=585
+ x=0
+ y=19
+ cx=1356
+ cy=682
+ rcx=0
+ rcy=0
  [mainfo]
  splitdir=0
  useroptions=838860925
@@ -1408,18 +1577,17 @@ windowlayout=502
  ny=0
  ncx=0
  ncy=0
- x=154
- y=26
- cx=966
+ x=164
+ y=81
+ cx=1020
  cy=621
  rcx=0
  rcy=0
- children=2
-  statdisp,0,1,1356,18
-  basedock,0,0,1356,701
- focusedchild=1
+ children=1
+  basedock,0,19,1356,682
+ focusedchild=0
  wsize=6
- active=0
+ active=1
  visible=1
  [targetconsolefo]
  splitdir=0
@@ -1430,14 +1598,14 @@ windowlayout=502
  ny=0
  ncx=0
  ncy=0
- x=495
- y=172
+ x=500
+ y=256
  cx=497
  cy=314
  rcx=0
  rcy=0
  wsize=0
- active=1
+ active=0
  visible=1
  [threadsfo]
  splitdir=0
@@ -1460,7 +1628,7 @@ windowlayout=502
  [memoryfo]
  splitdir=0
  useroptions=805322875
- stackedunder=cpuc86_64fo
+ stackedunder=dialogfilesfo
  parent=
  mdistate=0
  nx=0
@@ -1486,7 +1654,7 @@ windowlayout=502
  value=0
  [disassfo]
  splitdir=0
- useroptions=268451947
+ useroptions=805322859
  stackedunder=
  parent=
  mdistate=0
@@ -1506,22 +1674,22 @@ windowlayout=502
  [findinfilefo]
  splitdir=0
  useroptions=268451947
- stackedunder=
+ stackedunder=targetconsolefo
  parent=
  mdistate=0
  nx=0
  ny=0
  ncx=0
  ncy=0
- x=239
- y=115
- cx=678
+ x=78
+ y=64
+ cx=996
  cy=414
  rcx=0
  rcy=0
  [projecttreefo]
  splitdir=0
- useroptions=805355627
+ useroptions=268484715
  parent=mainfo.panel1.container
  visible=1
  mdistate=0
@@ -1532,10 +1700,10 @@ windowlayout=502
  x=0
  y=0
  cx=139
- cy=561
+ cy=532
  rcx=0
  rcy=0
- [projecttreefo.grid]
+ [projecttreefo.project_tree]
  propcolwidthref=1
  width0=141
  sortdescend0=0
@@ -1543,8 +1711,8 @@ windowlayout=502
  sortdescend1=0
  sorted=0
  col=0
- row=4
- rowheight=18
+ row=2
+ rowheight=17
  [stackfo]
  splitdir=0
  useroptions=805331049
@@ -1624,7 +1792,7 @@ windowlayout=502
  [objectinspectorfo]
  splitdir=0
  useroptions=805322859
- stackedunder=breakpointsfo
+ stackedunder=
  parent=
  mdistate=0
  nx=0
@@ -1701,8 +1869,8 @@ windowlayout=502
  y=0
  cx=247
  cy=44
- rcx=956
- rcy=585
+ rcx=1129
+ rcy=679
  [watchfo.grid]
  propcolwidthref=121
  values0=2
@@ -1741,7 +1909,7 @@ windowlayout=502
  ncx=0
  ncy=0
  x=0
- y=613
+ y=594
  cx=1356
  cy=88
  rcx=0
@@ -1812,7 +1980,7 @@ windowlayout=502
  [componentpalettefo]
  splitdir=0
  useroptions=805331051
- stackedunder=mainfo
+ stackedunder=findinfilefo
  parent=
  mdistate=0
  nx=0
@@ -1843,7 +2011,23 @@ windowlayout=502
  x=0
  y=0
  cx=1356
- cy=46
+ cy=56
+ rcx=0
+ rcy=0
+ [debuggerfo.basedock]
+ splitdir=2
+ useroptions=146563
+ parent=debuggerfo.container
+ visible=1
+ mdistate=0
+ nx=0
+ ny=52
+ ncx=1356
+ ncy=21
+ x=0
+ y=52
+ cx=1356
+ cy=3
  rcx=0
  rcy=0
  [sourcefo]
@@ -1859,7 +2043,23 @@ windowlayout=502
  x=142
  y=0
  cx=1214
- cy=561
+ cy=532
+ rcx=0
+ rcy=0
+ [mainfo.panel1]
+ splitdir=1
+ useroptions=838893035
+ parent=mainfo.basedock
+ visible=1
+ mdistate=0
+ nx=0
+ ny=0
+ ncx=0
+ ncy=0
+ x=0
+ y=59
+ cx=1356
+ cy=532
  rcx=0
  rcy=0
  [cpuc86_64fo]
@@ -1882,22 +2082,6 @@ windowlayout=502
  wsize=0
  active=0
  visible=0
- [mainfo.panel1]
- splitdir=1
- useroptions=838893035
- parent=mainfo.basedock
- visible=1
- mdistate=0
- nx=0
- ny=0
- ncx=0
- ncy=0
- x=0
- y=49
- cx=1356
- cy=561
- rcx=0
- rcy=0
 [targetconsole]
 finddtext=
 findhistory=0

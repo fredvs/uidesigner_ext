@@ -49,6 +49,8 @@ uses
   fpg_listbox,
   fpg_memo,
   fpg_dialogs,
+  fpg_tree,
+  fpg_splitter,
   fpg_panel,
   fpg_mru,
   vfd_widgetclass,
@@ -203,9 +205,18 @@ type
   end;
 
   TfrmProperties = class(TfpgForm)
+   private
+    procedure   FormShow(Sender: TObject);
+    procedure   FormResized(Sender: TObject);
+    procedure   SetHierarchyMaxHeight;
   protected
     procedure HandleKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean); override;
   public
+  {@VFD_HEAD_BEGIN: frmProperties}
+    Bevel1: TfpgBevel;
+    TreeView1: TfpgTreeView;
+    Splitter1: TfpgSplitter;
+    bvlOI: TfpgBevel;  
     l1, l2, l3, l4, l5, l6, l7, l8: TfpgLabel;
     lbClass: TfpgLabel;
     edName: TfpgEdit;
@@ -219,13 +230,14 @@ type
     virtualpanel: Tfpgpanel;
     cbsizeable, cbfullscreen, cbvisible, cbenabled, cbWindowPosition, cbFocusable, cbshowhint: TfpgCombobox;
     edmaxheight, edminheight, edmaxwidth, edminwidth, edTag, edhint: Tfpgedit;
-
+     {@VFD_HEAD_END: frmProperties}
+    constructor Create(AOwner: TComponent); override;
     procedure AfterCreate; override;
     procedure BeforeDestruction; override;
     procedure Vpanelpaint(Sender: TObject);
     procedure frmPropertiesPaint(Sender: TObject);
     procedure VirtualPropertiesUpdate(Sender: TObject);
-
+    procedure   UpdateWidgetHierachyTreeview(AMainComp, ASelected: TComponent);
   end;
 
   TfrmAbout = class(TfpgForm)
@@ -252,7 +264,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '1.9.3';
+  ext_version: string = '1.9.4';
 
 var
 
@@ -335,8 +347,6 @@ end;
 procedure TfrmAbout.AfterCreate;
 begin
   {%region 'Auto-generated GUI code' -fold}
-
-
   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
   SetPosition(464, 277, 278, 195);
@@ -1836,64 +1846,89 @@ end;
 
 { TfrmProperties }
 
+procedure TfrmProperties.FormShow(Sender: TObject);
+begin
+// gINI.ReadFormState(self);
+end;
+
+procedure TfrmProperties.FormResized(Sender: TObject);
+begin
+  SetHierarchyMaxHeight;
+  frmPropertiesPaint(sender);
+end;
+
+procedure TfrmProperties.SetHierarchyMaxHeight;
+begin
+  Bevel1.MaxHeight := Round(Height * 0.4); // no more than 40% of window height
+end;
+
 procedure TfrmProperties.AfterCreate;
 var
   x, x2, w, y, nblist, gap: integer;
 begin
+// inherited;
   {%region 'Auto-generated GUI code' -fold}
-
-  inherited;
+   {@VFD_BODY_BEGIN: frmProperties}
   Name := 'frmProperties';
   WindowTitle := 'Properties';
   left := 10;
   top := 110;
   Width := 270;
-  Height := 484;
+  Height := 590;
   MinWidth := 268;
-  MinHeight := 482;
-  OnResize := @frmPropertiesPaint;
+  MinHeight := 588;
+  //OnResize := @frmPropertiesPaint;
+  OnResize := @FormResized;
   Visible := False;
-
-  if gINI.ReadBool('frmPropertiesState', 'FirstLoad', True) = False then
+    
+     Bevel1 := TfpgBevel.Create(self);
+  with Bevel1 do
   begin
-    gINI.ReadFormState(self);
-    {$ifdef fpgui-develop}
-    UpdatePosition;
-    {$else}
-    UpdateWindowPosition;
-    {$endif}
-  end
-  else
-    gINI.WriteBool('frmPropertiesState', 'FirstLoad', False);
+    Name := 'Bevel1';
+    SetPosition(0, 0, 250, 100);
+    Hint := '';
+    Shape := bsSpacer;
+  end;
 
-  fpgImages.AddMaskedBMP(
-    'vfd.anchorleft', @vfd_anchorleft,
-    sizeof(vfd_anchorleft), 0, 0);
+  TreeView1 := TfpgTreeView.Create(Bevel1);
+  with TreeView1 do
+  begin
+    Name := 'TreeView1';
+    SetPosition(4, 4, 242, 92);
+    Anchors := [anLeft,anRight,anTop,anBottom];
+    FontDesc := '#Label1';
+    Hint := '';
+    TabOrder := 1;
+  end;
 
-  fpgImages.AddMaskedBMP(
-    'vfd.anchorright', @vfd_anchorright,
-    sizeof(vfd_anchorright), 0, 0);
+  Splitter1 := TfpgSplitter.Create(self);
+  with Splitter1 do
+  begin
+    Name := 'Splitter1';
+    SetPosition(0, 100, 250, 8);
+  end;
 
-  fpgImages.AddMaskedBMP(
-    'vfd.anchortop', @vfd_anchortop,
-    sizeof(vfd_anchortop), 0, 0);
-
-  fpgImages.AddMaskedBMP(
-    'vfd.anchorbottom', @vfd_anchorbottom,
-    sizeof(vfd_anchorbottom), 0, 0);
-
-  x := 3;
+  bvlOI := TfpgBevel.Create(self);
+  with bvlOI do
+  begin
+    Name := 'bvlOI';
+    SetPosition(0, 108, 250, 461);
+    Hint := '';
+    Shape := bsSpacer;
+  end;
+    
+   x := 3;
   x2 := x + 50;
   gap := 20;
   w := Width - x2;
   y := 3;
 
-  l1 := TfpgLabel.Create(self);
+  l1 := TfpgLabel.Create(bvlOI);
   l1.Text := 'Class:';
   l1.Top := y - 1;
   l1.left := 5;
 
-  lbClass := TfpgLabel.Create(self);
+  lbClass := TfpgLabel.Create(bvlOI);
   lbClass.Text := '';
   lbClass.Top := y - 1;
   lbClass.left := x2;
@@ -1903,15 +1938,18 @@ begin
   lbClass.Anchors := [anLeft, anRight, anTop];
   Inc(y, gap);
 
-  l2 := TfpgLabel.Create(self);
+  l2 := TfpgLabel.Create(bvlOI);
   l2.Text := 'Name:';
   l2.Top := y + 1;
   l2.left := 5;
+  l2.width := 60;
+  l2.Anchors := [anLeft, anRight, anTop];
 
-  edName := TfpgEdit.Create(self);
+  edName := TfpgEdit.Create(bvlOI);
   edName.Text := '';
   edName.name := 'name';
-  edName.Width := Width - l2.Right + 28;
+ // edName.Width := Width - l2.Right + 28;
+  edName.Width := Width - l2.width - 20;
   edName.Top := y - 2;
   edName.left := x2;
   edName.Anchors := [anLeft, anRight, anTop];
@@ -1921,8 +1959,8 @@ begin
 
    //  fpgApplication.CreateForm(TwgPropertyList, lstProps);
 
-  lstProps := TwgPropertyList.Create(self);
-  lstProps.SetPosition(0, y, Width, (self.Height - y - 150) div 2);
+  lstProps := TwgPropertyList.Create(bvlOI);
+  lstProps.SetPosition(0, y, Width-20, (bvlOI.Height - y - 150) div 2);
   lstProps.Anchors := AllAnchors;
   lstProps.Props := PropList;
   lstProps.Props.Widget := edName;
@@ -1936,8 +1974,8 @@ begin
 
   y := lstProps.Bottom;
 
-  virtualpanel := Tfpgpanel.Create(self);
-  virtualpanel.SetPosition(0, y, Width, 110);
+  virtualpanel := Tfpgpanel.Create(bvlOI);
+  virtualpanel.SetPosition(0, y, Width-20, 110);
   virtualpanel.Anchors := [anLeft, anRight];
   virtualpanel.BackgroundColor := $CCCCCC;
   virtualpanel.Style := bsFlat;
@@ -2081,25 +2119,24 @@ begin
 
   y := virtualpanel.Bottom + 5;
 
-  l3 := CreateLabel(self, 5, y + 1, 'Left:');
+  l3 := CreateLabel(bvlOI, 5, y + 1, 'Left:');
   l3.Anchors := [anLeft, anBottom];
 
-  l6 := TfpgLabel.Create(self);
+  l6 := TfpgLabel.Create(bvlOI);
   l6.Text := 'Height:';
   l6.Top := y + gap + 5;
   // l6.left:=110;
   l6.Height := 22;
   l6.Anchors := [anright, anBottom];
 
-  l6.Left := Width - (48 * 2) - 10;
+  l6.Left := Width - (48 * 2) - 30;
 
-  l4 := CreateLabel(self, 110, y, 'Top:');
+  l4 := CreateLabel(bvlOI, 90, y, 'Top:');
+  l4.Left := Width - (48 * 2) - 30;
   l4.Anchors := [anright, anBottom];
 
-  l4.Left := Width - (48 * 2) - 10;
 
-
-  btnLeft := CreateButton(self, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnLeft := CreateButton(bvlOI, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnLeft do
   begin
     Height := 22;
@@ -2107,7 +2144,7 @@ begin
     Focusable := False;
     end;
 
-  btnTop := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnTop := CreateButton(bvlOI, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
 
   with btnTop do
   begin
@@ -2116,13 +2153,13 @@ begin
     Focusable := False;
    end;
 
-  btnTop.Left := Width - (btnTop.Width) - 5;
+  btnTop.Left := Width - (btnTop.Width) - 25;
 
   Inc(y, gap + 5);
-  l5 := CreateLabel(self, 5, y + 1, 'Width:');
+  l5 := CreateLabel(bvlOI, 5, y + 1, 'Width:');
   l5.Anchors := [anleft, anBottom];
 
-  btnWidth := CreateButton(self, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnWidth := CreateButton(bvlOI, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnWidth do
   begin
     Height := 22;
@@ -2131,7 +2168,7 @@ begin
     Focusable := False;
   end;
 
-  btnHeight := CreateButton(self, 160, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnHeight := CreateButton(bvlOI, 140, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
   with btnHeight do
   begin
     Height := 22;
@@ -2140,14 +2177,14 @@ begin
   end;
   Inc(y, gap + 5);
 
-  l8 := CreateLabel(self, 5, y + 1, 'Anchors:');
+  l8 := CreateLabel(bvlOI, 5, y + 1, 'Anchors:');
   l8.Anchors := [anLeft, anBottom];
 
-  btnHeight.Left := Width - (btnHeight.Width) - 5;
+  btnHeight.Left := Width - (btnHeight.Width) - 25;
 
   x := 64;
 
-  btnAnLeft := CreateButton(self, x, y - 2, 26, '', nil);
+  btnAnLeft := CreateButton(bvlOI, x, y - 2, 26, '', nil);
   with btnAnLeft do
   begin
     ImageName := 'vfd.anchorleft';
@@ -2159,10 +2196,10 @@ begin
     Anchors := [anright, anBottom];
     OnClick := @(maindsgn.OnAnchorChange);
   end;
-  btnAnLeft.Left := Width - (btnAnLeft.Width * 4) - 50;
+  btnAnLeft.Left := Width - (btnAnLeft.Width * 4) - 100;
 
   Inc(x, 30);
-  btnAnTop := CreateButton(self, x, y - 2, 26, '', nil);
+  btnAnTop := CreateButton(bvlOI, x, y - 2, 26, '', nil);
   with btnAnTop do
   begin
     ImageName := 'vfd.anchortop';
@@ -2174,10 +2211,10 @@ begin
     Anchors := [anright, anBottom];
     OnClick := @(maindsgn.OnAnchorChange);
   end;
-  btnAnTop.Left := Width - (btnAnTop.Width * 3) - 35;
+  btnAnTop.Left := Width - (btnAnTop.Width * 3) - 85;
 
   Inc(x, 30);
-  btnAnBottom := CreateButton(self, x, y - 2, 26, '', nil);
+  btnAnBottom := CreateButton(bvlOI, x, y - 2, 26, '', nil);
   with btnAnBottom do
   begin
     ImageName := 'vfd.anchorbottom';
@@ -2189,10 +2226,10 @@ begin
     Anchors := [anBottom, anright];
     OnClick := @(maindsgn.OnAnchorChange);
   end;
-  btnAnBottom.Left := Width - (btnAnBottom.Width * 2) - 20;
+  btnAnBottom.Left := Width - (btnAnBottom.Width * 2) - 70;
 
   Inc(x, 30);
-  btnAnRight := CreateButton(self, x, y - 2, 26, '', nil);
+  btnAnRight := CreateButton(bvlOI, x, y - 2, 26, '', nil);
   with btnAnRight do
   begin
     ImageName := 'vfd.anchorright';
@@ -2205,22 +2242,40 @@ begin
     OnClick := @(maindsgn.OnAnchorChange);
   end;
 
-  btnAnRight.Left := Width - btnAnRight.Width - 5;
+  btnAnRight.Left := Width - btnAnRight.Width - 55;
 
   y := btnAnRight.Bottom + 5;
 
-  l7 := CreateLabel(self, 5, y, 'Unknown lines:');
+  l7 := CreateLabel(bvlOI, 5, y, 'Unknown lines:');
   l7.Anchors := [anLeft, anBottom];
   Inc(y, 16);
 
-  edOther := TfpgMemo.Create(self);
+  edOther := TfpgMemo.Create(bvlOI);
   edOther.BackgroundColor := $EEEEEE;
-  edOther.SetPosition(0, y, self.Width, 78);
+  edOther.SetPosition(0, y,bvlOI.Width, 78);
   edOther.Anchors := [anLeft, anRight, anBottom];
   edOther.FontDesc := '#Edit2';
   edOther.OnChange := @(maindsgn.OnOtherChange);
+
+  {@VFD_BODY_END: frmProperties}
   {%endregion}
 
+  Bevel1.Align := alTop;
+  Splitter1.Align := alTop;
+  bvlOI.Align := alClient;
+  
+   if gINI.ReadBool('frmPropertiesState', 'FirstLoad', True) = False then
+  begin
+    gINI.ReadFormState(self);
+    {$ifdef fpgui-develop}
+    UpdatePosition;
+    {$else}
+    UpdateWindowPosition;
+    {$endif}
+  end
+  else
+    gINI.WriteBool('frmPropertiesState', 'FirstLoad', False);
+    
 end;
 
 procedure TfrmProperties.BeforeDestruction;
@@ -2229,9 +2284,31 @@ begin
   inherited BeforeDestruction;
 end;
 
+constructor TfrmProperties.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+
+  fpgImages.AddMaskedBMP(
+    'vfd.anchorleft', @vfd_anchorleft,
+    sizeof(vfd_anchorleft), 0, 0);
+
+  fpgImages.AddMaskedBMP(
+    'vfd.anchorright', @vfd_anchorright,
+    sizeof(vfd_anchorright), 0, 0);
+
+  fpgImages.AddMaskedBMP(
+    'vfd.anchortop', @vfd_anchortop,
+    sizeof(vfd_anchortop), 0, 0);
+
+  fpgImages.AddMaskedBMP(
+    'vfd.anchorbottom', @vfd_anchorbottom,
+    sizeof(vfd_anchorbottom), 0, 0);
+end;
+
 procedure TfrmProperties.frmPropertiesPaint(Sender: TObject);
 begin
-  edName.Width := Width - l2.Right + 28;
+ // edName.Width := Width - l2.Right + 28;
+// edName.Width :=  Width - l2.width - 20;
 
     {$ifdef fpgui-develop}
   edName.UpdatePosition;
@@ -2241,15 +2318,16 @@ begin
 
   if virtualpanel.tag = 1 then
   begin
-      frmproperties.lstProps.Height := frmproperties.Height - 310;
+      frmproperties.lstProps.Height := frmproperties.Height - 310 - TreeView1.height  ;
       frmproperties.virtualpanel.top :=
-        frmproperties.lstProps.Height + frmproperties.lstProps.top +1;
+        frmproperties.lstProps.Height + frmproperties.lstProps.top +1 ;
     
      
   end
   else
   begin
-     frmproperties.lstProps.Height := 97;
+    // frmproperties.lstProps.Height :=   97  - TreeView1.height ;
+      frmproperties.lstProps.Height :=   97   ;
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top - 2;
      end;
@@ -2437,6 +2515,45 @@ end;
    cbshowhint.UpdateWindowPosition;
  {$endif}
 
+end;
+
+procedure TfrmProperties.UpdateWidgetHierachyTreeview(AMainComp: TComponent; ASelected: TComponent);
+
+  procedure AddAllChildren(APar: TComponent; MainNode: TfpgTreeNode);
+  var
+    f: integer;
+    fcd: TComponent;
+    subNode: TfpgTreeNode;
+  begin
+    fcd := APar;
+    for f := 0 to fcd.ComponentCount-1 do
+    begin
+      if (fcd.Components[f].Name = '') or (fcd.Components[f].ClassName = 'TwgResizer') then
+        Continue;
+      subNode := mainNode.AppendText(fcd.Components[f].Name + ': ' + fcd.Components[f].ClassName);
+      if fcd.Components[f] = ASelected then
+        TreeView1.Selection := subNode;
+      if fcd.Components[f].ComponentCount > 0 then
+        AddAllChildren(fcd.Components[f],subNode);
+    end;
+  end;
+
+var
+  s:string;
+begin
+  TreeView1.RootNode.Clear;
+  if Assigned(AMainComp) then
+  begin
+    if AMainComp.ClassName = 'TDesignedForm' then
+      s := AMainComp.Name + ': ' + 'TfpgForm'
+    else
+      s := AMainComp.Name + ': ' + AMainComp.ClassName;
+
+    AddAllChildren(AMainComp, TreeView1.RootNode.AppendText(s));
+    TreeView1.FullExpand;
+  end
+  else
+    TreeView1.Invalidate;
 end;
 
 procedure TfrmProperties.HandleKeyPress(var keycode: word; var shiftstate: TShiftState; var consumed: boolean);

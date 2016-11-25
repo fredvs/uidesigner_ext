@@ -1241,7 +1241,9 @@ begin
           
       frmproperties.lstProps.Anchors := [anLeft, anRight, antop];
       frmproperties.virtualpanel.Anchors := [anLeft, anRight, anbottom];
-      frmproperties.lstProps.Height := 97;
+  //   frmproperties.lstProps.Height := 97  - frmproperties.TreeView1.height;
+       frmproperties.lstProps.Height := 97  ;
+      
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top - 2;
       frmproperties.virtualpanel.Height := 155 ;
@@ -1392,7 +1394,7 @@ begin
       //////
       frmproperties.lstProps.Anchors := [anLeft, anRight, antop];
       frmproperties.virtualpanel.Anchors := [anLeft, anRight, anbottom];
-      frmproperties.lstProps.Height := frmproperties.Height - 310;
+      frmproperties.lstProps.Height := frmproperties.Height - 310  - frmproperties.TreeView1.height;
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top +1;
       frmproperties.virtualpanel.Height := 67;
@@ -1509,6 +1511,7 @@ begin
       btnAnTop.Down := anTop in wg.Anchors;
       btnAnRight.Down := anRight in wg.Anchors;
       btnAnBottom.Down := anBottom in wg.Anchors;
+      UpdateWidgetHierachyTreeview(FForm, wg);
     end;
 
    UpdateVirtualPropWin(wg);
