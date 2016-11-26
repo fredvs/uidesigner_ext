@@ -19,7 +19,7 @@ order16=0
 [projectoptions]
 projectdir=/home/fred/designer_ext/src
 projectfilename=/home/fred/designer_ext/src/designer_ext.prj
-findinfiledialog=61
+findinfiledialog=62
  [findinfileadialogfo.subdirs]
  value=1
  [findinfileadialogfo.incurrentfile]
@@ -29,32 +29,35 @@ findinfiledialog=61
  [findinfileadialogfo.wholeword]
  value=0
  [findinfileadialogfo.inprojectdir]
- value=1
+ value=0
  [findinfileadialogfo.casesensitive]
  value=0
  [findinfileadialogfo.indirectories]
- value=0
+ value=1
  [findinfileadialogfo.mask]
  value="*.pas" "*.pp" "*.inc"
  history=1
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
  filenames=1
-  /home/fred/fpGUI-develop/
+  /home/fred/fpgui/
  filecolwidth=174
  x=0
  y=0
  cx=0
  cy=0
- filehistory=3
+ filehistory=4
+  /home/fred/fpgui/
   /home/fred/fpGUI-develop/
   /home/fred/fpGUI-develop/uidesigner/
   /home/fred/designer_ext/src/
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=copy
+ value=TabPosition
  history=20
+  TabPosition
+  fpg_hint
   copy
   undomenu
   menuitem
@@ -73,8 +76,6 @@ findinfiledialog=61
   UpdateWindowPosition
   DoUpdatePosition
   6.4
-  6.4.0
-  InternalMsgHintTimer
  [findinfileadialogfo]
  stackedunder=
  x=386
@@ -768,37 +769,51 @@ sigsettings=27
  30,30,T,F
 defaultmake=4
 [breakpoints]
-on=4
+on=6
  0
  0
  0
  0
-path=4
+ -1
+ 0
+path=6
  /home/fred/designer_ext/src/frm_main_designer.pas
  /home/fred/designer_ext/src/frm_vfdforms.pas
  /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
  /home/fred/fpGUI-develop/src/gui/fpg_hint.pas
-line=4
+ /home/fred/designer_ext/src/frm_main_designer.pas
+ /home/fred/designer_ext/src/fpg_hint.pas
+line=6
  1406
  624
  43
  228
-address=4
+ 25
+ 296
+address=6
  4793369
  5867064
  4367615
  5433907
-addbkpt=4
+ 0
+ 0
+addbkpt=6
  0
  0
  0
  0
-ignore=4
+ 0
+ 0
+ignore=6
  0
  0
  0
  0
-condition=4
+ 0
+ 0
+condition=6
+ 
+ 
  
  
  
@@ -949,530 +964,30 @@ findhistory=20
  UpdateWindowPosition
  TextWidth
 findoptions=1
-editpos=105
+editpos=5
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,1862
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,0
- 0,-1073741823
- 0,0
- 0,-1073741823
- 0,1180
- 0,154
- 0,69
- 0,101
+ 0,17
+ 0,1
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
 bookmarks4=0
-bookmarks5=0
-bookmarks6=0
-bookmarks7=0
-bookmarks8=0
-bookmarks9=0
-bookmarks10=0
-bookmarks11=0
-bookmarks12=0
-bookmarks13=0
-bookmarks14=0
-bookmarks15=0
-bookmarks16=0
-bookmarks17=0
-bookmarks18=0
-bookmarks19=0
-bookmarks20=0
-bookmarks21=0
-bookmarks22=0
-bookmarks23=0
-bookmarks24=0
-bookmarks25=0
-bookmarks26=0
-bookmarks27=0
-bookmarks28=0
-bookmarks29=0
-bookmarks30=0
-bookmarks31=0
-bookmarks32=0
-bookmarks33=0
-bookmarks34=0
-bookmarks35=0
-bookmarks36=0
-bookmarks37=0
-bookmarks38=0
-bookmarks39=0
-bookmarks40=0
-bookmarks41=0
-bookmarks42=0
-bookmarks43=0
-bookmarks44=0
-bookmarks45=0
-bookmarks46=0
-bookmarks47=0
-bookmarks48=0
-bookmarks49=0
-bookmarks50=0
-bookmarks51=0
-bookmarks52=0
-bookmarks53=0
-bookmarks54=0
-bookmarks55=0
-bookmarks56=0
-bookmarks57=0
-bookmarks58=0
-bookmarks59=0
-bookmarks60=0
-bookmarks61=0
-bookmarks62=0
-bookmarks63=0
-bookmarks64=0
-bookmarks65=0
-bookmarks66=0
-bookmarks67=0
-bookmarks68=0
-bookmarks69=0
-bookmarks70=0
-bookmarks71=0
-bookmarks72=0
-bookmarks73=0
-bookmarks74=0
-bookmarks75=0
-bookmarks76=0
-bookmarks77=0
-bookmarks78=0
-bookmarks79=0
-bookmarks80=0
-bookmarks81=0
-bookmarks82=0
-bookmarks83=0
-bookmarks84=0
-bookmarks85=0
-bookmarks86=0
-bookmarks87=0
-bookmarks88=0
-bookmarks89=0
-bookmarks90=0
-bookmarks91=0
-bookmarks92=0
-bookmarks93=0
-bookmarks94=0
-bookmarks95=0
-bookmarks96=0
-bookmarks97=0
-bookmarks98=0
-bookmarks99=0
-bookmarks100=0
-bookmarks101=0
-bookmarks102=0
-bookmarks103=0
-bookmarks104=0
-sourcefiles=105
- ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/frm_vfdforms.pas
- ${PROJECTDIR}/vfd_editors.pas
- ${PROJECTDIR}/vfd_widgets.pas
+sourcefiles=5
  ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/vfd_formparser.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/vfd_widgetclass.pas
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/vfd_formparser.pas
  ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/vfd_widgetclass.pas
+ /home/fred/fpGUI-develop/src/corelib/x11/fpgui_toolkit.pas
+ ${PROJECTDIR}/fpg_hint.pas
  ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/vfd_widgetclass.pas
- ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/deviceinfos_fpGUI.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/designer_ext.pas
- /home/fred/fpGUI-develop/src/gui/fpg_form.pas
- /home/fred/fpGUI-develop/src/corelib/fpg_base.pas
- /home/fred/fpGUI-develop/src/corelib/fpg_widget.pas
- /home/fred/fpg_main.pas
- /home/fred/fpGUI-develop/src/corelib/x11/fpg_interface.pas
- /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
- ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/define.inc
- /home/fred/fpGUI-develop/src/corelib/x11/fpg_xft_x11.pas
- ${PROJECTDIR}/frm_main_designer.pas
- /home/fred/fpGUI-develop/src/gui/fpg_label.pas
- /home/fred/fpGUI-develop/src/gui/fpg_hint.pas
- /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
- /home/fred/fpGUI-develop/src/corelib/x11/fpg_netlayer_x11.pas
- /home/fred/fpGUI-develop/src/corelib/fpg_popupwindow.pas
- ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/fpg_style_chrome_silver_flatmenu.pas
- ${PROJECTDIR}/fpg_style_anim_chrome_silver_horz_flatmenu.pas
- ${PROJECTDIR}/fpg_style_anim_chrome_silver_vert_flatmenu.pas
- ${PROJECTDIR}/fpg_style_anim_chrome_silver_vert.pas
- ${PROJECTDIR}/fpg_style_anim_ellipse_silver_horz.pas
- ${PROJECTDIR}/fpg_style_anim_ellipse_silver_vert.pas
- ${PROJECTDIR}/fpg_style_anim_pram1.pas
- ${PROJECTDIR}/fpg_style_chrome_blue.pas
- ${PROJECTDIR}/fpg_style_chrome_gray.pas
- ${PROJECTDIR}/fpg_style_chrome_green.pas
- ${PROJECTDIR}/fpg_style_chrome_purple.pas
- ${PROJECTDIR}/fpg_style_chrome_red.pas
- ${PROJECTDIR}/fpg_style_chrome_silver.pas
- ${PROJECTDIR}/fpg_style_chrome_system.pas
- ${PROJECTDIR}/fpg_style_chrome_yellow.pas
- ${PROJECTDIR}/fpg_style_ellipse_blue.pas
- ${PROJECTDIR}/fpg_style_ellipse_gray.pas
- ${PROJECTDIR}/fpg_style_ellipse_green.pas
- ${PROJECTDIR}/fpg_style_ellipse_purple.pas
- ${PROJECTDIR}/fpg_style_ellipse_red.pas
- ${PROJECTDIR}/fpg_style_ellipse_silver.pas
- ${PROJECTDIR}/fpg_style_ellipse_system.pas
- ${PROJECTDIR}/fpg_style_ellipse_yellow.pas
- ${PROJECTDIR}/fpg_style_hoover_silver_flat.pas
- ${PROJECTDIR}/fpg_style_hoover_system_flat.pas
- ${PROJECTDIR}/fpg_style_mint1.pas
- ${PROJECTDIR}/fpg_style_mint2.pas
- ${PROJECTDIR}/fpg_style_mint3.pas
- ${PROJECTDIR}/fpg_style_systemcolorsmystyle1.pas
- ${PROJECTDIR}/fpg_style_systemcolorsmystyle2.pas
- ${PROJECTDIR}/fpg_style_anim_chrome_silver_horz.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
- ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/messagedialog.inc
- /home/fred/fpGUI-develop/src/gui/messagedialog.inc
- ${PROJECTDIR}/sak_fpg.pas
- ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/frm_vfdforms.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/vfd_main.pas
- ${PROJECTDIR}/runonce_postit.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/fpg_style_anim_round_silver_horz.pas
- ${PROJECTDIR}/frm_main_designer.pas
- /home/fred/fpGUI-develop/uidesigner/frm_main.pas
- ${PROJECTDIR}/vfd_main.pas
- /home/fred/fpGUI-develop/uidesigner/vfd_main.pas
- ${PROJECTDIR}/sak_fpg.pas
- /home/fred/fpGUI-develop/uidesigner/vfd_designer.pas
- ${PROJECTDIR}/vfd_designer.pas
- ${PROJECTDIR}/vfd_main.pas
- /home/fred/fpgui/src/gui/fpg_tree.pas
- /home/fred/fpgui/examples/gui/listviewtest/listviewtest.lpr
- ${PROJECTDIR}/frm_multiselect.pas
- ${PROJECTDIR}/vfd_designer.pas
- /home/fred/fpgui/src/corelib/fpg_widget.pas
- ${PROJECTDIR}/vfd_main.pas
-relpaths=105
- frm_main_designer.pas
- frm_vfdforms.pas
- vfd_editors.pas
- vfd_widgets.pas
+relpaths=5
  designer_ext.pas
- vfd_formparser.pas
- vfd_designer.pas
- define.inc
- designer_ext.pas
- vfd_widgetclass.pas
- vfd_widgets.pas
- define.inc
- vfd_formparser.pas
  frm_main_designer.pas
- vfd_widgetclass.pas
+ fpGUI-develop/src/corelib/x11/fpgui_toolkit.pas
+ fpg_hint.pas
  define.inc
- vfd_widgetclass.pas
- vfd_main.pas
- vfd_designer.pas
- frm_main_designer.pas
- vfd_widgets.pas
- uos/examples/deviceinfos_fpGUI.pas
- define.inc
- designer_ext.pas
- fpGUI-develop/src/gui/fpg_form.pas
- fpGUI-develop/src/corelib/fpg_base.pas
- fpGUI-develop/src/corelib/fpg_widget.pas
- fpg_main.pas
- fpGUI-develop/src/corelib/x11/fpg_interface.pas
- fpGUI-develop/src/corelib/x11/fpg_x11.pas
- frm_main_designer.pas
- define.inc
- fpGUI-develop/src/corelib/x11/fpg_xft_x11.pas
- frm_main_designer.pas
- fpGUI-develop/src/gui/fpg_label.pas
- fpGUI-develop/src/gui/fpg_hint.pas
- fpGUI-develop/src/corelib/fpg_main.pas
- fpGUI-develop/src/corelib/x11/fpg_netlayer_x11.pas
- fpGUI-develop/src/corelib/fpg_popupwindow.pas
- designer_ext.pas
- vfd_widgets.pas
- fpg_style_chrome_silver_flatmenu.pas
- fpg_style_anim_chrome_silver_horz_flatmenu.pas
- fpg_style_anim_chrome_silver_vert_flatmenu.pas
- fpg_style_anim_chrome_silver_vert.pas
- fpg_style_anim_ellipse_silver_horz.pas
- fpg_style_anim_ellipse_silver_vert.pas
- fpg_style_anim_pram1.pas
- fpg_style_chrome_blue.pas
- fpg_style_chrome_gray.pas
- fpg_style_chrome_green.pas
- fpg_style_chrome_purple.pas
- fpg_style_chrome_red.pas
- fpg_style_chrome_silver.pas
- fpg_style_chrome_system.pas
- fpg_style_chrome_yellow.pas
- fpg_style_ellipse_blue.pas
- fpg_style_ellipse_gray.pas
- fpg_style_ellipse_green.pas
- fpg_style_ellipse_purple.pas
- fpg_style_ellipse_red.pas
- fpg_style_ellipse_silver.pas
- fpg_style_ellipse_system.pas
- fpg_style_ellipse_yellow.pas
- fpg_style_hoover_silver_flat.pas
- fpg_style_hoover_system_flat.pas
- fpg_style_mint1.pas
- fpg_style_mint2.pas
- fpg_style_mint3.pas
- fpg_style_systemcolorsmystyle1.pas
- fpg_style_systemcolorsmystyle2.pas
- fpg_style_anim_chrome_silver_horz.pas
- define.inc
- fpg_style_anim_round_silver_horz.pas
- vfd_widgets.pas
- fpg_style_anim_round_silver_horz.pas
- frm_main_designer.pas
- messagedialog.inc
- fpGUI-develop/src/gui/messagedialog.inc
- sak_fpg.pas
- fpg_style_anim_round_silver_horz.pas
- define.inc
- vfd_main.pas
- designer_ext.pas
- frm_vfdforms.pas
- define.inc
- designer_ext.pas
- vfd_main.pas
- runonce_postit.pas
- define.inc
- fpg_style_anim_round_silver_horz.pas
- frm_main_designer.pas
- fpGUI-develop/uidesigner/frm_main.pas
- vfd_main.pas
- fpGUI-develop/uidesigner/vfd_main.pas
- sak_fpg.pas
- fpGUI-develop/uidesigner/vfd_designer.pas
- vfd_designer.pas
- vfd_main.pas
- ../fpgui/src/gui/fpg_tree.pas
- fpgui/examples/gui/listviewtest/listviewtest.lpr
- frm_multiselect.pas
- vfd_designer.pas
- ../fpgui/src/corelib/fpg_widget.pas
- vfd_main.pas
-ismoduletexts=105
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
+ismoduletexts=5
  0
  0
  0
@@ -1483,114 +998,14 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=105
+order=5
  0
- 88
- 89
- 91
- 105
- 103
- 101
- 104
- 99
- 100
- 98
- 97
- 92
- 96
- 95
- 93
- 94
- 90
  1
  2
- 3
  4
- 5
- 6
- 7
- 8
- 9
- 10
- 11
- 12
- 13
- 14
- 15
- 16
- 17
- 18
- 19
- 20
- 21
- 22
- 23
- 24
- 25
- 26
- 27
- 28
- 29
- 30
- 31
- 32
- 33
- 34
- 35
- 36
- 37
- 38
- 39
- 40
- 41
- 42
- 43
- 44
- 45
- 46
- 47
- 48
- 49
- 50
- 51
- 52
- 53
- 54
- 55
- 56
- 57
- 58
- 59
- 60
- 61
- 62
- 63
- 64
- 65
- 66
- 67
- 68
- 69
- 70
- 71
- 72
- 73
- 74
- 75
- 76
- 77
- 78
- 79
- 80
- 81
- 82
- 83
- 84
- 85
- 86
- 87
+ 3
 tabsize=60
-firsttab=1
+firsttab=0
 index=3
 [layout]
 windowlayout=530
@@ -1606,8 +1021,8 @@ windowlayout=530
  ncy=0
  x=0
  y=0
- cx=1356
- cy=682
+ cx=954
+ cy=585
  rcx=0
  rcy=0
  [mainfo]
@@ -1619,16 +1034,16 @@ windowlayout=530
  ny=0
  ncx=0
  ncy=0
- x=241
+ x=240
  y=61
  cx=964
  cy=621
  rcx=0
  rcy=0
  children=1
-  basedock,0,0,1356,682
+  basedock,0,0,954,585
  focusedchild=0
- wsize=6
+ wsize=0
  active=0
  visible=1
  [targetconsolefo]
@@ -1647,7 +1062,7 @@ windowlayout=530
  rcx=0
  rcy=0
  wsize=0
- active=0
+ active=1
  visible=1
  [threadsfo]
  splitdir=0
@@ -1742,7 +1157,7 @@ windowlayout=530
  x=0
  y=0
  cx=159
- cy=498
+ cy=426
  rcx=0
  rcy=0
  [projecttreefo.project_tree]
@@ -1752,8 +1167,8 @@ windowlayout=530
  width1=12
  sortdescend1=0
  sorted=0
- col=1
- row=-1073741823
+ col=0
+ row=2
  rowheight=17
  [stackfo]
  splitdir=0
@@ -1951,9 +1366,9 @@ windowlayout=530
  ncx=0
  ncy=0
  x=0
- y=569
- cx=1356
- cy=113
+ y=488
+ cx=954
+ cy=97
  rcx=0
  rcy=0
  [componentstorefo]
@@ -2052,8 +1467,8 @@ windowlayout=530
  ncy=0
  x=0
  y=0
- cx=1356
- cy=65
+ cx=954
+ cy=56
  rcx=0
  rcy=0
  [debuggerfo.basedock]
@@ -2068,8 +1483,8 @@ windowlayout=530
  ncy=6
  x=0
  y=52
- cx=1356
- cy=12
+ cx=954
+ cy=3
  rcx=0
  rcy=0
  [sourcefo]
@@ -2084,8 +1499,8 @@ windowlayout=530
  ncy=0
  x=162
  y=0
- cx=1194
- cy=498
+ cx=792
+ cy=426
  rcx=0
  rcy=0
  [cpuc86_64fo]
@@ -2119,9 +1534,9 @@ windowlayout=530
  ncx=0
  ncy=0
  x=0
- y=68
- cx=1356
- cy=498
+ y=59
+ cx=954
+ cy=426
  rcx=0
  rcy=0
 [targetconsole]

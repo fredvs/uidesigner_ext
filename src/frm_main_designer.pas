@@ -1928,6 +1928,7 @@ begin
   begin
     Name := 'Splitter1';
     SetPosition(0, 100, 250, 8);
+    Align := alNone;
   end;
 
   bvlOI := TfpgBevel.Create(self);
