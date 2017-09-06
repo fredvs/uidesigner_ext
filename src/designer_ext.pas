@@ -1,25 +1,11 @@
 { 
 This is the extended version of fpGUI uidesigner.
 With run-only-once, window list, undo feature, integration into IDE, editor launcher,...
+It uses dynamically loading of libX11 and libXft in Unix OS.
+
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2016
-}
-{
-    fpGUI  -  Free Pascal GUI Library
-
-    Copyright (C) 2006 - 2016 See the file AUTHORS.txt, included in this
-    distribution, for details of the copyright.
-
-    See the file COPYING.modifiedLGPL, included in this distribution,
-    for details about redistributing fpGUI.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-    Description:
-      The starting unit for the UI Designer project.
+2013 - 2017
 }
 
 program designer_ext;
@@ -31,7 +17,9 @@ program designer_ext;
 
 uses
  {$IFDEF UNIX}
-  cthreads, {$ENDIF}
+   cthreads,
+  fpg_dynload, 
+   {$ENDIF}
   fpg_main,
   fpg_iniutils,
   SysUtils,
@@ -148,8 +136,12 @@ uses
 
          end;
      end;
-
-    fpgApplication.Initialize;
+     
+     {$IFDEF UNIX}
+     fpg_loaddynlib();
+     {$ENDIF}
+  
+     fpgApplication.Initialize;
     try
       RegisterWidgets;
 
@@ -195,6 +187,7 @@ uses
 
    finally
           maindsgn.Free;
+          fpg_unloaddynlib();
     end;
 
 
