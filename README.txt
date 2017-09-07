@@ -7,7 +7,7 @@ run-only-once option, window list,
 undo's feature,
 integration into IDE,
 editor launcher,
-for Unix OS : dynamically load of XOrg dependencies,
+for Unix OS : dynamically load of XOrg and TThreads dependencies,
 lot of new themes-styles,
 and much more...
 

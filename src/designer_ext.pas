@@ -79,6 +79,10 @@ uses
 
   begin
  // param1 := 2;
+ 
+    {$IFDEF UNIX}
+   if  fpg_loaddynlib() then writeln('ok') else  writeln('not ok');
+     {$ENDIF}
 
     ifonlyone := True;
     filedir := '';
@@ -137,10 +141,6 @@ uses
          end;
      end;
      
-     {$IFDEF UNIX}
-     fpg_loaddynlib();
-     {$ENDIF}
-  
      fpgApplication.Initialize;
     try
       RegisterWidgets;

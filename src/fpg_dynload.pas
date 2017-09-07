@@ -5,13 +5,13 @@ unit fpg_dynload;
 interface
 
 uses
-  {$IFDEF UNIX}
-  sysutils, xlib, xftlib;
-  {$ENDIF}
+   sysutils, xlib, xftlib, dl;
+
   
  const
   fX11='libX11.so.6';
-  fXft='libXft.so.2';  
+  fXft='libXft.so.2'; 
+  fdl='libdl.so.2'; 
   
 Function fpg_LoadDynLib(const libfilename1:string = '' ; const libfilename2:string = '') :boolean;
 procedure fpg_UnLoadDynLib();
@@ -42,7 +42,7 @@ procedure fpg_UnLoadDynLib() ;
 begin
   xft_unLoad();
   x_unLoad();
-end;
+ end;
 
 end.
 
