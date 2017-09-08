@@ -479,7 +479,7 @@ befcommandon=0
 makeoptionson=9
  0
  2495
- 441
+ 443
  447
  48
  446
@@ -945,8 +945,10 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=XCopyArea
+finddtext=dynpthreads
 findhistory=20
+ dynpthreads
+ DEBUG_MT
  XCopyArea
  createfontc
  XAllocWMHints
@@ -965,177 +967,35 @@ findhistory=20
  .create
  Sort(AOrder: TFileListSortOrder
  setupcaption
- TfpgFileDialog
- TfpgFileListBase
 findoptions=1
-editpos=34
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
+editpos=6
+ 0,20
  0,0
+ 0,2952
+ 0,1033
+ 0,213
+ 0,5
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
 bookmarks4=0
 bookmarks5=0
-bookmarks6=0
-bookmarks7=0
-bookmarks8=0
-bookmarks9=0
-bookmarks10=0
-bookmarks11=0
-bookmarks12=0
-bookmarks13=0
-bookmarks14=0
-bookmarks15=0
-bookmarks16=0
-bookmarks17=0
-bookmarks18=0
-bookmarks19=0
-bookmarks20=0
-bookmarks21=0
-bookmarks22=0
-bookmarks23=0
-bookmarks24=0
-bookmarks25=0
-bookmarks26=0
-bookmarks27=0
-bookmarks28=0
-bookmarks29=0
-bookmarks30=0
-bookmarks31=0
-bookmarks32=0
-bookmarks33=0
-sourcefiles=34
+sourcefiles=6
  ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/frm_main_designer.pas
- /home/fred/fpGUI-develop/src/corelib/x11/fpgui_toolkit.pas
- ${PROJECTDIR}/fpg_hint.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/anchors.inc
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/fpg_dialogs.pas
- /home/fred/fpgui/src/gui/fpg_grid.pas
- /home/fred/fpgui/src/corelib/fpg_main.pas
- /home/fred/filesdialog_fpg/fpg_base.pas
- /home/fred/fpgui/src/gui/fpg_customgrid.pas
- /home/fred/fpgui/src/corelib/x11/fpg_interface.pas
- /home/fred/fpgui/src/corelib/x11/fpg_x11.pas
- /home/fred/fpgui/extras/contributed/ats/atstable.inc
- /home/fred/fpgui/src/gui/fpg_basegrid.pas
- ${PROJECTDIR}/fpg_base.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/tthread.inc
  ${PROJECTDIR}/xlib.pas
- ${PROJECTDIR}/fpg_x11.pas
- ${PROJECTDIR}/dynlibs.pas
- /usr/share/fpcsrc/3.0.3/rtl/unix/tthread.inc
- ${PROJECTDIR}/pthread.inc
- ${PROJECTDIR}/dl.pas
- ${PROJECTDIR}/xlib.pas
- ${PROJECTDIR}/dynlibs.pas
- /usr/share/fpcsrc/3.0.3/rtl/inc/systemh.inc
- ${PROJECTDIR}/dynlibs.inc
- ${PROJECTDIR}/dynlibs.inc
- ${PROJECTDIR}/fpg_dynload.pas
  ${PROJECTDIR}/cthreads.pas
  ${PROJECTDIR}/xftlib.pas
-relpaths=34
+ ${PROJECTDIR}/pthread.inc
+relpaths=6
  designer_ext.pas
- frm_main_designer.pas
- fpGUI-develop/src/corelib/x11/fpgui_toolkit.pas
- fpg_hint.pas
- define.inc
- anchors.inc
- define.inc
- define.inc
- fpg_dialogs.pas
- fpgui/src/gui/fpg_grid.pas
- fpgui/src/corelib/fpg_main.pas
- filesdialog_fpg/fpg_base.pas
- fpgui/src/gui/fpg_customgrid.pas
- fpgui/src/corelib/x11/fpg_interface.pas
- fpgui/src/corelib/x11/fpg_x11.pas
- fpgui/extras/contributed/ats/atstable.inc
- fpgui/src/gui/fpg_basegrid.pas
- fpg_base.pas
- define.inc
- define.inc
+ tthread.inc
  xlib.pas
- fpg_x11.pas
- dynlibs.pas
- ../usr/share/fpcsrc/3.0.3/rtl/unix/tthread.inc
- pthread.inc
- dl.pas
- xlib.pas
- dynlibs.pas
- usr/share/fpcsrc/3.0.3/rtl/inc/systemh.inc
- dynlibs.inc
- dynlibs.inc
- fpg_dynload.pas
  cthreads.pas
  xftlib.pas
-ismoduletexts=34
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
+ pthread.inc
+ismoduletexts=6
  0
  0
  0
@@ -1147,43 +1007,15 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=34
+order=6
  0
  32
  23
+ 34
  26
  33
- 25
- 22
- 31
- 30
- 27
- 29
- 28
- 19
- 18
- 6
- 20
- 24
- 21
- 1
- 8
- 17
- 15
- 11
- 9
- 12
- 16
- 10
- 13
- 14
- 7
- 2
- 4
- 5
- 3
 firsttab=0
-index=4
+index=0
 [layout]
 windowlayout=530
  [mainfo.basedock]
@@ -1211,8 +1043,8 @@ windowlayout=530
  ny=0
  ncx=0
  ncy=0
- x=156
- y=74
+ x=125
+ y=46
  cx=1123
  cy=621
  rcx=0
@@ -1232,8 +1064,8 @@ windowlayout=530
  ny=0
  ncx=0
  ncy=0
- x=470
- y=372
+ x=493
+ y=171
  cx=497
  cy=314
  rcx=0
@@ -1258,7 +1090,7 @@ windowlayout=530
  rcy=0
  wsize=0
  active=0
- visible=1
+ visible=0
  [memoryfo]
  splitdir=0
  useroptions=805322875
@@ -1334,7 +1166,7 @@ windowlayout=530
  x=0
  y=0
  cx=205
- cy=450
+ cy=455
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1364,7 +1196,7 @@ windowlayout=530
  rcy=0
  wsize=0
  active=0
- visible=1
+ visible=0
  [watchpointsfo]
  splitdir=0
  useroptions=805322857
@@ -1543,9 +1375,9 @@ windowlayout=530
  ncx=0
  ncy=0
  x=0
- y=507
+ y=512
  cx=1113
- cy=97
+ cy=92
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1677,14 +1509,14 @@ windowlayout=530
  x=208
  y=0
  cx=905
- cy=450
+ cy=455
  rcx=0
  rcy=0
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=threadsfo
+ stackedunder=targetconsolefo
  parent=
  mdistate=0
  nx=0
@@ -1713,7 +1545,7 @@ windowlayout=530
  x=0
  y=54
  cx=1113
- cy=450
+ cy=455
  rcx=0
  rcy=0
 [targetconsole]

@@ -18,8 +18,7 @@ program designer_ext;
 uses
  {$IFDEF UNIX}
    cthreads,
-  fpg_dynload, 
-   {$ENDIF}
+ {$ENDIF}
   fpg_main,
   fpg_iniutils,
   SysUtils,
@@ -80,11 +79,7 @@ uses
   begin
  // param1 := 2;
  
-    {$IFDEF UNIX}
-   if  fpg_loaddynlib() then writeln('ok') else  writeln('not ok');
-     {$ENDIF}
-
-    ifonlyone := True;
+      ifonlyone := True;
     filedir := '';
      ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
 
@@ -187,7 +182,7 @@ uses
 
    finally
           maindsgn.Free;
-          fpg_unloaddynlib();
+     
     end;
 
 

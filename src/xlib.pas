@@ -2956,4 +2956,12 @@ end;
 
 {$endif MACROS}
 
+initialization
+
+x_Load(libX11);
+
+finalization
+
+x_unLoad();
+
 end.

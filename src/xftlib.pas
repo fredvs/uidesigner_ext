@@ -209,7 +209,13 @@ begin
    xft_Handle:=DynLibs.NilHandle;
   end;
 end;
+initialization
 
+xft_Load(libXft);
+
+finalization
+
+xft_unLoad();
 
 end.
 

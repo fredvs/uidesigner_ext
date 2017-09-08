@@ -1,39 +1,9 @@
-{
-    This file is part of the Free Pascal run time library.
-    Copyright (c) 2002 by Peter Vreman,
-    member of the Free Pascal development team.
-
-    pthreads threading support implementation
-
-    See the file COPYING.FPC, included in this distribution,
-    for details about the copyright.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
- **********************************************************************}
+{ This is the dynamic loader header of TThreads library.
+    From original cthread.pp from fpc. 
+    Copyright (c) 1999-2000 by Peter Vreman
+       Fredvs ---> fiens@hotmail.com
+} 
 {$mode objfpc}
-{$ifdef linux}
-{ we can combine both compile-time linking and dynamic loading, in order to:
-    a) solve a problem on some systems with dynamically loading libpthread if
-       it's not linked at compile time
-    b) still enabling dynamically checking whether or not certain functions
-       are available (could also be implemented via weak linking)
-}
-//{$linklib pthread}
-{$define dynpthreads} // Useless on BSD, since they are in libc
-{$endif}
-
-
-{ sem_init is best, since it does not consume any file descriptors.    }
-{ sem_open is second best, since it consumes only one file descriptor  }
-{ per semaphore.                                                       }
-{ If neither is available, pipe is used as fallback, which consumes 2  }
-{ file descriptors per semaphore.                                      }
-
-{ Darwin doesn't support nameless semaphores in at least }
-{ Mac OS X 10.4.8/Darwin 8.8                             }
 {$if not defined(darwin) and not defined(iphonesim)}
 {$define has_sem_init}
 {$define has_sem_getvalue}
@@ -51,15 +21,6 @@ unit cthreads;
 interface
 {$S-}
 
-{$ifndef dynpthreads}   // If you have problems compiling this on FreeBSD 5.x
- {$linklib c}           // try adding -Xf
- {$if not defined(Darwin) and not defined(iphonesim) and not defined(Android)}
-   {$ifndef haiku}
- //   {$linklib pthread}
-   {$endif haiku}
- {$endif darwin}
-{$endif}
-
 {$define basicevents_with_pthread_cond}
 
 Procedure SetCThreadManager;
@@ -71,9 +32,7 @@ Uses
   unix,
   unixtype,
   initc
-{$ifdef dynpthreads}
   ,dl
-{$endif}
   ;
   
   const
@@ -998,11 +957,7 @@ begin
 {$ifdef DEBUG_MT}
   Writeln('Entering InitThreads.');
 {$endif}
-{$ifndef dynpthreads}
-  Result:=True;
-{$else}
   Result:=LoadPthreads;
-{$endif}
   ThreadID := TThreadID (pthread_self());
 {$ifdef DEBUG_MT}
   Writeln('InitThreads : ',Result);
@@ -1014,11 +969,7 @@ end;
 Function CDoneThreads : Boolean;
 
 begin
-{$ifndef dynpthreads}
-  Result:=True;
-{$else}
   Result:=UnloadPthreads;
-{$endif}
 end;
 
 
