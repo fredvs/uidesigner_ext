@@ -7,6 +7,8 @@ unit xftlib;
 interface
 {$mode objfpc}{$H+}
 
+{.$define initload} // uncomment if you want to load at init
+
 uses
   Classes
   ,x
@@ -209,6 +211,8 @@ begin
    xft_Handle:=DynLibs.NilHandle;
   end;
 end;
+
+{$ifdef initload}
 initialization
 
 xft_Load(libXft);
@@ -216,6 +220,7 @@ xft_Load(libXft);
 finalization
 
 xft_unLoad();
+{$endif initload}
 
 end.
 

@@ -12,6 +12,8 @@ uses
  dynlibs, ctypes, keysym, x ;
 {$define MACROS}
 
+{.$define initload} // uncomment if you want to load at init
+
  const
      libX11='libX11.so.6';
  
@@ -2107,6 +2109,8 @@ var x_Handle:TLibHandle=dynlibs.NilHandle; // this will hold our handle for the 
 
     Procedure x_Unload(); // unload and frees the lib from memory : do not forget to call it before close application.
 
+   // Procedure dummy() ; cdecl; external libX11;
+
 implementation
 
 function x_IsLoaded(): boolean;
@@ -2956,6 +2960,7 @@ end;
 
 {$endif MACROS}
 
+{$ifdef initload}
 initialization
 
 x_Load(libX11);
@@ -2963,5 +2968,7 @@ x_Load(libX11);
 finalization
 
 x_unLoad();
+
+{$endif initload}
 
 end.

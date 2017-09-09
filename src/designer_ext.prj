@@ -517,12 +517,12 @@ compilerusedon=29
  0
  0
 debuggerusedon=6
- 4035
+ 4032
  0
  0
  0
  0
- 60
+ 63
 exeusedon=14
  4047
  0
@@ -969,12 +969,12 @@ findhistory=20
  setupcaption
 findoptions=1
 editpos=6
- 0,20
+ 0,145
+ 0,14
+ 0,-1073741823
+ 9,6
+ 0,-1073741823
  0,0
- 0,2952
- 0,1033
- 0,213
- 0,5
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -983,18 +983,18 @@ bookmarks4=0
 bookmarks5=0
 sourcefiles=6
  ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/tthread.inc
  ${PROJECTDIR}/xlib.pas
  ${PROJECTDIR}/cthreads.pas
  ${PROJECTDIR}/xftlib.pas
  ${PROJECTDIR}/pthread.inc
+ ${PROJECTDIR}/xdynload.pas
 relpaths=6
  designer_ext.pas
- tthread.inc
  xlib.pas
  cthreads.pas
  xftlib.pas
  pthread.inc
+ xdynload.pas
 ismoduletexts=6
  0
  0
@@ -1009,13 +1009,13 @@ nomenumodules=0
 [sourcefo.files_tab]
 order=6
  0
- 32
- 23
- 34
- 26
- 33
+ 1
+ 5
+ 2
+ 3
+ 4
 firsttab=0
-index=0
+index=4
 [layout]
 windowlayout=530
  [mainfo.basedock]
@@ -1072,7 +1072,7 @@ windowlayout=530
  rcy=0
  wsize=0
  active=0
- visible=1
+ visible=0
  [threadsfo]
  splitdir=0
  useroptions=805322857
@@ -1516,7 +1516,7 @@ windowlayout=530
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=targetconsolefo
+ stackedunder=mainfo
  parent=
  mdistate=0
  nx=0

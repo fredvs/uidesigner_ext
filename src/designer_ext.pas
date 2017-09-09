@@ -17,7 +17,7 @@ program designer_ext;
 
 uses
  {$IFDEF UNIX}
-   cthreads,
+   cthreads, xdynload,
  {$ENDIF}
   fpg_main,
   fpg_iniutils,
@@ -135,6 +135,14 @@ uses
 
          end;
      end;
+     
+     {$IFDEF UNIX}
+     if not xdynloadlib() then 
+     begin
+     writeln('X11 and Xft libraries did not load');
+     fpgApplication.Terminate;
+     end;
+     {$ENDIF}
      
      fpgApplication.Initialize;
     try
