@@ -139,7 +139,7 @@ uses
      {$IFDEF UNIX}
      if not xdynloadlib() then 
      begin
-     writeln('X11 and Xft libraries did not load');
+     writeln('X11 and Xft libraries did not load...');
      fpgApplication.Terminate;
      end;
      {$ENDIF}
@@ -190,7 +190,11 @@ uses
 
    finally
           maindsgn.Free;
-     
+          
+         {$IFDEF UNIX} 
+          xdynunloadlib();
+         {$endif}
+
     end;
 
 

@@ -969,12 +969,12 @@ findhistory=20
  setupcaption
 findoptions=1
 editpos=6
- 0,145
- 0,14
+ 0,192
  0,-1073741823
- 9,6
  0,-1073741823
- 0,0
+ 0,6
+ 0,-1073741823
+ 0,-1073741823
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -1015,7 +1015,7 @@ order=6
  3
  4
 firsttab=0
-index=4
+index=0
 [layout]
 windowlayout=530
  [mainfo.basedock]
