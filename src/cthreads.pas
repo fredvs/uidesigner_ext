@@ -17,6 +17,8 @@
 {$define has_sem_timedwait}
 {$endif}
 
+{$define initload} // uncomment if you want to load at initialization.
+
 unit cthreads;
 interface
 {$S-}
@@ -24,6 +26,8 @@ interface
 {$define basicevents_with_pthread_cond}
 
 Procedure SetCThreadManager;
+
+function th_Load() :boolean; // load the lib
 
 implementation
 
@@ -46,11 +50,16 @@ Uses
   {$endif}
 {$endif}
 
+
+// Procedure th_Unload(); // unload and frees the lib from memory : do not forget to call it before close application.
+
+
 {*****************************************************************************
                              System unit import
 *****************************************************************************}
 
 procedure fpc_threaderror; [external name 'FPC_THREADERROR'];
+
 
 {*****************************************************************************
                              Generic overloaded
@@ -1022,7 +1031,18 @@ begin
   SetThreadManager(CThreadManager);
 end;
 
+function th_Load() :boolean; // load the lib
+begin
+result := false;
+if ThreadingAlreadyUsed then
+    exit else
+    begin
+  SetCThreadManager;
+  result := true;
+  end;
+end;
 
+{$ifdef initload}
 initialization
   if ThreadingAlreadyUsed then
     begin
@@ -1032,4 +1052,5 @@ initialization
     end;
   SetCThreadManager;
 finalization
+{$endif initload}
 end.

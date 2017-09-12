@@ -826,106 +826,106 @@ panels=1
  panel1
 units=
  (
- a=0,4149,6,Pascal Units
+ a=0,8245,6,Pascal Units
  c=17
   (
   file=${PROJECTDIR}/anchors.inc
   kind=1
-  a=0,4100,0,anchors.inc
+  a=0,8196,0,anchors.inc
   )
   (
   file=define.inc
   kind=1
-  a=0,4100,0,define.inc
+  a=0,8196,0,define.inc
   )
   (
   file=${PROJECTDIR}/designer_ext.pas
   kind=1
-  a=0,4100,0,designer_ext.pas
+  a=0,8196,0,designer_ext.pas
   )
   (
   file=frm_main_designer.pas
   kind=1
-  a=0,4100,0,frm_main_designer.pas
+  a=0,8196,0,frm_main_designer.pas
   )
   (
   file=${PROJECTDIR}/frm_main_designer.pas
   kind=1
-  a=0,4100,0,frm_main_designer.pas
+  a=0,8196,0,frm_main_designer.pas
   )
   (
   file=${PROJECTDIR}/frm_vfdforms.pas
   kind=1
-  a=0,4100,0,frm_vfdforms.pas
+  a=0,8196,0,frm_vfdforms.pas
   )
   (
   file=/home/fred/designer_ext/src/icons.inc
   kind=1
-  a=0,4100,0,icons.inc
+  a=0,8196,0,icons.inc
   )
   (
   file=vfd_designer.pas
   kind=1
-  a=0,4100,0,vfd_designer.pas
+  a=0,8196,0,vfd_designer.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_editors.pas
   kind=1
-  a=0,4100,0,vfd_editors.pas
+  a=0,8196,0,vfd_editors.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_file.pas
   kind=1
-  a=0,4100,0,vfd_file.pas
+  a=0,8196,0,vfd_file.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_formparser.pas
   kind=1
-  a=0,4100,0,vfd_formparser.pas
+  a=0,8196,0,vfd_formparser.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_main.pas
   kind=1
-  a=0,4100,0,vfd_main.pas
+  a=0,8196,0,vfd_main.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_propeditgrid.pas
   kind=1
-  a=0,4100,0,vfd_propeditgrid.pas
+  a=0,8196,0,vfd_propeditgrid.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_resizer.pas
   kind=1
-  a=0,4100,0,vfd_resizer.pas
+  a=0,8196,0,vfd_resizer.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_utils.pas
   kind=1
-  a=0,4100,0,vfd_utils.pas
+  a=0,8196,0,vfd_utils.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_widgetclass.pas
   kind=1
-  a=0,4100,0,vfd_widgetclass.pas
+  a=0,8196,0,vfd_widgetclass.pas
   )
   (
   file=/home/fred/designer_ext/src/vfd_widgets.pas
   kind=1
-  a=0,4100,0,vfd_widgets.pas
+  a=0,8196,0,vfd_widgets.pas
   )
  )
 cmodules=
  (
- a=0,4132,6,C Modules
+ a=0,8228,6,C Modules
  )
 files=
  (
- a=0,4149,6,Text Files
+ a=0,8245,6,Text Files
  c=1
   (
   file=/home/fred/designer_ext/src/extrafpc.cfg
   kind=1
-  a=0,4100,0,extrafpc.cfg
+  a=0,8196,0,extrafpc.cfg
   )
  )
 [componentstore]
@@ -968,34 +968,44 @@ findhistory=20
  Sort(AOrder: TFileListSortOrder
  setupcaption
 findoptions=1
-editpos=6
- 0,192
+editpos=8
+ 0,19
+ 0,-1073741823
+ 0,19
  0,-1073741823
  0,-1073741823
- 0,6
+ 0,33
  0,-1073741823
- 0,-1073741823
+ 0,8
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
 bookmarks4=0
 bookmarks5=0
-sourcefiles=6
+bookmarks6=0
+bookmarks7=0
+sourcefiles=8
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/xlib.pas
  ${PROJECTDIR}/cthreads.pas
  ${PROJECTDIR}/xftlib.pas
  ${PROJECTDIR}/pthread.inc
  ${PROJECTDIR}/xdynload.pas
-relpaths=6
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/define.inc
+relpaths=8
  designer_ext.pas
  xlib.pas
  cthreads.pas
  xftlib.pas
  pthread.inc
  xdynload.pas
-ismoduletexts=6
+ define.inc
+ define.inc
+ismoduletexts=8
+ 0
+ 0
  0
  0
  0
@@ -1007,15 +1017,17 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=6
+order=8
  0
+ 6
  1
  5
+ 7
  2
  3
  4
 firsttab=0
-index=0
+index=4
 [layout]
 windowlayout=530
  [mainfo.basedock]
@@ -1177,7 +1189,7 @@ windowlayout=530
  sortdescend1=0
  sorted=0
  col=0
- row=3
+ row=2
  rowheight=17
  [stackfo]
  splitdir=0

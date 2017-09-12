@@ -17,7 +17,7 @@ program designer_ext;
 
 uses
  {$IFDEF UNIX}
-   cthreads, xdynload,
+cthreads, xdynload,
  {$ENDIF}
   fpg_main,
   fpg_iniutils,

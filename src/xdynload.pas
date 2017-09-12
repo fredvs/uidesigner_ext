@@ -5,9 +5,8 @@ unit xdynload;
 interface
 
 uses
-  {$IFDEF UNIX}
-  sysutils, xlib, xftlib;
-  {$ENDIF}
+ sysutils, xlib, xftlib;
+
   
  const
   fX11='libX11.so.6';
