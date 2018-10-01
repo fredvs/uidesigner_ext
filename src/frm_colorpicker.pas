@@ -1008,9 +1008,9 @@ begin
  pt := WindowToScreen(self, FColorPos);
  {$endif}
 
-  FColor := fpgApplication.GetScreenPixelColor(pt);
+ FColor := fpgApplication.GetScreenPixelColor(pt);
   if Assigned(FOnColorPicked) then
-    FOnColorPicked(self, FColorPos, FColor);
+   FOnColorPicked(self, FColorPos, FColor);
 end;
 
 procedure TPickerButton.HandleLMouseDown(X, Y: integer; ShiftState: TShiftState);
@@ -1023,7 +1023,7 @@ end;
 
 procedure TPickerButton.HandleLMouseUp(x, y: integer; shiftstate: TShiftState);
 begin
-  inherited HandleLMouseUp(x, y, shiftstate);
+   inherited HandleLMouseUp(x, y, shiftstate);
   ReleaseMouse;
   FColorPicking := False;
   MouseCursor := mcDefault;

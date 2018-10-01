@@ -1731,7 +1731,10 @@ var XGetGeometry: function(para1:PDisplay; para2:TDrawable; para3:PWindow; para4
 var XGetIconName: function(para1:PDisplay; para2:TWindow; para3:PPchar):TStatus;cdecl;
 var XGetIconSizes: function(para1:PDisplay; para2:TWindow; para3:PPXIconSize; para4:Pcint):TStatus;cdecl;
 var XGetICValues: function(para1:TXIC; dotdotdot:array of const):Pchar;cdecl;
-var XGetImage: function(para1:PDisplay; para2:TDrawable; para3:cint; para4:cint; para5:cuint; para6:cuint; para7:culong; para8:cint):PXImage;cdecl;
+
+var XGetImage: function (para1:PDisplay; para2:TDrawable; para3:cint; para4:cint; para5:cuint;
+           para6:cuint; para7:culong; para8:cint):PXImage;cdecl;
+
 var XGetIMValues: function(para1:TXIM; dotdotdot:array of const):Pchar;cdecl;
 var XGetInputFocus: function(para1:PDisplay; para2:PWindow; para3:Pcint):cint;cdecl;
 var XGetKeyboardControl: function(para1:PDisplay; para2:PXKeyboardState):cint;cdecl;
@@ -2324,6 +2327,7 @@ Pointer(XSetWMProtocols):=DynLibs.GetProcedureAddress(x_Handle,PChar('XSetWMProt
  Pointer(XGetIconName):=DynLibs.GetProcedureAddress(x_Handle,PChar('XGetIconName'));
  Pointer(XGetIconSizes):=DynLibs.GetProcedureAddress(x_Handle,PChar('XGetIconSizes'));
  Pointer(XGetICValues):=DynLibs.GetProcedureAddress(x_Handle,PChar('XGetICValues'));
+ Pointer(XGetImage):=DynLibs.GetProcedureAddress(x_Handle,PChar('XGetImage'));
  Pointer(XGetIMValues):=DynLibs.GetProcedureAddress(x_Handle,PChar('XGetIMValues'));
  Pointer(XGetInputFocus):=DynLibs.GetProcedureAddress(x_Handle,PChar('XGetInputFocus'));
  Pointer(XGetKeyboardControl):=DynLibs.GetProcedureAddress(x_Handle,PChar('XGetKeyboardControl'));

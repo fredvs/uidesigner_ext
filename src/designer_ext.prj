@@ -19,7 +19,7 @@ order16=0
 [projectoptions]
 projectdir=/home/fred/designer_ext/src
 projectfilename=/home/fred/designer_ext/src/designer_ext.prj
-findinfiledialog=63
+findinfiledialog=65
  [findinfileadialogfo.subdirs]
  value=1
  [findinfileadialogfo.incurrentfile]
@@ -29,24 +29,26 @@ findinfiledialog=63
  [findinfileadialogfo.wholeword]
  value=0
  [findinfileadialogfo.inprojectdir]
- value=0
+ value=1
  [findinfileadialogfo.casesensitive]
  value=0
  [findinfileadialogfo.indirectories]
- value=1
+ value=0
  [findinfileadialogfo.mask]
  value="*.pas" "*.pp" "*.inc"
  history=1
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
  filenames=1
-  /usr/share/fpcsrc/
+  /usr/local/codetyphon/fpcsrc/
  filecolwidth=174
  x=0
  y=0
  cx=0
  cy=0
- filehistory=5
+ filehistory=7
+  /usr/local/codetyphon/fpcsrc/
+  /home/fred/fpGUI-maint/
   /usr/share/fpcsrc/
   /home/fred/fpgui/
   /home/fred/fpGUI-develop/
@@ -55,8 +57,15 @@ findinfiledialog=63
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=aix
+ value=xdynunloadlib
  history=20
+  xdynunloadlib
+  x_Unload
+  XGetImage
+  GetScreenPixelColor
+  OnColorPicked
+  XUtil
+  XInternAtom
   aix
   define aix
   hmodule
@@ -70,13 +79,6 @@ findinfiledialog=63
   pthread
   go_AlternativeColor
   FLastAscOrder
-  rsFileModifiedTime
-  HeaderText
-  mod. time
-  ColumnTitle
-  TabPosition
-  fpg_hint
-  copy
  [findinfileadialogfo]
  stackedunder=
  x=386
@@ -146,7 +148,7 @@ options=114
  sorted=0
  col=-1073741823
  row=-1073741823
- rowheight=17
+ rowheight=16
  [projectoptionsfo.newfile]
  firsttab=0
  index=0
@@ -168,7 +170,7 @@ options=114
  sortdescend6=0
  [projectoptionsfo.macrosplitter]
  x=0
- y=188
+ y=189
  xprop=1
  yprop=0.3970893970894
  [projectoptionsfo.macrogrid]
@@ -195,7 +197,7 @@ options=114
  value=
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=2
+ index=0
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=728
  width0=47
@@ -247,7 +249,7 @@ settings=8
  x=447
  y=149
  cx=471
- cy=446
+ cy=548
  wsize=0
  active=1
  visible=1
@@ -277,9 +279,9 @@ makeoptions=9
  -l -Mobjfpc -Schi
  -FE.
  -FUunits
- -WG
+ -ghl
  -B
- -O4 -XX -Xs -CX
+ -O2 -XX -Xs -CX
  -sh
  -vewnhibqw
 makeoptpurpose=9
@@ -397,6 +399,7 @@ forcezorder=-1
 stripmessageesc=0
 copymessages=0
 closemessages=0
+enablepurpose=0
 checkmethods=1
 colorerror=-1610612717
 colorwarning=-1610612712
@@ -481,7 +484,7 @@ makeoptionson=9
  2495
  443
  447
- 48
+ 2
  446
  447
  0
@@ -517,12 +520,12 @@ compilerusedon=29
  0
  0
 debuggerusedon=6
- 4032
+ 4034
  0
  0
  0
  0
- 63
+ 61
 exeusedon=14
  4047
  0
@@ -729,6 +732,7 @@ externalconsole=0
 settty=1
 gdbdownload=0
 downloadalways=0
+restartgdbbeforeload=0
 startupbkpt=0
 startupbkpton=0
 gdbsimulator=0
@@ -795,12 +799,12 @@ line=6
  25
  296
 address=6
- 4793369
- 5867064
- 4367615
- 5433907
- 0
- 0
+ 4805714
+ 5764094
+ 4369936
+ 5448320
+ 4786736
+ 5449808
 addbkpt=6
  0
  0
@@ -945,8 +949,20 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=dynpthreads
+finddtext=xdynunloadlib
 findhistory=20
+ xdynunloadlib
+ x_load
+ x_load()
+ XGetICValues
+ XGetImage
+ GetScreenPixelColor
+ XInternAtom
+ DYNLOAD
+ fred
+ OnColorPicked
+ FOnColorPicked
+ TColorPickedEvent
  dynpthreads
  DEBUG_MT
  XCopyArea
@@ -955,28 +971,24 @@ findhistory=20
  XAllocClassHint
  XBufferOverflow
  gridhead
- onheaderc
- go_AlternativeColor
- options
- InitializeComponents
- FLastAscOrder
- sort(
- sort
- FLastSortOrder
- TfpgFileGrid
- .create
- Sort(AOrder: TFileListSortOrder
- setupcaption
 findoptions=1
-editpos=8
- 0,19
- 0,-1073741823
- 0,19
+editpos=16
  0,-1073741823
  0,-1073741823
- 0,33
+ 0,0
  0,-1073741823
- 0,8
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,2112
+ 0,-1073741823
+ 0,-1073741823
+ 0,0
+ 0,-1073741823
+ 0,15
+ 23,194
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -985,25 +997,57 @@ bookmarks4=0
 bookmarks5=0
 bookmarks6=0
 bookmarks7=0
-sourcefiles=8
+bookmarks8=0
+bookmarks9=0
+bookmarks10=0
+bookmarks11=0
+bookmarks12=0
+bookmarks13=0
+bookmarks14=0
+bookmarks15=0
+sourcefiles=16
  ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/xlib.pas
- ${PROJECTDIR}/cthreads.pas
+ ${PROJECTDIR}/fpg_x11.pas
+ /usr/local/codetyphon/fpcsrc/packages/x11/src/xlib.pp
  ${PROJECTDIR}/xftlib.pas
  ${PROJECTDIR}/pthread.inc
  ${PROJECTDIR}/xdynload.pas
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/define.inc
-relpaths=8
+ ${PROJECTDIR}/frm_main_designer.pas
+ ${PROJECTDIR}/xlib.pas
+ /home/fred/fpGUI-maint/src/corelib/x11/fpg_x11.pas
+ ${PROJECTDIR}/frm_colorpicker.pas
+ /home/fred/fpGUI-maint/src/corelib/fpg_base.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/xdynload.pas
+ ${PROJECTDIR}/designer_ext.pas
+relpaths=16
  designer_ext.pas
- xlib.pas
- cthreads.pas
+ fpg_x11.pas
+ ../../../usr/local/codetyphon/fpcsrc/packages/x11/src/xlib.pp
  xftlib.pas
  pthread.inc
  xdynload.pas
  define.inc
  define.inc
-ismoduletexts=8
+ frm_main_designer.pas
+ xlib.pas
+ fpGUI-maint/src/corelib/x11/fpg_x11.pas
+ frm_colorpicker.pas
+ ../fpGUI-maint/src/corelib/fpg_base.pas
+ define.inc
+ xdynload.pas
+ designer_ext.pas
+ismoduletexts=16
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1017,59 +1061,52 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=8
+order=16
  0
- 6
  1
- 5
- 7
  2
  3
  4
-firsttab=0
-index=4
+ 12
+ 13
+ 5
+ 6
+ 7
+ 8
+ 9
+ 14
+ 15
+ 10
+ 11
+firsttab=2
+index=13
 [layout]
-windowlayout=530
+windowlayout=572
  [mainfo.basedock]
  splitdir=2
- useroptions=11395
- parent=mainfo.container
- visible=1
- mdistate=0
- nx=0
- ny=0
- ncx=668
- ncy=0
- x=0
- y=0
- cx=1113
- cy=604
- rcx=0
- rcy=0
+ useroptions=268450944
  [mainfo]
  splitdir=0
- useroptions=838860925
+ useroptions=301990011
+ stackedunder=
  parent=
  mdistate=0
  nx=0
  ny=0
  ncx=0
  ncy=0
- x=125
- y=46
- cx=1123
- cy=621
+ x=0
+ y=29
+ cx=1366
+ cy=706
  rcx=0
  rcy=0
- children=1
-  basedock,0,0,1113,604
- focusedchild=0
- wsize=0
+ wsize=6
  active=1
  visible=1
  [targetconsolefo]
  splitdir=0
- useroptions=805322857
+ useroptions=268451945
  parent=
  mdistate=0
  nx=0
@@ -1084,10 +1121,10 @@ windowlayout=530
  rcy=0
  wsize=0
  active=0
- visible=0
+ visible=1
  [threadsfo]
  splitdir=0
- useroptions=805322857
+ useroptions=268451945
  parent=
  mdistate=0
  nx=0
@@ -1105,7 +1142,7 @@ windowlayout=530
  visible=0
  [memoryfo]
  splitdir=0
- useroptions=805322875
+ useroptions=268451963
  stackedunder=dialogfilesfo
  parent=
  mdistate=0
@@ -1132,7 +1169,7 @@ windowlayout=530
  value=0
  [disassfo]
  splitdir=0
- useroptions=805322859
+ useroptions=268451947
  stackedunder=
  parent=
  mdistate=0
@@ -1152,7 +1189,7 @@ windowlayout=530
  [findinfilefo]
  splitdir=0
  useroptions=268451947
- stackedunder=
+ stackedunder=mainfo
  parent=
  mdistate=0
  nx=0
@@ -1167,7 +1204,7 @@ windowlayout=530
  rcy=0
  [projecttreefo]
  splitdir=0
- useroptions=805355627
+ useroptions=268484715
  parent=mainfo.panel1.container
  visible=1
  mdistate=0
@@ -1178,7 +1215,7 @@ windowlayout=530
  x=0
  y=0
  cx=205
- cy=455
+ cy=521
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1190,10 +1227,10 @@ windowlayout=530
  sorted=0
  col=0
  row=2
- rowheight=17
+ rowheight=16
  [stackfo]
  splitdir=0
- useroptions=805331049
+ useroptions=268460137
  parent=
  mdistate=0
  nx=0
@@ -1211,7 +1248,7 @@ windowlayout=530
  visible=0
  [watchpointsfo]
  splitdir=0
- useroptions=805322857
+ useroptions=268451945
  parent=
  mdistate=0
  nx=0
@@ -1269,7 +1306,7 @@ windowlayout=530
  value=0
  [objectinspectorfo]
  splitdir=0
- useroptions=805322859
+ useroptions=268451947
  stackedunder=
  parent=
  mdistate=0
@@ -1294,7 +1331,7 @@ windowlayout=530
  sortdescend1=0
  [symbolfo]
  splitdir=0
- useroptions=805322875
+ useroptions=268451963
  stackedunder=
  parent=
  mdistate=0
@@ -1313,7 +1350,11 @@ windowlayout=530
  visible=0
  [symbolfo.grid]
  propcolwidthref=207
- values0=14
+ values0=18
+  
+  
+  
+  
   
   
   
@@ -1335,7 +1376,7 @@ windowlayout=530
  [symbolfo.symbol]
  [watchfo]
  splitdir=0
- useroptions=805331049
+ useroptions=268460137
  parent=mainfo.basedock
  visible=0
  mdistate=0
@@ -1378,7 +1419,7 @@ windowlayout=530
  value=0
  [messagefo]
  splitdir=0
- useroptions=805388395
+ useroptions=268517483
  parent=mainfo.basedock
  visible=1
  mdistate=0
@@ -1387,14 +1428,14 @@ windowlayout=530
  ncx=0
  ncy=0
  x=0
- y=512
- cx=1113
- cy=92
+ y=585
+ cx=1356
+ cy=105
  rcx=0
  rcy=0
  [componentstorefo]
  splitdir=0
- useroptions=805331067
+ useroptions=268460155
  stackedunder=
  parent=
  mdistate=0
@@ -1457,7 +1498,7 @@ windowlayout=530
  filefilter=
  [componentpalettefo]
  splitdir=0
- useroptions=805331051
+ useroptions=268460139
  stackedunder=
  parent=
  mdistate=3
@@ -1488,26 +1529,59 @@ windowlayout=530
  ncy=0
  x=0
  y=0
- cx=1113
- cy=51
+ cx=1356
+ cy=58
  rcx=0
  rcy=0
  [debuggerfo.basedock]
  splitdir=2
- useroptions=805452931
+ useroptions=268582019
  parent=debuggerfo.container
  visible=1
  mdistate=0
  nx=0
  ny=0
- ncx=1113
- ncy=53
+ ncx=1356
+ ncy=61
  x=0
  y=0
- cx=1113
- cy=53
+ cx=1356
+ cy=61
  rcx=0
  rcy=0
+ [debuggerfo.edit_options]
+ value=X
+ [debuggerfo.edit_compilernum]
+ value=0
+ [debuggerfo.edit_compiler]
+ value=Pascal
+ [debuggerfo.file_history]
+ value=/home/fred/designer_ext/src/designer_ext.pas
+ history=20
+  /home/fred/fpGUI-maint/src/corelib/fpg_base.pas
+  /home/fred/designer_ext/src/pthread.inc
+  /home/fred/designer_ext/src/fpg_netlayer_x11.pasf
+  /home/fred/designer_ext/src/frm_colorpicker.pas
+  /home/fred/fpgui/uidesigner/uidesigner.lpr
+  /home/fred/ideu/src/dialogfiles.pas
+  /home/fred/ideu/src/confideu.pas
+  /home/fred/ideu/src/msegrids.pas
+  /home/fred/strumpract/src/msegrids.pas
+  /home/fred/ideu/src/msewidgets.pas
+  /home/fred/msegui/apps/ide/main.pas
+  /home/fred/strumpract/src/status.pas
+  /home/fred/strumpract/src/dialogfiles.pas
+  /home/fred/ideu/src/replacedialogform.pas
+  /home/fred/ideu/src/msefiledialog.pas
+  /home/fred/ideu/src/commandlineform.pas
+  /home/fred/ideu/src/threadsform.pas
+  /home/fred/ideu/src/messageform.pas
+  /home/fred/ideu/src/memoryform.pas
+  /home/fred/ideu/src/guitemplates.pas
+ [debuggerfo.project_options]
+ value=2
+ [debuggerfo.hints]
+ value=0
  [sourcefo]
  splitdir=0
  useroptions=16489
@@ -1520,15 +1594,35 @@ windowlayout=530
  ncy=0
  x=208
  y=0
- cx=905
- cy=455
+ cx=1148
+ cy=521
  rcx=0
  rcy=0
+ [sourcefo.files_tab]
+ order=16
+  0
+  1
+  2
+  3
+  4
+  12
+  13
+  5
+  6
+  7
+  8
+  9
+  14
+  15
+  10
+  11
+ firsttab=2
+ index=13
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=mainfo
+ stackedunder=targetconsolefo
  parent=
  mdistate=0
  nx=0
@@ -1546,7 +1640,7 @@ windowlayout=530
  visible=0
  [mainfo.panel1]
  splitdir=1
- useroptions=838958571
+ useroptions=302087659
  parent=mainfo.basedock
  visible=1
  mdistate=0
@@ -1555,9 +1649,9 @@ windowlayout=530
  ncx=0
  ncy=0
  x=0
- y=54
- cx=1113
- cy=455
+ y=61
+ cx=1356
+ cy=521
  rcx=0
  rcy=0
 [targetconsole]
