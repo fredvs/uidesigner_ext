@@ -330,7 +330,7 @@ begin
         Flush(f);
         CloseFile(f);
       end;
-        writeln('A other instance is running');
+     //   writeln('A other instance is running');
      Halt;
     end;
     Inc(x);
@@ -345,9 +345,8 @@ begin
         CloseFile(f);
       end;
   VProcess.Free;
-  if result then
-  else
- writeln('A unique instance is running and it it this one') ;
+//  if result then else
+// writeln('A unique instance is running and it it this one') ;
 end;
 
 function TOncePost.IsRunningIDE(AProcess : string) :boolean;

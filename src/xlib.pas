@@ -1624,12 +1624,6 @@ var XCreateFontSet: function(para1:PDisplay; para2:Pchar; para3:PPPchar; para4:P
 var XCreateGC: function(para1:PDisplay; para2:TDrawable; para3:culong; para4:PXGCValues):TGC;cdecl;
 var XCreateGlyphCursor: function(ADisplay:PDisplay; ASourceFont:TFont; AMaskFont:TFont; ASourceChar:cuint; AMaskChar:cuint; AForegroundColor:PXColor; ABackgroundColor:PXColor):TCursor;cdecl;
 var XCreateIC: function(para1:PXIM; dotdotdot:array of const):PXIC;cdecl;
-
-// XSync functions
-var XSyncCreateCounter: function(dpy: PXDisplay; initial_value: TXSyncValue): TXSyncCounter; cdecl; 
-var XSyncSetCounter: function(dpy: PXDisplay; counter: TXSyncCounter; value: TXSyncValue): TStatus; cdecl; 
-var XSyncDestroyCounter: function(dpy: PXDisplay; counter: TXSyncCounter ): TStatus; cdecl; 
-
 var XCreateImage: function(para1:PDisplay; para2:PVisual; para3:cuint; para4:cint; para5:cint; para6:Pchar; para7:cuint; para8:cuint; para9:cint; para10:cint):PXImage;cdecl;
 var XCreateOC: function(para1:TXOM; dotdotdot:array of const):TXOC;cdecl;
 var XCreatePixmap: function(ADisplay:PDisplay; ADrawable:TDrawable; AWidth:cuint; AHeight:cuint; ADepth:cuint):TPixmap;cdecl;
@@ -2220,12 +2214,6 @@ Pointer(XSetWMProtocols):=DynLibs.GetProcedureAddress(x_Handle,PChar('XSetWMProt
  Pointer(XCopyColormapAndFree):=DynLibs.GetProcedureAddress(x_Handle,PChar('XCopyColormapAndFree'));
  Pointer(XCopyGC):=DynLibs.GetProcedureAddress(x_Handle,PChar('XCopyGC'));
  Pointer(XCopyPlane):=DynLibs.GetProcedureAddress(x_Handle,PChar('XCopyPlane'));
- 
- // XSync functions
- Pointer(XSyncCreateCounter):=DynLibs.GetProcedureAddress(x_Handle,PChar('XSyncCreateCounter'));
- Pointer(XSyncSetCounter):=DynLibs.GetProcedureAddress(x_Handle,PChar('XSyncSetCounter'));
- Pointer(XSyncDestroyCounter):=DynLibs.GetProcedureAddress(x_Handle,PChar('XSyncDestroyCounter')); 
- 
  Pointer(XCreateBitmapFromData):=DynLibs.GetProcedureAddress(x_Handle,PChar('XCreateBitmapFromData'));
  Pointer(XCreateColormap):=DynLibs.GetProcedureAddress(x_Handle,PChar('XCreateColormap'));
  Pointer(XCreateFontCursor):=DynLibs.GetProcedureAddress(x_Handle,PChar('XCreateFontCursor'));

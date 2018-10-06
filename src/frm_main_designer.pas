@@ -1251,7 +1251,7 @@ begin
     btn.OnClick := @OnPaletteClick;
 
      {$ifdef fpgui-develop}
-     btn.OnDragStartDetected:=@OnPaletteDragStart;
+       btn.OnDragStartDetected:=@OnPaletteDragStart;
  {$else}
  {$endif}
 
@@ -3072,7 +3072,6 @@ begin
   Drag.OnPaintPreview:=@PaintPaletteButtonForDrag;
 
   Drag.Execute();
-
   SelectedWidget := nil;
 end;
 

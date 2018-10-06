@@ -47,6 +47,7 @@ uses
   fpg_netlayer_x11,
   fpg_base,
   fpg_impl;
+  {$LINKLIB Xext} // for xsync functions
 
 const
   IconBitmapWidth = 16;
@@ -522,7 +523,7 @@ const
 type
   TApplicationHelper = class(TfpgApplication);
 
- {$IFDEF DYNLOAD}
+{$IFDEF DYNLOAD}
  {$ELSE}
   // some externals
 // defines:
@@ -537,11 +538,12 @@ function XdbeSwapBuffers(ADisplay: PXDisplay; ASwapInfo: PXdbeSwapInfo; AScreenN
 function XdbeDeallocateBackBufferName(ADisplay: PXDisplay; ABuffer: TfpgWinHandle): PStatus; cdecl; external;
 function XOpenIM(para1: PDisplay; para2: PXrmHashBucketRec; para3: Pchar; para4: Pchar): PXIM; cdecl; external;
 function XCreateIC(para1: PXIM; para2: array of const): PXIC; cdecl; external;
+{$ENDIF}
+
 // XSync functions
 function XSyncCreateCounter(dpy: PXDisplay; initial_value: TXSyncValue): TXSyncCounter; cdecl; external;
 function XSyncSetCounter(dpy: PXDisplay; counter: TXSyncCounter; value: TXSyncValue): TStatus; cdecl; external;
 function XSyncDestroyCounter(dpy: PXDisplay; counter: TXSyncCounter ): TStatus; cdecl; external;
-{$ENDIF}
 
 const
   AltGrMask = 1 shl 13;  // missing from X unit

@@ -29,28 +29,28 @@ findinfiledialog=66
  [findinfileadialogfo.wholeword]
  value=0
  [findinfileadialogfo.inprojectdir]
- value=1
+ value=0
  [findinfileadialogfo.casesensitive]
  value=0
  [findinfileadialogfo.indirectories]
- value=0
+ value=1
  [findinfileadialogfo.mask]
  value="*.pas" "*.pp" "*.inc"
  history=1
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
  filenames=1
-  /home/fred/fpGUI-develop/uidesigner/
+  /usr/local/codetyphon/
  filecolwidth=174
  x=0
  y=0
  cx=0
  cy=0
  filehistory=8
-  /home/fred/fpGUI-develop/uidesigner/
-  /home/fred/fpGUI-develop/
-  /usr/local/codetyphon/fpcsrc/
   /usr/local/codetyphon/
+  /home/fred/fpGUI-develop/
+  /home/fred/fpGUI-develop/uidesigner/
+  /usr/local/codetyphon/fpcsrc/
   /home/fred/fpGUI-maint/
   /usr/share/fpcsrc/
   /home/fred/fpgui/
@@ -58,8 +58,9 @@ findinfiledialog=66
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=frmMultiSelect
+ value=XSyncCreateCounter
  history=20
+  XSyncCreateCounter
   frmMultiSelect
   colorpicker
   .create
@@ -67,7 +68,6 @@ findinfiledialog=66
   drag
   FSyncValue
   XCreateIC
-  XSyncCreateCounter
   TApplicationHelper
   PIXMAP_RESIZE_SIZE
   tfpgwindow
@@ -787,7 +787,7 @@ sigsettings=27
  30,30,T,F
 defaultmake=4
 [breakpoints]
-on=8
+on=7
  0
  0
  0
@@ -795,35 +795,31 @@ on=8
  0
  0
  0
- 0
-path=8
+path=7
  /home/fred/designer_ext/src/frm_main_designer.pas
  /home/fred/designer_ext/src/frm_vfdforms.pas
  /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
  /home/fred/fpGUI-develop/src/gui/fpg_hint.pas
  /home/fred/designer_ext/src/fpg_hint.pas
  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
- /home/fred/designer_ext/src/xlib.pas
  /home/fred/designer_ext/src/frm_main_designer.pas
-line=8
+line=7
  1410
  624
  43
  228
  296
  512
- 1628
  513
-address=8
- 4805586
- 5784862
- 4369776
- 5469088
- 5470576
- 5306828
- 4910880
- 4789788
-addbkpt=8
+address=7
+ 4817312
+ 5916558
+ 4369119
+ 5506752
+ 5508240
+ 5351440
+ 4801500
+addbkpt=7
  0
  0
  0
@@ -831,9 +827,7 @@ addbkpt=8
  0
  0
  0
- 0
-ignore=8
- 0
+ignore=7
  0
  0
  0
@@ -841,8 +835,7 @@ ignore=8
  0
  0
  0
-condition=8
- 
+condition=7
  
  
  
@@ -973,8 +966,10 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=runonce
+finddtext=XSyncCreateCounter
 findhistory=20
+ XSyncCreateCounter
+ XdbeQueryExtension
  runonce
  formclose
  destro
@@ -990,32 +985,70 @@ findhistory=20
  TXSyncValue
  FSyncValue
  xcreate
- XSyncCreateCounter
  XCreateRegion
  TfpgWindowAccess
  XAllocWMHints
- XAllocClassHint
 findoptions=1
-editpos=4
- 0,31
- 0,4
- 0,46
+editpos=12
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
  0,0
+ 0,1
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
-sourcefiles=4
+bookmarks4=0
+bookmarks5=0
+bookmarks6=0
+bookmarks7=0
+bookmarks8=0
+bookmarks9=0
+bookmarks10=0
+bookmarks11=0
+sourcefiles=12
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/runonce_postit.pas
  ${PROJECTDIR}/define.inc
-relpaths=4
+ ${PROJECTDIR}/fpg_x11.pas
+ ${PROJECTDIR}/frm_main_designer.pas
+ ${PROJECTDIR}/fpg_x11.pas
+ ${PROJECTDIR}/xlib.pas
+ /usr/local/codetyphon/typhon/lcl/interfaces/fpgui/src/corelib/fpg_x11.pas
+ ${PROJECTDIR}/designer_ext.pas
+ /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
+ ${PROJECTDIR}/define.inc
+relpaths=12
  designer_ext.pas
  define.inc
  runonce_postit.pas
  define.inc
-ismoduletexts=4
+ fpg_x11.pas
+ frm_main_designer.pas
+ fpg_x11.pas
+ xlib.pas
+ ../usr/local/codetyphon/typhon/lcl/interfaces/fpgui/src/corelib/fpg_x11.pas
+ designer_ext.pas
+ ../fpGUI-develop/src/corelib/x11/fpg_x11.pas
+ define.inc
+ismoduletexts=12
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1025,15 +1058,23 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=4
+order=12
  0
- 2
- 3
  1
+ 2
+ 10
+ 11
+ 8
+ 6
+ 5
+ 9
+ 4
+ 7
+ 3
 firsttab=0
-index=1
+index=4
 [layout]
-windowlayout=590
+windowlayout=568
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1508,9 +1549,12 @@ windowlayout=590
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/runonce_postit.pas
- history=50
+ value=/home/fred/designer_ext/src/define.inc
+ history=20
+  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
+  /home/fred/designer_ext/src/designer_ext.pas
   /home/fred/designer_ext/src/runonce_postit.pas
+  /home/fred/designer_ext/src/define.inc
   /home/fred/designer_ext/src/develop_x11/fpg_netlayer_x11.pas
   /home/fred/fpGUI-develop/uidesigner/frm_main.pas
   /home/fred/designer_ext/src/frm_colorpicker.pas
@@ -1526,42 +1570,9 @@ windowlayout=590
   /home/fred/designer_ext/src/maint/fpg_x11.pas
   /home/fred/designer_ext/src/develop/fpg_x11.pas
   /home/fred/designer_ext/src/develop/fpg_netlayer_x11.pas
-  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
   /home/fred/fpGUI-maint/examples/apps/ide/src/frm_main.pas
-  /home/fred/fpGUI-maint/examples/apps/ide/src/maximus.prj
-  /home/fred/fpGUI-maint/examples/gui/imgtest_jpeg/main.pas
-  /home/fred/fpGUI-maint/examples/gui/imgtest/bitmaptest.lpr
-  /home/fred/Downloads/dragtest/drag_test.lpr
-  /home/fred/eschecs/chessgraphicsutils.pas
-  /home/fred/eschecs/chessgraphics.pas
-  /home/fred/echecs/laz_avl_tree.pp
-  /home/fred/echecs/avglvltree.pas
-  /home/fred/echecs/chessgraphics.pas
-  /home/fred/echecs/eschecs.pas
-  /home/fred/echecs/eschecs.ctpr
-  /home/fred/designer_ext/src/fpg_netlayer_x11.pasf
-  /home/fred/fpgui/uidesigner/uidesigner.lpr
-  /home/fred/ideu/src/dialogfiles.pas
-  /home/fred/ideu/src/confideu.pas
-  /home/fred/ideu/src/msegrids.pas
-  /home/fred/strumpract/src/msegrids.pas
-  /home/fred/ideu/src/msewidgets.pas
-  /home/fred/msegui/apps/ide/main.pas
-  /home/fred/strumpract/src/status.pas
-  /home/fred/strumpract/src/dialogfiles.pas
-  /home/fred/ideu/src/replacedialogform.pas
-  /home/fred/ideu/src/msefiledialog.pas
-  /home/fred/ideu/src/commandlineform.pas
-  /home/fred/ideu/src/threadsform.pas
-  /home/fred/ideu/src/messageform.pas
-  /home/fred/ideu/src/memoryform.pas
-  /home/fred/ideu/src/guitemplates.pas
-  /home/fred/ideu/src/panelform.pas
-  /home/fred/msegui/apps/ide/main.mfm
-  /home/fred/msegui/apps/ide/sourceform.pas
-  /home/fred/msegui/apps/ide/actionsmodule.pas
  [debuggerfo.project_options]
- value=1
+ value=B
  [debuggerfo.hints]
  value=0
  [sourcefo]
@@ -1581,18 +1592,26 @@ windowlayout=590
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- order=4
+ order=12
   0
-  2
-  3
   1
+  2
+  10
+  11
+  8
+  6
+  5
+  9
+  4
+  7
+  3
  firsttab=0
- index=1
+ index=4
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=targetconsolefo
+ stackedunder=stackfo
  parent=
  mdistate=0
  nx=0
