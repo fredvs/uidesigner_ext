@@ -507,6 +507,10 @@ var
   x: integer;
 
 begin
+if assigned(frmMultiSelect) then
+begin
+frmMultiSelect.close;
+end;
 
 //   {
 

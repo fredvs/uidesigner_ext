@@ -53,12 +53,12 @@ type
     CLSUtilsProcessNameValueSeparator: char = '=';
 
     procedure onTimerPost(Sender: TObject);
-    procedure RunOnce(AMessage: string);
+    function RunOnce(AMessage: string) : boolean;
     function IsRunningIDE(AProcess : string) :boolean;
 
   end;
 
-procedure RunOnce(AMessage: string);
+function RunOnce(AMessage: string) : boolean; // if true the application is already loaded
 
 {$IF DEFINED(LCL)}
 procedure InitMessage(AOwner: TComponent);    /// LcL
@@ -77,10 +77,14 @@ var
 
 implementation
 
-procedure RunOnce(AMessage: string);
+function RunOnce(AMessage: string): boolean; // if true the application is already loaded
+
 begin
   TheOncePost := TOncePost.Create;
-  TheOncePost.RunOnce(AMessage);
+result :=  TheOncePost.RunOnce(AMessage);
+  
+//  fpgApplication.Terminate;
+  
 end;
 
 function IsRunningIDE(AProcess : string) :boolean;
@@ -283,7 +287,8 @@ begin
   AProcess.Sorted := ASorted;
 end;
 
-procedure TOncePost.RunOnce(AMessage: string);
+function TOncePost.RunOnce(AMessage: string): boolean; // if true the application is already loaded
+
 var
   VProcess: TStringList;
   x, y: integer;
@@ -291,6 +296,7 @@ var
 begin
   x := 0;
   y := 0;
+    result := false;
   VProcess := TStringList.Create;
   ListProcess(VProcess, False, False, False);
   while x < VProcess.Count do
@@ -299,6 +305,7 @@ begin
       Inc(y);
     if y > 1 then
     begin
+    result := true;
  
   // debug
   // writeln('Application name');

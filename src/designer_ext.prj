@@ -19,7 +19,7 @@ order16=0
 [projectoptions]
 projectdir=/home/fred/designer_ext/src
 projectfilename=/home/fred/designer_ext/src/designer_ext.prj
-findinfiledialog=65
+findinfiledialog=66
  [findinfileadialogfo.subdirs]
  value=1
  [findinfileadialogfo.incurrentfile]
@@ -40,25 +40,38 @@ findinfiledialog=65
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
  filenames=1
-  /usr/local/codetyphon/fpcsrc/
+  /home/fred/fpGUI-develop/uidesigner/
  filecolwidth=174
  x=0
  y=0
  cx=0
  cy=0
- filehistory=7
+ filehistory=8
+  /home/fred/fpGUI-develop/uidesigner/
+  /home/fred/fpGUI-develop/
   /usr/local/codetyphon/fpcsrc/
+  /usr/local/codetyphon/
   /home/fred/fpGUI-maint/
   /usr/share/fpcsrc/
   /home/fred/fpgui/
-  /home/fred/fpGUI-develop/
-  /home/fred/fpGUI-develop/uidesigner/
   /home/fred/designer_ext/src/
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=xdynunloadlib
+ value=frmMultiSelect
  history=20
+  frmMultiSelect
+  colorpicker
+  .create
+  TClassListPropertyEditor
+  drag
+  FSyncValue
+  XCreateIC
+  XSyncCreateCounter
+  TApplicationHelper
+  PIXMAP_RESIZE_SIZE
+  tfpgwindow
+  WindowSetAlpha
   xdynunloadlib
   x_Unload
   XGetImage
@@ -67,18 +80,6 @@ findinfiledialog=65
   XUtil
   XInternAtom
   aix
-  define aix
-  hmodule
-  rtldefs
-  unit rtldefs
-  unit dynlibs
-  libdl
-  libld
-  libpthread
-  linklib pthread
-  pthread
-  go_AlternativeColor
-  FLastAscOrder
  [findinfileadialogfo]
  stackedunder=
  x=386
@@ -197,7 +198,7 @@ options=114
  value=
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=0
+ index=3
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=728
  width0=47
@@ -258,7 +259,7 @@ targetfile=${PROJECTDIR}/designer_ext
 messageoutputfile=
 makecommand=${COMPILER}
 makedir=
-unitdirs=8
+unitdirs=11
  ${FPGUIDIR}/lib/${TargetCPU}-${TargetOS}
  ${FPGUIDIR}
  ${FPGUIDIR}/src/corelib/gdi
@@ -267,6 +268,9 @@ unitdirs=8
  ${FPGUIDIR}/src/gui
  ${FPGUIDIR}/src/corelib
  ${FPGUIDIR}/src/corelib/x11/dyn_x11
+ ./develop_x11
+ ./maint_x11
+ ./dynX11
 unitpref=-Fu
 incpref=-Fi
 libpref=-Fl
@@ -274,7 +278,7 @@ objpref=-Fo
 targpref=-o
 befcommand=0
 aftcommand=0
-makeoptions=9
+makeoptions=10
  -fPIC
  -l -Mobjfpc -Schi
  -FE.
@@ -283,8 +287,10 @@ makeoptions=9
  -B
  -O2 -XX -Xs -CX
  -sh
+ -WG
  -vewnhibqw
-makeoptpurpose=9
+makeoptpurpose=10
+ 
  
  
  
@@ -479,7 +485,7 @@ modulenames=0
 moduletypes=0
 modulefiles=0
 befcommandon=0
-makeoptionson=9
+makeoptionson=10
  0
  2495
  443
@@ -488,6 +494,7 @@ makeoptionson=9
  446
  447
  0
+ 48
  447
 compilerusedon=29
  4035
@@ -561,7 +568,7 @@ project_time=18:08:31
 project_date=25/11/2016
 project_comment=
 aftcommandon=0
-unitdirson=8
+unitdirson=11
  197055
  197055
  197040
@@ -570,6 +577,9 @@ unitdirson=8
  197055
  197055
  983040
+ 983040
+ 987135
+ 987135
 macroon=7
  21
  42
@@ -777,49 +787,63 @@ sigsettings=27
  30,30,T,F
 defaultmake=4
 [breakpoints]
-on=6
+on=8
  0
  0
  0
  0
- -1
  0
-path=6
+ 0
+ 0
+ 0
+path=8
  /home/fred/designer_ext/src/frm_main_designer.pas
  /home/fred/designer_ext/src/frm_vfdforms.pas
  /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
  /home/fred/fpGUI-develop/src/gui/fpg_hint.pas
- /home/fred/designer_ext/src/frm_main_designer.pas
  /home/fred/designer_ext/src/fpg_hint.pas
-line=6
- 1406
+ /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
+ /home/fred/designer_ext/src/xlib.pas
+ /home/fred/designer_ext/src/frm_main_designer.pas
+line=8
+ 1410
  624
  43
  228
- 25
  296
-address=6
- 4805714
- 5764094
- 4369936
- 5448320
- 4786736
- 5449808
-addbkpt=6
+ 512
+ 1628
+ 513
+address=8
+ 4805586
+ 5784862
+ 4369776
+ 5469088
+ 5470576
+ 5306828
+ 4910880
+ 4789788
+addbkpt=8
  0
  0
  0
  0
  0
  0
-ignore=6
+ 0
+ 0
+ignore=8
  0
  0
  0
  0
  0
  0
-condition=6
+ 0
+ 0
+condition=8
+ 
+ 
  
  
  
@@ -949,30 +973,47 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=xdynunloadlib
+finddtext=runonce
 findhistory=20
- xdynunloadlib
- x_load
- x_load()
- XGetICValues
- XGetImage
- GetScreenPixelColor
- XInternAtom
- DYNLOAD
- fred
- OnColorPicked
- FOnColorPicked
- TColorPickedEvent
- dynpthreads
- DEBUG_MT
- XCopyArea
- createfontc
+ runonce
+ formclose
+ destro
+ AfterCreate
+ .create
+ HandlePaint
+ PaintPaletteButtonForDrag
+ drop
+ drag
+ OnPaletteDragStart
+ FormClose
+ destroy
+ TXSyncValue
+ FSyncValue
+ xcreate
+ XSyncCreateCounter
+ XCreateRegion
+ TfpgWindowAccess
  XAllocWMHints
  XAllocClassHint
- XBufferOverflow
- gridhead
 findoptions=1
-editpos=16
+editpos=25
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
  0,-1073741823
  0,-1073741823
  0,0
@@ -981,14 +1022,6 @@ editpos=16
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,-1073741823
- 0,2112
- 0,-1073741823
- 0,-1073741823
- 0,0
- 0,-1073741823
- 0,15
- 23,194
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -1005,41 +1038,77 @@ bookmarks12=0
 bookmarks13=0
 bookmarks14=0
 bookmarks15=0
-sourcefiles=16
- ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/fpg_x11.pas
- /usr/local/codetyphon/fpcsrc/packages/x11/src/xlib.pp
- ${PROJECTDIR}/xftlib.pas
- ${PROJECTDIR}/pthread.inc
- ${PROJECTDIR}/xdynload.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/define.inc
+bookmarks16=0
+bookmarks17=0
+bookmarks18=0
+bookmarks19=0
+bookmarks20=0
+bookmarks21=0
+bookmarks22=0
+bookmarks23=0
+bookmarks24=0
+sourcefiles=25
  ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/xlib.pas
- /home/fred/fpGUI-maint/src/corelib/x11/fpg_x11.pas
- ${PROJECTDIR}/frm_colorpicker.pas
- /home/fred/fpGUI-maint/src/corelib/fpg_base.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/xdynload.pas
+ /home/fred/fpGUI-develop/uidesigner/frm_main.pas
+ /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
+ /home/fred/fpGUI-develop/src/corelib/fpg_widget.pas
+ ${PROJECTDIR}/vfd_widgetclass.pas
+ ${PROJECTDIR}/vfd_widgetclass.pas
+ ${PROJECTDIR}/vfd_widgets.pas
+ ${PROJECTDIR}/vfd_props.pas
  ${PROJECTDIR}/designer_ext.pas
-relpaths=16
- designer_ext.pas
- fpg_x11.pas
- ../../../usr/local/codetyphon/fpcsrc/packages/x11/src/xlib.pp
- xftlib.pas
- pthread.inc
- xdynload.pas
- define.inc
- define.inc
+ ${PROJECTDIR}/fpg_style_anim_chrome_silver_horz.pas
+ ${PROJECTDIR}/frm_colorpicker.pas
+ /home/fred/fpGUI-develop/src/gui/fpg_form.pas
+ ${PROJECTDIR}/frm_multiselect.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/vfd_widgets.pas
+ ${PROJECTDIR}/vfd_props.pas
+ /home/fred/fpGUI-maint/src/gui/fpg_form.pas
+ ${PROJECTDIR}/runonce_postit.pas
+ /home/fred/fpGUI-maint/src/corelib/x11/fpg_netlayer_x11.pas
+ /home/fred/designer_ext/src/define.inc
+ ${PROJECTDIR}/develop_x11/fpg_netlayer_x11.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/define.inc
+relpaths=25
  frm_main_designer.pas
- xlib.pas
- fpGUI-maint/src/corelib/x11/fpg_x11.pas
- frm_colorpicker.pas
- ../fpGUI-maint/src/corelib/fpg_base.pas
- define.inc
- xdynload.pas
+ fpGUI-develop/uidesigner/frm_main.pas
+ fpGUI-develop/src/corelib/fpg_main.pas
+ fpGUI-develop/src/corelib/fpg_widget.pas
+ vfd_widgetclass.pas
+ vfd_widgetclass.pas
+ vfd_widgets.pas
+ vfd_props.pas
  designer_ext.pas
-ismoduletexts=16
+ fpg_style_anim_chrome_silver_horz.pas
+ frm_colorpicker.pas
+ fpGUI-develop/src/gui/fpg_form.pas
+ frm_multiselect.pas
+ define.inc
+ vfd_widgets.pas
+ vfd_props.pas
+ fpGUI-maint/src/gui/fpg_form.pas
+ runonce_postit.pas
+ fpGUI-maint/src/corelib/x11/fpg_netlayer_x11.pas
+ define.inc
+ develop_x11/fpg_netlayer_x11.pas
+ define.inc
+ define.inc
+ define.inc
+ define.inc
+ismoduletexts=25
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1061,27 +1130,36 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=16
+order=25
  0
- 1
+ 12
  2
  3
- 4
- 12
- 13
- 5
+ 11
  6
  7
+ 5
  8
+ 19
+ 1
+ 20
+ 18
+ 4
  9
- 14
- 15
+ 22
+ 17
+ 21
  10
- 11
-firsttab=2
-index=13
+ 23
+ 13
+ 15
+ 16
+ 24
+ 14
+firsttab=8
+index=9
 [layout]
-windowlayout=572
+windowlayout=581
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1095,10 +1173,10 @@ windowlayout=572
  ny=0
  ncx=0
  ncy=0
- x=0
- y=29
- cx=1366
- cy=706
+ x=83
+ y=91
+ cx=1157
+ cy=621
  rcx=0
  rcy=0
  wsize=6
@@ -1189,7 +1267,7 @@ windowlayout=572
  [findinfilefo]
  splitdir=0
  useroptions=268451947
- stackedunder=mainfo
+ stackedunder=
  parent=
  mdistate=0
  nx=0
@@ -1245,7 +1323,7 @@ windowlayout=572
  rcy=0
  wsize=0
  active=0
- visible=0
+ visible=1
  [watchpointsfo]
  splitdir=0
  useroptions=268451945
@@ -1556,30 +1634,30 @@ windowlayout=572
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/designer_ext.pas
+ value=/home/fred/designer_ext/src/define.inc
  history=20
-  /home/fred/fpGUI-maint/src/corelib/fpg_base.pas
-  /home/fred/designer_ext/src/pthread.inc
-  /home/fred/designer_ext/src/fpg_netlayer_x11.pasf
+  /home/fred/designer_ext/src/define.inc
+  /home/fred/designer_ext/src/designer_ext.pas
+  /home/fred/designer_ext/src/vfd_widgets.pas
   /home/fred/designer_ext/src/frm_colorpicker.pas
-  /home/fred/fpgui/uidesigner/uidesigner.lpr
-  /home/fred/ideu/src/dialogfiles.pas
-  /home/fred/ideu/src/confideu.pas
-  /home/fred/ideu/src/msegrids.pas
-  /home/fred/strumpract/src/msegrids.pas
-  /home/fred/ideu/src/msewidgets.pas
-  /home/fred/msegui/apps/ide/main.pas
-  /home/fred/strumpract/src/status.pas
-  /home/fred/strumpract/src/dialogfiles.pas
-  /home/fred/ideu/src/replacedialogform.pas
-  /home/fred/ideu/src/msefiledialog.pas
-  /home/fred/ideu/src/commandlineform.pas
-  /home/fred/ideu/src/threadsform.pas
-  /home/fred/ideu/src/messageform.pas
-  /home/fred/ideu/src/memoryform.pas
-  /home/fred/ideu/src/guitemplates.pas
+  /home/fred/designer_ext/src/vfd_props.pas
+  /home/fred/fpGUI-maint/src/corelib/x11/fpg_netlayer_x11.pas
+  /home/fred/fpGUI-develop/src/gui/fpg_form.pas
+  /home/fred/fpGUI-develop/uidesigner/frm_main.pas
+  /home/fred/fpGUI-develop/uidesigner/vfd_props.pas
+  /home/fred/designer_ext/src/vfd_widgetclass.pas
+  /home/fred/fpGUI-develop/uidesigner/vfd_widgets.pas
+  /home/fred/fpGUI-develop/uidesigner/vfd_widgetclass.pas
+  /home/fred/designer_ext/src/fpg_netlayer_x11.pas
+  /home/fred/designer_ext/src/maint/fpg_netlayer_x11.pas
+  /home/fred/designer_ext/src/fpg_x11.pas
+  /home/fred/designer_ext/src/maint/fpg_x11.pas
+  /home/fred/designer_ext/src/develop/fpg_x11.pas
+  /home/fred/designer_ext/src/develop/fpg_netlayer_x11.pas
+  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
+  /home/fred/fpGUI-maint/examples/apps/ide/src/frm_main.pas
  [debuggerfo.project_options]
- value=2
+ value=1
  [debuggerfo.hints]
  value=0
  [sourcefo]
@@ -1599,25 +1677,34 @@ windowlayout=572
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- order=16
+ order=25
   0
-  1
+  12
   2
   3
-  4
-  12
-  13
-  5
+  11
   6
   7
+  5
   8
+  19
+  1
+  20
+  18
+  4
   9
-  14
-  15
+  22
+  17
+  21
   10
-  11
- firsttab=2
- index=13
+  23
+  13
+  15
+  16
+  24
+  14
+ firsttab=8
+ index=9
  [cpuc86_64fo]
  irqoff=0
  splitdir=0

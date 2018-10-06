@@ -17,8 +17,12 @@ program designer_ext;
 
 uses
  {$IFDEF UNIX}
-cthreads, xdynload,
+cthreads, 
+ {$IFDEF DYNLOAD}
+xdynload,
  {$ENDIF}
+ {$ENDIF}
+ 
   fpg_main,
   fpg_iniutils,
   SysUtils,
@@ -66,11 +70,14 @@ cthreads, xdynload,
   fpg_stylemanager,
   vfd_main,
   frm_main_designer,
+  frm_multiselect,
   vfd_widgets;
 
   procedure MainProc;
   var
     filedir, ordir : string;
+    
+    isalreadyrunning : boolean = false;
 
     {$ifdef fpgui-develop}
   //   cmd: ICmdLineParams;
@@ -79,7 +86,7 @@ cthreads, xdynload,
   begin
  // param1 := 2;
  
-      ifonlyone := True;
+       ifonlyone := True;
     filedir := '';
      ordir := IncludeTrailingBackslash(ExtractFilePath(ParamStr(0)));
 
@@ -92,14 +99,14 @@ cthreads, xdynload,
      if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
     begin
       ifonlyone := True;
-      RunOnce('showit');
+    isalreadyrunning :=  RunOnce('showit');
     end
     else
 
     if ((trim(ParamStr(1)) = 'hideit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
     begin
       ifonlyone := True;
-      RunOnce('hideit');
+      isalreadyrunning := RunOnce('hideit');
     end
     else
      begin
@@ -110,7 +117,7 @@ cthreads, xdynload,
         begin
           ifonlyone := True;
           filedir := 'clear';
-          RunOnce(filedir);
+        isalreadyrunning :=  RunOnce(filedir);
         end
         else
           ifonlyone := False;
@@ -124,7 +131,7 @@ cthreads, xdynload,
           if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
         begin
           ifonlyone := True;
-          RunOnce( ParamStr(1));
+        isalreadyrunning :=  RunOnce( ParamStr(1));
         end
         else
         begin
@@ -137,12 +144,17 @@ cthreads, xdynload,
      end;
      
      {$IFDEF UNIX}
+     {$IFDEF DYNLOAD}
      if not xdynloadlib() then 
      begin
      writeln('X11 and Xft libraries did not load...');
      fpgApplication.Terminate;
      end;
      {$ENDIF}
+     {$ENDIF}
+     
+ if isalreadyrunning = false then 
+ begin   
      
      fpgApplication.Initialize;
     try
@@ -152,14 +164,14 @@ cthreads, xdynload,
 
   if not gCommandLineParams.IsParam('style') then
 // cmd := fpgApplication as ICmdLineParams;
-// if not cmd.HasOption('style') then
+ //if not cmd.HasOption('style') then
       {$else}
      if not gCommandLineParams.IsParam('style') then
     {$endif}
 
       begin
-        if fpgStyleManager.SetStyle('Chrome silver flat menu') then
-          fpgStyle := fpgStyleManager.Style;
+      if fpgStyleManager.SetStyle('Chrome silver flat menu') then
+       fpgStyle := fpgStyleManager.Style;
       end;
 
      PropList := TPropertyList.Create;
@@ -187,14 +199,23 @@ cthreads, xdynload,
       fpgApplication.Run;
 
       PropList.Free;
+     
 
    finally
+          FreeRunOnce;
+         
           maindsgn.Free;
-          
+            
          {$IFDEF UNIX} 
+         {$IFDEF DYNLOAD} 
           xdynunloadlib();
          {$endif}
+         {$endif}
 
+    end;
+    end else 
+    begin
+     FreeRunOnce;
     end;
 
 
