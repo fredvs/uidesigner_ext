@@ -13,9 +13,9 @@ fiens@hotmail.com
 
 unit RunOnce_PostIt;
 
+{$DEFINE fpgui}
 
-
-/// for custom compil, like using fpgui-dvelop =>  edit define.inc
+/// for custom compil, like using fpgui-develop =>  edit define.inc
 {$I define.inc}
 
 interface
@@ -27,7 +27,9 @@ uses
    {$IF DEFINED(LCL)}
   ExtCtrls,       /// for lcl timer
      {$else}
-  fpg_main, /// for fpgui timer
+   {$IF DEFINED(fpgui)}  
+   fpg_main, /// for fpgui timer
+   {$endif}
     {$endif}
   SysUtils, Classes, Process;
 
@@ -42,8 +44,9 @@ type
     ATimer: TTimer;         /// for lcl timer
     procedure InitMessage(AOwner: TComponent);
     {$else}
-  //  ATimer: Tfpgtimer;             /// for fpGUI
+{$IF DEFINED(fpgui)}
     procedure InitMessage;
+     {$endif}
    {$endif}
     function ExecProcess(const ACommandLine: string): string;
     procedure ListProcess(const AProcess: TStringList; const AShowPID: boolean = False;
@@ -82,9 +85,7 @@ function RunOnce(AMessage: string): boolean; // if true the application is alrea
 begin
   TheOncePost := TOncePost.Create;
 result :=  TheOncePost.RunOnce(AMessage);
-  
-//  fpgApplication.Terminate;
-  
+   
 end;
 
 function IsRunningIDE(AProcess : string) :boolean;
@@ -154,12 +155,15 @@ end;
 procedure TOncePost.onTimerPost(Sender: TObject);
 begin
   ATimer.Enabled:=false;
+
+{$IF DEFINED(fpgui)}
   fpgapplication.ProcessMessages;
+ {$endif}    
   if PostIt <> '' then
     if TheProc <> nil then
       TheProc;
- // fpgapplication.ProcessMessages;
-   ATimer.Enabled:=true;
+    ATimer.Enabled:=true;
+ 
 end;
 
 {$IF DEFINED(LCL)}
@@ -169,11 +173,13 @@ begin
    ATimer.Enabled := false;
 end;
 {$else}
+{$IF DEFINED(fpgui)}
 procedure TOncePost.InitMessage;
 begin
    ATimer := TfpgTimer.Create(500);           /// for fpGUI
    ATimer.Enabled := false;
  end;
+  {$endif} 
 {$endif}
 
 function TOncePost.ExecProcess(const ACommandLine: string): string;

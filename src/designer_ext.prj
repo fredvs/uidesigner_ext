@@ -996,18 +996,28 @@ findhistory=20
  XAllocWMHints
  XAllocClassHint
 findoptions=1
-editpos=2
+editpos=4
  0,31
+ 0,4
+ 0,46
  0,0
 bookmarks0=0
 bookmarks1=0
-sourcefiles=2
+bookmarks2=0
+bookmarks3=0
+sourcefiles=4
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/define.inc
-relpaths=2
+ ${PROJECTDIR}/runonce_postit.pas
+ ${PROJECTDIR}/define.inc
+relpaths=4
  designer_ext.pas
  define.inc
-ismoduletexts=2
+ runonce_postit.pas
+ define.inc
+ismoduletexts=4
+ 0
+ 0
  0
  0
 modules=0
@@ -1015,10 +1025,15 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
+order=4
+ 0
+ 2
+ 3
+ 1
 firsttab=0
-index=0
+index=1
 [layout]
-windowlayout=555
+windowlayout=590
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1493,12 +1508,10 @@ windowlayout=555
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/designer_ext.pas
- history=20
-  /home/fred/fpGUI-develop/src/gui/fpg_form.pas
-  /home/fred/fpGUI-maint/src/gui/fpg_form.pas
-  /home/fred/designer_ext/src/develop_x11/fpg_netlayer_x11.pas
+ value=/home/fred/designer_ext/src/runonce_postit.pas
+ history=50
   /home/fred/designer_ext/src/runonce_postit.pas
+  /home/fred/designer_ext/src/develop_x11/fpg_netlayer_x11.pas
   /home/fred/fpGUI-develop/uidesigner/frm_main.pas
   /home/fred/designer_ext/src/frm_colorpicker.pas
   /home/fred/designer_ext/src/vfd_props.pas
@@ -1515,6 +1528,38 @@ windowlayout=555
   /home/fred/designer_ext/src/develop/fpg_netlayer_x11.pas
   /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
   /home/fred/fpGUI-maint/examples/apps/ide/src/frm_main.pas
+  /home/fred/fpGUI-maint/examples/apps/ide/src/maximus.prj
+  /home/fred/fpGUI-maint/examples/gui/imgtest_jpeg/main.pas
+  /home/fred/fpGUI-maint/examples/gui/imgtest/bitmaptest.lpr
+  /home/fred/Downloads/dragtest/drag_test.lpr
+  /home/fred/eschecs/chessgraphicsutils.pas
+  /home/fred/eschecs/chessgraphics.pas
+  /home/fred/echecs/laz_avl_tree.pp
+  /home/fred/echecs/avglvltree.pas
+  /home/fred/echecs/chessgraphics.pas
+  /home/fred/echecs/eschecs.pas
+  /home/fred/echecs/eschecs.ctpr
+  /home/fred/designer_ext/src/fpg_netlayer_x11.pasf
+  /home/fred/fpgui/uidesigner/uidesigner.lpr
+  /home/fred/ideu/src/dialogfiles.pas
+  /home/fred/ideu/src/confideu.pas
+  /home/fred/ideu/src/msegrids.pas
+  /home/fred/strumpract/src/msegrids.pas
+  /home/fred/ideu/src/msewidgets.pas
+  /home/fred/msegui/apps/ide/main.pas
+  /home/fred/strumpract/src/status.pas
+  /home/fred/strumpract/src/dialogfiles.pas
+  /home/fred/ideu/src/replacedialogform.pas
+  /home/fred/ideu/src/msefiledialog.pas
+  /home/fred/ideu/src/commandlineform.pas
+  /home/fred/ideu/src/threadsform.pas
+  /home/fred/ideu/src/messageform.pas
+  /home/fred/ideu/src/memoryform.pas
+  /home/fred/ideu/src/guitemplates.pas
+  /home/fred/ideu/src/panelform.pas
+  /home/fred/msegui/apps/ide/main.mfm
+  /home/fred/msegui/apps/ide/sourceform.pas
+  /home/fred/msegui/apps/ide/actionsmodule.pas
  [debuggerfo.project_options]
  value=1
  [debuggerfo.hints]
@@ -1536,8 +1581,13 @@ windowlayout=555
  rcx=0
  rcy=0
  [sourcefo.files_tab]
+ order=4
+  0
+  2
+  3
+  1
  firsttab=0
- index=0
+ index=1
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
