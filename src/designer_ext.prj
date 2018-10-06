@@ -576,10 +576,10 @@ unitdirson=11
  196623
  197055
  197055
+ 983071
  983040
- 983040
- 987135
- 987135
+ 987072
+ 987072
 macroon=7
  21
  42
@@ -996,133 +996,18 @@ findhistory=20
  XAllocWMHints
  XAllocClassHint
 findoptions=1
-editpos=25
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
+editpos=2
+ 0,31
  0,0
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
 bookmarks0=0
 bookmarks1=0
-bookmarks2=0
-bookmarks3=0
-bookmarks4=0
-bookmarks5=0
-bookmarks6=0
-bookmarks7=0
-bookmarks8=0
-bookmarks9=0
-bookmarks10=0
-bookmarks11=0
-bookmarks12=0
-bookmarks13=0
-bookmarks14=0
-bookmarks15=0
-bookmarks16=0
-bookmarks17=0
-bookmarks18=0
-bookmarks19=0
-bookmarks20=0
-bookmarks21=0
-bookmarks22=0
-bookmarks23=0
-bookmarks24=0
-sourcefiles=25
- ${PROJECTDIR}/frm_main_designer.pas
- /home/fred/fpGUI-develop/uidesigner/frm_main.pas
- /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
- /home/fred/fpGUI-develop/src/corelib/fpg_widget.pas
- ${PROJECTDIR}/vfd_widgetclass.pas
- ${PROJECTDIR}/vfd_widgetclass.pas
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/vfd_props.pas
+sourcefiles=2
  ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/fpg_style_anim_chrome_silver_horz.pas
- ${PROJECTDIR}/frm_colorpicker.pas
- /home/fred/fpGUI-develop/src/gui/fpg_form.pas
- ${PROJECTDIR}/frm_multiselect.pas
  ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/vfd_widgets.pas
- ${PROJECTDIR}/vfd_props.pas
- /home/fred/fpGUI-maint/src/gui/fpg_form.pas
- ${PROJECTDIR}/runonce_postit.pas
- /home/fred/fpGUI-maint/src/corelib/x11/fpg_netlayer_x11.pas
- /home/fred/designer_ext/src/define.inc
- ${PROJECTDIR}/develop_x11/fpg_netlayer_x11.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/define.inc
-relpaths=25
- frm_main_designer.pas
- fpGUI-develop/uidesigner/frm_main.pas
- fpGUI-develop/src/corelib/fpg_main.pas
- fpGUI-develop/src/corelib/fpg_widget.pas
- vfd_widgetclass.pas
- vfd_widgetclass.pas
- vfd_widgets.pas
- vfd_props.pas
+relpaths=2
  designer_ext.pas
- fpg_style_anim_chrome_silver_horz.pas
- frm_colorpicker.pas
- fpGUI-develop/src/gui/fpg_form.pas
- frm_multiselect.pas
  define.inc
- vfd_widgets.pas
- vfd_props.pas
- fpGUI-maint/src/gui/fpg_form.pas
- runonce_postit.pas
- fpGUI-maint/src/corelib/x11/fpg_netlayer_x11.pas
- define.inc
- develop_x11/fpg_netlayer_x11.pas
- define.inc
- define.inc
- define.inc
- define.inc
-ismoduletexts=25
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
+ismoduletexts=2
  0
  0
 modules=0
@@ -1130,36 +1015,10 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=25
- 0
- 12
- 2
- 3
- 11
- 6
- 7
- 5
- 8
- 19
- 1
- 20
- 18
- 4
- 9
- 22
- 17
- 21
- 10
- 23
- 13
- 15
- 16
- 24
- 14
-firsttab=8
-index=9
+firsttab=0
+index=0
 [layout]
-windowlayout=581
+windowlayout=555
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1191,8 +1050,8 @@ windowlayout=581
  ny=0
  ncx=0
  ncy=0
- x=493
- y=171
+ x=359
+ y=188
  cx=497
  cy=314
  rcx=0
@@ -1634,17 +1493,17 @@ windowlayout=581
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/define.inc
+ value=/home/fred/designer_ext/src/designer_ext.pas
  history=20
-  /home/fred/designer_ext/src/define.inc
-  /home/fred/designer_ext/src/designer_ext.pas
-  /home/fred/designer_ext/src/vfd_widgets.pas
+  /home/fred/fpGUI-develop/src/gui/fpg_form.pas
+  /home/fred/fpGUI-maint/src/gui/fpg_form.pas
+  /home/fred/designer_ext/src/develop_x11/fpg_netlayer_x11.pas
+  /home/fred/designer_ext/src/runonce_postit.pas
+  /home/fred/fpGUI-develop/uidesigner/frm_main.pas
   /home/fred/designer_ext/src/frm_colorpicker.pas
   /home/fred/designer_ext/src/vfd_props.pas
-  /home/fred/fpGUI-maint/src/corelib/x11/fpg_netlayer_x11.pas
-  /home/fred/fpGUI-develop/src/gui/fpg_form.pas
-  /home/fred/fpGUI-develop/uidesigner/frm_main.pas
   /home/fred/fpGUI-develop/uidesigner/vfd_props.pas
+  /home/fred/designer_ext/src/vfd_widgets.pas
   /home/fred/designer_ext/src/vfd_widgetclass.pas
   /home/fred/fpGUI-develop/uidesigner/vfd_widgets.pas
   /home/fred/fpGUI-develop/uidesigner/vfd_widgetclass.pas
@@ -1677,34 +1536,8 @@ windowlayout=581
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- order=25
-  0
-  12
-  2
-  3
-  11
-  6
-  7
-  5
-  8
-  19
-  1
-  20
-  18
-  4
-  9
-  22
-  17
-  21
-  10
-  23
-  13
-  15
-  16
-  24
-  14
- firsttab=8
- index=9
+ firsttab=0
+ index=0
  [cpuc86_64fo]
  irqoff=0
  splitdir=0

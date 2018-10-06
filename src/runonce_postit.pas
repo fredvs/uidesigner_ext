@@ -306,6 +306,7 @@ begin
     if y > 1 then
     begin
     result := true;
+   // writeln('Application run: ' +VProcess.Strings[x]);
  
   // debug
   // writeln('Application name');
@@ -323,6 +324,7 @@ begin
         Flush(f);
         CloseFile(f);
       end;
+        writeln('A other instance is running');
      Halt;
     end;
     Inc(x);
@@ -337,6 +339,9 @@ begin
         CloseFile(f);
       end;
   VProcess.Free;
+  if result then
+  else
+ writeln('A unique instance is running and it it this one') ;
 end;
 
 function TOncePost.IsRunningIDE(AProcess : string) :boolean;
