@@ -198,7 +198,7 @@ options=114
  value=
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=3
+ index=2
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=728
  width0=47
@@ -278,18 +278,20 @@ objpref=-Fo
 targpref=-o
 befcommand=0
 aftcommand=0
-makeoptions=10
+makeoptions=11
  -fPIC
  -l -Mobjfpc -Schi
  -FE.
  -FUunits
  -ghl
  -B
- -O2 -XX -Xs -CX
+ -XX -Xs -CX
+ -O2
  -sh
  -WG
  -vewnhibqw
-makeoptpurpose=10
+makeoptpurpose=11
+ 
  
  
  
@@ -485,14 +487,15 @@ modulenames=0
 moduletypes=0
 modulefiles=0
 befcommandon=0
-makeoptionson=10
+makeoptionson=11
  0
  2495
  443
  447
  2
  446
- 447
+ 439
+ 8
  0
  48
  447
@@ -812,13 +815,13 @@ line=7
  512
  513
 address=7
- 4817312
- 5916558
- 4369119
- 5506752
- 5508240
- 5351440
- 4801500
+ 4824057
+ 5980712
+ 4370751
+ 5539117
+ 5540680
+ 5372060
+ 4808680
 addbkpt=7
  0
  0
@@ -989,7 +992,7 @@ findhistory=20
  TfpgWindowAccess
  XAllocWMHints
 findoptions=1
-editpos=12
+editpos=21
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -1000,8 +1003,17 @@ editpos=12
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,0
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
  0,1
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -1014,7 +1026,16 @@ bookmarks8=0
 bookmarks9=0
 bookmarks10=0
 bookmarks11=0
-sourcefiles=12
+bookmarks12=0
+bookmarks13=0
+bookmarks14=0
+bookmarks15=0
+bookmarks16=0
+bookmarks17=0
+bookmarks18=0
+bookmarks19=0
+bookmarks20=0
+sourcefiles=21
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/runonce_postit.pas
@@ -1027,7 +1048,16 @@ sourcefiles=12
  ${PROJECTDIR}/designer_ext.pas
  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
  ${PROJECTDIR}/define.inc
-relpaths=12
+ ${PROJECTDIR}/xext.pas
+ ${PROJECTDIR}/xdynload.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/fpg_x11.pas
+ ${PROJECTDIR}/sak_fpg.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/xext.pas
+ ${PROJECTDIR}/xdynload.pas
+relpaths=21
  designer_ext.pas
  define.inc
  runonce_postit.pas
@@ -1036,11 +1066,29 @@ relpaths=12
  frm_main_designer.pas
  fpg_x11.pas
  xlib.pas
- ../usr/local/codetyphon/typhon/lcl/interfaces/fpgui/src/corelib/fpg_x11.pas
+ usr/local/codetyphon/typhon/lcl/interfaces/fpgui/src/corelib/fpg_x11.pas
  designer_ext.pas
- ../fpGUI-develop/src/corelib/x11/fpg_x11.pas
+ fpGUI-develop/src/corelib/x11/fpg_x11.pas
  define.inc
-ismoduletexts=12
+ xext.pas
+ xdynload.pas
+ define.inc
+ fpg_x11.pas
+ sak_fpg.pas
+ define.inc
+ define.inc
+ xext.pas
+ xdynload.pas
+ismoduletexts=21
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1058,23 +1106,32 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=12
+order=21
  0
+ 20
+ 14
+ 3
  1
  2
+ 9
+ 17
  10
  11
+ 18
+ 4
+ 15
+ 16
+ 13
+ 5
+ 19
  8
  6
- 5
- 9
- 4
  7
- 3
+ 12
 firsttab=0
-index=4
+index=7
 [layout]
-windowlayout=568
+windowlayout=577
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1218,8 +1275,8 @@ windowlayout=568
  width1=82
  sortdescend1=0
  sorted=0
- col=0
- row=2
+ col=1
+ row=5
  rowheight=16
  [stackfo]
  splitdir=0
@@ -1551,10 +1608,13 @@ windowlayout=568
  [debuggerfo.file_history]
  value=/home/fred/designer_ext/src/define.inc
  history=20
-  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
-  /home/fred/designer_ext/src/designer_ext.pas
-  /home/fred/designer_ext/src/runonce_postit.pas
   /home/fred/designer_ext/src/define.inc
+  /home/fred/designer_ext/src/xext.pas
+  /home/fred/designer_ext/src/develop_dynX11/fpg_x11.pas
+  /home/fred/dynx/src/fpgui/develop_dynX11/fpg_x11.pas
+  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
+  /home/fred/designer_ext/src/frm_main_designer.pas
+  /home/fred/designer_ext/src/runonce_postit.pas
   /home/fred/designer_ext/src/develop_x11/fpg_netlayer_x11.pas
   /home/fred/fpGUI-develop/uidesigner/frm_main.pas
   /home/fred/designer_ext/src/frm_colorpicker.pas
@@ -1568,11 +1628,8 @@ windowlayout=568
   /home/fred/designer_ext/src/maint/fpg_netlayer_x11.pas
   /home/fred/designer_ext/src/fpg_x11.pas
   /home/fred/designer_ext/src/maint/fpg_x11.pas
-  /home/fred/designer_ext/src/develop/fpg_x11.pas
-  /home/fred/designer_ext/src/develop/fpg_netlayer_x11.pas
-  /home/fred/fpGUI-maint/examples/apps/ide/src/frm_main.pas
  [debuggerfo.project_options]
- value=B
+ value=1
  [debuggerfo.hints]
  value=0
  [sourcefo]
@@ -1592,26 +1649,35 @@ windowlayout=568
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- order=12
+ order=21
   0
+  20
+  14
+  3
   1
   2
+  9
+  17
   10
   11
+  18
+  4
+  15
+  16
+  13
+  5
+  19
   8
   6
-  5
-  9
-  4
   7
-  3
+  12
  firsttab=0
- index=4
+ index=7
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=stackfo
+ stackedunder=targetconsolefo
  parent=
  mdistate=0
  nx=0

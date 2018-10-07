@@ -40,14 +40,14 @@ uses
   XUtil,
   ctypes,
   {$IFDEF DYNLOAD}
-  Xftlib,
+  Xftlib, Xext,
   {$ELSE}
  fpg_xft_x11,
   {$ENDIF}
   fpg_netlayer_x11,
   fpg_base,
   fpg_impl;
-  {$LINKLIB Xext} // for xsync functions
+ // {$LINKLIB Xext} // for xsync functions
 
 const
   IconBitmapWidth = 16;
@@ -541,9 +541,9 @@ function XCreateIC(para1: PXIM; para2: array of const): PXIC; cdecl; external;
 {$ENDIF}
 
 // XSync functions
-function XSyncCreateCounter(dpy: PXDisplay; initial_value: TXSyncValue): TXSyncCounter; cdecl; external;
-function XSyncSetCounter(dpy: PXDisplay; counter: TXSyncCounter; value: TXSyncValue): TStatus; cdecl; external;
-function XSyncDestroyCounter(dpy: PXDisplay; counter: TXSyncCounter ): TStatus; cdecl; external;
+//function XSyncCreateCounter(dpy: PXDisplay; initial_value: TXSyncValue): TXSyncCounter; cdecl; external;
+//function XSyncSetCounter(dpy: PXDisplay; counter: TXSyncCounter; value: TXSyncValue): TStatus; cdecl; external;
+//function XSyncDestroyCounter(dpy: PXDisplay; counter: TXSyncCounter ): TStatus; cdecl; external;
 
 const
   AltGrMask = 1 shl 13;  // missing from X unit

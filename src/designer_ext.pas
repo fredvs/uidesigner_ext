@@ -142,6 +142,9 @@ xdynload,
 
          end;
      end;
+
+ if isalreadyrunning = false then 
+ begin   
      
      {$IFDEF UNIX}
      {$IFDEF DYNLOAD}
@@ -152,9 +155,6 @@ xdynload,
      end;
      {$ENDIF}
      {$ENDIF}
-     
- if isalreadyrunning = false then 
- begin   
      
      fpgApplication.Initialize;
     try
@@ -198,11 +198,11 @@ xdynload,
     fpgApplication.ShowHint:=true;
       fpgApplication.Run;
 
+finally
+
       PropList.Free;
      
-
-   finally
-          FreeRunOnce;
+         FreeRunOnce;
          
           maindsgn.Free;
             
@@ -215,8 +215,13 @@ xdynload,
     end;
     end else 
     begin
-     FreeRunOnce;
-    end;
+    
+      PropList.Free;
+     
+         FreeRunOnce;
+         
+          maindsgn.Free;
+     end;
 
 
   end;
