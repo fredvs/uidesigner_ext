@@ -524,6 +524,7 @@ end;
    (IsRunningIDE('ideu') = False)) or
       (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
     begin
+    StopMessage;
     CanClose := True;
   end
   else

@@ -30,7 +30,7 @@ xdynload,
   sak_fpg,
   fpg_cmdlineparams,
 
-// {
+
  // fpg_style_anim_pram1,
   fpg_style_anim_round_silver_horz,
   fpg_style_round_silver_flat_horz,
@@ -110,8 +110,9 @@ xdynload,
     end
     else
      begin
-        if (idetemp = 0) or ((idetemp > 0) and
-        (isrunningIDE('typhon') = False) and (isrunningIDE('ideu') = False) and (isrunningIDE('ideU') = False) and (isrunningIDE('lazarus') = False)) then
+        if (idetemp = 0) or ((idetemp > 0)
+         and (isrunningIDE('typhon') = False) and (isrunningIDE('ideu') = False) and (isrunningIDE('ideU') = False) and (isrunningIDE('lazarus') = False))
+      then
       begin
         if gINI.ReadBool('Options', 'RunOnlyOnce', True) = True then
         begin
@@ -136,7 +137,8 @@ xdynload,
         else
         begin
         //  ifonlyone := False;
-          if (FileExists(ParamStr(1)))  or (trim(ParamStr(1)) = '')  then  ifonlyone := False else fpgApplication.Terminate;
+          if (FileExists(ParamStr(1)))  or (trim(ParamStr(1)) = '')  then  ifonlyone := False
+           else fpgApplication.Terminate;
         end;
       end
 
@@ -147,6 +149,7 @@ xdynload,
 
  if isalreadyrunning = false then 
  begin   
+//  writeln('isalreadyrunning = false');  
      
      {$IFDEF UNIX}
      {$IFDEF DYNLOAD}
@@ -159,7 +162,8 @@ xdynload,
      {$ENDIF}
      
      fpgApplication.Initialize;
-    try
+    
+     
       RegisterWidgets;
 
     {$ifdef fpgui-develop}
@@ -198,32 +202,25 @@ xdynload,
      then SAKLoadlib(dirsakit);
 
     fpgApplication.ShowHint:=true;
+   
       fpgApplication.Run;
-
-finally
-
-      PropList.Free;
-     
-         FreeRunOnce;
-         
-          maindsgn.Free;
-          
-             
+       
+        PropList.Free;
+        maindsgn.Free;
+        FreeRunOnce;  
+               
          {$IFDEF UNIX} 
          {$IFDEF DYNLOAD} 
           xdynunloadlib();
          {$endif}
          {$endif}
 
-    end;
+    
     end else 
     begin
-    
+// writeln('isalreadyrunning = true') ;  
          FreeRunOnce;
-       //  fpgApplication.Terminate;
-    
-     end;
-
+       end;
 
   end;
 

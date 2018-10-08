@@ -28,7 +28,7 @@ uses
    fpg_main, /// for fpgui timer
    {$endif}
     {$endif}
- //   fptimer,
+ //  fptimer,   // ??? memory leak !
   SysUtils, Classes, Process;
 
 type
@@ -73,8 +73,8 @@ procedure StartMessage(AProc: Tproc; const AInterval: integer = 500);
 var
    TheOncePost: TOncePost;
    TheMessage: string;
-    ATimer: Tfpgtimer;
-   //   ATimer: Tfptimer;
+   ATimer: Tfpgtimer;
+ //  ATimer: Tfptimer;
 
 implementation
 
@@ -128,9 +128,9 @@ begin
    if assigned(ATimer) then
    begin
    ATimer.Enabled:=false;
-   ATimer.Free;
+   ATimer.free;
    end;
-  TheOncePost.Free;
+ if assigned(TheOncePost) then TheOncePost.Free;
 end;
 
 
@@ -173,8 +173,8 @@ end;
 {$IF DEFINED(fpgui)}
 procedure TOncePost.InitMessage;
 begin
-   ATimer := TfpgTimer.Create(500);           /// for fpGUI
-   //  ATimer := TfpTimer.Create(nil);   
+  ATimer := TfpgTimer.Create(500);           /// for fpGUI
+//  ATimer := TfpTimer.Create(nil);   
    ATimer.Enabled := false;
  end;
   {$endif} 
@@ -350,17 +350,17 @@ function TOncePost.IsRunningIDE(AProcess : string) :boolean;
 var
   VProcess: TStringList;
   x : integer;
+  
   begin
   x := 0;
   result := false;
   VProcess := TStringList.Create;
   ListProcess(VProcess, False, False, False);
-  while x < VProcess.Count do
+  while (x < VProcess.Count) and (result = false) do
   begin
     if pos(AProcess, VProcess.Strings[x]) > 0 then
      begin
      result := true;
-     exit;
      end;
    inc(x);
  end;
