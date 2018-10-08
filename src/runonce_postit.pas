@@ -21,14 +21,7 @@ uses
   {$IFDEF MSWINDOWS}
   JwaTlHelp32,
 {$ENDIF}
-   {$IF DEFINED(LCL)}
-  ExtCtrls,       /// for lcl timer
-     {$else}
-   {$IF DEFINED(fpgui)}  
-   fpg_main, /// for fpgui timer
-   {$endif}
-    {$endif}
- //  fptimer,   // ??? memory leak !
+  fptimer,  
   SysUtils, Classes, Process;
 
 type
@@ -38,13 +31,7 @@ type
   TOncePost = class(TObject)
   private
     TheProc: TProc;
-{$IF DEFINED(LCL)}
-   procedure InitMessage(AOwner: TComponent);
-    {$else}
-{$IF DEFINED(fpgui)}
     procedure InitMessage;
-     {$endif}
-   {$endif}
     function ExecProcess(const ACommandLine: string): string;
     procedure ListProcess(const AProcess: TStringList; const AShowPID: boolean = False;
       const ASorted: boolean = True; const AIgnoreCurrent: boolean = False);
@@ -60,11 +47,7 @@ type
 
 function RunOnce(AMessage: string) : boolean; // if true the application is already loaded
 
-{$IF DEFINED(LCL)}
-procedure InitMessage(AOwner: TComponent);    /// LcL
-    {$else}
-procedure InitMessage;      /// fpgui
-   {$endif}
+procedure InitMessage;     
 function IsRunningIDE(AProcess : string) :boolean;
 procedure FreeRunOnce;
 procedure StopMessage;
@@ -73,8 +56,7 @@ procedure StartMessage(AProc: Tproc; const AInterval: integer = 500);
 var
    TheOncePost: TOncePost;
    TheMessage: string;
-   ATimer: Tfpgtimer;
- //  ATimer: Tfptimer;
+   ATimer: Tfptimer;
 
 implementation
 
@@ -93,19 +75,11 @@ else
  result := true ;
 end;
 
-{$IF DEFINED(LCL)}
-  procedure InitMessage(AOwner: TComponent);
-begin
-   if assigned(ATimer) = false then  TheOncePost.InitMessage(AOwner);
-end;
-    {$else}
-  procedure InitMessage ;         /// fpgui
+  procedure InitMessage ;     
 begin
    if assigned(ATimer) = false then  TheOncePost.InitMessage;
 end;
-   {$endif}
-
-
+  
 procedure StopMessage;
 begin
   if assigned(ATimer) then
@@ -152,10 +126,6 @@ end;
 procedure TOncePost.onTimerPost(Sender: TObject);
 begin
   ATimer.Enabled:=false;
-
-{$IF DEFINED(fpgui)}
-//  fpgapplication.ProcessMessages;
- {$endif}    
   if PostIt <> '' then
     if TheProc <> nil then
       TheProc;
@@ -163,23 +133,12 @@ begin
  
 end;
 
-{$IF DEFINED(LCL)}
-procedure TOncePost.InitMessage(AOwner: TComponent);
-begin
-   ATimer := TTimer.Create(AOwner);         /// for lcl timer
-   ATimer.Enabled := false;
-end;
-{$else}
-{$IF DEFINED(fpgui)}
 procedure TOncePost.InitMessage;
 begin
-  ATimer := TfpgTimer.Create(500);           /// for fpGUI
-//  ATimer := TfpTimer.Create(nil);   
+   ATimer := TfpTimer.Create(nil);   
    ATimer.Enabled := false;
  end;
-  {$endif} 
-{$endif}
-
+ 
 function TOncePost.ExecProcess(const ACommandLine: string): string;
 const
   READ_BYTES = 2048;

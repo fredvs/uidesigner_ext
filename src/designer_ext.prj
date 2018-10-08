@@ -285,7 +285,7 @@ makeoptions=11
  -FUunits
  -ghl
  -B
- -XX -Xs -CX
+ -O1 -XX -Xs -CX
  -O2
  -sh
  -WG
@@ -494,7 +494,7 @@ makeoptionson=11
  447
  2
  446
- 439
+ 447
  8
  0
  48
@@ -992,26 +992,46 @@ findhistory=20
  OnPaletteDragStart
  onMoveMovePanel
 findoptions=1
-editpos=4
+editpos=8
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,211
+ 0,0
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,330
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
-sourcefiles=4
+bookmarks4=0
+bookmarks5=0
+bookmarks6=0
+bookmarks7=0
+sourcefiles=8
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/fpg_main.pas
  ${PROJECTDIR}/develop_dynX11/fpg_main.pas
  ${PROJECTDIR}/fpg_x11.pas
-relpaths=4
+ ${PROJECTDIR}/fpg_main.pas
+ ${PROJECTDIR}/sak_fpg.pas
+ ${PROJECTDIR}/define.inc
+ ${PROJECTDIR}/runonce_postit.pas
+relpaths=8
  designer_ext.pas
  fpg_main.pas
  develop_dynX11/fpg_main.pas
  fpg_x11.pas
-ismoduletexts=4
+ fpg_main.pas
+ sak_fpg.pas
+ define.inc
+ runonce_postit.pas
+ismoduletexts=8
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1021,10 +1041,19 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
+order=8
+ 0
+ 1
+ 2
+ 5
+ 6
+ 7
+ 3
+ 4
 firsttab=0
-index=3
+index=5
 [layout]
-windowlayout=555
+windowlayout=564
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1168,8 +1197,8 @@ windowlayout=555
  width1=82
  sortdescend1=0
  sorted=0
- col=1
- row=7
+ col=0
+ row=2
  rowheight=16
  [stackfo]
  splitdir=0
@@ -1499,9 +1528,14 @@ windowlayout=555
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/fpg_x11.pas
+ value=/home/fred/designer_ext/src/runonce_postit.pas
  history=20
   /home/fred/designer_ext/src/fpg_x11.pas
+  /home/fred/designer_ext/src/sak_fpg.pas
+  /home/fred/designer_ext/src/define.inc
+  /home/fred/designer_ext/src/fpg_main.pas
+  /home/fred/designer_ext/src/develop_dynX11/fpg_main.pas
+  /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
   /home/fred/designer_ext/src/maint_dynX11/fpg_main.pas
   /home/fred/designer_ext/src/runonce_postitold.pas
   /home/fred/fpGUI-maint/src/corelib/fpg_main.pas
@@ -1516,11 +1550,6 @@ windowlayout=555
   /home/fred/designer_ext/src/develop_x11/fpg_netlayer_x11.pas
   /home/fred/fpGUI-develop/uidesigner/frm_main.pas
   /home/fred/designer_ext/src/frm_colorpicker.pas
-  /home/fred/designer_ext/src/vfd_props.pas
-  /home/fred/fpGUI-develop/uidesigner/vfd_props.pas
-  /home/fred/designer_ext/src/vfd_widgets.pas
-  /home/fred/designer_ext/src/vfd_widgetclass.pas
-  /home/fred/fpGUI-develop/uidesigner/vfd_widgets.pas
  [debuggerfo.project_options]
  value=1
  [debuggerfo.hints]
@@ -1542,8 +1571,17 @@ windowlayout=555
  rcx=0
  rcy=0
  [sourcefo.files_tab]
+ order=8
+  0
+  1
+  2
+  5
+  6
+  7
+  3
+  4
  firsttab=0
- index=3
+ index=5
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
