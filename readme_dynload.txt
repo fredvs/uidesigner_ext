@@ -9,6 +9,10 @@
 
   Edit define.inc and uncomment {$DEFINE DYNLOAD}
 
+  Add in uses section : xdynload.
+  To load the libraries, add xdynloadlib() before fpgApplication.Initialize.
+  To unload the libraries, add xdynunloadlib() after fpgApplication.Run;
+
 - For static loading of Xlib and Xft.
   Delete all files in /src that are also in /src/dynX11. 
   Delete all files in /src that are also in /src/xxx_dynx11.

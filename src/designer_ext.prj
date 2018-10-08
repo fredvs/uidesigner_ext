@@ -40,17 +40,17 @@ findinfiledialog=66
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
  filenames=1
-  /usr/local/codetyphon/
+  /usr/local/codetyphon/fpcsrc/
  filecolwidth=174
  x=0
  y=0
  cx=0
  cy=0
  filehistory=8
+  /usr/local/codetyphon/fpcsrc/
   /usr/local/codetyphon/
   /home/fred/fpGUI-develop/
   /home/fred/fpGUI-develop/uidesigner/
-  /usr/local/codetyphon/fpcsrc/
   /home/fred/fpGUI-maint/
   /usr/share/fpcsrc/
   /home/fred/fpgui/
@@ -58,8 +58,14 @@ findinfiledialog=66
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=XSyncCreateCounter
+ value=timer
  history=20
+  timer
+   ttimer
+  fpctimer
+  ttimer
+  X_GetProperty
+  TfpgDrag
   XSyncCreateCounter
   frmMultiSelect
   colorpicker
@@ -74,15 +80,9 @@ findinfiledialog=66
   WindowSetAlpha
   xdynunloadlib
   x_Unload
-  XGetImage
-  GetScreenPixelColor
-  OnColorPicked
-  XUtil
-  XInternAtom
-  aix
  [findinfileadialogfo]
  stackedunder=
- x=386
+ x=432
  y=189
  cx=375
  cy=276
@@ -530,12 +530,12 @@ compilerusedon=29
  0
  0
 debuggerusedon=6
- 4034
+ 4046
  0
  0
  0
  0
- 61
+ 49
 exeusedon=14
  4047
  0
@@ -815,13 +815,13 @@ line=7
  512
  513
 address=7
- 4824057
- 5980712
- 4370751
- 5539117
- 5540680
- 5372060
- 4808680
+ 4811255
+ 5841944
+ 4370632
+ 5495533
+ 5497096
+ 5319387
+ 4795896
 addbkpt=7
  0
  0
@@ -969,8 +969,17 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=XSyncCreateCounter
+finddtext=timer
 findhistory=20
+ timer
+ onTimerPost
+ atimer
+ free
+ RunOnce
+ termin
+ OnPaletteDragStart
+ onMoveMovePanel
+ drag
  XSyncCreateCounter
  XdbeQueryExtension
  runonce
@@ -981,18 +990,12 @@ findhistory=20
  HandlePaint
  PaintPaletteButtonForDrag
  drop
- drag
- OnPaletteDragStart
  FormClose
- destroy
- TXSyncValue
- FSyncValue
- xcreate
- XCreateRegion
- TfpgWindowAccess
- XAllocWMHints
 findoptions=1
-editpos=21
+editpos=15
+ 0,232
+ 0,-1073741823
+ 0,324
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -1002,15 +1005,6 @@ editpos=21
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,1
  0,-1073741823
  0,-1073741823
  0,-1073741823
@@ -1029,63 +1023,39 @@ bookmarks11=0
 bookmarks12=0
 bookmarks13=0
 bookmarks14=0
-bookmarks15=0
-bookmarks16=0
-bookmarks17=0
-bookmarks18=0
-bookmarks19=0
-bookmarks20=0
-sourcefiles=21
+sourcefiles=15
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/runonce_postit.pas
  ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/fpg_x11.pas
  ${PROJECTDIR}/frm_main_designer.pas
- ${PROJECTDIR}/fpg_x11.pas
- ${PROJECTDIR}/xlib.pas
- /usr/local/codetyphon/typhon/lcl/interfaces/fpgui/src/corelib/fpg_x11.pas
- ${PROJECTDIR}/designer_ext.pas
- /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
  ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/xext.pas
- ${PROJECTDIR}/xdynload.pas
+ /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
+ /home/fred/fpGUI-maint/src/corelib/fpg_base.pas
+ /home/fred/fpGUI-maint/src/corelib/fpg_main.pas
+ /usr/local/codetyphon/fpcsrc/packages/amunits/examples/simple_timer.pas
+ /usr/local/codetyphon/fpcsrc/packages/fcl-base/src/fptimer.pp
+ ${PROJECTDIR}/frm_main_designer.pas
  ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/fpg_x11.pas
  ${PROJECTDIR}/sak_fpg.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/xext.pas
- ${PROJECTDIR}/xdynload.pas
-relpaths=21
+ ${PROJECTDIR}/runonce_postitold.pas
+relpaths=15
  designer_ext.pas
  define.inc
  runonce_postit.pas
  define.inc
- fpg_x11.pas
  frm_main_designer.pas
- fpg_x11.pas
- xlib.pas
- usr/local/codetyphon/typhon/lcl/interfaces/fpgui/src/corelib/fpg_x11.pas
- designer_ext.pas
- fpGUI-develop/src/corelib/x11/fpg_x11.pas
  define.inc
- xext.pas
- xdynload.pas
+ fpGUI-develop/src/corelib/fpg_main.pas
+ fpGUI-maint/src/corelib/fpg_base.pas
+ fpGUI-maint/src/corelib/fpg_main.pas
+ usr/local/codetyphon/fpcsrc/packages/amunits/examples/simple_timer.pas
+ usr/local/codetyphon/fpcsrc/packages/fcl-base/src/fptimer.pp
+ frm_main_designer.pas
  define.inc
- fpg_x11.pas
  sak_fpg.pas
- define.inc
- define.inc
- xext.pas
- xdynload.pas
-ismoduletexts=21
- 0
- 0
- 0
- 0
- 0
- 0
+ runonce_postitold.pas
+ismoduletexts=15
  0
  0
  0
@@ -1106,32 +1076,26 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=21
+order=15
  0
- 20
- 14
- 3
  1
  2
- 9
- 17
- 10
- 11
- 18
- 4
- 15
- 16
  13
- 5
- 19
+ 14
  8
- 6
- 7
+ 9
+ 4
+ 11
  12
+ 5
+ 3
+ 7
+ 10
+ 6
 firsttab=0
-index=7
+index=0
 [layout]
-windowlayout=577
+windowlayout=571
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1275,8 +1239,8 @@ windowlayout=577
  width1=82
  sortdescend1=0
  sorted=0
- col=1
- row=5
+ col=0
+ row=2
  rowheight=16
  [stackfo]
  splitdir=0
@@ -1606,15 +1570,17 @@ windowlayout=577
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/define.inc
+ value=/home/fred/designer_ext/src/designer_ext.pas
  history=20
-  /home/fred/designer_ext/src/define.inc
-  /home/fred/designer_ext/src/xext.pas
+  /home/fred/designer_ext/src/runonce_postit.pas
+  /home/fred/fpGUI-maint/src/corelib/fpg_main.pas
+  /home/fred/fpGUI-maint/src/corelib/fpg_base.pas
   /home/fred/designer_ext/src/develop_dynX11/fpg_x11.pas
+  /home/fred/designer_ext/src/xdynload.pas
+  /home/fred/designer_ext/src/xext.pas
   /home/fred/dynx/src/fpgui/develop_dynX11/fpg_x11.pas
   /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
   /home/fred/designer_ext/src/frm_main_designer.pas
-  /home/fred/designer_ext/src/runonce_postit.pas
   /home/fred/designer_ext/src/develop_x11/fpg_netlayer_x11.pas
   /home/fred/fpGUI-develop/uidesigner/frm_main.pas
   /home/fred/designer_ext/src/frm_colorpicker.pas
@@ -1626,8 +1592,6 @@ windowlayout=577
   /home/fred/fpGUI-develop/uidesigner/vfd_widgetclass.pas
   /home/fred/designer_ext/src/fpg_netlayer_x11.pas
   /home/fred/designer_ext/src/maint/fpg_netlayer_x11.pas
-  /home/fred/designer_ext/src/fpg_x11.pas
-  /home/fred/designer_ext/src/maint/fpg_x11.pas
  [debuggerfo.project_options]
  value=1
  [debuggerfo.hints]
@@ -1649,30 +1613,24 @@ windowlayout=577
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- order=21
+ order=15
   0
-  20
-  14
-  3
   1
   2
-  9
-  17
-  10
-  11
-  18
-  4
-  15
-  16
   13
-  5
-  19
+  14
   8
-  6
-  7
+  9
+  4
+  11
   12
+  5
+  3
+  7
+  10
+  6
  firsttab=0
- index=7
+ index=0
  [cpuc86_64fo]
  irqoff=0
  splitdir=0

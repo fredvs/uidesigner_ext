@@ -15,9 +15,6 @@ unit RunOnce_PostIt;
 
 {$DEFINE fpgui}
 
-/// for custom compil, like using fpgui-develop =>  edit define.inc
-{$I define.inc}
-
 interface
 
 uses
@@ -31,6 +28,7 @@ uses
    fpg_main, /// for fpgui timer
    {$endif}
     {$endif}
+ //   fptimer,
   SysUtils, Classes, Process;
 
 type
@@ -41,8 +39,7 @@ type
   private
     TheProc: TProc;
 {$IF DEFINED(LCL)}
-    ATimer: TTimer;         /// for lcl timer
-    procedure InitMessage(AOwner: TComponent);
+   procedure InitMessage(AOwner: TComponent);
     {$else}
 {$IF DEFINED(fpgui)}
     procedure InitMessage;
@@ -77,6 +74,7 @@ var
    TheOncePost: TOncePost;
    TheMessage: string;
     ATimer: Tfpgtimer;
+   //   ATimer: Tfptimer;
 
 implementation
 
@@ -85,7 +83,6 @@ function RunOnce(AMessage: string): boolean; // if true the application is alrea
 begin
   TheOncePost := TOncePost.Create;
 result :=  TheOncePost.RunOnce(AMessage);
-   
 end;
 
 function IsRunningIDE(AProcess : string) :boolean;
@@ -99,7 +96,7 @@ end;
 {$IF DEFINED(LCL)}
   procedure InitMessage(AOwner: TComponent);
 begin
-   if assigned(TheOncePost.ATimer) = false then  TheOncePost.InitMessage(AOwner);
+   if assigned(ATimer) = false then  TheOncePost.InitMessage(AOwner);
 end;
     {$else}
   procedure InitMessage ;         /// fpgui
@@ -157,7 +154,7 @@ begin
   ATimer.Enabled:=false;
 
 {$IF DEFINED(fpgui)}
-  fpgapplication.ProcessMessages;
+//  fpgapplication.ProcessMessages;
  {$endif}    
   if PostIt <> '' then
     if TheProc <> nil then
@@ -177,6 +174,7 @@ end;
 procedure TOncePost.InitMessage;
 begin
    ATimer := TfpgTimer.Create(500);           /// for fpGUI
+   //  ATimer := TfpTimer.Create(nil);   
    ATimer.Enabled := false;
  end;
   {$endif} 
@@ -302,18 +300,17 @@ var
 begin
   x := 0;
   y := 0;
-    result := false;
+  result := false;
   VProcess := TStringList.Create;
   ListProcess(VProcess, False, False, False);
-  while x < VProcess.Count do
+  while (x < VProcess.Count) and (result = false) do
   begin
     if pos(ApplicationName, VProcess.Strings[x]) > 0 then
       Inc(y);
     if y > 1 then
     begin
     result := true;
-   // writeln('Application run: ' +VProcess.Strings[x]);
- 
+  
   // debug
   // writeln('Application name');
   // writeln('---------------------------------');
@@ -331,7 +328,7 @@ begin
         CloseFile(f);
       end;
      //   writeln('A other instance is running');
-     Halt;
+     // Halt;
     end;
     Inc(x);
   end;

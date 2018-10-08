@@ -142,6 +142,8 @@ xdynload,
 
          end;
      end;
+     
+ // if isalreadyrunning = false then writeln('isalreadyrunning = false') else writeln('isalreadyrunning = true') ;    
 
  if isalreadyrunning = false then 
  begin   
@@ -205,7 +207,8 @@ finally
          FreeRunOnce;
          
           maindsgn.Free;
-            
+          
+             
          {$IFDEF UNIX} 
          {$IFDEF DYNLOAD} 
           xdynunloadlib();
@@ -216,11 +219,9 @@ finally
     end else 
     begin
     
-      PropList.Free;
-     
          FreeRunOnce;
-         
-          maindsgn.Free;
+       //  fpgApplication.Terminate;
+    
      end;
 
 
