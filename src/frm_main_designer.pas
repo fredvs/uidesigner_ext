@@ -788,8 +788,9 @@ begin
   begin
     maindsgn.EditedFileName := theMessage;
     maindsgn.OnLoadFile(maindsgn);
+     BringToFront;
   end;
-  BringToFront;
+ 
 end;
 
 

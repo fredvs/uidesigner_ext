@@ -19,7 +19,7 @@ order16=0
 [projectoptions]
 projectdir=/home/fred/designer_ext/src
 projectfilename=/home/fred/designer_ext/src/designer_ext.prj
-findinfiledialog=66
+findinfiledialog=67
  [findinfileadialogfo.subdirs]
  value=1
  [findinfileadialogfo.incurrentfile]
@@ -29,24 +29,25 @@ findinfiledialog=66
  [findinfileadialogfo.wholeword]
  value=0
  [findinfileadialogfo.inprojectdir]
- value=0
+ value=1
  [findinfileadialogfo.casesensitive]
  value=0
  [findinfileadialogfo.indirectories]
- value=1
+ value=0
  [findinfileadialogfo.mask]
  value="*.pas" "*.pp" "*.inc"
  history=1
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
  filenames=1
-  /home/fred/fpGUI-maint/
+  /home/fred/designer_ext/
  filecolwidth=174
  x=0
  y=0
  cx=0
  cy=0
- filehistory=8
+ filehistory=9
+  /home/fred/designer_ext/
   /home/fred/fpGUI-maint/
   /usr/local/codetyphon/fpcsrc/
   /usr/local/codetyphon/
@@ -58,8 +59,13 @@ findinfiledialog=66
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=fpgInitMsgQueue
+ value=ATimer
  history=20
+  ATimer
+  StartMessage
+  writeln
+  fpg_x11
+  fpgx11
   fpgInitMsgQueue
   initialization
   InitMessage
@@ -75,11 +81,6 @@ findinfiledialog=66
   colorpicker
   .create
   TClassListPropertyEditor
-  drag
-  FSyncValue
-  XCreateIC
-  TApplicationHelper
-  PIXMAP_RESIZE_SIZE
  [findinfileadialogfo]
  stackedunder=
  x=432
@@ -173,7 +174,7 @@ options=114
  x=0
  y=189
  xprop=1
- yprop=0.3970893970894
+ yprop=0.3979381443299
  [projectoptionsfo.macrogrid]
  propcolwidthref=499
  sortdescend0=0
@@ -198,7 +199,7 @@ options=114
  value=
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=2
+ index=3
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=728
  width0=47
@@ -490,14 +491,14 @@ befcommandon=0
 makeoptionson=11
  0
  2495
- 443
+ 447
  447
  2
  446
  447
- 8
  0
- 48
+ 0
+ 56
  447
 compilerusedon=29
  4035
@@ -572,14 +573,14 @@ project_date=25/11/2016
 project_comment=
 aftcommandon=0
 unitdirson=11
+ 197049
+ 197055
+ 197042
+ 197055
+ 196615
  197055
  197055
- 197040
- 197055
- 196623
- 197055
- 197055
- 983071
+ 983067
  983040
  987072
  987072
@@ -807,7 +808,7 @@ path=7
  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
  /home/fred/designer_ext/src/frm_main_designer.pas
 line=7
- 1411
+ 1412
  624
  43
  228
@@ -969,19 +970,21 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=tfpgapplication.c
+finddtext=InitMessage
 findhistory=20
+ InitMessage
+ ATimer
+ onMessagePost
+ GetTempDir
  tfpgapplication.c
  tapplication.c
  initialize
  initman
  fpgInitMsgQueue
- ATimer
  formclose
  destroy
  RunOnce
  isrunningIDE
- InitMessage
  Destroy
  IsRunningIDE
  timer
@@ -989,48 +992,31 @@ findhistory=20
  atimer
  free
  termin
- OnPaletteDragStart
- onMoveMovePanel
 findoptions=1
-editpos=8
+editpos=5
+ 0,-1073741823
+ 0,11
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,0
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,330
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
 bookmarks4=0
-bookmarks5=0
-bookmarks6=0
-bookmarks7=0
-sourcefiles=8
+sourcefiles=5
  ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/fpg_main.pas
- ${PROJECTDIR}/develop_dynX11/fpg_main.pas
- ${PROJECTDIR}/fpg_x11.pas
- ${PROJECTDIR}/fpg_main.pas
- ${PROJECTDIR}/sak_fpg.pas
- ${PROJECTDIR}/define.inc
+ /home/fred/designer_ext/src/frm_colorpicker.pas
  ${PROJECTDIR}/runonce_postit.pas
-relpaths=8
+ ${PROJECTDIR}/runonce_postit2.pas
+ ${PROJECTDIR}/plugmanager.pas
+relpaths=5
  designer_ext.pas
- fpg_main.pas
- develop_dynX11/fpg_main.pas
- fpg_x11.pas
- fpg_main.pas
- sak_fpg.pas
- define.inc
+ frm_colorpicker.pas
  runonce_postit.pas
-ismoduletexts=8
- 0
- 0
- 0
+ runonce_postit2.pas
+ plugmanager.pas
+ismoduletexts=5
  0
  0
  0
@@ -1041,19 +1027,10 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=8
- 0
- 1
- 2
- 5
- 6
- 7
- 3
- 4
 firsttab=0
-index=5
+index=1
 [layout]
-windowlayout=564
+windowlayout=555
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1067,8 +1044,8 @@ windowlayout=564
  ny=0
  ncx=0
  ncy=0
- x=83
- y=91
+ x=42
+ y=53
  cx=1157
  cy=621
  rcx=0
@@ -1093,7 +1070,7 @@ windowlayout=564
  rcy=0
  wsize=0
  active=0
- visible=1
+ visible=0
  [threadsfo]
  splitdir=0
  useroptions=268451945
@@ -1168,10 +1145,10 @@ windowlayout=564
  ny=0
  ncx=0
  ncy=0
- x=239
- y=115
- cx=678
- cy=414
+ x=3
+ y=29
+ cx=1360
+ cy=706
  rcx=0
  rcy=0
  [projecttreefo]
@@ -1217,7 +1194,7 @@ windowlayout=564
  rcy=0
  wsize=0
  active=0
- visible=1
+ visible=0
  [watchpointsfo]
  splitdir=0
  useroptions=268451945
@@ -1528,11 +1505,16 @@ windowlayout=564
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/runonce_postit.pas
+ value=/home/fred/designer_ext/src/frm_colorpicker.pas
  history=20
-  /home/fred/designer_ext/src/fpg_x11.pas
-  /home/fred/designer_ext/src/sak_fpg.pas
-  /home/fred/designer_ext/src/define.inc
+  /home/fred/designer_ext/src/frm_colorpicker.pas
+  /home/fred/designer_ext/src/runonce_postit2.pas
+  /home/fred/ideu/src/plugmanager.pas
+  /home/fred/ideu/src/conffpgui.pas
+  /home/fred/ideu/src/confideu.pas
+  /home/fred/ideu/src/ideusettings.pas
+  /home/fred/ideu/src/make.pas
+  /home/fred/designer_ext/src/runonce_postit.pas
   /home/fred/designer_ext/src/fpg_main.pas
   /home/fred/designer_ext/src/develop_dynX11/fpg_main.pas
   /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
@@ -1545,11 +1527,6 @@ windowlayout=564
   /home/fred/designer_ext/src/xext.pas
   /home/fred/dynx/src/fpgui/develop_dynX11/fpg_x11.pas
   /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
-  /home/fred/designer_ext/src/frm_main_designer.pas
-  /home/fred/designer_ext/src/runonce_postit.pas
-  /home/fred/designer_ext/src/develop_x11/fpg_netlayer_x11.pas
-  /home/fred/fpGUI-develop/uidesigner/frm_main.pas
-  /home/fred/designer_ext/src/frm_colorpicker.pas
  [debuggerfo.project_options]
  value=1
  [debuggerfo.hints]
@@ -1571,24 +1548,15 @@ windowlayout=564
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- order=8
-  0
-  1
-  2
-  5
-  6
-  7
-  3
-  4
  firsttab=0
- index=5
+ index=1
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=targetconsolefo
+ stackedunder=mainfo
  parent=
- mdistate=0
+ mdistate=3
  nx=0
  ny=0
  ncx=0

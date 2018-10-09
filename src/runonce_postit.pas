@@ -112,6 +112,7 @@ function TOncePost.PostIt: string;
 var
   f: textfile;
 begin
+   Result := '';
   if fileexists(GetTempDir + '.postit.tmp') then
   begin
     AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
@@ -159,7 +160,6 @@ begin
 {$WARN SYMBOL_DEPRECATED ON}
     VProcess.Options := [poUsePipes, poNoConsole];
     VProcess.Execute;
-    VProcess.Priority:=ppRealTime;
     while VProcess.Running do
     begin
       VMemoryStream.SetSize(VBytesRead + READ_BYTES);
@@ -261,6 +261,10 @@ begin
   y := 0;
   result := false;
   VProcess := TStringList.Create;
+  
+  if fileexists(GetTempDir + '.postit.tmp') then
+     DeleteFile(GetTempDir + '.postit.tmp');
+    
   ListProcess(VProcess, False, False, False);
   while (x < VProcess.Count) and (result = false) do
   begin
@@ -269,15 +273,20 @@ begin
     if y > 1 then
     begin
     result := true;
-  
+    
   // debug
   // writeln('Application name');
   // writeln('---------------------------------');
   // writeln(VProcess.Strings[x]);
   // writeln('-----------------------------------');
-     
-      if AMessage <> '' then
-      begin
+  // writeln('A other instance is running');
+   
+   end;
+    Inc(x);
+  end;
+ 
+      if (ParamStr(1) <> '') or  (Amessage <> '') then
+     begin
         AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
         rewrite(f);
         append(f);
@@ -286,20 +295,7 @@ begin
         Flush(f);
         CloseFile(f);
       end;
-     //   writeln('A other instance is running');
-     // Halt;
-    end;
-    Inc(x);
-  end;
-      if (ParamStr(1) <> '') and  (Amessage <> 'clear') then
-     begin
-        AssignFile(f, PChar(GetTempDir + '.postit.tmp'));
-        rewrite(f);
-        append(f);
-        writeln(f,AMessage);
-        Flush(f);
-        CloseFile(f);
-      end;
+       
   VProcess.Free;
 //  if result then else
 // writeln('A unique instance is running and it it this one') ;

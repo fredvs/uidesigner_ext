@@ -96,7 +96,15 @@ xdynload,
   idetemp := gINI.ReadInteger('Options', 'IDE', 0) ;
  {$endif}
 
-     if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
+  if ((trim(ParamStr(1)) = '-m') or (trim(ParamStr(2)) = '-m')) then  // force multi-instance
+  begin
+  ifonlyone := false; 
+  isalreadyrunning := false;
+  idetemp := 0;
+  end else 
+  begin
+  
+      if ((trim(ParamStr(1)) = 'showit') and (gINI.ReadBool('Options', 'RunOnlyOnce', True) = True)) then
     begin
       ifonlyone := True;
     isalreadyrunning :=  RunOnce('showit');
@@ -143,6 +151,7 @@ xdynload,
       end
 
          end;
+     end;
      end;
      
  // if isalreadyrunning = false then writeln('isalreadyrunning = false') else writeln('isalreadyrunning = true') ;    
