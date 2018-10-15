@@ -29,29 +29,29 @@ findinfiledialog=67
  [findinfileadialogfo.wholeword]
  value=0
  [findinfileadialogfo.inprojectdir]
- value=1
+ value=0
  [findinfileadialogfo.casesensitive]
  value=0
  [findinfileadialogfo.indirectories]
- value=0
+ value=1
  [findinfileadialogfo.mask]
  value="*.pas" "*.pp" "*.inc"
  history=1
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
  filenames=1
-  /home/fred/designer_ext/
+  /usr/local/codetyphon/
  filecolwidth=174
  x=0
  y=0
  cx=0
  cy=0
  filehistory=9
+  /usr/local/codetyphon/
+  /home/fred/fpGUI-develop/
   /home/fred/designer_ext/
   /home/fred/fpGUI-maint/
   /usr/local/codetyphon/fpcsrc/
-  /usr/local/codetyphon/
-  /home/fred/fpGUI-develop/
   /home/fred/fpGUI-develop/uidesigner/
   /usr/share/fpcsrc/
   /home/fred/fpgui/
@@ -59,8 +59,13 @@ findinfiledialog=67
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=ATimer
+ value=X_G
  history=20
+  X_G
+  X_GetProperty
+  TfpgDrag
+  DoInitImageMask
+  'clos
   ATimer
   StartMessage
   writeln
@@ -74,13 +79,8 @@ findinfiledialog=67
    ttimer
   fpctimer
   ttimer
-  X_GetProperty
-  TfpgDrag
   XSyncCreateCounter
   frmMultiSelect
-  colorpicker
-  .create
-  TClassListPropertyEditor
  [findinfileadialogfo]
  stackedunder=
  x=432
@@ -199,7 +199,7 @@ options=114
  value=
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=3
+ index=2
  [projectoptionsfo.exceptionsgrid]
  propcolwidthref=728
  width0=47
@@ -284,7 +284,7 @@ makeoptions=11
  -l -Mobjfpc -Schi
  -FE.
  -FUunits
- -ghl
+ -gl
  -B
  -O1 -XX -Xs -CX
  -O2
@@ -496,9 +496,9 @@ makeoptionson=11
  2
  446
  447
+ 62
  0
- 0
- 56
+ 48
  447
 compilerusedon=29
  4035
@@ -575,12 +575,12 @@ aftcommandon=0
 unitdirson=11
  197049
  197055
- 197042
+ 197040
  197055
- 196615
+ 196623
  197055
  197055
- 983067
+ 983043
  983040
  987072
  987072
@@ -970,8 +970,11 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext=InitMessage
+finddtext=.execute
 findhistory=20
+ .execute
+ mousemo
+ mouse
  InitMessage
  ATimer
  onMessagePost
@@ -989,34 +992,71 @@ findhistory=20
  IsRunningIDE
  timer
  onTimerPost
- atimer
- free
- termin
 findoptions=1
-editpos=5
- 0,-1073741823
- 0,11
+editpos=13
  0,-1073741823
  0,-1073741823
  0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,0
+ 0,-1073741823
+ 0,585
+ 0,2
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
 bookmarks4=0
-sourcefiles=5
+bookmarks5=0
+bookmarks6=0
+bookmarks7=0
+bookmarks8=0
+bookmarks9=0
+bookmarks10=0
+bookmarks11=0
+bookmarks12=0
+sourcefiles=13
  ${PROJECTDIR}/designer_ext.pas
- /home/fred/designer_ext/src/frm_colorpicker.pas
+ ${PROJECTDIR}/frm_colorpicker.pas
  ${PROJECTDIR}/runonce_postit.pas
- ${PROJECTDIR}/runonce_postit2.pas
+ ${PROJECTDIR}/vfd_main.pas
  ${PROJECTDIR}/plugmanager.pas
-relpaths=5
+ /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
+ ${PROJECTDIR}/define.inc
+ /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
+ ${PROJECTDIR}/fpg_main.pas
+ /home/fred/fpGUI-develop/src/corelib/fpg_base.pas
+ /home/fred/fpGUI-develop/src/corelib/gdi/fpg_impl.pas
+ /home/fred/designer_ext/src/fpg_netlayer_x11.pas
+ /home/fred/designer_ext/src/define.inc
+relpaths=13
  designer_ext.pas
  frm_colorpicker.pas
  runonce_postit.pas
- runonce_postit2.pas
+ vfd_main.pas
  plugmanager.pas
-ismoduletexts=5
+ fpGUI-develop/src/corelib/x11/fpg_x11.pas
+ define.inc
+ fpGUI-develop/src/corelib/fpg_main.pas
+ fpg_main.pas
+ ../fpGUI-develop/src/corelib/fpg_base.pas
+ fpGUI-develop/src/corelib/gdi/fpg_impl.pas
+ fpg_netlayer_x11.pas
+ define.inc
+ismoduletexts=13
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1027,10 +1067,24 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-firsttab=0
-index=1
+order=13
+ 0
+ 1
+ 6
+ 3
+ 4
+ 2
+ 5
+ 7
+ 8
+ 9
+ 11
+ 12
+ 10
+firsttab=2
+index=10
 [layout]
-windowlayout=555
+windowlayout=569
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1070,7 +1124,7 @@ windowlayout=555
  rcy=0
  wsize=0
  active=0
- visible=0
+ visible=1
  [threadsfo]
  splitdir=0
  useroptions=268451945
@@ -1505,17 +1559,21 @@ windowlayout=555
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/frm_colorpicker.pas
+ value=/home/fred/designer_ext/src/fpg_netlayer_x11.pas
  history=20
+  /home/fred/fpGUI-develop/src/corelib/fpg_base.pas
+  /home/fred/designer_ext/src/fpg_main.pas
+  /home/fred/designer_ext/src/plugmanager.pas
+  /home/fred/designer_ext/src/define.inc
+  /home/fred/designer_ext/src/vfd_main.pas
   /home/fred/designer_ext/src/frm_colorpicker.pas
+  /home/fred/designer_ext/src/runonce_postit.pas
   /home/fred/designer_ext/src/runonce_postit2.pas
   /home/fred/ideu/src/plugmanager.pas
   /home/fred/ideu/src/conffpgui.pas
   /home/fred/ideu/src/confideu.pas
   /home/fred/ideu/src/ideusettings.pas
   /home/fred/ideu/src/make.pas
-  /home/fred/designer_ext/src/runonce_postit.pas
-  /home/fred/designer_ext/src/fpg_main.pas
   /home/fred/designer_ext/src/develop_dynX11/fpg_main.pas
   /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
   /home/fred/designer_ext/src/maint_dynX11/fpg_main.pas
@@ -1523,12 +1581,8 @@ windowlayout=555
   /home/fred/fpGUI-maint/src/corelib/fpg_main.pas
   /home/fred/fpGUI-maint/src/corelib/fpg_base.pas
   /home/fred/designer_ext/src/develop_dynX11/fpg_x11.pas
-  /home/fred/designer_ext/src/xdynload.pas
-  /home/fred/designer_ext/src/xext.pas
-  /home/fred/dynx/src/fpgui/develop_dynX11/fpg_x11.pas
-  /home/fred/fpGUI-develop/src/corelib/x11/fpg_x11.pas
  [debuggerfo.project_options]
- value=1
+ value=4
  [debuggerfo.hints]
  value=0
  [sourcefo]
@@ -1548,13 +1602,27 @@ windowlayout=555
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- firsttab=0
- index=1
+ order=13
+  0
+  1
+  6
+  3
+  4
+  2
+  5
+  7
+  8
+  9
+  11
+  12
+  10
+ firsttab=2
+ index=10
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=mainfo
+ stackedunder=targetconsolefo
  parent=
  mdistate=3
  nx=0
