@@ -90,11 +90,10 @@ end;
 
 procedure StartMessage(AProc: Tproc; const AInterval: integer = 500);
 begin
-  ATimer.Enabled := false;
   TheOncePost.TheProc := AProc;
  ATimer.Interval := AInterval;
  ATimer.OnTimer := @TheOncePost.onTimerPost;
- ATimer.Enabled := True;
+ ATimer.Enabled:=true;
 end;
 
 procedure FreeRunOnce;
@@ -126,12 +125,9 @@ end;
 
 procedure TOncePost.onTimerPost(Sender: TObject);
 begin
-  ATimer.Enabled:=false;
   if PostIt <> '' then
     if TheProc <> nil then
       TheProc;
-    ATimer.Enabled:=true;
- 
 end;
 
 procedure TOncePost.InitMessage;
