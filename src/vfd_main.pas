@@ -795,7 +795,7 @@ function TMainDesigner.AddUnits(filedata: string): string;
 var
   n, n2: integer;
   funit, fdata1, fdata2, fdata3, fdata31, fdata32, fdata4, datatmp: string;
-  cns_label, cns_edit, cns_combobox, cns_checkbox, cns_gauge, cns_button, cns_radiobutton, cns_listbox, cns_panel,
+  cns_label, cns_widget, cns_edit, cns_combobox, cns_checkbox, cns_gauge, cns_button, cns_radiobutton, cns_listbox, cns_panel,
   cns_memo, cns_menu, cns_calendar, cns_grid, cns_progressbar, cns_trackbar, cns_listview, cns_tree, cns_tab,
   cns_editbtn, cns_colorwheel, cns_splitter, cns_hyperlink, cns_toggle, cns_nicegrid, cns_editgrid, cns_hexview,
   cns_spinedit: boolean;
@@ -823,7 +823,7 @@ begin
 
   if datatmp <> '' then
   begin
-    fdata1 := copy(filedata, 1, pos(datatmp, uppercase(filedata)) + length(datatmp)); /// all before "uses"
+    fdata1 := copy(filedata, 1, pos(datatmp, uppercase(filedata)) + length(datatmp)-1); /// all before "uses"
     fdata2 := copy(filedata, pos(datatmp, uppercase(filedata)) + length(datatmp), 1 +
               length(filedata) - pos(datatmp, uppercase(filedata)));   /// all after "uses"
     fdata3 := copy(fdata2, 1, pos(';', fdata2) + length(datatmp) - 4);  /// only "uses" section
@@ -863,6 +863,11 @@ begin
       cns_label := True
     else
       cns_label := False;
+      
+    if pos('FPG_WIDGET', uppercase(fdata3)) > 0 then
+      cns_widget := True
+    else
+      cns_widget := False;  
       
      if pos('FPG_BUTTON', uppercase(fdata3)) > 0 then
       cns_button := True
@@ -1013,6 +1018,12 @@ begin
         begin
           funit := funit + ' fpg_button,';
           cns_button := True;
+        end
+        else
+        if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGWIDGET') and (cns_widget = False) then
+        begin
+          funit := funit + ' fpg_widget,';
+          cns_widget := True;
         end
         else
         if (uppercase(TFormDesigner(FDesigners[n]).Form.Components[n2].ClassName) = 'TFPGRADIOBUTTON') and (cns_radiobutton = False) then
@@ -1457,8 +1468,8 @@ begin
 
     isfpguifile := True;
     isFileLoaded := True;
-
-   // frmProperties.Show;
+    sleep(100);
+    frmProperties.Show;
 
   end;
 

@@ -265,7 +265,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '1.9.4';
+  ext_version: string = '1.9.5';
 
 var
 
@@ -307,7 +307,7 @@ uses
 
 // logo images
 {$I fpgui_logo.inc}
-
+{$I icon.inc} 
 
 {@VFD_NEWFORM_IMPL}
 
@@ -839,6 +839,10 @@ var
   mi, mi2, mi3, mi4, mi5, mi8: TfpgMenuItem;
 begin 
 
+fpgImages.AddMaskedBMP('vfd.dext', @vfd_dext,
+    sizeof(vfd_dext), 0, 0);
+ 
+
   {%region 'Auto-generated GUI code' -fold}
 
 
@@ -856,7 +860,7 @@ begin
   width := 842 ;
   height := 92 ;
 
-  //iconname := 'vfd.ideuicon' ;
+  iconname := 'vfd.dext' ;
 
   panel1 := TfpgPanel.Create(self);
   with panel1 do
