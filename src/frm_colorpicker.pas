@@ -11,7 +11,7 @@ uses
   SysUtils, Classes, fpg_base, fpg_main,
   fpg_menu, fpg_spinedit,
   {%units 'Auto-generated GUI code'}
-  fpg_form, fpg_label, fpg_button, fpg_hyperlink, fpg_colorwheel, fpg_checkbox, fpg_combobox, fpg_edit, fpg_panel
+  fpg_form, fpg_label, fpg_button, fpg_hyperlink, fpg_colorwheel, fpg_checkbox, fpg_panel, fpg_combobox, fpg_edit
   {%endunits}
   ;
 
@@ -891,9 +891,10 @@ begin
   Name := 'frmAbout';
   SetPosition(489, 139, 242, 145);
   WindowTitle := 'About Color_Picker';
-  Hint := '';
+  IconName := '';
   BackGroundColor := $FFFFFFFF;
   Sizeable := False;
+  Hint := '';
   WindowPosition := wpScreenCenter;
   OnShow := @FormShow;
 
@@ -904,9 +905,10 @@ begin
     SetPosition(36, 0, 160, 31);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-20';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Color_Picker';
     TextColor := TfpgColor($4B8133);
+    Hint := '';
   end;
 
   lblVersion := TfpgLabel.Create(self);
@@ -917,9 +919,10 @@ begin
     Alignment := taRightJustify;
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := '#Label2';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Version:  1.0';
     TextColor := TfpgColor($3A8230);
+    Hint := '';
   end;
 
   btnClose := TfpgButton.Create(self);
@@ -928,13 +931,14 @@ begin
     Name := 'btnClose';
     SetPosition(153, 112, 80, 23);
     Anchors := [];
+    Text := 'Close';
     FontDesc := '#Label1';
-    Hint := '';
     ImageName := 'stdimg.close';
     ModalResult := mrOK;
+    ParentShowHint := False;
     TabOrder := 2;
-    Text := 'Close';
     TextColor := TfpgColor($FF000000);
+    Hint := '';
     AllowDown := True;
   end;
 
@@ -945,9 +949,10 @@ begin
     SetPosition(24, 56, 188, 19);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Inspired by ColorWheel of fpGUI';
     TextColor := TfpgColor($FF000000);
+    Hint := '';
   end;
 
   lblURL := TfpgHyperlink.Create(self);
@@ -957,12 +962,13 @@ begin
     SetPosition(24, 76, 164, 19);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-9:underline';
-    Hint := '';
     HotTrackColor := TfpgColor($80000001);
     HotTrackFont := 'Arial-9:underline';
+    ParentShowHint := False;
     Text := 'http://fpgui.sourceforge.net';
     TextColor := TfpgColor($0032D2);
     URL := 'http://fpgui.sourceforge.net';
+    Hint := '';
   end;
 
   lblDeveloper := TfpgLabel.Create(self);
@@ -972,9 +978,10 @@ begin
     SetPosition(16, 104, 112, 15);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Fred van Stappen';
     TextColor := TfpgColor($FF000000);
+    Hint := '';
   end;
 
   lblExtBy := TfpgLabel.Create(self);
@@ -984,9 +991,10 @@ begin
     SetPosition(16, 120, 100, 15);
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-8';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'fiens@hotmail.com';
     TextColor := TfpgColor($4DC63D);
+    Hint := '';
   end;
 
   {@VFD_BODY_END: frmAbout}
@@ -1266,9 +1274,10 @@ begin
   Name := 'WheelColorForm';
   SetPosition(349, 242, 380, 452);
   WindowTitle := 'Color_Picker';
-  Hint := '';
+  IconName := '';
   BackGroundColor := $80000001;
   Sizeable := False;
+  Hint := '';
   WindowPosition := wpScreenCenter;
   SetPosition(349, 242, 380, 452 + y);
   onclose := @onclosemain;
@@ -1303,9 +1312,10 @@ begin
     Name := 'chkCrossHair';
     SetPosition(30, 270, 120, 19);
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     TabOrder := 20;
     Text := 'Large Cross';
+    Hint := '';
     SetPosition(30, 270 + y, 110, 20);
     OnChange := @chkCrossHairChange;
   end;
@@ -1314,10 +1324,11 @@ begin
   with panel1 do
   begin
     Name := 'panel1';
-    SetPosition(301, 22, 80, 80);
+    SetPosition(273, 26, 80, 80);
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Panel';
+    Hint := '';
     panel1.BackgroundColor := clgray;
     SetPosition(301, 22 + y, 56, 242);
   end;
@@ -1326,7 +1337,7 @@ begin
   with ValueBar1 do
   begin
     Name := 'ValueBar1';
-    SetPosition(304, 24, 80, 100);
+    SetPosition(188, 108, 80, 100);
     CursorHeight := 15;
     Value := 1;
     SetPosition(304, 24 + y, 52, 238);
@@ -1341,8 +1352,9 @@ begin
     SetPosition(170, 270, 80, 15);
     Alignment := taCenter;
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Predefined Colors';
+    Hint := '';
     SetPosition(170, 270 + y, 164, 16);
   end;
 
@@ -1353,9 +1365,10 @@ begin
     SetPosition(170, 288, 120, 24);
     ExtraHint := '';
     FontDesc := '#List';
-    Hint := '';
     FocusItem := -1;
+    ParentShowHint := False;
     TabOrder := 8;
+    Hint := '';
     SetPosition(170, 288 + y, 164, 20);
     OnChange := @ColorBoxChange;
   end;
@@ -1367,8 +1380,9 @@ begin
     SetPosition(126, 324, 80, 15);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Hue';
+    Hint := '';
     SetPosition(126, 324 + y, 52, 18);
   end;
 
@@ -1379,8 +1393,9 @@ begin
     SetPosition(126, 352, 80, 15);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Sat';
+    Hint := '';
     SetPosition(126, 352 + y, 52, 18);
   end;
 
@@ -1391,8 +1406,9 @@ begin
     SetPosition(126, 380, 80, 15);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Bright';
+    Hint := '';
     SetPosition(126, 380 + y, 52, 18);
   end;
 
@@ -1404,9 +1420,10 @@ begin
     BackgroundColor := TfpgColor($80000001);
     ExtraHint := '';
     FontDesc := '#Edit1';
-    Hint := '';
+    ParentShowHint := False;
     TabOrder := 8;
     Text := '';
+    Hint := '';
     Focusable := False;
     SetPosition(182, 320 + y, 50, 26);
     ReadOnly := True;
@@ -1420,9 +1437,10 @@ begin
     BackgroundColor := TfpgColor($80000001);
     ExtraHint := '';
     FontDesc := '#Edit1';
-    Hint := '';
+    ParentShowHint := False;
     TabOrder := 9;
     Text := '';
+    Hint := '';
     Focusable := False;
     SetPosition(182, 348 + y, 50, 26);
     ReadOnly := True;
@@ -1436,9 +1454,10 @@ begin
     BackgroundColor := TfpgColor($80000001);
     ExtraHint := '';
     FontDesc := '#Edit1';
-    Hint := '';
+    ParentShowHint := False;
     TabOrder := 10;
     Text := '';
+    Hint := '';
     Focusable := False;
     SetPosition(182, 376 + y, 50, 26);
     ReadOnly := True;
@@ -1451,8 +1470,9 @@ begin
     SetPosition(236, 324, 80, 15);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Red';
+    Hint := '';
     SetPosition(236, 324 + y, 56, 18);
   end;
 
@@ -1463,8 +1483,9 @@ begin
     SetPosition(236, 352, 80, 15);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Green';
+    Hint := '';
     SetPosition(236, 352 + y, 56, 18);
   end;
 
@@ -1475,8 +1496,9 @@ begin
     SetPosition(236, 380, 80, 15);
     Alignment := taRightJustify;
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Blue';
+    Hint := '';
     SetPosition(236, 380 + y, 56, 18);
   end;
 
@@ -1485,12 +1507,12 @@ begin
   begin
     Name := 'edR';
     SetPosition(296, 320, 120, 32);
-    SetPosition(296, 320 + y, 44, 26);
-    TabOrder := 13;
-    MinValue := 0;
-    MaxValue := 255;
-    Value := 255;
     FontDesc := '#Edit1';
+    MaxValue := 255;
+    ParentShowHint := False;
+    TabOrder := 13;
+    Value := 255;
+    SetPosition(296, 320 + y, 44, 26);
     OnChange := @RGBChanged;
     OnExit := @RGBChanged;
   end;
@@ -1500,12 +1522,12 @@ begin
   begin
     Name := 'edG';
     SetPosition(296, 348, 120, 32);
-    SetPosition(296, 348 + y, 44, 26);
-    TabOrder := 14;
-    MinValue := 0;
-    MaxValue := 255;
-    Value := 255;
     FontDesc := '#Edit1';
+    MaxValue := 255;
+    ParentShowHint := False;
+    TabOrder := 14;
+    Value := 255;
+    SetPosition(296, 348 + y, 44, 26);
     OnChange := @RGBChanged;
     OnExit := @RGBChanged;
   end;
@@ -1515,12 +1537,12 @@ begin
   begin
     Name := 'edB';
     SetPosition(296, 376, 120, 32);
-    SetPosition(296, 376 + y, 44, 26);
-    TabOrder := 15;
-    MinValue := 0;
-    MaxValue := 255;
-    Value := 255;
     FontDesc := '#Edit1';
+    MaxValue := 255;
+    ParentShowHint := False;
+    TabOrder := 15;
+    Value := 255;
+    SetPosition(296, 376 + y, 44, 26);
     OnChange := @RGBChanged;
     OnExit := @RGBChanged;
   end;
@@ -1530,6 +1552,7 @@ begin
   begin
     Name := 'bevel1';
     SetPosition(20, 350, 80, 80);
+    ParentShowHint := False;
     Hint := '';
     SetPosition(20, 350 + y, 100, 90);
   end;
@@ -1540,8 +1563,9 @@ begin
     Name := 'lblHexa';
     SetPosition(20, 297, 80, 15);
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Hexadecimal';
+    Hint := '';
     SetPosition(20, 297 + y, 100, 16);
     lblHexa.Alignment := taCenter;
   end;
@@ -1553,11 +1577,10 @@ begin
     SetPosition(20, 315, 120, 24);
     ExtraHint := '';
     FontDesc := '#Label1';
-    Hint := 'Mouse out change edit...';
     ParentShowHint := False;
-    ShowHint := True;
     TabOrder := 23;
     Text := '';
+    Hint := 'Mouse out change edit...';
     SetPosition(20, 315 + y, 100, 26);
     MaxLength := 7;
     OnMouseExit := @ConvertToRGB;
@@ -1571,8 +1594,9 @@ begin
     Name := 'Label7';
     SetPosition(135, 4, 80, 15);
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Colors';
+    Hint := '';
     SetPosition(135, 4 + y, 80, 16);
   end;
 
@@ -1582,8 +1606,9 @@ begin
     Name := 'Label8';
     SetPosition(310, 3, 80, 15);
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     Text := 'Bright';
+    Hint := '';
     SetPosition(310, 3 + y, 64, 16);
   end;
 
@@ -1592,11 +1617,10 @@ begin
   begin
     Name := 'btnPicker';
     SetPosition(125, 410, 120, 32);
+    Hint := 'Click on Picker and maintain click => release get the color';
     SetPosition(125, 410 + y, 80, 24);
     Text := 'Picker';
     FontDesc := '#Label1';
-    Hint := 'Click on Picker and maintain click => release get the color';
-    ShowHint := True;
     TabOrder := 24;
     OnColorPicked := @btnColorPicked;
   end;
@@ -1607,9 +1631,10 @@ begin
     Name := 'chkContinuous';
     SetPosition(210, 413, 120, 19);
     FontDesc := '#Label1';
-    Hint := '';
+    ParentShowHint := False;
     TabOrder := 25;
     Text := 'Continous';
+    Hint := '';
     SetPosition(210, 413 + y, 80, 20);
     OnChange := @chkContinuousChanged;
   end;
@@ -1619,11 +1644,12 @@ begin
   begin
     Name := 'btnClose';
     SetPosition(300, 418, 80, 23);
-    FontDesc := '#Label1';
-    Hint := '';
-    ImageName := 'stdimg.close';
-    TabOrder := 0;
     Text := 'Quit';
+    FontDesc := '#Label1';
+    ImageName := 'stdimg.close';
+    ParentShowHint := False;
+    TabOrder := 0;
+    Hint := '';
     SetPosition(300, 418 + y, 70, 26);
     OnClick := @btnQuitClicked;
   end;

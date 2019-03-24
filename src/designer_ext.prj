@@ -29,11 +29,11 @@ findinfiledialog=67
  [findinfileadialogfo.wholeword]
  value=0
  [findinfileadialogfo.inprojectdir]
- value=1
+ value=0
  [findinfileadialogfo.casesensitive]
  value=0
  [findinfileadialogfo.indirectories]
- value=0
+ value=1
  [findinfileadialogfo.mask]
  value="*.pas" "*.pp" "*.inc"
  history=1
@@ -59,8 +59,11 @@ findinfiledialog=67
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=addun
+ value=IconBitmapBits
  history=20
+  IconBitmapBits
+  XCreateBitmapFromData
+  IconPixMap
   addun
   TfrmAbout.Execute
   imageconvert
@@ -78,9 +81,6 @@ findinfiledialog=67
   DoInitImageMask
   'clos
   ATimer
-  StartMessage
-  writeln
-  fpg_x11
  [findinfileadialogfo]
  stackedunder=
  x=432
@@ -955,7 +955,7 @@ files=
   )
  )
 [componentstore]
-storedir=/home/fred/msegui/apps/ide/compstore/
+storedir=/home/fred/mseguinew/mseide-msegui/apps/ide/compstore/
 filename=
 [components]
 [selecteditpage]
@@ -994,36 +994,42 @@ findhistory=20
  RunOnce
  isrunningIDE
 findoptions=1
-editpos=38
+editpos=42
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
  0,0
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
  0,5
  0,-1073741823
  0,-1073741823
@@ -1031,8 +1037,6 @@ editpos=38
  0,-1073741823
  0,-1073741823
  0,-1073741823
- 0,0
- 30,267
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
@@ -1071,7 +1075,11 @@ bookmarks34=0
 bookmarks35=0
 bookmarks36=0
 bookmarks37=0
-sourcefiles=38
+bookmarks38=0
+bookmarks39=0
+bookmarks40=0
+bookmarks41=0
+sourcefiles=42
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/frm_colorpicker.pas
  ${PROJECTDIR}/runonce_postit.pas
@@ -1092,7 +1100,6 @@ sourcefiles=38
  ${PROJECTDIR}/cthreads.pas
  ${PROJECTDIR}/pthread.inc
  ${PROJECTDIR}/pthread/pthrbsd.inc
- ${PROJECTDIR}/pthreads.pp
  /usr/local/codetyphon/fpcsrc/packages/pthreads/src/pthreads.pp
  ${PROJECTDIR}/pthread.inc
  ${PROJECTDIR}/define.inc
@@ -1110,7 +1117,12 @@ sourcefiles=38
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/define.inc
  ${PROJECTDIR}/frm_main_designer.pas
-relpaths=38
+ ${PROJECTDIR}/define.inc
+ /home/fred/fpGUI-maint/src/corelib/x11/fpg_x11.pas
+ ${PROJECTDIR}/fpg_netlayer_x11.pas
+ ${PROJECTDIR}/synregexpr.pas
+ ${PROJECTDIR}/fpcadds.pas
+relpaths=42
  designer_ext.pas
  frm_colorpicker.pas
  runonce_postit.pas
@@ -1131,7 +1143,6 @@ relpaths=38
  cthreads.pas
  pthread.inc
  pthread/pthrbsd.inc
- pthreads.pp
  usr/local/codetyphon/fpcsrc/packages/pthreads/src/pthreads.pp
  pthread.inc
  define.inc
@@ -1149,7 +1160,16 @@ relpaths=38
  define.inc
  define.inc
  frm_main_designer.pas
-ismoduletexts=38
+ define.inc
+ fpGUI-maint/src/corelib/x11/fpg_x11.pas
+ fpg_netlayer_x11.pas
+ synregexpr.pas
+ fpcadds.pas
+ismoduletexts=42
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1193,49 +1213,53 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=38
+order=42
  0
- 37
- 29
- 36
- 7
- 8
- 6
- 9
- 14
- 33
- 17
- 26
- 23
- 11
- 12
- 16
- 4
- 15
  1
- 10
- 28
- 35
- 25
- 2
- 27
+ 23
  24
- 19
- 34
- 5
- 21
  30
- 32
- 3
+ 21
  31
+ 29
+ 33
+ 26
+ 35
+ 32
+ 36
+ 37
+ 38
+ 28
+ 34
+ 2
+ 3
+ 7
+ 5
+ 9
+ 40
+ 39
+ 10
+ 4
+ 12
+ 8
+ 41
+ 15
+ 6
+ 17
+ 13
+ 14
+ 20
+ 11
  22
  18
- 13
- 20
-firsttab=0
-index=1
+ 19
+ 25
+ 16
+ 27
+firsttab=8
+index=10
 [layout]
-windowlayout=594
+windowlayout=598
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1275,7 +1299,7 @@ windowlayout=594
  rcy=0
  wsize=0
  active=0
- visible=0
+ visible=1
  [threadsfo]
  splitdir=0
  useroptions=268451945
@@ -1369,7 +1393,7 @@ windowlayout=594
  x=0
  y=0
  cx=205
- cy=521
+ cy=515
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1380,7 +1404,7 @@ windowlayout=594
  sortdescend1=0
  sorted=0
  col=0
- row=4
+ row=2
  rowheight=16
  [stackfo]
  splitdir=0
@@ -1582,9 +1606,9 @@ windowlayout=594
  ncx=0
  ncy=0
  x=0
- y=585
+ y=578
  cx=1350
- cy=105
+ cy=104
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1684,7 +1708,7 @@ windowlayout=594
  x=0
  y=0
  cx=1350
- cy=58
+ cy=57
  rcx=0
  rcy=0
  [debuggerfo.basedock]
@@ -1696,11 +1720,11 @@ windowlayout=594
  nx=0
  ny=0
  ncx=1350
- ncy=61
+ ncy=60
  x=0
  y=0
  cx=1350
- cy=61
+ cy=60
  rcx=0
  rcy=0
  [debuggerfo.edit_options]
@@ -1710,16 +1734,20 @@ windowlayout=594
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/frm_main_designer.pas
+ value=/home/fred/designer_ext/src/define.inc
  history=20
+  /home/fred/designer_ext/src/define.inc
+  /home/fred/designer_ext/src/runonce_postit.pas
+  /home/fred/designer_ext/src/plugmanager.pas
+  /home/fred/designer_ext/src/vfd_main.pas
+  /home/fred/designer_ext/src/frm_main_designer.pas
+  /home/fred/designer_ext/src/frm_colorpicker.pas
+  /usr/local/codetyphon/fpcsrc/packages/pthreads/src/pthreads.pp
   /home/fred/designer_ext/src/frm_imageconvert.pas
   /home/fred/designer_ext/src/fpg_main.pas
-  /home/fred/designer_ext/src/runonce_postit.pas
   /home/fred/designer_ext/src/pthread.inc
   /home/fred/fpGUI-develop/src/corelib/gdi/fpg_impl.pas
   /home/fred/designer_ext/src/messagedialog.inc
-  /home/fred/designer_ext/src/frm_main_designer.pas
-  /home/fred/designer_ext/src/plugmanager.pas
   /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
   /home/fred/designer_ext/src/cthreads.pas
   /home/fred/designer_ext/src/pthreads.pp
@@ -1728,10 +1756,6 @@ windowlayout=594
   /home/fred/designer_ext/src/runonce_postit2.pas
   /home/fred/ideu/src/plugmanager.pas
   /home/fred/ideu/src/conffpgui.pas
-  /home/fred/ideu/src/confideu.pas
-  /home/fred/ideu/src/ideusettings.pas
-  /home/fred/ideu/src/make.pas
-  /home/fred/designer_ext/src/frm_colorpicker.pas
  [debuggerfo.project_options]
  value=1
  [debuggerfo.hints]
@@ -1749,56 +1773,60 @@ windowlayout=594
  x=208
  y=0
  cx=1142
- cy=521
+ cy=515
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- order=38
+ order=42
   0
-  37
-  29
-  36
-  7
-  8
-  6
-  9
-  14
-  33
-  17
-  26
-  23
-  11
-  12
-  16
-  4
-  15
   1
-  10
-  28
-  35
-  25
-  2
-  27
+  23
   24
-  19
-  34
-  5
-  21
   30
-  32
-  3
+  21
   31
+  29
+  33
+  26
+  35
+  32
+  36
+  37
+  38
+  28
+  34
+  2
+  3
+  7
+  5
+  9
+  40
+  39
+  10
+  4
+  12
+  8
+  41
+  15
+  6
+  17
+  13
+  14
+  20
+  11
   22
   18
-  13
-  20
- firsttab=0
- index=1
+  19
+  25
+  16
+  27
+ firsttab=8
+ index=10
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=mainfo
+ stackedunder=targetconsolefo
  parent=
  mdistate=3
  nx=0
@@ -1825,9 +1853,9 @@ windowlayout=594
  ncx=0
  ncy=0
  x=0
- y=61
+ y=60
  cx=1350
- cy=521
+ cy=515
  rcx=0
  rcy=0
 [targetconsole]

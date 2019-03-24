@@ -839,12 +839,7 @@ var
   mi, mi2, mi3, mi4, mi5, mi8: TfpgMenuItem;
 begin 
 
-fpgImages.AddMaskedBMP('vfd.dext', @vfd_dext,
-    sizeof(vfd_dext), 0, 0);
- 
-
   {%region 'Auto-generated GUI code' -fold}
-
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
@@ -859,9 +854,7 @@ fpgImages.AddMaskedBMP('vfd.dext', @vfd_dext,
   top := 10 ;
   width := 842 ;
   height := 92 ;
-
-  iconname := 'vfd.dext' ;
-
+  
   panel1 := TfpgPanel.Create(self);
   with panel1 do
   begin
@@ -870,7 +863,6 @@ fpgImages.AddMaskedBMP('vfd.dext', @vfd_dext,
     Anchors := [anLeft,anRight,anTop,anBottom];
     Align := alClient;
     FontDesc := '#Label1';
-    //BackgroundColor := clblack;
     Hint := '';
     Text := '';
   end;
@@ -1318,6 +1310,10 @@ fpgImages.AddMaskedBMP('vfd.dext', @vfd_dext,
  MainMenu.MenuItem(8).Visible := False;
  MainMenu.MenuItem(8).Text :=
       'fpGUI designer_ext v' + ext_version + ' ' + IntToStr(bitcpu) + ' bit';
+      
+fpgImages.AddMaskedBMP('vfd.dext', @vfd_dext,
+    sizeof(vfd_dext), 0, 0);
+iconname := 'vfd.dext' ;
 
 windowtitle := MainMenu.MenuItem(8).Text;
 
@@ -1897,7 +1893,6 @@ procedure TfrmProperties.AfterCreate;
 var
   x, x2, w, y, nblist, gap: integer;
 begin
-// inherited;
   {%region 'Auto-generated GUI code' -fold}
    {@VFD_BODY_BEGIN: frmProperties}
   Name := 'frmProperties';

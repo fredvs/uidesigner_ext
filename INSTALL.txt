@@ -3,8 +3,6 @@ Designer_ext is the extended version of fpGUI uiDesigner.
 It needs the last fpGUI version =>
 https://github.com/graemeg/fpgui/
 
-With run-only-once, windows list, undo feature, integration into IDE, editor launcher, multi-selection, assistive, ...
-
 How to install it ?
 
 Just compile /designer_ext/src/designer_ext.pas
@@ -12,6 +10,11 @@ You may use designer_ext.lpi for Lazarus/Typhon or designer_ext.prj for MSEide/i
 
 If you want to use last fpgui-develop branch, edit => define.inc
 and uncomment {$DEFINE fpgui-develop}.
+
+If you want to use dynamic loading of Xorg and Xft, edit => define.inc
+and uncomment {$DEFINE DYNLOAD}.
+Depends of the fpGUI branch you are using, copy + paste all files 
+in /designer_ext/src/xxx_dynx11 into /designer_ext/src/.
 
 If you want assistive for designer_ext => copy /src/sakit folder => into your main application folder (or where you want) .
 Then in "Settings" => choose the parent directory of /sakit.
