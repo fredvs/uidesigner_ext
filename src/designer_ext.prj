@@ -1007,71 +1007,26 @@ findhistory=20
  tapplication.c
  initialize
 findoptions=1
-editpos=13
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,209
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,-1073741823
- 0,1660
- 32,5
+editpos=4
+ 0,9
+ 0,267
+ 0,11
+ 0,0
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
 bookmarks3=0
-bookmarks4=0
-bookmarks5=0
-bookmarks6=0
-bookmarks7=0
-bookmarks8=0
-bookmarks9=0
-bookmarks10=0
-bookmarks11=0
-bookmarks12=0
-sourcefiles=13
+sourcefiles=4
  ${PROJECTDIR}/designer_ext.pas
- ${PROJECTDIR}/fpg_netlayer_x11.pas
- ${PROJECTDIR}/define.inc
- ${PROJECTDIR}/pthread_ori.inc
- ${PROJECTDIR}/pthread.inc
- ${PROJECTDIR}/cthreads.pas
- ${PROJECTDIR}/fpg_x11.pas
- /home/fred/fpGUI-maint/src/corelib/x11/fpg_x11.pas
- /home/fred/fpGUI-develop/src/gui/fpg_menu.pas
- ${PROJECTDIR}/fpg_main.pas
- ${PROJECTDIR}/fpg_main.pas
- ${PROJECTDIR}/sak_fpg.pas
- ${PROJECTDIR}/define.inc
-relpaths=13
+ ${PROJECTDIR}/frm_main_designer.pas
+ ${PROJECTDIR}/frm_vfdforms.pas
+ ${PROJECTDIR}/vfd_file.pas
+relpaths=4
  designer_ext.pas
- fpg_netlayer_x11.pas
- define.inc
- pthread_ori.inc
- pthread.inc
- cthreads.pas
- fpg_x11.pas
- fpGUI-maint/src/corelib/x11/fpg_x11.pas
- fpGUI-develop/src/gui/fpg_menu.pas
- fpg_main.pas
- fpg_main.pas
- sak_fpg.pas
- define.inc
-ismoduletexts=13
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
- 0
+ frm_main_designer.pas
+ frm_vfdforms.pas
+ vfd_file.pas
+ismoduletexts=4
  0
  0
  0
@@ -1081,24 +1036,10 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-order=13
- 0
- 1
- 2
- 3
- 4
- 5
- 6
- 11
- 12
- 7
- 8
- 9
- 10
-firsttab=2
-index=8
+firsttab=0
+index=0
 [layout]
-windowlayout=594
+windowlayout=580
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1250,7 +1191,7 @@ windowlayout=594
  sortdescend1=0
  sorted=0
  col=0
- row=2
+ row=10
  rowheight=16
  [stackfo]
  splitdir=0
@@ -1580,11 +1521,11 @@ windowlayout=594
  nx=0
  ny=0
  ncx=1333
- ncy=48
+ ncy=45
  x=0
  y=0
  cx=1348
- cy=47
+ cy=44
  rcx=0
  rcy=0
  [debuggerfo.edit_options]
@@ -1594,8 +1535,10 @@ windowlayout=594
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/uidesigner_ext/src/define.inc
+ value=/home/fred/uidesigner_ext/src/designer_ext.pas
  history=20
+  /home/fred/uidesigner_ext/src/designer_ext.pas
+  /home/fred/uidesigner_ext/src/fpg_main.pas
   /home/fred/uidesigner_ext/src/fpg_x11.pas
   /home/fred/uidesigner_ext/src/cthreads.pas
   /home/fred/uidesigner_ext/src/pthread.inc
@@ -1614,8 +1557,6 @@ windowlayout=594
   /home/fred/mseide-msegui/lib/common/db/msedb.pas
   /home/fred/mseide-msegui/lib/common/fpccompatibility/mdbf.pas
   /home/fred/mseide-msegui/lib/common/fpccompatibility/mdb.pas
-  /home/fred/demo_mse/problast52/main.pas
-  /home/fred/mseuniverse/samples/db/simplemysql/main.pas
  [debuggerfo.project_options]
  value=1
  [debuggerfo.hints]
@@ -1637,22 +1578,8 @@ windowlayout=594
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- order=13
-  0
-  1
-  2
-  3
-  4
-  5
-  6
-  11
-  12
-  7
-  8
-  9
-  10
- firsttab=2
- index=8
+ firsttab=0
+ index=0
  [confideufo.fontname]
  value=stf_default
  [confideufo.usedefaulteditoroptions]

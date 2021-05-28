@@ -4,12 +4,12 @@ With window list, undo feature, integration into IDE, editor launcher, extra-pro
 
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2016
+2013 - 2021
 }
 {
     fpGUI  -  Free Pascal GUI Toolkit
 
-    Copyright (C) 2006 - 2016 See the file AUTHORS.txt, included in this
+    Copyright (C) 2006 - 2021 See the file AUTHORS.txt, included in this
     distribution, for details of the copyright.
 
     See the file COPYING.modifiedLGPL, included in this distribution,

@@ -4,7 +4,7 @@ With window list, undo feature, integration into IDE, editor launcher, extra-pro
 
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2016
+2013 - 2021
 }
 { fpGUI - Free Pascal GUI Toolkit
 
@@ -265,7 +265,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '1.9.5';
+  ext_version: string = '1.9.6';
 
 var
 

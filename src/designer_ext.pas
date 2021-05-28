@@ -5,7 +5,7 @@ It uses dynamically loading of libX11 and libXft in Unix OS.
 
 Fred van Stappen
 fiens@hotmail.com
-2013 - 2018
+2013 - 2021
 }
 
 program designer_ext;
