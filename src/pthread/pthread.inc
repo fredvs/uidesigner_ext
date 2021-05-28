@@ -142,6 +142,9 @@ Var
     pthread_key_delete : Function(__key:pthread_key_t):longint;cdecl;
     pthread_setspecific : Function(__key:pthread_key_t; __pointer:pointer):longint;cdecl;
     pthread_getspecific : Function(__key:pthread_key_t):pointer;cdecl;
+    pthread_condattr_setclock : function(__attr:ppthread_condattr_t; __clock_id: longint):longint;cdecl;
+
+    
 {    pthread_once : Function(__once_control:ppthread_once_t; __init_routine:tprocedure ):longint;cdecl;}
 {$ifndef ANDROID}
     pthread_setcancelstate : Function(__state:longint; __oldstate:plongint):longint;cdecl;
@@ -235,6 +238,8 @@ begin
   Pointer(pthread_key_delete) := dlsym(PthreadDLL,'pthread_key_delete');
   Pointer(pthread_setspecific) := dlsym(PthreadDLL,'pthread_setspecific');
   Pointer(pthread_getspecific) := dlsym(PthreadDLL,'pthread_getspecific');
+  Pointer(pthread_condattr_setclock) := dlsym(PthreadDLL,'pthread_condattr_setclock');
+   
 {  Pointer(pthread_once) := dlsym(PthreadDLL,'pthread_once');}
 {$ifndef ANDROID}
   Pointer(pthread_setcancelstate) := dlsym(PthreadDLL,'pthread_setcancelstate');

@@ -16,10 +16,11 @@ order13=0
 order14=0
 order15=0
 order16=0
+order17=0
 [projectoptions]
-projectdir=/home/fred/designer_ext/src
-projectfilename=/home/fred/designer_ext/src/designer_ext.prj
-findinfiledialog=67
+projectdir=/home/fred/uidesigner_ext/src
+projectfilename=/home/fred/uidesigner_ext/src/designer_ext.prj
+findinfiledialog=79
  [findinfileadialogfo.subdirs]
  value=1
  [findinfileadialogfo.incurrentfile]
@@ -28,26 +29,38 @@ findinfiledialog=67
  value=0
  [findinfileadialogfo.wholeword]
  value=0
+ [findinfileadialogfo.indirectories]
+ value=1
  [findinfileadialogfo.inprojectdir]
  value=0
  [findinfileadialogfo.casesensitive]
  value=0
- [findinfileadialogfo.indirectories]
- value=1
  [findinfileadialogfo.mask]
  value="*.pas" "*.pp" "*.inc"
  history=1
   "*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.dir]
+ filenamescust=0
  filenames=1
-  /home/fred/fpGUI-maint/
- filecolwidth=174
+  /home/fred/fpGUI-develop/
+ filecolwidth=150
  x=0
  y=0
  cx=0
  cy=0
- filehistory=9
+ panel=0
+ noicon=0
+ compact=0
+ showhidden=0
+ colnamewidth=203
+ colsizewidth=81
+ colextwidth=45
+ coldatewidth=126
+ splitterplaces=243
+ splitterlateral=126
+ filehistory=10
   /home/fred/fpGUI-maint/
+  /home/fred/freepascal-ootb_320/
   /usr/local/codetyphon/fpcsrc/
   /usr/local/codetyphon/
   /home/fred/fpGUI-develop/
@@ -59,8 +72,11 @@ findinfiledialog=67
  filefilterindex=0
  filefilter="*.pas" "*.pp" "*.inc"
  [findinfileadialogfo.findtext]
- value=IconBitmapBits
+ value=MenuHeaderFon
  history=20
+  MenuHeaderFon
+  FDNDVersion
+  pthread_condattr_setclock
   IconBitmapBits
   XCreateBitmapFromData
   IconPixMap
@@ -78,24 +94,21 @@ findinfiledialog=67
   X_G
   X_GetProperty
   TfpgDrag
-  DoInitImageMask
-  'clos
-  ATimer
  [findinfileadialogfo]
  stackedunder=
  x=432
  y=189
  cx=375
- cy=276
+ cy=308
 finddialog=8
  [finddialogfo.selectedonly]
  value=0
  [finddialogfo]
  stackedunder=
- x=319
- y=205
+ x=832
+ y=156
  cx=372
- cy=122
+ cy=269
 replacedialog=15
  [replacedialogfo.promptonreplace]
  value=1
@@ -119,38 +132,38 @@ options=114
   70
   70
  [projectoptionsfo.twidgetgrid3]
- propcolwidthref=744
+ propcolwidthref=726
  sortdescend0=0
  sortdescend1=0
  sortdescend2=0
  sortdescend3=0
- width4=346
+ width4=338
  sortdescend4=0
- width5=188
+ width5=183
  sortdescend5=0
- width6=159
+ width6=155
  sortdescend6=0
- width7=51
+ width7=50
  sortdescend7=0
  width8=1
  sortdescend8=0
- width9=303
+ width9=296
  sortdescend9=0
  [projectoptionsfo.twidgetgrid4]
- propcolwidthref=568
+ propcolwidthref=561
  width0=96
  sortdescend0=0
  sortdescend1=0
  width2=73
  sortdescend2=0
- width3=274
+ width3=271
  sortdescend3=0
- width4=284
+ width4=280
  sortdescend4=0
  sorted=0
  col=-1073741823
  row=-1073741823
- rowheight=16
+ rowheight=17
  [projectoptionsfo.newfile]
  firsttab=0
  index=0
@@ -172,9 +185,9 @@ options=114
  sortdescend6=0
  [projectoptionsfo.macrosplitter]
  x=0
- y=189
+ y=187
  xprop=1
- yprop=0.3979381443299
+ yprop=0.39832285115304
  [projectoptionsfo.macrogrid]
  propcolwidthref=499
  sortdescend0=0
@@ -199,21 +212,21 @@ options=114
  value=
  [projectoptionsfo.makegroupbox]
  firsttab=0
- index=2
+ index=0
  [projectoptionsfo.exceptionsgrid]
- propcolwidthref=728
+ propcolwidthref=717
  width0=47
  sortdescend0=0
- width1=722
+ width1=711
  sortdescend1=0
  [projectoptionsfo.ttabwidget1]
  firsttab=0
  index=0
  [projectoptionsfo.filefiltergrid]
- propcolwidthref=636
+ propcolwidthref=734
  width0=112
  sortdescend0=0
- width1=629
+ width1=727
  sortdescend1=0
  [projectoptionsfo.ttabwidget2]
  firsttab=0
@@ -250,8 +263,8 @@ settings=8
  [settings_form]
  x=447
  y=149
- cx=471
- cy=548
+ cx=446
+ cy=578
  wsize=0
  active=1
  visible=1
@@ -404,7 +417,7 @@ newfosources=2
 newfoforms=2
  
  
-forcezorder=-1
+forcezorder=1
 stripmessageesc=0
 copymessages=0
 closemessages=0
@@ -502,8 +515,8 @@ makeoptionson=11
  432
  447
 compilerusedon=29
- 3651
- 4
+ 3655
+ 0
  8
  144
  288
@@ -639,9 +652,9 @@ fontoptions=0
 fontxscales=0
 expandprojectfilemacros=4
  1
- -1
- -1
- -1
+ 1
+ 1
+ 1
 loadprojectfile=4
  1
  0
@@ -955,7 +968,7 @@ files=
   )
  )
 [componentstore]
-storedir=/home/fred/mseguinew/mseide-msegui/apps/ide/compstore/
+storedir=/home/fred/mseide-msegui/apps/ide/compstore/
 filename=
 [components]
 [selecteditpage]
@@ -971,8 +984,14 @@ envvarons=0
 [edit]
 hintwidth=462
 hintheight=19
-finddtext='{
+finddtext=FDNDVersion
 findhistory=20
+ FDNDVersion
+ external
+ pthread_condattr_setclock
+ semaphores
+ loadlib
+ rtleventWaitFor
  '{
  TfrmAbout
  LoadUndo
@@ -987,29 +1006,73 @@ findhistory=20
  tfpgapplication.c
  tapplication.c
  initialize
- initman
- fpgInitMsgQueue
- formclose
- destroy
- RunOnce
- isrunningIDE
 findoptions=1
-editpos=3
- 0,5
- 0,585
- 0,3
+editpos=13
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,209
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,-1073741823
+ 0,1660
+ 32,5
 bookmarks0=0
 bookmarks1=0
 bookmarks2=0
-sourcefiles=3
+bookmarks3=0
+bookmarks4=0
+bookmarks5=0
+bookmarks6=0
+bookmarks7=0
+bookmarks8=0
+bookmarks9=0
+bookmarks10=0
+bookmarks11=0
+bookmarks12=0
+sourcefiles=13
  ${PROJECTDIR}/designer_ext.pas
  ${PROJECTDIR}/fpg_netlayer_x11.pas
  ${PROJECTDIR}/define.inc
-relpaths=3
+ ${PROJECTDIR}/pthread_ori.inc
+ ${PROJECTDIR}/pthread.inc
+ ${PROJECTDIR}/cthreads.pas
+ ${PROJECTDIR}/fpg_x11.pas
+ /home/fred/fpGUI-maint/src/corelib/x11/fpg_x11.pas
+ /home/fred/fpGUI-develop/src/gui/fpg_menu.pas
+ ${PROJECTDIR}/fpg_main.pas
+ ${PROJECTDIR}/fpg_main.pas
+ ${PROJECTDIR}/sak_fpg.pas
+ ${PROJECTDIR}/define.inc
+relpaths=13
  designer_ext.pas
  fpg_netlayer_x11.pas
  define.inc
-ismoduletexts=3
+ pthread_ori.inc
+ pthread.inc
+ cthreads.pas
+ fpg_x11.pas
+ fpGUI-maint/src/corelib/x11/fpg_x11.pas
+ fpGUI-develop/src/gui/fpg_menu.pas
+ fpg_main.pas
+ fpg_main.pas
+ sak_fpg.pas
+ define.inc
+ismoduletexts=13
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
  0
  0
  0
@@ -1018,10 +1081,24 @@ moduleoptions=0
 visiblemodules=0
 nomenumodules=0
 [sourcefo.files_tab]
-firsttab=0
-index=1
+order=13
+ 0
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 11
+ 12
+ 7
+ 8
+ 9
+ 10
+firsttab=2
+index=8
 [layout]
-windowlayout=555
+windowlayout=594
  [mainfo.basedock]
  splitdir=2
  useroptions=268450944
@@ -1044,6 +1121,13 @@ windowlayout=555
  wsize=0
  active=1
  visible=1
+ [findmessagefo.findtext]
+ value=
+ history=0
+ [findmessagefo.casesensitive]
+ value=0
+ [findmessagefo.copytoclip]
+ value=0
  [targetconsolefo]
  splitdir=0
  useroptions=268451945
@@ -1155,7 +1239,7 @@ windowlayout=555
  x=0
  y=0
  cx=205
- cy=515
+ cy=523
  rcx=0
  rcy=0
  [projecttreefo.grid]
@@ -1244,30 +1328,11 @@ windowlayout=555
  visible=0
  [breakpointsfo.bkptson]
  value=0
- [objectinspectorfo]
- splitdir=0
- useroptions=268451947
- stackedunder=
- parent=
- mdistate=0
- nx=0
- ny=0
- ncx=0
- ncy=0
- x=316
- y=249
- cx=316
- cy=484
- rcx=0
- rcy=0
- wsize=0
- active=0
- visible=0
  [objectinspectorfo.grid]
- propcolwidthref=306
- width0=136
+ propcolwidthref=448
+ width0=199
  sortdescend0=0
- width1=164
+ width1=243
  sortdescend1=0
  [symbolfo]
  splitdir=0
@@ -1368,9 +1433,9 @@ windowlayout=555
  ncx=0
  ncy=0
  x=0
- y=578
- cx=1350
- cy=104
+ y=580
+ cx=1348
+ cy=105
  rcx=0
  rcy=0
  [componentstorefo]
@@ -1402,6 +1467,7 @@ windowlayout=555
  width3=185
  sortdescend3=0
  [componentstorefo.storefiledialog]
+ filenamescust=0
  filenames=1
   /home/mse/test/msegui/apps/ide/compstore/
  filecolwidth=0
@@ -1409,11 +1475,22 @@ windowlayout=555
  y=0
  cx=0
  cy=0
+ panel=0
+ noicon=0
+ compact=0
+ showhidden=0
+ colnamewidth=0
+ colsizewidth=0
+ colextwidth=0
+ coldatewidth=0
+ splitterplaces=0
+ splitterlateral=0
  lastdir=/home/mse/test/msegui/apps/ide/compstore/
  filehistory=0
  filefilterindex=0
  filefilter=
  [componentstorefo.groupfiledialog]
+ filenamescust=0
  filenames=1
   /home/mse/test/msegui/apps/ide/compstore/
  filecolwidth=0
@@ -1421,17 +1498,38 @@ windowlayout=555
  y=0
  cx=0
  cy=0
+ panel=0
+ noicon=0
+ compact=0
+ showhidden=0
+ colnamewidth=0
+ colsizewidth=0
+ colextwidth=0
+ coldatewidth=0
+ splitterplaces=0
+ splitterlateral=0
  lastdir=/home/mse/test/msegui/apps/ide/compstore/
  filehistory=0
  filefilterindex=0
  filefilter=
  [componentstorefo.compfiledialog]
+ filenamescust=0
  filenames=0
  filecolwidth=0
  x=0
  y=0
  cx=0
  cy=0
+ panel=0
+ noicon=0
+ compact=0
+ showhidden=0
+ colnamewidth=0
+ colsizewidth=0
+ colextwidth=0
+ coldatewidth=0
+ splitterplaces=0
+ splitterlateral=0
  lastdir=
  filehistory=0
  filefilterindex=0
@@ -1469,8 +1567,8 @@ windowlayout=555
  ncy=0
  x=0
  y=0
- cx=1350
- cy=57
+ cx=1348
+ cy=51
  rcx=0
  rcy=0
  [debuggerfo.basedock]
@@ -1481,12 +1579,12 @@ windowlayout=555
  mdistate=0
  nx=0
  ny=0
- ncx=1350
- ncy=60
+ ncx=1333
+ ncy=48
  x=0
  y=0
- cx=1350
- cy=60
+ cx=1348
+ cy=47
  rcx=0
  rcy=0
  [debuggerfo.edit_options]
@@ -1496,28 +1594,28 @@ windowlayout=555
  [debuggerfo.edit_compiler]
  value=Pascal
  [debuggerfo.file_history]
- value=/home/fred/designer_ext/src/fpg_netlayer_x11.pas
+ value=/home/fred/uidesigner_ext/src/define.inc
  history=20
-  /home/fred/designer_ext/src/designer_ext.pas
-  /home/fred/designer_ext/src/fpg_netlayer_x11.pas
-  /home/fred/designer_ext/src/runonce_postit.pas
-  /home/fred/designer_ext/src/pthread.inc
-  /home/fred/designer_ext/src/frm_vfdforms.pas
-  /home/fred/designer_ext/src/define.inc
-  /home/fred/designer_ext/src/plugmanager.pas
-  /home/fred/designer_ext/src/vfd_main.pas
-  /home/fred/designer_ext/src/frm_main_designer.pas
-  /home/fred/designer_ext/src/frm_colorpicker.pas
-  /usr/local/codetyphon/fpcsrc/packages/pthreads/src/pthreads.pp
-  /home/fred/designer_ext/src/frm_imageconvert.pas
-  /home/fred/designer_ext/src/fpg_main.pas
-  /home/fred/fpGUI-develop/src/corelib/gdi/fpg_impl.pas
-  /home/fred/designer_ext/src/messagedialog.inc
-  /home/fred/fpGUI-develop/src/corelib/fpg_main.pas
-  /home/fred/designer_ext/src/cthreads.pas
-  /home/fred/designer_ext/src/pthreads.pp
-  /home/fred/designer_ext/src/frm_multiselect.pas
-  /home/fred/designer_ext/src/fpg_style_anim_chrome_silver_vert_flatmenu.pas
+  /home/fred/uidesigner_ext/src/fpg_x11.pas
+  /home/fred/uidesigner_ext/src/cthreads.pas
+  /home/fred/uidesigner_ext/src/pthread.inc
+  /home/fred/uidesigner_ext/src/pthread_ori.inc
+  /home/fred/cthreads.pas
+  /home/fred/fpGUIlib/src/fpgui.pas
+  /home/fred/fpGUIlib/src/fpglib_class.pas
+  /home/fred/demo_mse/test__med/msebufdataset.pas
+  /home/fred/mseide-msegui/apps/ide/main.pas
+  /home/fred/mseide-msegui/lib/common/db/msedbf.pas
+  /home/fred/mseide-msegui/lib/common/fpccompatibility/mse_dbf_prssupp.pas
+  /home/fred/mseide-msegui/lib/common/fpccompatibility/mse_dbf_common.pas
+  /home/fred/demo_mse/mse_fb3_new/main.pas
+  /home/fred/mseide-msegui/lib/common/db/msefirebird.pas
+  /home/fred/mseide-msegui/lib/common/db/firebird.pas
+  /home/fred/mseide-msegui/lib/common/db/msedb.pas
+  /home/fred/mseide-msegui/lib/common/fpccompatibility/mdbf.pas
+  /home/fred/mseide-msegui/lib/common/fpccompatibility/mdb.pas
+  /home/fred/demo_mse/problast52/main.pas
+  /home/fred/mseuniverse/samples/db/simplemysql/main.pas
  [debuggerfo.project_options]
  value=1
  [debuggerfo.hints]
@@ -1534,18 +1632,36 @@ windowlayout=555
  ncy=0
  x=208
  y=0
- cx=1142
- cy=515
+ cx=1140
+ cy=523
  rcx=0
  rcy=0
  [sourcefo.files_tab]
- firsttab=0
- index=1
+ order=13
+  0
+  1
+  2
+  3
+  4
+  5
+  6
+  11
+  12
+  7
+  8
+  9
+  10
+ firsttab=2
+ index=8
+ [confideufo.fontname]
+ value=stf_default
+ [confideufo.usedefaulteditoroptions]
+ value=0
  [cpuc86_64fo]
  irqoff=0
  splitdir=0
  useroptions=268451947
- stackedunder=targetconsolefo
+ stackedunder=confdebuggerfo
  parent=
  mdistate=3
  nx=0
@@ -1572,9 +1688,9 @@ windowlayout=555
  ncx=0
  ncy=0
  x=0
- y=60
- cx=1350
- cy=515
+ y=54
+ cx=1348
+ cy=523
  rcx=0
  rcy=0
 [targetconsole]

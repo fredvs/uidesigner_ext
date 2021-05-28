@@ -1,9 +1,39 @@
-{ This is the dynamic loader header of TThreads library.
-    From original cthread.pp from fpc. 
-    Copyright (c) 1999-2000 by Peter Vreman
-       Fredvs ---> fiens@hotmail.com
-} 
+{
+    This file is part of the Free Pascal run time library.
+    Copyright (c) 2002 by Peter Vreman,
+    member of the Free Pascal development team.
+
+    pthreads threading support implementation
+
+    See the file COPYING.FPC, included in this distribution,
+    for details about the copyright.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+ **********************************************************************}
 {$mode objfpc}
+{$ifdef linux}
+{ we can combine both compile-time linking and dynamic loading, in order to:
+    a) solve a problem on some systems with dynamically loading libpthread if
+       it's not linked at compile time
+    b) still enabling dynamically checking whether or not certain functions
+       are available (could also be implemented via weak linking)
+}
+{$linklib pthread}
+{$define dynpthreads} // Useless on BSD, since they are in libc
+{$endif}
+
+
+{ sem_init is best, since it does not consume any file descriptors.    }
+{ sem_open is second best, since it consumes only one file descriptor  }
+{ per semaphore.                                                       }
+{ If neither is available, pipe is used as fallback, which consumes 2  }
+{ file descriptors per semaphore.                                      }
+
+{ Darwin doesn't support nameless semaphores in at least }
+{ Mac OS X 10.4.8/Darwin 8.8                             }
 {$if not defined(darwin) and not defined(iphonesim)}
 {$define has_sem_init}
 {$define has_sem_getvalue}
@@ -21,6 +51,15 @@ unit cthreads;
 interface
 {$S-}
 
+{$ifndef dynpthreads}   // If you have problems compiling this on FreeBSD 5.x
+ {$linklib c}           // try adding -Xf
+ {$if not defined(Darwin) and not defined(iphonesim) and not defined(Android)}
+   {$ifndef haiku}
+     {$linklib pthread}
+   {$endif haiku}
+ {$endif darwin}
+{$endif}
+
 {$define basicevents_with_pthread_cond}
 
 Procedure SetCThreadManager;
@@ -28,23 +67,17 @@ Procedure SetCThreadManager;
 implementation
 
 Uses
+{$if defined(Linux) and not defined(Android)}
+  Linux,
+{$endif}
   BaseUnix,
   unix,
   unixtype,
   initc
+{$ifdef dynpthreads}
   ,dl
-  ;
-  
-  const
-{$ifdef BSD}   // dlopen is in libc on FreeBSD.
-  LibDL = 'libc.so.6';
-{$else}
-  {$ifdef HAIKU}
-    LibDL = 'root';
-  {$else}
-    LibDL = 'libdl.so.2';
-  {$endif}
 {$endif}
+  ;
 
 {*****************************************************************************
                              System unit import
@@ -85,6 +118,10 @@ Type  PINTRTLEvent = ^TINTRTLEvent;
         {$ifdef cpusparc}
         threadvarblocksize:=align(threadvarblocksize,16);
         {$endif cpusparc}
+        
+        {$ifdef cpusparc64}
+        threadvarblocksize:=align(threadvarblocksize,16);
+        {$endif cpusparc64}
 
         {$ifdef cpupowerpc}
         threadvarblocksize:=align(threadvarblocksize,8);
@@ -109,6 +146,10 @@ Type  PINTRTLEvent = ^TINTRTLEvent;
         {$ifdef cpupowerpc64}
         threadvarblocksize:=align(threadvarblocksize,16);
         {$endif cpupowerpc64}
+
+        {$ifdef cpuaarch64}
+        threadvarblocksize:=align(threadvarblocksize,16);
+        {$endif cpuaarch64}
 
         offset:=threadvarblocksize;
 
@@ -272,10 +313,14 @@ Type  PINTRTLEvent = ^TINTRTLEvent;
         pthread_exit(ThreadMain);
       end;
 
-  Procedure InitCThreading;
+
+  var
+    TLSInitialized : longbool = FALSE;
+
+  Procedure InitCTLS;
   
   begin
-    if (InterLockedExchange(longint(IsMultiThread),ord(true)) = 0) then
+    if (InterLockedExchange(longint(TLSInitialized),ord(true)) = 0) then
       begin
         { We're still running in single thread mode, setup the TLS }
         pthread_key_create(@TLSKey,nil);
@@ -304,8 +349,10 @@ Type  PINTRTLEvent = ^TINTRTLEvent;
       writeln('Creating new thread');
 {$endif DEBUG_MT}
       { Initialize multithreading if not done }
-      if not IsMultiThread then
-        InitCThreading;
+      if not TLSInitialized then
+        InitCTLS;
+      IsMultiThread:=true;
+
       { the only way to pass data to the newly created thread
         in a MT safe way, is to use the heap }
       new(ti);
@@ -317,7 +364,7 @@ Type  PINTRTLEvent = ^TINTRTLEvent;
       writeln('Starting new thread');
 {$endif DEBUG_MT}
       pthread_attr_init(@thread_attr);
-      {$if not defined(HAIKU) and not defined(ANDROID)}
+      {$if not defined(HAIKU)and not defined(BEOS) and not defined(ANDROID)}
       {$if defined (solaris) or defined (netbsd) }
       pthread_attr_setinheritsched(@thread_attr, PTHREAD_INHERIT_SCHED);
       {$else not solaris}
@@ -497,196 +544,16 @@ Type  PINTRTLEvent = ^TINTRTLEvent;
                            Semaphore routines
 *****************************************************************************}
 
-procedure cSemaphoreWait(const FSem: Pointer);
-var
-  res: cint;
-  err: cint;
-{$if not defined(has_sem_init) and not defined(has_sem_open)}
-  b: byte;
-{$endif}
-begin
-{$if defined(has_sem_init) or defined(has_sem_open)}
-  repeat
-    res:=sem_wait(PSemaphore(FSem));
-    err:=fpgetCerrno;
-  until (res<>-1) or (err<>ESysEINTR);
-{$else}
-  repeat
-    res:=fpread(PFilDes(FSem)^[0], b, 1);
-    err:=fpgeterrno;
-  until (res<>-1) or ((err<>ESysEINTR) and (err<>ESysEAgain));
-{$endif}
-end;
-
-{$if defined(has_sem_timedwait)}
-
-function cSemaphoreTimedWait(const FSem: Pointer; const Timeout: ttimespec): cint;
-var
-  res: cint;
-  err: cint;
-begin
-  repeat
-    res:=sem_timedwait(PSemaphore(FSem), @Timeout);
-    if res=0 then exit(0);
-    err:=fpgetCerrno;
-  until err<>ESysEINTR;
-  result:=err;
-end;
-
-{$endif}
-
-procedure cSemaphorePost(const FSem: Pointer);
-{$if defined(has_sem_init) or defined(has_sem_open)}
-begin
-  sem_post(PSemaphore(FSem));
-end;
-{$else}
-var
-  writeres: cint;
-  err: cint;
-  b : byte;
-begin
-  b:=0;
-  repeat
-    writeres:=fpwrite(PFilDes(FSem)^[1], b, 1);
-    err:=fpgeterrno;
-  until (writeres<>-1) or ((err<>ESysEINTR) and (err<>ESysEAgain));
-end;
-{$endif}
-
-
-function cSemaphoreTryWait(const FSem: pointer): TTryWaitResult;
-var
-  res: cint;
-  err: cint;
-{$if defined(has_sem_init) or defined(has_sem_open)}
-begin
-  repeat
-    res:=sem_trywait(FSem);
-    err:=fpgetCerrno;
-  until (res<>-1) or (err<>ESysEINTR);
-  if (res=0) then
-    result:=tw_semwasunlocked
-  else if (err=ESysEAgain) then
-    result:=tw_semwaslocked
-  else
-    result:=tw_error;
-{$else has_sem_init or has_sem_open}
-var
-  fds: TFDSet;
-  tv : timeval;
-begin
-  tv.tv_sec:=0;
-  tv.tv_usec:=0;
-  fpFD_ZERO(fds);
-  fpFD_SET(PFilDes(FSem)^[0],fds);
-  repeat
-    res:=fpselect(PFilDes(FSem)^[0]+1,@fds,nil,nil,@tv);
-    err:=fpgeterrno;
-  until (res>=0) or ((res=-1) and (err<>ESysEIntr));
-  if (res>0) then
-    begin
-      cSemaphoreWait(FSem);
-      result:=tw_semwasunlocked
-    end
-  else if (res=0) then
-    result:=tw_semwaslocked
-  else
-    result:=tw_error;
-{$endif has_sem_init or has_sem_open}
-end;
-
-
-
-
-{$if defined(has_sem_open) and not defined(has_sem_init)}
-function cIntSemaphoreOpen(const name: pchar; initvalue: boolean): Pointer;
-var
-  err: cint;
-begin
-  repeat
-    cIntSemaphoreOpen := sem_open(name,O_CREAT,0,ord(initvalue));
-    err:=fpgetCerrno;
-  until (ptrint(cIntSemaphoreOpen) <> SEM_FAILED) or (err <> ESysEINTR);
-  if (ptrint(cIntSemaphoreOpen) <> SEM_FAILED) then
-    { immediately unlink so the semaphore will be destroyed when the }
-    { the process exits                                              }
-    sem_unlink(name)
-  else
-    { 0 is a valid for sem_open on some platforms; pointer(-1) shouldn't
-      be valid anywhere, even for sem_init }
-    cIntSemaphoreOpen:=pointer(-1);
-end;
-{$endif}
-
-
-function cIntSemaphoreInit(initvalue: boolean): Pointer;
-{$if defined(has_sem_open) and not defined(has_sem_init)}
-var
-  tid: string[31];
-  semname: string[63];
-{$endif}
-begin
-{$ifdef has_sem_init}
-  cIntSemaphoreInit := GetMem(SizeOf(TSemaphore));
-  if sem_init(PSemaphore(cIntSemaphoreInit), 0, ord(initvalue)) <> 0 then
-    begin
-      FreeMem(cIntSemaphoreInit);
-      { 0 is a valid for sem_open on some platforms; pointer(-1) shouldn't
-        be valid anywhere, even for sem_init }
-      cIntSemaphoreInit:=pointer(-1);
-    end;
-{$else}
-{$ifdef has_sem_open}
-  { avoid a potential temporary nameclash with another process/thread }
-  str(fpGetPid,semname);
-  str(ptruint(pthread_self()),tid);
-  semname:='/FPC'+semname+'T'+tid+#0;
-  cIntSemaphoreInit:=cIntSemaphoreOpen(@semname[1],initvalue);
-{$else}
-  cIntSemaphoreInit := GetMem(SizeOf(TFilDes));
-  if (fppipe(PFilDes(cIntSemaphoreInit)^) <> 0) then
-    begin
-      FreeMem(cIntSemaphoreInit);
-      { 0 is a valid for sem_open on some platforms; pointer(-1) shouldn't
-        be valid anywhere, even for sem_init }
-      cIntSemaphoreInit:=pointer(-1);
-    end
-  else if initvalue then
-    cSemaphorePost(cIntSemaphoreInit);
-{$endif}
-{$endif}
-end;
-
-
-function cSemaphoreInit: Pointer;
-begin
-  cSemaphoreInit:=cIntSemaphoreInit(false);
-end;
-
-
-procedure cSemaphoreDestroy(const FSem: Pointer);
-begin
-{$ifdef has_sem_init}
-  sem_destroy(PSemaphore(FSem));
-  FreeMem(FSem);
-{$else}
-{$ifdef has_sem_open}
-  sem_close(PSemaphore(FSem));
-{$else has_sem_init}
-  fpclose(PFilDes(FSem)^[0]);
-  fpclose(PFilDes(FSem)^[1]);
-  FreeMem(FSem);
-{$endif}
-{$endif}
-end;
-
 
 type
      TPthreadCondition = pthread_cond_t;
      TPthreadMutex = pthread_mutex_t;
      Tbasiceventstate=record
          FCondVar: TPthreadCondition;
+{$if defined(Linux) and not defined(Android)}         
+         FAttr: pthread_condattr_t;
+         FClockID: longint;
+{$ifend}        
          FEventSection: TPthreadMutex;
          FWaiters: longint;
          FIsSet,
@@ -705,19 +572,67 @@ Const
 function IntBasicEventCreate(EventAttributes : Pointer; AManualReset,InitialState : Boolean;const Name : ansistring):pEventState;
 var
   MAttr : pthread_mutexattr_t;
-  res   : cint;
+  res   : cint;  
+{$if defined(Linux) and not defined(Android)}  
+  timespec: ttimespec;
+{$ifend}  
 begin
   new(plocaleventstate(result));
   plocaleventstate(result)^.FManualReset:=AManualReset;
   plocaleventstate(result)^.FWaiters:=0;
   plocaleventstate(result)^.FDestroying:=False;
   plocaleventstate(result)^.FIsSet:=InitialState;
+{$if defined(Linux) and not defined(Android)}  
+  res := pthread_condattr_init(@plocaleventstate(result)^.FAttr);
+  if (res <> 0) then
+  begin
+    FreeMem(result);
+    fpc_threaderror;  
+  end;
+  
+  if clock_gettime(CLOCK_MONOTONIC_RAW, @timespec) = 0 then
+  begin
+   res := pthread_condattr_setclock(@plocaleventstate(result)^.FAttr, CLOCK_MONOTONIC_RAW);
+  end
+  else
+  begin
+    res := -1; // No support for CLOCK_MONOTONIC_RAW   
+  end;
+  
+  if (res = 0) then
+  begin
+    plocaleventstate(result)^.FClockID := CLOCK_MONOTONIC_RAW;
+  end
+  else
+  begin
+    res := pthread_condattr_setclock(@plocaleventstate(result)^.FAttr, CLOCK_MONOTONIC);
+    if (res = 0) then
+    begin
+      plocaleventstate(result)^.FClockID := CLOCK_MONOTONIC;
+    end
+    else
+    begin
+      pthread_condattr_destroy(@plocaleventstate(result)^.FAttr);
+      FreeMem(result);
+      fpc_threaderror;  
+    end;    
+  end;  
+
+  res := pthread_cond_init(@plocaleventstate(result)^.FCondVar, @plocaleventstate(result)^.FAttr);
+  if (res <> 0) then
+  begin
+    pthread_condattr_destroy(@plocaleventstate(result)^.FAttr);  
+    FreeMem(result);
+    fpc_threaderror;
+  end;
+{$else}
   res := pthread_cond_init(@plocaleventstate(result)^.FCondVar, nil);
   if (res <> 0) then
   begin
     FreeMem(result);
     fpc_threaderror;
-  end;
+  end; 
+{$ifend} 
 
   res:=pthread_mutexattr_init(@MAttr);
   if res=0 then
@@ -735,6 +650,9 @@ begin
   if res <> 0 then
     begin
       pthread_cond_destroy(@plocaleventstate(result)^.FCondVar);
+{$if defined(Linux) and not defined(Android)}  
+      pthread_condattr_destroy(@plocaleventstate(result)^.FAttr);	
+{$ifend}      
       FreeMem(result);
       fpc_threaderror;
     end;
@@ -756,6 +674,9 @@ begin
 
   { and clean up }
   pthread_cond_destroy(@plocaleventstate(state)^.Fcondvar);
+{$if defined(Linux) and not defined(Android)}  
+  pthread_condattr_destroy(@plocaleventstate(state)^.FAttr);	
+{$ifend}  
   pthread_mutex_destroy(@plocaleventstate(state)^.FEventSection);
   dispose(plocaleventstate(state));
 end;
@@ -786,6 +707,7 @@ var
   isset: boolean;
   tnow : timeval;
 begin
+
   { safely check whether we are being destroyed, if so immediately return. }
   { otherwise (under the same mutex) increase the number of waiters        }
   pthread_mutex_lock(@plocaleventstate(state)^.feventsection);
@@ -807,18 +729,33 @@ begin
     end
   else
     begin
-      //Wait with timeout using pthread_cont_timedwait
-      fpgettimeofday(@tnow,nil);
+      //Wait with timeout using pthread_cond_timedwait
+{$if defined(Linux) and not defined(Android)}
+      if clock_gettime(plocaleventstate(state)^.FClockID, @timespec) <> 0 then
+      begin
+        Result := Ord(wrError);
+        Exit;
+      end;
+      timespec.tv_sec  := timespec.tv_sec + (clong(timeout) div 1000);
+      timespec.tv_nsec := ((clong(timeout) mod 1000) * 1000000) + (timespec.tv_nsec);
+{$else}
+      // TODO: FIX-ME: Also use monotonic clock for other *nix targets
+      fpgettimeofday(@tnow, nil);
       timespec.tv_sec  := tnow.tv_sec + (clong(timeout) div 1000);
-      timespec.tv_nsec := (clong(timeout) mod 1000)*1000000 + tnow.tv_usec*1000;
+      timespec.tv_nsec := ((clong(timeout) mod 1000) * 1000000) + (tnow.tv_usec * 1000);
+{$ifend}
       if timespec.tv_nsec >= 1000000000 then
         begin
           inc(timespec.tv_sec);
           dec(timespec.tv_nsec, 1000000000);
         end;
-      errres:=0;
-      while (not plocaleventstate(state)^.FDestroying) and (not plocaleventstate(state)^.FIsSet) and (errres<>ESysETIMEDOUT) do
-        errres:=pthread_cond_timedwait(@plocaleventstate(state)^.Fcondvar, @plocaleventstate(state)^.feventsection, @timespec);
+      errres := 0;
+      while (not plocaleventstate(state)^.FDestroying) and
+            (not plocaleventstate(state)^.FIsSet) and 
+            (errres<>ESysETIMEDOUT) do
+        errres := pthread_cond_timedwait(@plocaleventstate(state)^.Fcondvar,
+                                         @plocaleventstate(state)^.feventsection, 
+                                         @timespec);
     end;
 
   isset := plocaleventstate(state)^.FIsSet;
@@ -957,19 +894,27 @@ begin
 {$ifdef DEBUG_MT}
   Writeln('Entering InitThreads.');
 {$endif}
+{$ifndef dynpthreads}
+  Result:=True;
+{$else}
   Result:=LoadPthreads;
+{$endif}
   ThreadID := TThreadID (pthread_self());
 {$ifdef DEBUG_MT}
   Writeln('InitThreads : ',Result);
 {$endif DEBUG_MT}
   // We assume that if you set the thread manager, the application is multithreading.
-  InitCThreading;
+  InitCTLS;
 end;
 
 Function CDoneThreads : Boolean;
 
 begin
+{$ifndef dynpthreads}
+  Result:=True;
+{$else}
   Result:=UnloadPthreads;
+{$endif}
 end;
 
 
@@ -1013,11 +958,6 @@ begin
     rtlEventResetEvent     :=@intrtlEventResetEvent;
     rtleventWaitForTimeout :=@intrtleventWaitForTimeout;
     rtleventWaitFor        :=@intrtleventWaitFor;
-    // semaphores
-    SemaphoreInit          :=@cSemaphoreInit;
-    SemaphoreDestroy       :=@cSemaphoreDestroy;
-    SemaphoreWait          :=@cSemaphoreWait;
-    SemaphorePost          :=@cSemaphorePost;
   end;
   SetThreadManager(CThreadManager);
 end;

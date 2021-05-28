@@ -1,7 +1,7 @@
 {
     This unit is part of the fpGUI Toolkit project.
 
-    Copyright (c) 2006 - 2017 by Graeme Geldenhuys.
+    Copyright (c) 2006 - 2019 by Graeme Geldenhuys.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
     for details about redistributing fpGUI.
@@ -16,13 +16,7 @@
 
 unit fpg_main;
 
-{$mode objfpc}{$H+}
-{$interfaces corba}
-
-{.$Define GDEBUG}
-
-// To enable the AggPas powered Canvas
-{.$define AGGCanvas}
+{$I fpg_defines.inc}
 
 { TODO : Implement font size adjustments for each platform. eg: linux=10pt & windows=8pt }
 
@@ -50,7 +44,7 @@ type
     btfIsSelected, btfHasFocus, btfHasParentColor, btfFlat, btfHover, btfDisabled);
 
   TfpgMenuItemFlags = set of (mifSelected, mifHasFocus, mifSeparator,
-    mifEnabled, mifChecked, mifSubMenu);
+    mifEnabled, mifChecked, mifSubMenu, mifHeader);
 
   TfpgTextFlags = set of (txtLeft, txtHCenter, txtRight, txtTop, txtVCenter,
     txtBottom, txtWrap, txtDisabled, txtAutoSize);
@@ -86,7 +80,7 @@ type
   TMouseMoveEvent = procedure(Sender: TObject; AShift: TShiftState; const AMousePos: TPoint) of object;
   TMouseWheelEvent = procedure(Sender: TObject; AShift: TShiftState; AWheelDelta: Single; const AMousePos: TPoint) of object;
   { Painting }
-  TPaintEvent = procedure(Sender: TObject{; const ARect: TfpgRect}) of object;
+  TPaintEvent = procedure(Sender: TObject) of object;
   { Exceptions }
   TExceptionEvent = procedure(Sender: TObject; E: Exception) of object;
 
@@ -191,7 +185,11 @@ type
   { This is very basic for now, just to remind us of theming support. Later we
     will rework this to use a Style Manager like the previous fpGUI.
     Also support Bitmap based styles for easier theme implementations. }
+
   TfpgStyle = class(TObject)
+  private
+    FMenuHeaderFont: TfpgFont;
+    procedure SetMenuHeaderFont(AValue: TfpgFont);
   protected
     FDefaultFont: TfpgFont;
     FFixedFont: TfpgFont;
@@ -212,6 +210,7 @@ type
     property    DefaultFont: TfpgFont read FDefaultFont write SetDefaultFont;
     property    FixedFont: TfpgFont read FFixedFont write SetFixedFont;
     property    MenuFont: TfpgFont read FMenuFont write SetMenuFont;
+    property    MenuHeaderFont: TfpgFont read FMenuHeaderFont write SetMenuHeaderFont;
     property    MenuAccelFont: TfpgFont read FMenuAccelFont write SetMenuAccelFont;
     property    MenuDisabledFont: TfpgFont read FMenuDisabledFont write SetMenuDisabledFont;
     property    TabFont: TfpgFont read FTabFont write SetTabFont;
@@ -308,6 +307,7 @@ type
     procedure   Run;
     procedure   SetMessageHook(AWidget: TObject; const AMsgCode: integer; AListener: TObject);
     procedure   ShowException(E: Exception);
+    procedure   ShowBacktrace(sender: TObject; E: Exception);
     procedure   UnsetMessageHook(AWidget: TObject; const AMsgCode: integer; AListener: TObject);
     property    HintPause: Integer read FHintPause write SetHintPause;
     property    HintWindow: TfpgWidgetBase read FHintWindow;
@@ -438,9 +438,6 @@ var
   fpgImages: TfpgImages;  { TODO -ograemeg : move this into fpgApplication }
 
   DefaultCanvasClass: TfpgCanvasBaseClass = nil;
-  
-// Initialization
-procedure initifpgmain;   
 
 // Application & Clipboard singletons
 function  fpgApplication: TfpgApplication;
@@ -1461,7 +1458,9 @@ end;
 
 constructor TfpgApplication.Create(const AParams: string);
 begin
-  initifpgmain; 
+  InitializeDebugOutput;
+  fpgInitMsgQueue;
+
   FFontResList    := TList.Create;
   FDisplayParams  := AParams;
   FScreenWidth    := -1;
@@ -1909,6 +1908,20 @@ begin
   TfpgMessageDialog.Critical(rsErrUnexpected, E.Message);
 end;
 
+procedure TfpgApplication.ShowBacktrace(sender: TObject; E: Exception);
+var
+  m: string;
+  i: Integer;
+  frames: PPointer;
+begin
+  m:='Backtrace:'#10;
+  m+='   * '+BackTraceStrFunc(ExceptAddr)+#10;
+  frames:=ExceptFrames;
+  for i:=0 to ExceptFrameCount-1 do m+='   * '+BackTraceStrFunc(frames[i])+#10;
+  fpgClipboard.text:=m;
+  TfpgMessageDialog.Critical('Exception '+E.ClassName+': '+E.message, m);
+end;
+
 procedure TfpgApplication.WaitWindowMessage(atimeoutms: integer);
 begin
   if IsMultiThread then
@@ -2153,6 +2166,13 @@ end;
 
 { TfpgStyle }
 
+procedure TfpgStyle.SetMenuHeaderFont(AValue: TfpgFont);
+begin
+  if FMenuHeaderFont=AValue then Exit;
+  FMenuHeaderFont.Free;
+  FMenuHeaderFont:=AValue;
+end;
+
 procedure TfpgStyle.SetDefaultFont(AValue: TfpgFont);
 begin
   if FDefaultFont = AValue then Exit;
@@ -2206,6 +2226,7 @@ begin
   fpgSetNamedFont('Grid', FPG_DEFAULT_SANS + '-9');
   fpgSetNamedFont('GridHeader', FPG_DEFAULT_SANS + '-9:bold');
   fpgSetNamedFont('Menu', FPG_DEFAULT_FONT_DESC);
+  fpgSetNamedFont('MenuHeader', FPG_DEFAULT_FONT_DESC+':bold');
   fpgSetNamedFont('MenuAccel', FPG_DEFAULT_FONT_DESC + ':underline');
   fpgSetNamedFont('MenuDisabled', FPG_DEFAULT_FONT_DESC);
 
@@ -2252,6 +2273,7 @@ begin
   FFixedFont        := fpgGetFont(fpgGetNamedFontDesc('Edit2'));
   FMenuFont         := fpgGetFont(fpgGetNamedFontDesc('Menu'));
   FMenuAccelFont    := fpgGetFont(fpgGetNamedFontDesc('MenuAccel'));
+  FMenuHeaderFont   := fpgGetFont(fpgGetNamedFontDesc('MenuHeader'));
   FMenuDisabledFont := fpgGetFont(fpgGetNamedFontDesc('MenuDisabled'));
   FTabFont          := fpgGetFont(fpgGetNamedFontdesc('Label1'));
 end;
@@ -2264,6 +2286,7 @@ begin
   FMenuAccelFont.Free;
   FMenuDisabledFont.Free;
   FTabFont.Free;
+  FMenuHeaderFont.Free;
   inherited Destroy;
 end;
 
@@ -3140,13 +3163,11 @@ procedure TfpgDrag.MsgMouseMove(var msg: TfpgMessageRec);
 var
   FOffset: TfpgPoint;
 begin
- if Assigned(FPreviewWin) then begin
   if TfpgDNDWindow(FPreviewWin).Visible then
   begin
     FOffset := TWidgetFriend(Source).FDragStartPos;
 
     FPreviewWin.MoveWidget(msg.Params.mouse.x-FOffset.X, msg.Params.mouse.y-FOffset.Y);
-  end;
   end;
 end;
 
@@ -3186,18 +3207,17 @@ begin
   Result := inherited Execute(ADropActions, ADefaultAction);
 end;
 
-// Initialization
-procedure initifpgmain; 
-begin
- uApplication    := nil;
+
+
+initialization
+  uApplication    := nil;
   uClipboard      := nil;
   uMsgQueueList   := nil;
   fpgTimers       := nil;
   fpgCaret        := nil;
   fpgImages       := nil;
   iCallTrace      := -1;
-  InitializeDebugOutput;
-  fpgInitMsgQueue;
+
 {$ifdef AGGCanvas}
   DefaultCanvasClass := TAgg2D;
 {$else}
@@ -3207,8 +3227,7 @@ begin
   // This switches RTL, FCL and String data type to UTF-8. Many of fpg_utils functions will not be needed any more.
   DefaultSystemCodePage := CP_UTF8;
   SetMultiByteRTLFileSystemCodePage(CP_UTF8);
-  {$endif}
-end;
+  {$IFEND}
 
 finalization
   uClipboard.Free;
