@@ -17,6 +17,7 @@
 unit vfd_widgetclass;
 
 {$mode objfpc}{$H+}
+{$I define.inc}
 
 interface
 
@@ -231,8 +232,9 @@ var
 begin
   x  := rect.left;
   y  := rect.top;
-  fy := y + rect.Height div 2 - Canvas.Font.Height div 2;
-
+  {$ifdef fpgui-develop}
+  fy := y + rect.Height div 2 - Canvas.Font.GetHeight div 2;
+  {$else}  fy := y + rect.Height div 2 - Canvas.Font.Height div 2;{$endif}
   try
     s := GetValueText(wg);
   except

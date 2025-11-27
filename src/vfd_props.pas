@@ -1105,7 +1105,12 @@ begin
     on E: Exception do
       debugln('Detected an error: ', E.Message);
   end;
-  dx := Canvas.Font.TextWidth(s) + BLOCK_SIZE;
+   {$ifdef fpgui-develop}
+  dx := Canvas.Font.GetTextWidth(s) + BLOCK_SIZE;
+   {$else}
+  dx := Canvas.Font.TextWidth(s) + BLOCK_SIZE;   
+  {$endif}  
+    
   i := GetOrdProp(wg, Name);
   c := fpgColorToRGB(TfpgColor(i));
   { paint the color square }

@@ -20,8 +20,7 @@
 unit fpg_hint;
 
 {$mode objfpc}{$H+}
-
-{.$Define Debug}
+{$I define.inc}
 
 interface
 
@@ -39,7 +38,7 @@ type
 
   TfpgHintWindow = class(TfpgBaseForm)
   private
-    FFont: TfpgFont;
+    FFont: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif};
     FTime: Integer;
     FShadow: Integer;
     FBorder: Integer;
@@ -69,7 +68,7 @@ type
     HintLabel: Tfpglabel;
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
-    property    Font: TfpgFont read FFont;
+    property    Font: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif} read FFont;
     property    Text: TfpgString read GetText write SetText;
     property    Shadow: Integer read FShadow write SetShadow default 0;
     property    Border: Integer read FBorder write SetBorder default 1;
@@ -186,7 +185,12 @@ end;
 procedure TfpgHintWindow.SetFontDesc(const AValue: string);
 begin
   FFont.Free;
+   {$ifdef fpgui-develop}
+  FFont := fpgApplication.FontManager.GetFont(AValue);
+    {$else}
   FFont := fpgGetFont(AValue);
+   {$endif}
+   
 end;
 
 procedure TfpgHintWindow.HandleShow;
@@ -255,7 +259,11 @@ begin
   WindowType := wtPopup;
   Sizeable := False;
   BackgroundColor:= clHintWindow; //clBlack;  // This becomes the hint border so don't set to clHintWindow
+   {$ifdef fpgui-develop} 
+  FFont := fpgApplication.FontManager.GetFont('#Label1');
+   {$else}
   FFont := fpgGetFont('#Label1');
+  {$endif}
   FMargin := 3;
   FBorder := 1;
   FShadow := 3; 

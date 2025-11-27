@@ -2943,8 +2943,13 @@ begin
 
   x := rect.left;
   y := rect.top;
+  
+  {$ifdef fpgui-develop}
+  fy := y + rect.Height div 2 - FFont.GetHeight div 2;
+  {$else}
   fy := y + rect.Height div 2 - FFont.Height div 2;
-
+  {$endif}
+    
   s := prop.Name;
   Canvas.DrawString(x + 1, fy, s);
 

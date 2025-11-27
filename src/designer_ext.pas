@@ -175,16 +175,9 @@ xdynload,
      
       RegisterWidgets;
 
-    {$ifdef fpgui-develop}
-
-  if not gCommandLineParams.IsParam('style') then
-// cmd := fpgApplication as ICmdLineParams;
- //if not cmd.HasOption('style') then
-      {$else}
-     if not gCommandLineParams.IsParam('style') then
-    {$endif}
-
-      begin
+ 
+  if paramstr(1) <> 'style' then
+     begin
       if fpgStyleManager.SetStyle('Chrome silver flat menu') then
        fpgStyle := fpgStyleManager.Style;
       end;

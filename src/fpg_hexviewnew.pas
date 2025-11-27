@@ -20,8 +20,6 @@
 
 {$mode objfpc}{$H+}
 
-{$I define.inc}
-
 interface
 
 uses
@@ -55,12 +53,12 @@ type
     FCursor: Int64;
     FOwnsStream: Boolean;
     FStream: TStream;
-    FFont: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif};
+    FFont: TfpgFontResourceBase;
     FVScroll: TfpgScrollBar;
     FEventListenerList: TEventList;
-    function    GetFont: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif};
+    function    GetFont: TfpgFontResourceBase;
     procedure   SetCursor(AValue: Int64);
-    procedure   SetFont(AValue: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif});
+    procedure   SetFont(AValue: TfpgFontResourceBase);
     procedure   SetStream(AValue: TStream);
     function    GetHexCharSize: TfpgSize;
     function    GetHexAreaWidth: Integer;
@@ -91,7 +89,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
     property    Stream: TStream read FStream write SetStream;
-    property    Font: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif} read GetFont write SetFont; // Fixed width
+    property    Font: TfpgFontResourceBase read GetFont write SetFont; // Fixed width
     property    Cursor: Int64 read FCursor write SetCursor;
   published
     property    Align;
@@ -109,7 +107,7 @@ type
     function GetValueString(AType: TIntType; const AValue): String;
   private
     FCurrentVal: QWord;
-    FFont: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif};
+    FFont: TfpgFontResourceBase;
     FHexView: IfpgHexView;
     FLabels: array[TIntType] of TfpgLabel;
     FEdits: array[TIntType] of TfpgEdit;
@@ -247,14 +245,10 @@ begin
   inherited Create(AOwner);
   FWidth := 300;
   FHeight := 100;
-  {$ifdef fpgui-develop} 
-  FFont := fpgApplication.FontManager.GetFont('#Label1');
-    LabelWidths := FFont.GetTextWidth(IntTypeToString(bcU64));
-   {$else}
-  FFont := fpgGetFont('#Label1');
-    LabelWidths := FFont.TextWidth(IntTypeToString(bcU64));
-  {$endif}
-  
+  //FFont := fpgGetFont('#Label1');
+
+  //LabelWidths := FFont.TextWidth(IntTypeToString(bcU64));
+
   X := 0;
   Y := 0;
   for i := Low(TIntType) to High(TIntType) do
@@ -326,14 +320,11 @@ begin
   Invalidate;
 end;
 
-function TfpgHexView.GetFont: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif};
+function TfpgHexView.GetFont: TfpgFontResourceBase;
 begin
   if FFont = nil then
-  {$ifdef fpgui-develop} 
-  FFont := fpgApplication.FontManager.GetFont('Courier New-12');
-   {$else}
-  FFont := fpgGetFont('Courier New-12');
-  {$endif}
+  //  FFont := fpgGetFont('Courier New-12');
+
   Result := FFont;
 end;
 
@@ -358,7 +349,7 @@ begin
   DoCursorChange;
 end;
 
-procedure TfpgHexView.SetFont(AValue: {$ifdef fpgui-develop}TfpgFontResourceBase{$else}TfpgFont{$endif});
+procedure TfpgHexView.SetFont(AValue: TfpgFontResourceBase);
 begin
   if FFont <> AValue then
     FFont := AValue;
@@ -366,8 +357,8 @@ end;
 
 function TfpgHexView.GetHexCharSize: TfpgSize;
 begin
-  Result.H := Font.{$ifdef fpgui-develop}GetHeight{$else}Height{$endif};
-  Result.W := Font.{$ifdef fpgui-develop}GetTextWidth{$else}TextWidth{$endif}('AZ');
+  Result.H := Font.getHeight;
+  Result.W := Font.getTextWidth('AZ');
 end;
 
 function TfpgHexView.GetHexAreaWidth: Integer;
@@ -390,7 +381,7 @@ begin
   W := Width - GetAddressWidth - BevelsWidth - BordersWidth;
   Result := W div (CSize.W + CharSpacing);
 
-  CharWidth:=Font.{$ifdef fpgui-develop}GetTextWidth{$else}TextWidth{$endif}('X');
+  CharWidth:=Font.getTextWidth('X');
 
   while (Result * (CSize.W + CharSpacing)) + (Result * CharWidth) > W do
     Dec(Result);
@@ -402,7 +393,7 @@ var
 begin
   // H is not affected by a scrollbar. We only scroll up and down
   H := Height - fpgStyle.GetBevelWidth * 2;
-  Result := H div Font.{$ifdef fpgui-develop}GetHeight{$else}Height{$endif};
+  Result := H div Font.getHeight;
 end;
 
 function TfpgHexView.GetAddressChars: Integer;
@@ -424,12 +415,12 @@ end;
 
 function TfpgHexView.GetAddressWidth: Integer;
 begin
-  Result := GetAddressChars * Font.{$ifdef fpgui-develop}GetTextWidth{$else}TextWidth{$endif}('X')+AddressSpace;
+  Result := GetAddressChars * Font.getTextWidth('X')+AddressSpace;
 end;
 
 function TfpgHexView.GetTextWidth: Integer;
 begin
-  Result := GetCharsPerRow * Font.{$ifdef fpgui-develop}GetTextWidth{$else}TextWidth{$endif}('X');
+  Result := GetCharsPerRow * Font.getTextWidth('X');
 end;
 
 function TfpgHexView.GetTextLeft: Integer;
@@ -450,7 +441,7 @@ begin
   Y := fpgStyle.GetBevelWidth;
   CharsPerRow:=GetCharsPerRow;
   Pos := AStartAddress;
-  CharWidth:=Font.{$ifdef fpgui-develop}GetTextWidth{$else}TextWidth{$endif}('X');
+  CharWidth:=Font.getTextWidth('X');
   AddressChars:=GetAddressChars;
 
   Canvas.Color:=clDarkGray;
@@ -462,11 +453,11 @@ begin
   while (Y < Height) and (Pos <= FStream.Size) do
   begin
     Address := hexStr(Pos, AddressChars);
-    AddressWidth := Font.{$ifdef fpgui-develop}GetTextWidth{$else}TextWidth{$endif}(Address);
+    AddressWidth := Font.getTextWidth(Address);
     X := AddressChars * CharWidth - AddressWidth + (AddressSpace div 2);
     Canvas.DrawText(X,Y, Address);
 
-    Inc(Y, Font.{$ifdef fpgui-develop}GetHeight{$else}Height{$endif});
+    Inc(Y, Font.getHeight);
     Inc(Pos, CharsPerRow);
   end;
 end;
@@ -485,7 +476,7 @@ var
   TextPos: TfpgRect;
 begin
   CharSize := GetHexCharSize;
-  CharWidth:=Font.{$ifdef fpgui-develop}GetTextWidth{$else}TextWidth{$endif}('X');
+  CharWidth:=Font.getTextWidth('X');
 
   // get some useful values
   PaintTop := fpgStyle.GetBevelWidth;
@@ -600,11 +591,7 @@ begin
   UpdateScrollbar;
   fpgStyle.DrawBevel(Canvas,0,0,Width,Height, False);
   Canvas.SetClipRect(fpgRect(0,0,Width-fpgStyle.GetBevelWidth*2, Height-fpgStyle.GetBevelWidth*2));
-   {$ifdef fpgui-develop} 
-  Canvas.SetFont(Font);
-  {$else}
-  Canvas.Font := Font;
-  {$endif}
+ // Canvas.FontResourceBase := Font;
 
   StartRow:= FVScroll.Position;
   PaintAddressGutter(StartRow*GetCharsPerRow);
@@ -640,8 +627,8 @@ begin
   if X > GetTextLeft then
   begin
     // we clicked in the text area
-    Row := (y - BS) div Font.{$ifdef fpgui-develop}GetHeight{$else}Height{$endif} + FVScroll.Position;
-    Col := (x - GetTextLeft) div Font.{$ifdef fpgui-develop}GetTextWidth{$else}TextWidth{$endif}('X');
+    Row := (y - BS) div Font.getHeight + FVScroll.Position;
+    Col := (x - GetTextLeft) div Font.getTextWidth('X');
     NewPos := Row * GetCharsPerRow + Col;
     Cursor := NewPos;
   end
