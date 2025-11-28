@@ -328,7 +328,7 @@ begin
   lblURL.Text := fpGUIWebsite;
  
   /// => This code gives problem to JEDI code-formater
-  lblCompiled.Text := Format(rsCompiledOn, [{$I %date%} + ' ' + {$I %time%}]);
+  lblCompiled.Text := Format(rsCompiledOn, [{$I %date%}]);
   //
   btnClose.Text := rsClose;
 end;
@@ -346,12 +346,15 @@ begin
 end;
 
 procedure TfrmAbout.AfterCreate;
-begin
-  {%region 'Auto-generated GUI code' -fold}
+var  
+  ratio : double;
+begin 
+   ratio := fpgApplication.ScreenWidth / 1280;
+   {%region 'Auto-generated GUI code' -fold}
   {@VFD_BODY_BEGIN: frmAbout}
   Name := 'frmAbout';
-  SetPosition(464, 277, 278, 195);
-  WindowTitle := 'About designer_ext';
+  SetPosition(round(464*ratio), round(277*ratio), round(278*ratio), round(195*ratio));  
+  WindowTitle := 'About UIdesigner_ext';
   Hint := '';
   BackGroundColor := $FFFFFFFF;
   Sizeable := False;
@@ -363,11 +366,11 @@ begin
   with lblAppName do
   begin
     Name := 'lblAppName';
-    SetPosition(108, 10, 167, 35);
+    SetPosition(round(108*ratio), round(10*ratio), round(167*ratio), round(35*ratio));      
     BackgroundColor := TfpgColor($FFFFFFFF);
-    FontDesc := 'Arial-20';
+    FontDesc := 'Arial-'+ inttostr(round(16*ratio));
     Hint := '';
-    Text := 'designer_ext';
+    Text := 'UIdesigner_ext';
     TextColor := TfpgColor($4B8133);
   end;
 
@@ -375,10 +378,10 @@ begin
   with lblVersion do
   begin
     Name := 'lblVersion';
-    SetPosition(114, 46, 153, 24);
+    SetPosition(round(80*ratio), round(46*ratio), round(153*ratio), round(24*ratio));      
     Alignment := taRightJustify;
     BackgroundColor := TfpgColor($FFFFFFFF);
-    FontDesc := '#Label2';
+    FontDesc := 'Arial-'+ inttostr(round(10*ratio));
     Hint := '';
     Text := 'Version:  %s';
     TextColor := TfpgColor($3A8230);
@@ -388,9 +391,9 @@ begin
   with btnClose do
   begin
     Name := 'btnClose';
-    SetPosition(196, 163, 75, 24);
+    SetPosition(round(196*ratio), round(163*ratio), round(75*ratio), round(24*ratio));     
     Anchors := [anRight,anBottom];
-    FontDesc := '#Label1';
+    FontDesc := 'Arial-'+ inttostr(round(10*ratio));
     Hint := '';
     ImageName := 'stdimg.close';
     ModalResult := mrOK;
@@ -403,11 +406,11 @@ begin
   with lblWrittenBy do
   begin
     Name := 'lblWrittenBy';
-    SetPosition(12, 109, 245, 14);
+    SetPosition(round(12*ratio), round(105*ratio), round(245*ratio), round(18*ratio));      
     BackgroundColor := TfpgColor($FFFFFFFF);
-    FontDesc := 'Arial-9';
+    FontDesc := 'Arial-'+ inttostr(round(10*ratio));
     Hint := '';
-    Text := 'UIdesigner written by Graeme Geldenhuys';
+    Text := 'UIdesigner by Graeme Geldenhuys';
     TextColor := TfpgColor($FF000000);
   end;
 
@@ -415,12 +418,12 @@ begin
   with lblURL do
   begin
     Name := 'lblURL';
-    SetPosition(16, 125, 162, 14);
+    SetPosition(round(16*ratio), round(125*ratio), round(162*ratio), round(14*ratio));    
     BackgroundColor := TfpgColor($FFFFFFFF);
-    FontDesc := 'Arial-9:underline';
+    FontDesc := 'Arial-' +  inttostr(round(10*ratio))+':underline';
     Hint := '';
     HotTrackColor := TfpgColor($80000001);
-    HotTrackFont := 'Arial-9:underline';
+    HotTrackFont := 'Arial-' +  inttostr(round(10*ratio))+':underline';
     Text := 'http://fpgui.sourceforge.net';
     TextColor := TfpgColor($0032D2);
     URL := 'http://fpgui.sourceforge.net';
@@ -430,9 +433,9 @@ begin
   with lblCompiled do
   begin
     Name := 'lblCompiled';
-    SetPosition(12, 91, 290, 13);
+    SetPosition(round(12*ratio), round(75*ratio), round(290*ratio), round(16*ratio));    
     BackgroundColor := TfpgColor($FFFFFFFF);
-    FontDesc := 'Arial-8';
+    FontDesc := 'Arial-' +  inttostr(round(9*ratio));
     Hint := '';
 
     TextColor := TfpgColor($FF000000);
@@ -443,23 +446,24 @@ begin
   begin
     Name := 'lblExtBy';
     SetPosition(14, 156, 150, 14);
+    SetPosition(round(14*ratio), round(152*ratio), round(170*ratio), round(18*ratio));    
     BackgroundColor := TfpgColor($FFFFFFFF);
-    FontDesc := 'Arial-9';
+    FontDesc := 'Arial-'+ inttostr(round(10*ratio));
     Hint := '';
     Text := '_ext => Fred van Stappen';
-    TextColor := TfpgColor($4DC63D);
+    TextColor := TfpgColor($4B8133);
   end;
 
   lblExtMail := TfpgLabel.Create(self);
   with lblExtMail do
   begin
     Name := 'lblExtMail';
-    SetPosition(38, 174, 114, 18);
+    SetPosition(round(38*ratio), round(170*ratio), round(114*ratio), round(18*ratio));    
     BackgroundColor := TfpgColor($FFFFFFFF);
-    FontDesc := 'Arial-9';
+    FontDesc := 'Arial-'+ inttostr(round(10*ratio));
     Hint := '';
     Text := 'fiens@hotmail.com';
-    TextColor := TfpgColor($4DC63D);
+    TextColor := TfpgColor($4B8133);
   end;
 
   {@VFD_BODY_END: frmAbout}
@@ -837,32 +841,38 @@ var
   wgc: TVFDWidgetClass;
   btn: TwgPaletteButton;
   mi, mi2, mi3, mi4, mi5, mi8: TfpgMenuItem;
+  ratio : double;
 begin 
+   ratio := fpgApplication.ScreenWidth / 1280;
+
+ // ratio := 1;
+ // IntToStr(fpgApplication.ScreenWidth));
+ // IntToStr(fpgApplication.ScreenHeight));
 
   {%region 'Auto-generated GUI code' -fold}
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
- // SetPosition(400, 10, 900, 92);
   WindowTitle := 'fpGUI designer ext';
   Hint := '';
-  BackGroundColor := $80000001;
-  MinWidth := 840;
-  MinHeight := 90;
+   BackGroundColor := $80000001;
+  MinWidth := round(845*ratio);
+  MinHeight := round(92*ratio);
+  MaxHeight := round(92*ratio);
   WindowPosition := wpUser;
-  left := 10;
-  top := 10 ;
-  width := 842 ;
-  height := 92 ;
+  left := round(10*ratio);
+  top := round(10*ratio); 
+  width := round(845*ratio); 
+  height := round(92*ratio); 
   
   panel1 := TfpgPanel.Create(self);
   with panel1 do
   begin
     Name := 'panel1';
-    SetPosition(0, 0, 800, 92);
+    SetPosition(0, 0, round(845*ratio), round(92*ratio));
     Anchors := [anLeft,anRight,anTop,anBottom];
     Align := alClient;
-    FontDesc := '#Label1';
+    FontDesc := 'Arial-' + inttostr(round(ratio*10));
     Hint := '';
     Text := '';
   end;
@@ -871,10 +881,10 @@ begin
   with PanelMove do
   begin
     Name := 'PanelMove';
-    SetPosition(2, 2, 13, 88);
+    SetPosition(round(2*ratio), round(2*ratio), round(13*ratio), round(88*ratio));
     Align := alLeft;
     BackgroundColor := TfpgColor($BED9BE);
-    FontDesc := '#Label1';
+    FontDesc := 'Arial-' + inttostr(round(ratio*10));
     Hint := 'Hold left-click to move, right-click to resize...';
     Style := bsLowered;
     ShowHint := True;
@@ -888,9 +898,9 @@ begin
   with xicon do
   begin
     Name := 'xicon';
-    SetPosition(2, 1, 8, 14);
+    SetPosition(round(2*ratio), round(1*ratio), round(8*ratio), round(14*ratio));
     BackgroundColor := TfpgColor($BED9BE);
-    FontDesc := '#Label2';
+    FontDesc := 'Arial-' + inttostr(round(ratio*10));
     Hint := 'Quit';
     ShowHint := True;
     Textcolor := clgray;
@@ -902,9 +912,9 @@ begin
   with micon do
   begin
     Name := 'micon';
-    SetPosition(2, 71, 8, 14);
+    SetPosition(round(2*ratio), round(71*ratio), round(8*ratio), round(14*ratio));
     BackgroundColor := TfpgColor($BED9BE);
-    FontDesc := '#Label2';
+    FontDesc := 'Arial-' + inttostr(round(ratio*10));
     Hint := 'Minimize';
     ShowHint := True;
     Textcolor := clgray;
@@ -917,9 +927,8 @@ begin
   with MainMenu do
   begin
     Name := 'MainMenu';
-    SetPosition(0, 0, 753, 24);
+    SetPosition(0, 0, round(821*ratio), round(24*ratio));
     Align := alTop;
-
    OnMouseMove := @onMovemovepanel;
    OnMouseDown := @onClickDownPanel;
    OnMouseUp := @onClickUpPanel;
@@ -929,7 +938,8 @@ begin
   with filemenu do
   begin
     Name := 'filemenu';
-    SetPosition(464, 64, 120, 20);
+    
+    SetPosition(round(464*ratio), round(64*ratio), round(120*ratio), round(20*ratio));
     AddMenuItem('Create New File...', 'Ctrl+N', @(maindsgn.OnNewFile));
     AddMenuItem('Open...', 'Ctrl+O', @(maindsgn.OnLoadFile));
     FFileOpenRecent := AddMenuItem('Open Recent...', '', nil);
@@ -957,7 +967,7 @@ begin
   with formmenu do
   begin
     Name := 'formmenu';
-    SetPosition(464, 48, 120, 20);
+    SetPosition(round(464*ratio), round(48*ratio), round(120*ratio), round(20*ratio));
     AddMenuItem('Widget Order...', '', @(maindsgn.OnEditWidgetOrder));
     AddMenuItem('Tab Order...', '', @(maindsgn.OnEditTabOrder));
     AddMenuItem('-', '', nil);
@@ -968,14 +978,14 @@ begin
   with miOpenRecentMenu do
   begin
     Name := 'miOpenRecentMenu';
-    SetPosition(336, 68, 128, 20);
+    SetPosition(round(336*ratio), round(68*ratio), round(128*ratio), round(20*ratio));
   end;
 
   setmenu := TfpgPopupMenu.Create(panel1);
   with setmenu do
   begin
     Name := 'setmenu';
-    SetPosition(464, 48, 120, 20);
+    SetPosition(round(464*ratio), round(48*ratio), round(120*ratio), round(20*ratio));
     AddMenuItem('General Settings', '', @(maindsgn.OnOptionsClick));
   end;
 
@@ -984,6 +994,7 @@ begin
   begin
     Name := 'undomenu';
     SetPosition(464, 48, 120, 20);
+    SetPosition(round(464*ratio), round(48*ratio), round(120*ratio), round(20*ratio));    
     AddMenuItem('Undo', 'Ctrl+Z', @OnIndexUndo);
     AddMenuItem('ReDo', 'Ctrl+Maj+Z', @OnIndexRedo);
     AddMenuItem('-', '', nil);
@@ -997,7 +1008,7 @@ begin
   with toolsmenu do
   begin
     Name := 'toolsmenu';
-    SetPosition(328, 52, 120, 20);
+    SetPosition(round(328*ratio), round(52*ratio), round(120*ratio), round(20*ratio));    
     AddMenuItem('Color Picker', '', @micolorwheel);
     AddMenuItem('Image Convertor', '', @miimageconv);
   end;
@@ -1006,7 +1017,7 @@ begin
   with helpmenu do
   begin
     Name := 'helpmenu';
-    SetPosition(448, 52, 120, 20);
+    SetPosition(round(448*ratio), round(52*ratio), round(120*ratio), round(20*ratio));
     AddMenuItem('About fpGUI Toolkit...', '', @miHelpAboutGUI);
     AddMenuItem('About designer_ext...', '', @miHelpAboutClick);
   end;
@@ -1015,14 +1026,14 @@ begin
   with listundomenu do
   begin
     Name := 'listundomenu';
-    SetPosition(328, 52, 120, 20);
+    SetPosition(round(328*ratio), round(52*ratio), round(120*ratio), round(20*ratio));
   end;
 
   windowmenu := TfpgPopupMenu.Create(panel1);
   with windowmenu do
   begin
     Name := 'windowmenu';
-    SetPosition(328, 52, 120, 20);
+    SetPosition(round(328*ratio), round(52*ratio), round(120*ratio), round(20*ratio));    
     AddMenuItem('Object Inspector', '', @OnObjInspect);
     AddMenuItem('-', '', nil);
     AddMenuItem('', '', @frmMainDesigner.OnFormDesignShow);
@@ -1051,15 +1062,16 @@ begin
   with previewmenu do
   begin
     Name := 'previewmenu';
-    SetPosition(324, 36, 120, 20);
+    SetPosition(round(324*ratio), round(36*ratio), round(120*ratio), round(20*ratio));    
   end;
 
   btnNewForm := TfpgButton.Create(panel1);
   with btnNewForm do
   begin
     Name := 'NewForm';
-    SetPosition(16, 33, 25, 24);
-    FontDesc := '#Label1';
+    SetPosition(round(16*ratio), round(33*ratio), round(25*ratio), round(24*ratio));        
+ //   FontDesc := '#Label1';
+    FontDesc := 'Arial-' + inttostr(round(ratio*10));
     Hint := 'Add New Form to Unit';
     ImageMargin := -1;
     ImageName := 'vfd.newform';
@@ -1076,8 +1088,9 @@ begin
   with btnOpen do
   begin
     Name := 'Open';
-    SetPosition(42, 33, 25, 24);
-    FontDesc := '#Label1';
+    SetPosition(round(42*ratio), round(33*ratio), round(25*ratio), round(24*ratio));            
+    FontDesc := 'Arial-' + inttostr(round(ratio*10));    
+    //FontDesc := '#Label1';
     Hint := 'Open a file';
     ImageMargin := -1;
     ImageName := 'stdimg.open';
@@ -1094,8 +1107,9 @@ begin
   with btnSave do
   begin
     Name := 'Save';
-    SetPosition(68, 33, 25, 24);
-    FontDesc := '#Label1';
+    SetPosition(round(68*ratio), round(33*ratio), round(25*ratio), round(24*ratio));            
+    FontDesc := 'Arial-' + inttostr(round(ratio*10));
+    //FontDesc := '#Label1';
     Hint := 'Save the loaded forms';
     ImageMargin := -1;
     ImageName := 'stdimg.save';
@@ -1113,7 +1127,7 @@ begin
   with btnGrid do
   begin
     Name := 'Grid';
-    SetPosition(94, 33, 25, 24);
+    SetPosition(round(94*ratio), round(33*ratio), round(25*ratio), round(24*ratio));        
     FontDesc := '#Label1';
     Hint := 'Toggle designer grid';
     ImageMargin := -1;
@@ -1131,7 +1145,7 @@ begin
   with btnToFront do
   begin
     Name := 'ToFront';
-    SetPosition(120, 33, 25, 24);
+    SetPosition(round(120*ratio), round(33*ratio), round(25*ratio), round(24*ratio));            
     FontDesc := '#Label1';
     Hint := 'Switch Designer Always-To-Front <> Normal';
     ImageMargin := -1;
@@ -1148,7 +1162,7 @@ begin
   with btnSelected do
   begin
     Name := 'Selected';
-    SetPosition(146, 33, 25, 24);
+    SetPosition(round(146*ratio), round(33*ratio), round(25*ratio), round(24*ratio));            
     FontDesc := '#Label1';
     Hint := 'Multi-Selector => Select objects and apply changes';
     ImageMargin := -1;
@@ -1165,7 +1179,7 @@ begin
   with btnAssist do
   begin
     Name := 'Assist';
-    SetPosition(172, 33, 25, 24);
+    SetPosition(round(172*ratio), round(33*ratio), round(25*ratio), round(24*ratio));            
     FontDesc := '#Label1';
     Hint := 'Toggle voice assistive';
     ImageMargin := -1;
@@ -1185,11 +1199,11 @@ begin
   with wgpalette do
   begin
     Name := 'wgpalette';
-    SetPosition(200, 28, 578, 62);
+    SetPosition(round(200*ratio), round(28*ratio), round(578*ratio), round(62*ratio));            
     Anchors := [anLeft,anRight,anTop,anBottom];
     Focusable := False;
     ShowHint := True;
-    Width := self.Width - 204;
+    Width := self.Width - round(204*ratio);
     OnResize := @PaletteBarResized;
   end;
 
@@ -1197,9 +1211,10 @@ begin
   with chlPalette do
   begin
     Name := 'chlPalette';
-    SetPosition(16, 62, 181, 22);
+    SetPosition(round(16*ratio), round(62*ratio), round(181*ratio), round(22*ratio));                
     ExtraHint := '';
-    FontDesc := '#List';
+  //  FontDesc := '#List';
+    FontDesc := 'Arial-' + inttostr(round(ratio*10));    
     Hint := 'Widgets list';
     ShowHint := True;
     FocusItem := -1;
@@ -1239,7 +1254,8 @@ begin
     wgc := VFDWidget(n);
     btn := TwgPaletteButton.Create(wgpalette);
     btn.VFDWidget := wgc;
-    btn.SetPosition(x, y, 30, 28);
+//    btn.SetPosition(x, y, 30, 28);
+    btn.SetPosition(x, y, round(30*ratio), round(28*ratio));                
     btn.ImageName := wgc.WidgetIconName;
     btn.ImageMargin := -1;
     btn.Text := '';
@@ -1258,11 +1274,11 @@ begin
     chlPalette.Tag:=1 ;
     chlPalette.Items.AddObject(wgc.WidgetClass.ClassName, wgc);
 
-    Inc(x, 32);
-    if (x + 30) >= wgpalette.Width then
+    Inc(x, round(32*ratio));
+    if (x + round(30*ratio)) >= wgpalette.Width then
     begin
       x := 0;
-      Inc(y, 30);
+      Inc(y, round(30*ratio));
     end;
   end;
 
@@ -1384,7 +1400,7 @@ fpgapplication.ProcessMessages;
    btnToFront.tag := 0;
   WindowType := wtwindow;  // with borders, not on front.
     btnOpen.Visible := True;
-    btnSave.Left := 69;
+    btnSave.Left := round(69*ratio);
 
      panel1.Style := bsflat;
 
@@ -1422,7 +1438,7 @@ if  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
   btnToFront.tag := 0;
   WindowType := wtwindow;  // with borders, not on front.
     btnOpen.Visible := True;
-    btnSave.Left := 69;
+    btnSave.Left := round(69*ratio);
   
       panel1.Style := bsflat;
         MainMenu.MenuItem(8).Visible := false;
@@ -1892,17 +1908,19 @@ end;
 procedure TfrmProperties.AfterCreate;
 var
   x, x2, w, y, nblist, gap: integer;
-begin
+  ratio : double;
+begin 
+   ratio := fpgApplication.ScreenWidth / 1280;
   {%region 'Auto-generated GUI code' -fold}
    {@VFD_BODY_BEGIN: frmProperties}
   Name := 'frmProperties';
   WindowTitle := 'Properties';
-  left := 10;
-  top := 110;
-  Width := 270;
-  Height := 590;
-  MinWidth := 268;
-  MinHeight := 588;
+  left := round(10*ratio);
+  top := round(110*ratio);
+  Width := round(270*ratio);
+  Height := round(590*ratio);
+  MinWidth := round(268*ratio);
+  MinHeight := round(588*ratio);
   //OnResize := @frmPropertiesPaint;
   OnResize := @FormResized;
   Visible := False;
@@ -1911,7 +1929,7 @@ begin
   with Bevel1 do
   begin
     Name := 'Bevel1';
-    SetPosition(0, 0, 250, 100);
+    SetPosition(0,0 , round(250*ratio), round(100*ratio));
     Hint := '';
     Shape := bsSpacer;
   end;
@@ -1920,74 +1938,75 @@ begin
   with TreeView1 do
   begin
     Name := 'TreeView1';
-    SetPosition(4, 4, 242, 92);
+    SetPosition(round(4*ratio), round(4*ratio), round(242*ratio), round(92*ratio));
     Anchors := [anLeft,anRight,anTop,anBottom];
-    FontDesc := '#Label1';
+    FontDesc := 'Arial-'+ inttostr(round(10*ratio));
     Hint := '';
     TabOrder := 1;
     OnChange := @TreeSelect;
   end;
 
+
   Splitter1 := TfpgSplitter.Create(self);
   with Splitter1 do
   begin
     Name := 'Splitter1';
-    SetPosition(0, 100, 250, 8);
+    SetPosition(0, round(100*ratio), round(250*ratio), round(8*ratio));
     Align := alNone;
   end;
+
 
   bvlOI := TfpgBevel.Create(self);
   with bvlOI do
   begin
     Name := 'bvlOI';
-    SetPosition(0, 108, 250, 461);
+    SetPosition(0, round(108*ratio), round(250*ratio), round(461*ratio));
     Hint := '';
     Shape := bsSpacer;
   end;
     
-   x := 3;
-  x2 := x + 50;
-  gap := 20;
+  x := round(3*ratio);
+  x2 := x + round(50*ratio);
+  gap := round(20*ratio);
   w := Width - x2;
-  y := 3;
+  y := round(3*ratio);
 
   l1 := TfpgLabel.Create(bvlOI);
   l1.Text := 'Class:';
-  l1.Top := y - 1;
-  l1.left := 5;
+  l1.Top := y - round(1*ratio);
+  l1.left := round(5*ratio);
 
   lbClass := TfpgLabel.Create(bvlOI);
   lbClass.Text := '';
-  lbClass.Top := y - 1;
+  lbClass.Top := y - round(1*ratio);
   lbClass.left := x2;
   lbClass.Width := w;
-  lbClass.Height := 22;
-  lbClass.FontDesc := '#Label2';
+  lbClass.Height := round(22*ratio);
+  lbClass.FontDesc := 'Arial-'+ inttostr(round(12*ratio));
   lbClass.Anchors := [anLeft, anRight, anTop];
   Inc(y, gap);
 
   l2 := TfpgLabel.Create(bvlOI);
   l2.Text := 'Name:';
-  l2.Top := y + 1;
-  l2.left := 5;
-  l2.width := 60;
+  l2.Top := y + round(1*ratio);
+  l2.left := round(5*ratio);
+  l2.width := round(60*ratio);
   l2.Anchors := [anLeft, anRight, anTop];
 
   edName := TfpgEdit.Create(bvlOI);
   edName.Text := '';
   edName.name := 'name';
- // edName.Width := Width - l2.Right + 28;
-  edName.Width := Width - l2.width - 20;
-  edName.Top := y - 2;
+  edName.Width := Width - l2.width - round(28*ratio);
+  edName.Top := y - round(2*ratio);
   edName.left := x2;
   edName.Anchors := [anLeft, anRight, anTop];
   edName.OnChange := @(maindsgn.OnPropNameChange);
 
-  Inc(y, gap + 5);
+  Inc(y, gap + round(5*ratio));
 
   
   lstProps := TwgPropertyList.Create(bvlOI);
-  lstProps.SetPosition(0, y, Width-20, (bvlOI.Height - y - 150) div 2);
+  lstProps.SetPosition(0, y, Width-round(20*ratio), (bvlOI.Height - y - round(150*ratio)) div 2);
   lstProps.Anchors := AllAnchors;
   lstProps.Props := PropList;
   lstProps.Props.Widget := edName;
@@ -2002,8 +2021,9 @@ begin
   y := lstProps.Bottom;
 
   virtualpanel := Tfpgpanel.Create(bvlOI);
-  virtualpanel.SetPosition(0, y, Width-20, 110);
-  virtualpanel.Anchors := [anLeft, anRight];
+  virtualpanel.SetPosition(0, y, Width-round(20*ratio), round(130*ratio));
+  // virtualpanel.Anchors := [anLeft, anRight];
+  virtualpanel.Anchors := AllAnchors;
   virtualpanel.BackgroundColor := $CCCCCC;
   virtualpanel.Style := bsFlat;
   virtualpanel.Visible := False;
@@ -2017,7 +2037,7 @@ begin
   cbfocusable.Text := 'True';
   cbfocusable.name := 'focusable';
   cbfocusable.BackgroundColor := $E0E0E0;
-  cbfocusable.Height := 21;
+  cbfocusable.Height := round(21*ratio);
   
   cbfocusable.OnExit := @VirtualPropertiesUpdate;
 
@@ -2028,7 +2048,7 @@ begin
   cbsizeable.Text := 'True';
   cbsizeable.name := 'sizeable';
   cbsizeable.BackgroundColor := $E0E0E0;
-  cbsizeable.Height := 21;
+  cbsizeable.Height := round(21*ratio);
   cbsizeable.OnExit := @VirtualPropertiesUpdate;
   
   cbshowhint := TfpgCombobox.Create(virtualpanel);
@@ -2038,7 +2058,7 @@ begin
   cbshowhint.Text := 'True';
   cbshowhint.name := 'showhint';
   cbshowhint.BackgroundColor := $E0E0E0;
-  cbshowhint.Height := 21;
+  cbshowhint.Height := round(21*ratio);
   cbshowhint.OnExit := @VirtualPropertiesUpdate;
 
   cbvisible := TfpgCombobox.Create(virtualpanel);
@@ -2048,19 +2068,17 @@ begin
   cbvisible.Text := 'True';
   cbvisible.BackgroundColor := $E0E0E0;
   cbvisible.name := 'visible';
-  cbvisible.Height := 21;
+  cbvisible.Height := round(21*ratio);
   cbvisible.OnExit := @VirtualPropertiesUpdate;
-  ;
-
+  
   cbfullscreen := TfpgCombobox.Create(virtualpanel);
   cbfullscreen.Items.Add('False');
   cbfullscreen.Items.Add('True');
   cbfullscreen.FocusItem := 0;
   cbfullscreen.Text := 'False';
   cbfullscreen.name := 'fullscreen';
-
   cbfullscreen.BackgroundColor := $E0E0E0;
-  cbfullscreen.Height := 21;
+  cbfullscreen.Height := round(21*ratio);
   cbfullscreen.OnExit := @VirtualPropertiesUpdate;
 
 
@@ -2078,7 +2096,7 @@ begin
   edminwidth := TfpgEdit.Create(virtualpanel);
   edminwidth.Text := '0';
   edminwidth.BackgroundColor := $E0E0E0;
-  edminwidth.Height := 21;
+  edminwidth.Height := round(21*ratio);
   edminwidth.OnExit := @VirtualPropertiesUpdate;
   edminwidth.name := 'minwidth';
 
@@ -2086,21 +2104,21 @@ begin
   edminheight := TfpgEdit.Create(virtualpanel);
   edminheight.Text := '0';
   edminheight.BackgroundColor := $E0E0E0;
-  edminheight.Height := 21;
+  edminheight.Height := round(21*ratio);
   edminheight.OnExit := @VirtualPropertiesUpdate;
   edminheight.name := 'minheight';
 
   edmaxwidth := TfpgEdit.Create(virtualpanel);
   edmaxwidth.Text := '0';
   edmaxwidth.BackgroundColor := $E0E0E0;
-  edmaxwidth.Height := 21;
+  edmaxwidth.Height := round(21*ratio);
   edmaxwidth.OnExit := @VirtualPropertiesUpdate;
    edmaxwidth.name := 'maxwidth';
 
   edmaxheight := TfpgEdit.Create(virtualpanel);
   edmaxheight.Text := '0';
   edmaxheight.BackgroundColor := $E0E0E0;
-  edmaxheight.Height := 21;
+  edmaxheight.Height := round(21*ratio);
   edmaxheight.OnExit := @VirtualPropertiesUpdate;
    edmaxheight.name := 'maxheight';
 
@@ -2112,21 +2130,21 @@ begin
   cbWindowPosition.FocusItem := 0;
   cbWindowPosition.Text := 'wpUser';
   cbWindowPosition.BackgroundColor := $E0E0E0;
-  cbWindowPosition.Height := 21;
+  cbWindowPosition.Height := round(21*ratio);
   cbWindowPosition.OnExit := @VirtualPropertiesUpdate;
   cbWindowPosition.name := 'WindowPosition';
 
   edTag := TfpgEdit.Create(virtualpanel);
   edTag.Text := '0';
   edTag.BackgroundColor := $E0E0E0;
-  edTag.Height := 21;
+  edTag.Height := round(21*ratio);
   edTag.OnExit := @VirtualPropertiesUpdate;
-   edTag.name := 'Tag';
+  edTag.name := 'Tag';
    
    edhint := TfpgEdit.Create(virtualpanel);
   edhint.Text := '';
   edhint.BackgroundColor := $E0E0E0;
-  edhint.Height := 21;
+  edhint.Height := round(21*ratio);
   edhint.OnExit := @VirtualPropertiesUpdate;
    edhint.name := 'Hint';
    
@@ -2144,74 +2162,74 @@ begin
       edhint.visible := false;
        cbshowhint.visible := false;
 
-  y := virtualpanel.Bottom + 5;
+  y := virtualpanel.Bottom + round(5*ratio);
 
-  l3 := CreateLabel(bvlOI, 5, y + 1, 'Left:');
+  l3 := CreateLabel(bvlOI, round(5*ratio), y + round(1*ratio), 'Left:');
   l3.Anchors := [anLeft, anBottom];
 
   l6 := TfpgLabel.Create(bvlOI);
   l6.Text := 'Height:';
-  l6.Top := y + gap + 5;
+  l6.Top := y + gap + round(5*ratio);
   // l6.left:=110;
-  l6.Height := 22;
+  l6.Height := round(22*ratio);
   l6.Anchors := [anright, anBottom];
 
-  l6.Left := Width - (48 * 2) - 30;
+  l6.Left := Width - (round(48*ratio) * 2) - round(30*ratio);
 
   l4 := CreateLabel(bvlOI, 90, y, 'Top:');
-  l4.Left := Width - (48 * 2) - 30;
+  l4.Left := Width - (round(48*ratio) * 2) - round(30*ratio);
   l4.Anchors := [anright, anBottom];
 
 
-  btnLeft := CreateButton(bvlOI, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnLeft := CreateButton(bvlOI, round(50*ratio), y - round(2*ratio), round(48*ratio), '0', @(maindsgn.OnPropPosEdit));
   with btnLeft do
   begin
-    Height := 22;
+    Height := round(22*ratio);
     Anchors := [anLeft, anBottom];
     Focusable := False;
     end;
 
-  btnTop := CreateButton(bvlOI, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnTop := CreateButton(bvlOI, round(50*ratio), y - round(2*ratio), round(48*ratio), '0', @(maindsgn.OnPropPosEdit));
 
   with btnTop do
   begin
-    Height := 22;
+    Height := round(22*ratio);
     Anchors := [anright, anBottom];
     Focusable := False;
    end;
 
-  btnTop.Left := Width - (btnTop.Width) - 25;
+  btnTop.Left := Width - (btnTop.Width) - round(25*ratio);
 
-  Inc(y, gap + 5);
-  l5 := CreateLabel(bvlOI, 5, y + 1, 'Width:');
+  Inc(y, gap + round(5*ratio));
+  l5 := CreateLabel(bvlOI, round(5*ratio), y + round(1*ratio), 'Width:');
   l5.Anchors := [anleft, anBottom];
 
-  btnWidth := CreateButton(bvlOI, 50, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnWidth := CreateButton(bvlOI, round(50*ratio), y - round(2*ratio), round(48*ratio), '0', @(maindsgn.OnPropPosEdit));
   with btnWidth do
   begin
-    Height := 22;
+    Height := round(22*ratio);
     Anchors := [anleft, anBottom];
 
     Focusable := False;
   end;
 
-  btnHeight := CreateButton(bvlOI, 140, y - 2, 48, '0', @(maindsgn.OnPropPosEdit));
+  btnHeight := CreateButton(bvlOI, round(140*ratio), y - round(2*ratio), round(48*ratio), '0', @(maindsgn.OnPropPosEdit));
   with btnHeight do
   begin
-    Height := 22;
+    Height := round(22*ratio);
     Anchors := [anright, anBottom];
     Focusable := False;
   end;
-  Inc(y, gap + 5);
+  Inc(y, gap + round(5*ratio));
 
-  l8 := CreateLabel(bvlOI, 5, y + 1, 'Anchors:');
+  l8 := CreateLabel(bvlOI, round(5*ratio), y + round(2*ratio), 'Anchors:');
   l8.Anchors := [anLeft, anBottom];
 
-  btnHeight.Left := Width - (btnHeight.Width) - 25;
+  btnHeight.Left := Width - (btnHeight.Width) - round(25*ratio);
 
-  x := 64;
+  x := round(64*ratio);
 
-  btnAnLeft := CreateButton(bvlOI, x, y - 2, 26, '', nil);
+  btnAnLeft := CreateButton(bvlOI, x, y - round(2*ratio), round(26*ratio), '', nil);
   with btnAnLeft do
   begin
     ImageName := 'vfd.anchorleft';
@@ -2223,10 +2241,10 @@ begin
     Anchors := [anright, anBottom];
     OnClick := @(maindsgn.OnAnchorChange);
   end;
-  btnAnLeft.Left := Width - (btnAnLeft.Width * 4) - 100;
+  btnAnLeft.Left := Width - (btnAnLeft.Width * 4) - round(100*ratio);
 
-  Inc(x, 30);
-  btnAnTop := CreateButton(bvlOI, x, y - 2, 26, '', nil);
+  Inc(x, round(30*ratio));
+  btnAnTop := CreateButton(bvlOI, x, y - round(2*ratio), round(26*ratio), '', nil);
   with btnAnTop do
   begin
     ImageName := 'vfd.anchortop';
@@ -2238,10 +2256,10 @@ begin
     Anchors := [anright, anBottom];
     OnClick := @(maindsgn.OnAnchorChange);
   end;
-  btnAnTop.Left := Width - (btnAnTop.Width * 3) - 85;
+  btnAnTop.Left := Width - (btnAnTop.Width * 3) - round(85*ratio);
 
-  Inc(x, 30);
-  btnAnBottom := CreateButton(bvlOI, x, y - 2, 26, '', nil);
+  Inc(x, round(30*ratio));
+  btnAnBottom := CreateButton(bvlOI, x, y - round(2*ratio), round(26*ratio), '', nil);
   with btnAnBottom do
   begin
     ImageName := 'vfd.anchorbottom';
@@ -2253,10 +2271,10 @@ begin
     Anchors := [anBottom, anright];
     OnClick := @(maindsgn.OnAnchorChange);
   end;
-  btnAnBottom.Left := Width - (btnAnBottom.Width * 2) - 70;
+  btnAnBottom.Left := Width - (btnAnBottom.Width * 2) - round(70*ratio);
 
-  Inc(x, 30);
-  btnAnRight := CreateButton(bvlOI, x, y - 2, 26, '', nil);
+  Inc(x, round(30*ratio));
+  btnAnRight := CreateButton(bvlOI, x, y - round(2*ratio), round(26*ratio), '', nil);
   with btnAnRight do
   begin
     ImageName := 'vfd.anchorright';
@@ -2269,19 +2287,19 @@ begin
     OnClick := @(maindsgn.OnAnchorChange);
   end;
 
-  btnAnRight.Left := Width - btnAnRight.Width - 55;
+  btnAnRight.Left := Width - btnAnRight.Width - round(55*ratio);
 
-  y := btnAnRight.Bottom + 5;
+  y := btnAnRight.Bottom + round(5*ratio);
 
-  l7 := CreateLabel(bvlOI, 5, y, 'Unknown lines:');
+  l7 := CreateLabel(bvlOI, round(5*ratio), y, 'Unknown lines:');
   l7.Anchors := [anLeft, anBottom];
-  Inc(y, 16);
+  Inc(y, round(16*ratio));
 
   edOther := TfpgMemo.Create(bvlOI);
   edOther.BackgroundColor := $EEEEEE;
-  edOther.SetPosition(0, y,bvlOI.Width, 78);
+  edOther.SetPosition(0, y,bvlOI.Width, round(78*ratio));
   edOther.Anchors := [anLeft, anRight, anBottom];
-  edOther.FontDesc := '#Edit2';
+  edOther.FontDesc := 'Arial-'+ inttostr(round(12*ratio));
   edOther.OnChange := @(maindsgn.OnOtherChange);
 
   {@VFD_BODY_END: frmProperties}
@@ -2333,7 +2351,11 @@ begin
 end;
 
 procedure TfrmProperties.frmPropertiesPaint(Sender: TObject);
-begin
+var
+ratio : double;
+begin 
+   ratio := fpgApplication.ScreenWidth / 1280;
+
  // edName.Width := Width - l2.Right + 28;
 // edName.Width :=  Width - l2.width - 20;
 
@@ -2345,83 +2367,94 @@ begin
 
   if virtualpanel.tag = 1 then
   begin
-      frmproperties.lstProps.Height := frmproperties.Height - 310 - TreeView1.height  ;
-      frmproperties.virtualpanel.top :=
-        frmproperties.lstProps.Height + frmproperties.lstProps.top +1 ;
+      frmproperties.lstProps.Height := frmproperties.Height - round(330*ratio) - TreeView1.height;
+       {$ifdef fpgui-develop}
+      frmproperties.lstProps.UpdatePosition;
+      {$else}
+      frmproperties.lstProps.UpdateWindowPosition;
+       {$endif}
+      frmproperties.virtualpanel.top := frmproperties.lstProps.bottom + round(1*ratio);
+      //  frmproperties.lstProps.Height + frmproperties.lstProps.top + round(1*ratio) ;
     
-     
+     frmproperties.virtualpanel.height := round(23) * 8;
   end
   else
   begin
     // frmproperties.lstProps.Height :=   97  - TreeView1.height ;
-      frmproperties.lstProps.Height :=   97   ;
-      frmproperties.virtualpanel.top :=
-        frmproperties.lstProps.Height + frmproperties.lstProps.top - 2;
-     end;
-
-  {$ifdef fpgui-develop}
-  virtualpanel.UpdatePosition;
-  lstProps.UpdatePosition;
- {$else}
-  virtualpanel.UpdateWindowPosition;
- lstProps.UpdateWindowPosition;
- {$endif}
-
+      frmproperties.lstProps.Height :=   round(100*ratio)   ;
+       {$ifdef fpgui-develop}
+      frmproperties.lstProps.UpdatePosition;
+      {$else}
+      frmproperties.lstProps.UpdateWindowPosition;
+       {$endif}
+        frmproperties.virtualpanel.top := frmproperties.lstProps.bottom + round(1*ratio);
+          //   frmproperties.lstProps.Height + frmproperties.lstProps.top + round(2*ratio);
+          
+       frmproperties.virtualpanel.height := round(23) * 3;   
+      end;
+ 
+ 
 end;
 
 procedure TfrmProperties.Vpanelpaint(Sender: TObject);
 var
   y, z: integer;
- begin  
+  ratio : double;
+begin 
+   ratio := fpgApplication.ScreenWidth / 1280;  
 
   virtualpanel.Canvas.SetColor(clblack);
-  virtualpanel.Canvas.DrawText(4, 2, 60, 20, 'Visible');
+  virtualpanel.Canvas.DrawText(round(4*ratio), round(2*ratio), round(60*ratio), round(20*ratio), 'Visible');
  // if virtualpanel.tag = 0 then
    // virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2, 60, 20, 'Enabled') else
-     virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2, 60, 20, 'ShowHint') ;
+  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + round(4*ratio), round(2*ratio), round(60*ratio), round(20*ratio), 'ShowHint') ;
 
- y := 22;
- z := 1 ;
+ y := round(22*ratio);
+ z := round(1*ratio) ;
  
-  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'Hint');
+  virtualpanel.Canvas.DrawText(round(4*ratio), round(3*ratio) + y, round(60*ratio), round(20*ratio), 'Hint');
   
   inc(z);
-  y := 22*z;
+  y := round(22*ratio)*z;
   
-  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'Focusable');
+  virtualpanel.Canvas.DrawText(round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'Focusable');
     if virtualpanel.tag = 0 then
-    virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'Tag')
+    virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'Tag')
   else
-    virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 35, 2 + y, 60, 20, 'Tag');
+    virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + round(35*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'Tag');
 
 if virtualpanel.tag = 0 then 
 begin
   inc(z);
-  y := 22*z;
-  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'FullScreen');
-  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'Sizable');
+  y := round(22*ratio)*z;
+  virtualpanel.Canvas.DrawText(round(4*ratio), round(5*ratio) + y, round(60*ratio), round(20*ratio), 'FullScreen');
+  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + round(4*ratio), round(5*ratio) + y, round(60*ratio), round(20*ratio), 'Sizable');
 
   inc(z);
-  y := 22*z;
-  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'MinWidth');
-  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'MaxWidth');
+  y := round(22*ratio)*z;
+  virtualpanel.Canvas.DrawText(round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'MinWidth');
+  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'MaxWidth');
 
   inc(z);
-  y := 22*z;
-  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'MinHeight');
-  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + 4, 2 + y, 60, 20, 'MaxHeight');
+  y := round(22*ratio)*z;
+  virtualpanel.Canvas.DrawText(round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'MinHeight');
+  virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'MaxHeight');
 
  inc(z);
-  y := 22*z;
-  virtualpanel.Canvas.DrawText(4, 2 + y, 60, 20, 'WindowPosition');
-end;
+  y := round(22*ratio)*z;
+  virtualpanel.Canvas.DrawText(round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'WindowPosition');
 
-  y := 22;
+ virtualpanel.Height := round(23*ratio) * 7;
+
+end else virtualpanel.Height := round(23*ratio) * 3;
+
+ 
+  y := round(22*ratio);
   virtualpanel.Canvas.SetColor(clgray);
   while y < virtualpanel.Height do
   begin
     virtualpanel.Canvas.DrawLine(0, y, virtualpanel.Width, y);
-    y := y + 22;
+    y := y + round(22*ratio);
   end;
 
   virtualpanel.Canvas.DrawLine(0, 0, virtualpanel.Width -1, 0);   //top
@@ -2429,77 +2462,77 @@ end;
   virtualpanel.Canvas.DrawLine(virtualpanel.Width - 1, 0, virtualpanel.Width - 1, virtualpanel.Height);  //right
   virtualpanel.Canvas.DrawLine(0, 0, 0, virtualpanel.Height );   // left
 
-  y := 22;
-  z := 1;
+  y := round(22*ratio);
+  z := round(1*ratio);
 
-  cbvisible.top := 1;
-  cbshowhint.top := 1;
+  cbvisible.top := round(1*ratio);
+  cbshowhint.top := round(1*ratio);
 
    // cbenabled.Visible := false;
     
-    cbvisible.Left := (virtualpanel.Width div 4) + 1;
+    cbvisible.Left := (virtualpanel.Width div 4) + round(1*ratio);
      
-    cbvisible.Width := (virtualpanel.Width div 4) - 1;
-    cbshowhint.Left := (3 * (virtualpanel.Width div 4)) + 1;
-    cbshowhint.Width := (virtualpanel.Width div 4) - 1;
+    cbvisible.Width := (virtualpanel.Width div 4) - round(1*ratio);
+    cbshowhint.Left := (3 * (virtualpanel.Width div 4)) + round(1*ratio);
+    cbshowhint.Width := (virtualpanel.Width div 4) - round(1*ratio);
     
     cbshowhint.Visible := true;
     cbvisible.Visible := true;
        
-   edhint.top := y +1;
-   edhint.left := (virtualpanel.Width div 4) + 1;
-   edhint.width := (3 * (virtualpanel.Width div 4)) -1 ;
+   edhint.top := y +round(1*ratio);
+   edhint.left := (virtualpanel.Width div 4) + round(1*ratio);
+   edhint.width := (3 * (virtualpanel.Width div 4)) -round(1*ratio) ;
    edhint.visible := true;
  
    inc(z);
-  y := 22*z;
-     cbfocusable.top := y + 1;
-   cbfocusable.Left := (virtualpanel.Width div 4) + 1;
-  cbfocusable.Width := (virtualpanel.Width div 4) - 1;
+  y := round(22*ratio)*z;
+     cbfocusable.top := y + round(1*ratio);
+   cbfocusable.Left := (virtualpanel.Width div 4) + round(1*ratio);
+  cbfocusable.Width := (virtualpanel.Width div 4) - round(1*ratio);
   cbfocusable.visible := true;
   
-  edtag.top := y + 1;
-  edtag.Left := (3 * (virtualpanel.Width div 4)) + 1;
-  edtag.Width := (virtualpanel.Width div 4) - 1;
+  edtag.top := y + round(1*ratio);
+  edtag.Left := (3 * (virtualpanel.Width div 4)) + round(1*ratio);
+  edtag.Width := (virtualpanel.Width div 4) - round(1*ratio);
  edtag.visible := true;
  
 if virtualpanel.tag = 0 then 
 begin
     inc(z);
-  y := 22*z;
-  cbfullscreen.top := y +1;
-  cbfullscreen.Left := (virtualpanel.Width div 4) + 1;
-  cbfullscreen.Width := (virtualpanel.Width div 4) - 1;
+  y := round(22*ratio)*z;
+  cbfullscreen.top := y +round(1*ratio);
+  cbfullscreen.Left := (virtualpanel.Width div 4) + round(1*ratio);
+  cbfullscreen.Width := (virtualpanel.Width div 4) - round(1*ratio);
 
-  cbsizeable.top := y + 1;
-  cbsizeable.Left := (3 * (virtualpanel.Width div 4)) + 1;
-  cbsizeable.Width := (virtualpanel.Width div 4) - 1;
-
-   inc(z);
-  y := 22*z;
-  edminwidth.top := y + 1;
-  edminwidth.Left := (virtualpanel.Width div 4) + 1;
-  edminwidth.Width := (virtualpanel.Width div 4) - 1;
-
-  edmaxwidth.top := y + 1;
-  edmaxwidth.Left := (3 * (virtualpanel.Width div 4)) + 1;
-  edmaxwidth.Width := (virtualpanel.Width div 4) - 1;
+  cbsizeable.top := y + round(1*ratio);
+  cbsizeable.Left := (3 * (virtualpanel.Width div 4)) + round(1*ratio);
+  cbsizeable.Width := (virtualpanel.Width div 4) - round(1*ratio);
 
    inc(z);
-  y := 22*z;
-  edminheight.top :=y+ 1;
-  edminheight.Left := (virtualpanel.Width div 4) + 1;
-  edminheight.Width := (virtualpanel.Width div 4) - 1;
+  y := round(22*ratio)*z;
+  edminwidth.top := y + round(1*ratio);
+  edminwidth.Left := (virtualpanel.Width div 4) + round(1*ratio);
+  edminwidth.Width := (virtualpanel.Width div 4) - round(1*ratio);
 
-  edmaxheight.top := y + 1;
-  edmaxheight.Left := (3 * (virtualpanel.Width div 4)) + 1;
-  edmaxheight.Width := (virtualpanel.Width div 4) - 1;
+  edmaxwidth.top := y + round(1*ratio);
+  edmaxwidth.Left := (3 * (virtualpanel.Width div 4)) + round(1*ratio);
+  edmaxwidth.Width := (virtualpanel.Width div 4) - round(1*ratio);
+
+   inc(z);
+  y := round(22*ratio)*z;
+  edminheight.top :=y+ round(1*ratio);
+  edminheight.Left := (virtualpanel.Width div 4) + round(1*ratio);
+  edminheight.Width := (virtualpanel.Width div 4) - round(1*ratio);
+
+  edmaxheight.top := y + round(1*ratio);
+  edmaxheight.Left := (3 * (virtualpanel.Width div 4)) + round(1*ratio);
+  edmaxheight.Width := (virtualpanel.Width div 4) - round(1*ratio);
 
  inc(z);
-  y := 22*z;
-  cbwindowposition.top := y + 1;
-  cbwindowposition.Left := 105;
-  cbwindowposition.Width := (virtualpanel.Width) - cbwindowposition.Left - 1;
+  y := round(22*ratio)*z;
+  cbwindowposition.top := y + round(1*ratio);
+  cbwindowposition.Left := round(105*ratio);
+  cbwindowposition.Width := (virtualpanel.Width) - cbwindowposition.Left - round(1*ratio);
   cbWindowPosition.visible := true;    
   
      cbsizeable.visible := true;
@@ -2526,6 +2559,9 @@ end;
      edtag.UpdatePosition;
       edhint.UpdatePosition;
        cbshowhint.UpdatePosition;
+       virtualpanel.UpdatePosition;
+  lstProps.UpdatePosition;
+  UpdatePosition
  {$else}
   cbsizeable.UpdateWindowPosition;
   cbfocusable.UpdateWindowPosition;
@@ -2540,9 +2576,12 @@ end;
   edtag.UpdateWindowPosition;
    edhint.UpdateWindowPosition;
    cbshowhint.UpdateWindowPosition;
+    virtualpanel.UpdateWindowPosition;
+ lstProps.UpdateWindowPosition;
+ UpdateWindowPosition
  {$endif}
-
-end;
+ 
+  end;
 
 procedure TfrmProperties.UpdateWidgetHierachyTreeview(AMainComp: TComponent; ASelected: TComponent);
 
@@ -3092,21 +3131,23 @@ procedure TfrmMainDesigner.PaletteBarResized(Sender: TObject);
 var
   btn: TwgPaletteButton;
   x, y, n: integer;
+  ratio : double;
 begin
   x := 0;
   y := 0;
-  wgpalette.Width := Width - 200;
+   ratio := fpgApplication.ScreenWidth / 1280;
+  wgpalette.Width := Width - round(ratio*200);
   for n := 0 to wgPalette.ComponentCount - 1 do
   begin
     btn := wgPalette.Components[n] as TwgPaletteButton;
-    btn.SetPosition(x, y, 30, 28);
+    btn.SetPosition(x, y, round(ratio*30), round(ratio*28));
     btn.ImageMargin := -1;
     btn.ImageSpacing := 0;
-    Inc(x, 32);
-    if (x + 30) >= wgpalette.Width then
+    Inc(x, round(ratio*32));
+    if (x + round(ratio*30)) >= wgpalette.Width then
     begin
       x := 0;
-      Inc(y, 30);
+      Inc(y, round(ratio*30));
     end;
   end;
 
