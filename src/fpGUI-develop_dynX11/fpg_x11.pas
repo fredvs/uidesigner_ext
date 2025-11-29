@@ -20,14 +20,8 @@ unit fpg_x11;
 
 {$mode objfpc}{$H+}
 
-{$Define DYNLOAD}   // use dynamic loading of libraries
-
 {.$Define DEBUG}      // general debugging - mostly OS messages though
 {.$Define DNDDEBUG}   // drag-n-drop specific debugging
-
-{ TODO : Compiz effects: Menu popup with correct window hint. Same for Combo dropdown window. }
-{ TODO : Under Compiz restoring a window position moves the window down/right the width and height
-         of the window borders. This has something to do with win_gravity = StaticGravity setting. }
 
 interface
 
@@ -46,8 +40,10 @@ uses
   fpg_netlayer_x11,
   fpg_base,
   fpg_impl;
-
-// {$LINKLIB Xext} // for xsync functions
+  
+ {$IFNDEF DYNLOAD}
+ {$LINKLIB Xext} // for xsync functions
+ {$ENDIF}
 
 const
   IconBitmapWidth = 16;
@@ -242,7 +238,13 @@ type
   private
     QueueEnabledDrops: boolean;
     FSyncCounter: TXSyncCounter;
-    FSyncValue: xext.TXSyncValue;
+    
+   {$IFDEF DYNLOAD}
+        FSyncValue: xext.TXSyncValue;
+   {$ELSE}
+        FSyncValue: TXSyncValue;
+   {$ENDIF}
+   
     FHasSyncValue: Boolean;
     procedure   ApplyFormIcon;
     procedure   DoWindowNetStateChanged;
@@ -548,12 +550,12 @@ function XdbeDeallocateBackBufferName(ADisplay: PXDisplay; ABuffer: TfpgWinHandl
 
 function XOpenIM(para1: PDisplay; para2: PXrmHashBucketRec; para3: Pchar; para4: Pchar): PXIM; cdecl; external;
 function XCreateIC(para1: PXIM; para2: array of const): PXIC; cdecl; external;
-{$ENDIF}
 
 // XSync functions
-//function XSyncCreateCounter(dpy: PXDisplay; initial_value: TXSyncValue): TXSyncCounter; cdecl; external;
-//function XSyncSetCounter(dpy: PXDisplay; counter: TXSyncCounter; value: TXSyncValue): TStatus; cdecl; external;
-//function XSyncDestroyCounter(dpy: PXDisplay; counter: TXSyncCounter ): TStatus; cdecl; external;
+function XSyncCreateCounter(dpy: PXDisplay; initial_value: TXSyncValue): TXSyncCounter; cdecl; external;
+function XSyncSetCounter(dpy: PXDisplay; counter: TXSyncCounter; value: TXSyncValue): TStatus; cdecl; external;
+function XSyncDestroyCounter(dpy: PXDisplay; counter: TXSyncCounter ): TStatus; cdecl; external;
+{$ENDIF}
 
 const
   AltGrMask = 1 shl 13;  // missing from X unit
@@ -2580,8 +2582,12 @@ begin
 
   if IsToplevel then // is a toplevel window
   begin
+    {$IFDEF DYNLOAD}
     WMHints := @XAllocWMHints;
-
+   {$ELSE}
+    WMHints := XAllocWMHints;
+   {$ENDIF}
+  
     { setup a window icon - old style }
     if not fpgApplication.netlayer.ManagerSupportsAtom(naWM_ICON) then
     begin
@@ -2624,7 +2630,12 @@ begin
     fpgApplication.netlayer.WindowSetAlpha(FWinHandle, WindowOpacity);
 
     // use this to synchronize painting the window with the window frame being redrawn
+    {$IFDEF DYNLOAD}
     FSyncCounter:=xext.XSyncCreateCounter(xapplication.Display, FSyncValue);
+    {$ELSE}
+    FSyncCounter:=XSyncCreateCounter(xapplication.Display, FSyncValue);
+    {$ENDIF}
+    
     if FSyncCounter > 0 then
     begin
       fpgApplication.netlayer.WindowSetSupportSyncRequest(FWinHandle);
