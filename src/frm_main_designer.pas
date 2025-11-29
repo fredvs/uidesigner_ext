@@ -437,7 +437,6 @@ begin
     BackgroundColor := TfpgColor($FFFFFFFF);
     FontDesc := 'Arial-' +  inttostr(round(9*ratio));
     Hint := '';
-
     TextColor := TfpgColor($FF000000);
   end;
 
@@ -859,9 +858,14 @@ begin
    
   Hint := '';
   BackGroundColor := $80000001;
-  MinWidth := round(845*ratio);
   MinHeight := round(92*ratio);
-  MaxHeight := round(92*ratio);
+  
+  {$ifdef ideu}
+  MinWidth := round(845*ratio);
+  {$else}
+  MinWidth := round(400*ratio);
+  {$endif}
+  
   WindowPosition := wpUser;
   left := round(10*ratio);
   top := round(10*ratio); 
