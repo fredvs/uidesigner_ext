@@ -848,14 +848,17 @@ begin
  // ratio := 1;
  // IntToStr(fpgApplication.ScreenWidth));
  // IntToStr(fpgApplication.ScreenHeight));
-
+  
+  fpgSetNamedFont('List', 'Arial-' + inttostr(round(10*ratio)));
+  
   {%region 'Auto-generated GUI code' -fold}
 
   {@VFD_BODY_BEGIN: frmMainDesigner}
   Name := 'frmMainDesigner';
   WindowTitle := 'fpGUI designer ext';
+   
   Hint := '';
-   BackGroundColor := $80000001;
+  BackGroundColor := $80000001;
   MinWidth := round(845*ratio);
   MinHeight := round(92*ratio);
   MaxHeight := round(92*ratio);
@@ -1500,6 +1503,12 @@ if  (gINI.ReadBool('Options', 'RunOnlyOnce', true) = false) then
   end;
 
    PaletteBarResized(self);
+   
+    {$ifdef ideu}
+  windowType := wtpopup;
+ {$else}
+   windowType := wtwindow; ;
+ {$endif}
 
    {$ifdef fpgui-develop}
    UpdatePosition;
@@ -1911,6 +1920,7 @@ var
   ratio : double;
 begin 
    ratio := fpgApplication.ScreenWidth / 1280;
+   fpgSetNamedFont('List', 'Arial-' + inttostr(round(10*ratio)));
   {%region 'Auto-generated GUI code' -fold}
    {@VFD_BODY_BEGIN: frmProperties}
   Name := 'frmProperties';
@@ -2023,7 +2033,7 @@ begin
   virtualpanel := Tfpgpanel.Create(bvlOI);
   virtualpanel.SetPosition(0, y, Width-round(20*ratio), round(130*ratio));
   // virtualpanel.Anchors := [anLeft, anRight];
-  virtualpanel.Anchors := AllAnchors;
+  virtualpanel.Anchors := [anLeft, anRight, anBottom];
   virtualpanel.BackgroundColor := $CCCCCC;
   virtualpanel.Style := bsFlat;
   virtualpanel.Visible := False;
@@ -2148,7 +2158,7 @@ begin
   edhint.OnExit := @VirtualPropertiesUpdate;
    edhint.name := 'Hint';
    
-    cbsizeable.visible := false;
+     cbsizeable.visible := false;
      cbfocusable.visible := false;
      cbvisible.visible := false;
      cbfullscreen.visible := false;
@@ -2159,8 +2169,8 @@ begin
      edmaxheight.visible := false;
      cbwindowposition.visible := false;
      edtag.visible := false;
-      edhint.visible := false;
-       cbshowhint.visible := false;
+     edhint.visible := false;
+     cbshowhint.visible := false;
 
   y := virtualpanel.Bottom + round(5*ratio);
 
@@ -2190,7 +2200,6 @@ begin
     end;
 
   btnTop := CreateButton(bvlOI, round(50*ratio), y - round(2*ratio), round(48*ratio), '0', @(maindsgn.OnPropPosEdit));
-
   with btnTop do
   begin
     Height := round(22*ratio);
@@ -2392,7 +2401,11 @@ begin
           
        frmproperties.virtualpanel.height := round(23) * 3;   
       end;
- 
+   {$ifdef fpgui-develop}
+  frmproperties.virtualpanel.UpdatePosition;
+ {$else}
+  frmproperties.virtualpanel.UpdateWindowPosition;
+ {$endif}
  
 end;
 

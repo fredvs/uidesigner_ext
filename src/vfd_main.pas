@@ -1714,6 +1714,7 @@ begin
   end;
 end;
 
+{$ifndef fpgui-develop}
 procedure TMainDesigner.OnOtherChange(Sender: TObject);
 var
   TheParent: Tfpgwidget;
@@ -1730,18 +1731,24 @@ begin
       TheParent := (frmProperties.lstProps.Props.Widget);
       if TheParent.HasParent then
         TheParent := (frmProperties.lstProps.Props.Widget.Parent);
-
       frmMultiSelect.Getwidgetlist(TheParent);
-
     end;
     fpgapplication.ProcessMessages;
     if (ifundo = False) and (enableundo = True) then
       SaveUndo(Sender, 11);
     calculwidget := True;
+   end;
+ end;
+{$else}
+procedure TMainDesigner.OnOtherChange(Sender: TObject);
+begin
+  if (SelectedForm <> nil) and (isFileLoaded = True) and (calculwidget = True) then
+  begin
+    SelectedForm.OnOtherChange(Sender);
   end;
-
 end;
-
+{$endif}
+ 
 function TMainDesigner.OnNewForm(Sender: TObject): boolean;
 var
   fd: TFormDesigner;
