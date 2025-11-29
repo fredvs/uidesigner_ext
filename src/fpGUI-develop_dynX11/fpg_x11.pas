@@ -47,8 +47,7 @@ uses
   fpg_base,
   fpg_impl;
 
-{$LINKLIB Xext} // for xsync functions
-
+// {$LINKLIB Xext} // for xsync functions
 
 const
   IconBitmapWidth = 16;
@@ -243,7 +242,7 @@ type
   private
     QueueEnabledDrops: boolean;
     FSyncCounter: TXSyncCounter;
-    FSyncValue: TXSyncValue;
+    FSyncValue: xext.TXSyncValue;
     FHasSyncValue: Boolean;
     procedure   ApplyFormIcon;
     procedure   DoWindowNetStateChanged;
@@ -552,9 +551,9 @@ function XCreateIC(para1: PXIM; para2: array of const): PXIC; cdecl; external;
 {$ENDIF}
 
 // XSync functions
-function XSyncCreateCounter(dpy: PXDisplay; initial_value: TXSyncValue): TXSyncCounter; cdecl; external;
-function XSyncSetCounter(dpy: PXDisplay; counter: TXSyncCounter; value: TXSyncValue): TStatus; cdecl; external;
-function XSyncDestroyCounter(dpy: PXDisplay; counter: TXSyncCounter ): TStatus; cdecl; external;
+//function XSyncCreateCounter(dpy: PXDisplay; initial_value: TXSyncValue): TXSyncCounter; cdecl; external;
+//function XSyncSetCounter(dpy: PXDisplay; counter: TXSyncCounter; value: TXSyncValue): TStatus; cdecl; external;
+//function XSyncDestroyCounter(dpy: PXDisplay; counter: TXSyncCounter ): TStatus; cdecl; external;
 
 const
   AltGrMask = 1 shl 13;  // missing from X unit
@@ -2625,7 +2624,7 @@ begin
     fpgApplication.netlayer.WindowSetAlpha(FWinHandle, WindowOpacity);
 
     // use this to synchronize painting the window with the window frame being redrawn
-    FSyncCounter:=XSyncCreateCounter(xapplication.Display, FSyncValue);
+    FSyncCounter:=xext.XSyncCreateCounter(xapplication.Display, FSyncValue);
     if FSyncCounter > 0 then
     begin
       fpgApplication.netlayer.WindowSetSupportSyncRequest(FWinHandle);
