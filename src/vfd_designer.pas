@@ -955,7 +955,11 @@ var
   i: integer;
   ok: boolean;
   TheParent: TfpgWidget;
-begin
+  ratio : double;
+begin 
+
+   ratio := fpgApplication.ScreenWidth / 1280;  
+
   if maindsgn.selectedform <> nil then
   begin
     if (TheWidget is TfpgForm) then
@@ -1246,7 +1250,7 @@ begin
       
       frmproperties.virtualpanel.top :=
         frmproperties.lstProps.Height + frmproperties.lstProps.top - 2;
-      frmproperties.virtualpanel.Height := 155 ;
+      frmproperties.virtualpanel.Height := round(ratio *155) ;
      frmproperties.virtualpanel.tag := 0 ;
 
       {$ifdef fpgui-develop}
