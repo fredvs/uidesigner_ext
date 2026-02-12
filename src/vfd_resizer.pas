@@ -1,7 +1,7 @@
 {
     This unit is part of the fpGUI Toolkit project.
 
-    Copyright (c) 2006 - 2016 by Graeme Geldenhuys.
+    Copyright (c) 2006 - 2015 by Graeme Geldenhuys.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
     for details about redistributing fpGUI.
@@ -17,9 +17,6 @@
 unit vfd_resizer;
 
 {$mode objfpc}{$H+}
-
-/// for custom compil, like using fpgui-dvelop =>  edit define.inc
-{$I define.inc}
 
 interface
 
@@ -109,6 +106,10 @@ begin
     7: wgd.Widget.MoveAndResizeBy(dx, 0, -dx, dy);
     8: wgd.Widget.MoveAndResizeBy(dx, 0, -dx, 0);
   end;
+  { MoveAndResizeBy updates actual size but not preferred size.
+    Sync preferred size so Width/Height properties stay consistent. }
+  wgd.Widget.Width := wgd.Widget.ActualWidth;
+  wgd.Widget.Height := wgd.Widget.ActualHeight;
   wgd.UpdateResizerPositions;
   wgd.FormDesigner.UpdatePropWin;
 end;
@@ -119,8 +120,9 @@ begin
   FBackgroundColor := $404040;
   wgdesigner := aCompDesigner;
   FDragging := False;
-  Width     := 5;
-  Height    := 5;
+  FWidth    := 5;
+  FHeight   := 5;
+  FPreferredSize.SetSize(FWidth, FHeight);
   direction := adirection;
   case direction of
     1: MouseCursor := mcSizeSENW;   // top left

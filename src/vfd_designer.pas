@@ -2409,8 +2409,12 @@ begin
     if wgc.WidgetClass = TOtherWidget then
       TOtherWidget(wg).wgClassName := newclassname;
     wgd := AddWidget(wg, wgc);
-    wg.SetPosition(x, y, wg.Width, wg.Height);
-    wg.Visible := True;
+    wg.Left := x;
+    wg.Top := y;
+    wg.Width := wg.ActualWidth;
+    wg.Height := wg.ActualHeight;
+    wg.UpdatePosition;
+    wg.Visible   := True;
 
  {$ifdef fpgui-develop}
  wg.DropHandler := TfpgDropEventHandler.Create(@DropEnter, nil, @DropDrop, nil);
@@ -2420,6 +2424,8 @@ begin
     DeSelectAll;
     wgd.Selected := True;
     UpdatePropWin;
+    
+    wg.UpdatePosition;
 
  if (frmMultiSelect.Visible = True) then
         frmMultiSelect.refreshall;

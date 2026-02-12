@@ -1,6 +1,6 @@
 
 // for compiling using new fpgui-develop branch
-{.$DEFINE fpgui-develop} // uncomment for building with fpgui-develop
+{$DEFINE fpgui-develop} // uncomment for building with fpgui-develop
 
 // for dynamic load of xlib and xft
 {.$DEFINE DYNLOAD} // uncomment for dynamic load of xlib and xft

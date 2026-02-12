@@ -1,7 +1,7 @@
 {
     This unit is part of the fpGUI Toolkit project.
 
-    Copyright (c) 2006 - 2016 by Graeme Geldenhuys.
+    Copyright (c) 2006 - 2015 by Graeme Geldenhuys.
 
     See the file COPYING.modifiedLGPL, included in this distribution,
     for details about redistributing fpGUI.
@@ -17,7 +17,6 @@
 unit vfd_widgetclass;
 
 {$mode objfpc}{$H+}
-{$I define.inc}
 
 interface
 
@@ -49,11 +48,9 @@ type
     procedure   StoreValue(wg: TfpgWidget); virtual;
     procedure   SetFocus; virtual;
   end;
+  TVFDPropertyEditorClass = class of TVFDPropertyEditor;
 
-
- TVFDWidgetProperty = class(TObject)
-  
- //  TVFDWidgetProperty = class(TfpgWidget)
+  TVFDWidgetProperty = class(TObject)
   public
     Name: string;
     Description: string;
@@ -66,12 +63,13 @@ type
     procedure   DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas; rect: TfpgRect; flags: integer); virtual;
     function    CreateEditor(AOwner: TComponent): TVFDPropertyEditor; virtual;
     procedure   OnExternalEdit(wg: TfpgWidget); virtual;
-   
   end;
 
 
   TVFDPropertyClass = class of TVFDWidgetProperty;
 
+
+  { TVFDWidgetClass }
 
   TVFDWidgetClass = class(TObject)
   private
@@ -87,6 +85,7 @@ type
     BlockMouseMsg: boolean;
     constructor Create(aClass: TWidgetClass);
     destructor  Destroy; override;
+    function    AddListProperty(apropname: string; apropeditorclass: TVFDPropertyEditorClass; desc: string; AList: TList): TVFDWidgetProperty;
     function    AddProperty(apropname: string; apropclass: TVFDPropertyClass; desc: string): TVFDWidgetProperty;
     function    HasProperty(apropname: string): Boolean;
     function    PropertyCount: integer;
@@ -100,7 +99,7 @@ type
 implementation
 
 uses
-  TypInfo;
+  TypInfo, vfd_props;
   
 
 type
@@ -109,6 +108,23 @@ type
 
 
 { TVFDWidgetClass }
+
+function TVFDWidgetClass.AddListProperty(apropname: string; apropeditorclass: TVFDPropertyEditorClass;
+  desc: string; AList: TList): TVFDWidgetProperty;
+var
+  PropInfo: PPropInfo;
+begin
+  PropInfo := GetPropInfo(WidgetClass, apropname);
+  if not Assigned(PropInfo) then
+  begin
+    Result := nil;
+    FErrors.Add(Format('Invalid property: %s', [apropname]));
+    Exit; // ==>
+  end;
+  Result := TVFDPropertyList.Create(apropname, apropeditorclass, AList);
+  Result.Description := desc;
+  FProps.Add(Result);
+end;
 
 function TVFDWidgetClass.AddProperty(apropname: string; apropclass: TVFDPropertyClass;
   desc: string): TVFDWidgetProperty;
@@ -232,16 +248,15 @@ var
 begin
   x  := rect.left;
   y  := rect.top;
-  {$ifdef fpgui-develop}
-  fy := y + rect.Height div 2 - Canvas.Font.GetHeight div 2;
-  {$else}  fy := y + rect.Height div 2 - Canvas.Font.Height div 2;{$endif}
+  fy := y + rect.Height div 2 - Canvas.Font.GetHeight() div 2;
+
   try
     s := GetValueText(wg);
   except
     on E: Exception do
       debugln('Detected an error: ', E.Message);
   end;
-  
+
   Canvas.BeginDraw;
   Canvas.DrawString(x + 1, fy, s);
   Canvas.EndDraw;

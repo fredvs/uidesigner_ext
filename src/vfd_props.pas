@@ -18,10 +18,6 @@ unit vfd_props;
 
 {$mode objfpc}{$H+}
 
-/// for custom compil, like using fpgui-dvelop =>  edit define.inc
-{$I define.inc}
-
-
 interface
 
 uses
@@ -90,14 +86,14 @@ type
     function GetValueText(wg: TfpgWidget): string; override;
     function CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
   end;
-  
-  
+
+
   TPropertyFontDesc = class(TPropertyString)
     function  CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
     procedure OnExternalEdit(wg: TfpgWidget); override;
   end;
-  
-  
+
+
   TPropertyColor = class(TVFDWidgetProperty)
   public
     procedure DrawValue(wg: TfpgWidget; Canvas: TfpgCanvas; rect: TfpgRect; flags: integer); override;
@@ -123,6 +119,19 @@ type
     function  CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
     function  GetPropertySource(wg: TfpgWidget; const ident: string; out afterObject: TObject): string; override;
     function  GetValueText(wg: TfpgWidget): string; override;
+  end;
+
+  { TVFDPropertyList }
+
+  TVFDPropertyList = class(TVFDWidgetProperty)
+    List: TList;
+    EditorClass: TVFDPropertyEditorClass;
+  public
+    constructor Create(aName: string; alisteditorclass: TVFDPropertyEditorClass; AList: TList); reintroduce; virtual;
+    function    CreateEditor(AOwner: TComponent): TVFDPropertyEditor; override;
+    function    ParseSourceLine(wg: TfpgWidget; const line: string): boolean; override;
+    function    GetPropertySource(wg: TfpgWidget; const ident: string; out afterObject: TObject): string; override;
+    function    GetValueText(wg: TfpgWidget): string; override;
   end;
 
 
@@ -159,8 +168,8 @@ type
     procedure StoreValue(wg: TfpgWidget); override;
     procedure SetFocus; override;
   end;
-  
-  
+
+
   TBooleanPropertyEditor = class(TChoicePropertyEditor)
   public
     procedure LoadValue(wg: TfpgWidget); override;
@@ -177,6 +186,30 @@ type
   { TInterfacePropertyEditor }
 
   TInterfacePropertyEditor = class(TChoicePropertyEditor)
+    procedure LoadValue(wg: TfpgWidget); override;
+    procedure StoreValue(wg: TfpgWidget); override;
+  end;
+
+  { TListPropertyEditor }
+
+  TListPropertyEditor = class(TChoicePropertyEditor)
+  public
+    List: TList;
+    class function  GetItemString(AItem: Pointer): string; virtual;
+    class function  GetItemFromString(AList: TList; AValue: String): Pointer; virtual;
+    class procedure SetWidgetProperty(wg: TfpgWidget; PropName: String; PropValue: Pointer); virtual;
+    class function  GetWidgetProperty(wg: TfpgWidget; PropName: String): Pointer; virtual;
+    constructor Create(AOwner: TComponent; aprop: TVFDWidgetProperty; alist: TList); reintroduce;
+  end;
+  TListPropertyEditorClass = class of TListPropertyEditor;
+
+  { TClassListPropertyEditor }
+
+  TClassListPropertyEditor = class(TListPropertyEditor)
+    class function GetItemString(AItem: Pointer): string; override;
+    class function GetItemFromString(AList: TList; AValue: String): Pointer; override;
+    class procedure SetWidgetProperty(wg: TfpgWidget; PropName: String; PropValue: Pointer); override;
+    class function  GetWidgetProperty(wg: TfpgWidget; PropName: String): Pointer; override;
     procedure LoadValue(wg: TfpgWidget); override;
     procedure StoreValue(wg: TfpgWidget); override;
   end;
@@ -250,6 +283,160 @@ begin
   finally
     sl.EndUpdate;
   end;
+end;
+
+{ TListPropertyEditor }
+
+class function TListPropertyEditor.GetItemString(AItem: Pointer): string;
+begin
+  Result := '';
+end;
+
+class function TListPropertyEditor.GetItemFromString(AList: TList; AValue: String): Pointer;
+begin
+  Result := nil;
+end;
+
+class procedure TListPropertyEditor.SetWidgetProperty(wg: TfpgWidget; PropName: String; PropValue: Pointer);
+begin
+  //
+end;
+
+class function TListPropertyEditor.GetWidgetProperty(wg: TfpgWidget; PropName: String): Pointer;
+begin
+  Result := nil;
+end;
+
+constructor TListPropertyEditor.Create(AOwner: TComponent;
+  aprop: TVFDWidgetProperty; alist: TList);
+begin
+  inherited Create(AOwner, aprop);
+  List := alist;
+end;
+
+{ TClassListPropertyEditor }
+
+class function TClassListPropertyEditor.GetItemString(AItem: Pointer): string;
+begin
+  Result:=TClass(AItem).ClassName;
+end;
+
+class function TClassListPropertyEditor.GetItemFromString(AList: TList;
+  AValue: String): Pointer;
+var
+  p: Pointer;
+begin
+  for p in AList do
+    if LowerCase(TClass(p).ClassName) = Lowercase(AValue) then
+      Exit(p);
+  Result := nil;
+end;
+
+class procedure TClassListPropertyEditor.SetWidgetProperty(wg: TfpgWidget;
+  PropName: String; PropValue: Pointer);
+begin
+  SetObjectProp(wg, PropName, TObject(PropValue));
+end;
+
+class function TClassListPropertyEditor.GetWidgetProperty(wg: TfpgWidget;
+  PropName: String): Pointer;
+begin
+  Result := Pointer(GetObjectProp(wg, PropName));
+end;
+
+procedure TClassListPropertyEditor.LoadValue(wg: TfpgWidget);
+var
+  i: Integer;
+  c: TClass;
+begin
+
+  c := TClass(GetObjectProp(wg, prop.Name));
+
+  for i := 0 to List.Count-1 do
+  begin
+    chl.Items.AddObject(TClass(List[i]).ClassName, TObject(List[i]));
+    if List[i] = Pointer(c) then
+      chl.FocusItem:=i;
+  end;
+
+  if chl.FocusItem = -1 then
+    chl.FocusItem := 0;
+end;
+
+procedure TClassListPropertyEditor.StoreValue(wg: TfpgWidget);
+begin
+  if chl.FocusItem = -1 then
+    chl.FocusItem := 0;
+
+  SetObjectProp(wg, prop.Name, TObject(chl.Items.Objects[chl.FocusItem]));
+end;
+
+{ TVFDPropertyList }
+
+constructor TVFDPropertyList.Create(aName: string;
+  alisteditorclass: TVFDPropertyEditorClass; AList: TList);
+begin
+  inherited Create(aName);
+  EditorClass := alisteditorclass;
+  List := AList;
+end;
+
+function TVFDPropertyList.CreateEditor(AOwner: TComponent): TVFDPropertyEditor;
+begin
+  Result:=TListPropertyEditorClass(EditorClass).Create(AOwner, Self, List);
+end;
+
+function TVFDPropertyList.ParseSourceLine(wg: TfpgWidget; const line: string): boolean;
+var
+  s: string;
+  pval: pointer;
+  sval: String;
+begin
+  s      := line;
+  Result := False;
+  if UpperCase(GetIdentifier(s)) <> UpperCase(Name) then
+    Exit;
+
+  Result := CheckSymbol(s, ':=');
+  if Result then
+  begin
+    sval := GetIdentifier(s);
+    pval   := TListPropertyEditorClass(EditorClass).GetItemFromString(List, sval);
+    Result := CheckSymbol(s, ';');
+    if Result then
+      TListPropertyEditorClass(EditorClass).SetWidgetProperty(wg, Name, pval);
+  end;
+end;
+
+function TVFDPropertyList.GetPropertySource(wg: TfpgWidget; const ident: string;
+  out afterObject: TObject): string;
+var
+  item: Pointer;
+  s: string;
+  PropInfo: PPropInfo;
+  Editor: TListPropertyEditorClass;
+begin
+  PropInfo := GetPropInfo(wg.ClassType, Name);
+  if IsStoredProp(wg, PropInfo) then
+  begin
+    Editor := TListPropertyEditorClass(EditorClass);
+    item := Editor.GetWidgetProperty(wg, Name);
+    s := Editor.GetItemString(item);
+    if s <> '' then
+      Result := ident + Name + ' := ' + s + ';' + LineEnding
+    else
+      Result := '';
+  end;
+end;
+
+function TVFDPropertyList.GetValueText(wg: TfpgWidget): string;
+var
+  Editor: TListPropertyEditorClass;
+  item: Pointer;
+begin
+  Editor := TListPropertyEditorClass(EditorClass);
+  item := Editor.GetWidgetProperty(wg, Name);
+  Result := Editor.GetItemString(item);
 end;
 
 { TPropertyInterface }
@@ -625,7 +812,10 @@ procedure TGeneralPropertyEditor.CreateLayout;
 begin
   Anchors       := [anTop, anLeft, anRight];
   Edit          := TfpgEdit.Create(self);
-  Edit.SetPosition(0, 0, Width, Height);
+  Edit.Left := 0;
+  Edit.Top := 0;
+  Edit.Width := Width;
+  Edit.Height := Height;
   Edit.Anchors  := Anchors;
 //  Edit.OnChange := @UpdateProperty;
   Edit.OnKeyPress := @EditKeyPressed;
@@ -885,13 +1075,7 @@ begin
     Top     := 0;
     Left    := self.Width - btnEdit.Width;
     Text    := '...';
-    
-     {$ifdef fpgui-develop}
-     UpdatePosition;
-    {$else}
-     UpdateWindowPosition;
-   {$endif}
-   
+    UpdatePosition;
     Anchors := [anTop, anRight];
     OnClick := @OnEditClick;
     Visible := True;
@@ -972,7 +1156,10 @@ procedure TChoicePropertyEditor.CreateLayout;
 begin
   Anchors      := [anTop, anLeft, anRight];
   chl          := TfpgComboBox.Create(self);
-  chl.SetPosition(0, 0, Width, Height);
+  chl.Left := 0;
+  chl.Top := 0;
+  chl.Width := Width;
+  chl.Height := Height;
   chl.Anchors  := Anchors;
   chl.OnChange := @UpdateProperty;
   chl.Visible := True;
@@ -1105,12 +1292,7 @@ begin
     on E: Exception do
       debugln('Detected an error: ', E.Message);
   end;
-   {$ifdef fpgui-develop}
   dx := Canvas.Font.GetTextWidth(s) + BLOCK_SIZE;
-   {$else}
-  dx := Canvas.Font.TextWidth(s) + BLOCK_SIZE;   
-  {$endif}  
-    
   i := GetOrdProp(wg, Name);
   c := fpgColorToRGB(TfpgColor(i));
   { paint the color square }
@@ -1171,11 +1353,11 @@ end;
 
 function TPropertyColor.GetValueText(wg: TfpgWidget): string;
 var
-  PropInfo: PPropInfo;
+  //PropInfo: PPropInfo;
   i: integer;
   c: TfpgColor;
 begin
-  PropInfo := GetPropInfo(wg.ClassType, Name);
+  //PropInfo := GetPropInfo(wg.ClassType, Name);
   i := GetOrdProp(wg, Name);
   c := fpgColorToRGB(TfpgColor(i));
   Result := '$' + IntToHex(c, 6);
@@ -1188,11 +1370,11 @@ end;
 
 procedure TPropertyColor.OnExternalEdit(wg: TfpgWidget);
 var
-  PropInfo: PPropInfo;
+  //PropInfo: PPropInfo;
   i: integer;
   c: TfpgColor;
 begin
-  PropInfo := GetPropInfo(wg.ClassType, Name);
+  //PropInfo := GetPropInfo(wg.ClassType, Name);
   i := GetOrdProp(wg, Name);
   c := fpgColorToRGB(TfpgColor(i));
   c := fpgSelectColorDialog(c);
