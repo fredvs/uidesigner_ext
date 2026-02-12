@@ -291,7 +291,7 @@ begin
   FTimer.enabled := false;
   hintlabel.free;
   FTimer.Free;
-  FFont.Free;
+  // FFont.Free;
   inherited Destroy;
   uShadowForm.Free;
 end;
