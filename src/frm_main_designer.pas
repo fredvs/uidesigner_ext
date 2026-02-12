@@ -2367,6 +2367,7 @@ procedure TfrmProperties.frmPropertiesPaint(Sender: TObject);
 var
 ratio : double;
 begin 
+
    ratio := fpgApplication.ScreenWidth / 1280;
 
  // edName.Width := Width - l2.Right + 28;
@@ -2401,10 +2402,10 @@ begin
       frmproperties.lstProps.UpdateWindowPosition;
        {$endif}
         frmproperties.virtualpanel.top := frmproperties.lstProps.bottom + round(1*ratio);
-          //   frmproperties.lstProps.Height + frmproperties.lstProps.top + round(2*ratio);
-          
+       //   frmproperties.lstProps.Height + frmproperties.lstProps.top + round(2*ratio);
        frmproperties.virtualpanel.height := round(23) * 3;   
       end;
+      
    {$ifdef fpgui-develop}
   frmproperties.virtualpanel.UpdatePosition;
  {$else}
@@ -2418,6 +2419,7 @@ var
   y, z: integer;
   ratio : double;
 begin 
+
    ratio := fpgApplication.ScreenWidth / 1280;  
 
   virtualpanel.Canvas.SetColor(clblack);
@@ -2439,6 +2441,8 @@ begin
     virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'Tag')
   else
     virtualpanel.Canvas.DrawText((virtualpanel.Width div 2) + round(35*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'Tag');
+
+
 
 if virtualpanel.tag = 0 then 
 begin
@@ -2465,7 +2469,7 @@ begin
 
 end else virtualpanel.Height := round(23*ratio) * 3;
 
- 
+
   y := round(22*ratio);
   virtualpanel.Canvas.SetColor(clgray);
   while y < virtualpanel.Height do
@@ -2512,6 +2516,7 @@ end else virtualpanel.Height := round(23*ratio) * 3;
   edtag.Left := (3 * (virtualpanel.Width div 4)) + round(1*ratio);
   edtag.Width := (virtualpanel.Width div 4) - round(1*ratio);
  edtag.visible := true;
+
  
 if virtualpanel.tag = 0 then 
 begin
@@ -2562,7 +2567,9 @@ begin
      cbwindowposition.visible := true;
 
 end;
+
    {$ifdef fpgui-develop}
+ 
    cbsizeable.UpdatePosition;
      cbfocusable.UpdatePosition;
      cbvisible.UpdatePosition;
@@ -2574,11 +2581,11 @@ end;
      edmaxheight.UpdatePosition;
      cbwindowposition.UpdatePosition;
      edtag.UpdatePosition;
-      edhint.UpdatePosition;
-       cbshowhint.UpdatePosition;
-       virtualpanel.UpdatePosition;
-  lstProps.UpdatePosition;
-  UpdatePosition
+     edhint.UpdatePosition;
+     cbshowhint.UpdatePosition;
+     virtualpanel.UpdatePosition;
+     lstProps.UpdatePosition; 
+     //  UpdatePosition
  {$else}
   cbsizeable.UpdateWindowPosition;
   cbfocusable.UpdateWindowPosition;
@@ -2597,7 +2604,7 @@ end;
  lstProps.UpdateWindowPosition;
  UpdateWindowPosition
  {$endif}
- 
+
   end;
 
 procedure TfrmProperties.UpdateWidgetHierachyTreeview(AMainComp: TComponent; ASelected: TComponent);
@@ -2659,6 +2666,7 @@ var
   TheWidget, TheParent: TfpgWidget;
   ok: boolean;
 begin
+
   if lstProps.Props.Widget is TDesignedForm then
   begin
 
