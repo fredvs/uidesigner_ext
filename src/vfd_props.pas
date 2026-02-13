@@ -18,6 +18,9 @@ unit vfd_props;
 
 {$mode objfpc}{$H+}
 
+// for custom compil, like using fpgui-dvelop =>  edit define.inc
+{$I define.inc}
+
 interface
 
 uses
@@ -1075,7 +1078,12 @@ begin
     Top     := 0;
     Left    := self.Width - btnEdit.Width;
     Text    := '...';
-    UpdatePosition;
+   {$ifdef fpgui-develop}
+     UpdatePosition;
+    {$else}
+     UpdateWindowPosition;
+   {$endif}
+   
     Anchors := [anTop, anRight];
     OnClick := @OnEditClick;
     Visible := True;

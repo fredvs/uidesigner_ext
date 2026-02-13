@@ -2417,7 +2417,12 @@ begin
     wg.Top := y;
     wg.Width := wg.ActualWidth;
     wg.Height := wg.ActualHeight;
-    wg.UpdatePosition;
+   {$ifdef fpgui-develop}
+     wg.UpdatePosition;
+    {$else}
+     wg.UpdateWindowPosition;
+   {$endif}
+  
     wg.Visible   := True;
 
  {$ifdef fpgui-develop}
@@ -2429,8 +2434,12 @@ begin
     wgd.Selected := True;
     UpdatePropWin;
     
-    wg.UpdatePosition;
-
+    {$ifdef fpgui-develop}
+     wg.UpdatePosition;
+    {$else}
+     wg.UpdateWindowPosition;
+   {$endif}
+   
  if (frmMultiSelect.Visible = True) then
         frmMultiSelect.refreshall;
 
