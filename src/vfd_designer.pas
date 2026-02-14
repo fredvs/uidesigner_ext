@@ -51,7 +51,7 @@ uses
   vfd_widgetclass,
   vfd_widgets,
   frm_multiselect,
-    frm_main_designer;
+  frm_main_designer;
 
 type
 
@@ -290,57 +290,57 @@ begin
         1:
         begin
           rs.left := Widget.left - 2;
-          rs.Top := Widget.Top - 2;
+          rs.Top  := Widget.Top - 2;
         end;
         2:
         begin
-          rs.Top := Widget.Top - 2;
-          rs.left := Widget.left + Widget.Width div 2 - 2;
+          rs.Top  := Widget.Top - 2;
+          rs.left := Widget.left + Widget.ActualWidth div 2 - 2;
         end;
         3:
         begin
-          rs.Top := Widget.Top - 2;
-          rs.left := Widget.left + Widget.Width - 1 - 2;
+          rs.Top  := Widget.Top - 2;
+          rs.left := Widget.left + Widget.ActualWidth - 1 - 2;
         end;
         4:
         begin
-          rs.Top := Widget.Top + Widget.Height div 2 - 2;
-          rs.left := Widget.left + Widget.Width - 1 - 2;
+          rs.Top  := Widget.Top + Widget.ActualHeight div 2 - 2;
+          rs.left := Widget.left + Widget.ActualWidth - 1 - 2;
         end;
         5:
         begin
-          rs.Top := Widget.Top + Widget.Height - 1 - 2;
-          rs.left := Widget.left + Widget.Width - 1 - 2;
+          rs.Top  := Widget.Top + Widget.ActualHeight - 1 - 2;
+          rs.left := Widget.left + Widget.ActualWidth - 1 - 2;
         end;
         6:
         begin
-          rs.Top := Widget.Top + Widget.Height - 1 - 2;
-          rs.left := Widget.left + Widget.Width div 2 - 2;
+          rs.Top  := Widget.Top + Widget.ActualHeight - 1 - 2;
+          rs.left := Widget.left + Widget.ActualWidth div 2 - 2;
         end;
         7:
         begin
-          rs.Top := Widget.Top + Widget.Height - 1 - 2;
+          rs.Top  := Widget.Top + Widget.ActualHeight - 1 - 2;
           rs.left := Widget.left - 2;
         end;
         8:
         begin
-          rs.Top := Widget.Top + Widget.Height div 2 - 2;
+          rs.Top  := Widget.Top + Widget.ActualHeight div 2 - 2;
           rs.left := Widget.left - 2;
         end;
       end; // case
-
+      
      {$ifdef fpgui-develop}
+     if rs.WindowAllocated then
      rs.UpdatePosition;
      {$else}
      if rs.HasHandle then
      rs.UpdateWindowPosition;
      {$endif}
-
+   
     end;
   end;
 
 end;
-
 { TFormDesigner }
 
 {$ifdef fpgui-develop}
@@ -1508,8 +1508,8 @@ begin
     begin
       btnLeft.Text := IntToStr(wg.Left);
       btnTop.Text := IntToStr(wg.Top);
-      btnWidth.Text := IntToStr(wg.Width);
-      btnHeight.Text := IntToStr(wg.Height);
+      btnWidth.Text := IntToStr(wg.ActualWidth);
+      btnHeight.Text := IntToStr(wg.ActualHeight);
 
       btnAnLeft.Down := anLeft in wg.Anchors;
       btnAnTop.Down := anTop in wg.Anchors;
@@ -1974,11 +1974,18 @@ begin
   if maindsgn.SaveComponentNames then
     s := s + Ind(1) + 'Name := ' + QuotedStr(FForm.Name) + ';' + LineEnding;
 
+{
   s := s + Ind(1) + 'SetPosition('
       + IntToStr(FForm.Left) + ', '
       + IntToStr(FForm.Top) + ', '
       + IntToStr(FForm.Width) + ', '
       + IntToStr(FForm.Height) + ');' + LineEnding;
+}
+
+ s := s + Ind(1) + 'Left := ' + IntToStr(FForm.Left) + ';' + LineEnding;
+  s := s + Ind(1) + 'Top := ' + IntToStr(FForm.Top) + ';' + LineEnding;
+  s := s + Ind(1) + 'Width := ' + IntToStr(FForm.ActualWidth) + ';' + LineEnding;
+  s := s + Ind(1) + 'Height := ' + IntToStr(FForm.ActualHeight) + ';' + LineEnding;
 
 {
   // Extend this and the Form Parser to handle WindowPosition, Width and Height
@@ -2433,12 +2440,14 @@ begin
     DeSelectAll;
     wgd.Selected := True;
     UpdatePropWin;
-    
+   
+   {
     {$ifdef fpgui-develop}
      wg.UpdatePosition;
     {$else}
      wg.UpdateWindowPosition;
    {$endif}
+   }
    
  if (frmMultiSelect.Visible = True) then
         frmMultiSelect.refreshall;
@@ -2603,11 +2612,13 @@ end;
 
 constructor TOtherWidget.Create(AOwner: TComponent);
 begin
+  
   inherited;
   wgClassName := 'TfpgWidget';
   FBackgroundColor := clUIDesignerGreen;
   {$ifdef fpgui-develop}
   FFont   := fpgStyle.GetDefaultFont;
+  FPreferredSize.SetSize(FWidth, FHeight);
   {$else}
   FFont := fpgStyle.DefaultFont;
  {$endif}

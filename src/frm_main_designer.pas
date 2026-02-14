@@ -892,7 +892,9 @@ begin
     Align := alLeft;
     BackgroundColor := TfpgColor($BED9BE);
     FontDesc := 'Arial-' + inttostr(round(ratio*10));
-    Hint := 'Hold left-click to move, right-click to resize...';
+    {$IFDEF ideu}
+    Hint := 'Hold left-click to move, right-click to resize...';,
+    {$ENDIF}
     Style := bsLowered;
     ShowHint := True;
     Text := '';
