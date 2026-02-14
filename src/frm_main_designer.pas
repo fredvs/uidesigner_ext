@@ -265,7 +265,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '1.9.6';
+  ext_version: string = '2.0.0';
 
 var
 
@@ -2390,7 +2390,7 @@ begin
       frmproperties.virtualpanel.top := frmproperties.lstProps.bottom + round(1*ratio);
       //  frmproperties.lstProps.Height + frmproperties.lstProps.top + round(1*ratio) ;
     
-     frmproperties.virtualpanel.height := round(23) * 8;
+     frmproperties.virtualpanel.height := (round(23) * 8);
   end
   else
   begin
@@ -2403,7 +2403,7 @@ begin
        {$endif}
         frmproperties.virtualpanel.top := frmproperties.lstProps.bottom + round(1*ratio);
        //   frmproperties.lstProps.Height + frmproperties.lstProps.top + round(2*ratio);
-       frmproperties.virtualpanel.height := round(23) * 3;   
+       frmproperties.virtualpanel.height := (round(23) * 3) ;   
       end;
       
    {$ifdef fpgui-develop}
@@ -2465,9 +2465,10 @@ begin
   y := round(22*ratio)*z;
   virtualpanel.Canvas.DrawText(round(4*ratio), round(2*ratio) + y, round(60*ratio), round(20*ratio), 'WindowPosition');
 
- virtualpanel.Height := round(23*ratio) * 7;
+ virtualpanel.Height := round(23*ratio) * 7 ;
+ 
 
-end else virtualpanel.Height := round(23*ratio) * 3;
+end else virtualpanel.Height := (round(23*ratio) * 3) ;
 
 
   y := round(22*ratio);
