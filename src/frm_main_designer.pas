@@ -265,7 +265,7 @@ type
 {@VFD_NEWFORM_DECL}
 
 const
-  ext_version: string = '2.0.0';
+  ext_version: string = '2.0.2';
 
 var
 
